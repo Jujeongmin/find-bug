@@ -206,6 +206,7 @@ export function EngineStage({
   );
 
   const onSubmitCategory = (category: BugCategory) => {
+    if (!mutation) return;
     const correct =
       mutation.bug.objectIds.includes(pickedObject!) &&
       mutation.bug.category === category;
@@ -219,6 +220,7 @@ export function EngineStage({
    * dying, and by the playtest re-roll — in every case the answer stays hidden.
    */
   const nextRound = () => {
+    if (!mutation) return;
     const next = pickMutation(mutations, mutation.bug.id);
     setMutation(next);
     runtimeRef.current.reset(applyMutation(scene, next));
