@@ -23,7 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-# Verse8 deploy writes VITE_AGENT8_VERSE here
-.env
-.env.*
-!.env.example
+# Verse8 keeps .env tracked — it holds VITE_AGENT8_VERSE, the verse binding.
+# Do not ignore it.
