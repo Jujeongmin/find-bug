@@ -179,8 +179,7 @@ export function Office({ onExit }: { onExit: () => void }) {
    * small talk — otherwise the same line comes back and they stop reading it.
    */
   const devLine = () => {
-    const left = assignments.filter((a) => a.result === null).length;
-    if (day === 1 && talks === 0) return "office.dev.intro";
+      if (day === 1 && talks === 0) return "office.dev.intro";
     if (pending.length) return "office.dev.waiting";
     if (lastResult === "caught") return "office.dev.caught";
     if (lastResult === "missed") return "office.dev.missed";
