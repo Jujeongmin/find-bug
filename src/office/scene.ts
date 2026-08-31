@@ -1,8 +1,5 @@
 import type { SceneSpec } from "../engine/types";
 
-const D = (col: number, row: number, scale = 2) =>
-  ({ sheet: "dungeon" as const, col, row, scale });
-
 /** the three machines today's builds are queued on */
 export const MACHINES = ["machineA", "machineB", "machineC"] as const;
 export type MachineId = (typeof MACHINES)[number];
@@ -32,11 +29,15 @@ export const officeScene: SceneSpec = {
       y: 430,
       z: 3,
       render: {
-        sprite: { sheet: "platchars", col: 0, row: 1, scale: 1.7 },
-        shadow: { offsetX: 8, width: 24 },
+        actor: {
+          sheet: "worker",
+          rows: { down: 0, right: 2, up: 4, left: 6 },
+          idle: 0,
+          walk: [1, 2, 3, 4],
+          fps: 8,
+          scale: 1.5}
       },
-      behaviors: [{ t: "playerTopDown", speed: 120, minY: 190, maxY: 600 }],
-    },
+      behaviors: [{ t: "playerTopDown", speed: 120, minY: 190, maxY: 600 }]},
 
     /* the wall the desks stand against */
     {
@@ -46,8 +47,7 @@ export const officeScene: SceneSpec = {
       x: 0,
       y: 120,
       render: { className: "office-wall", bar: { width: 360, height: 70 } },
-      behaviors: [],
-    },
+      behaviors: []},
 
     /* three test machines, each holding one build to verify */
     ...[
@@ -58,26 +58,24 @@ export const officeScene: SceneSpec = {
       id: m.id,
       nameKey: `object.${m.id}`,
       kind: "sprite" as const,
-      x: m.x,
-      y: 200,
+      x: m.x - 17,
+      y: 176,
       z: 2,
-      render: { sprite: D(6, 4, 2.2), shadow: { offsetX: 8, width: 26 } },
+      render: { className: "office-crt", bar: { width: 34, height: 30 } },
       behaviors: [
         { t: "blocker" as const, radius: 26 },
         { t: "station" as const, radius: 62, labelKey: m.labelKey },
-      ],
-    })),
+      ]})),
 
     /* desks under the machines */
-    ...[40, 152, 264].map((x, i) => ({
+    ...[68, 180, 292].map((x, i) => ({
       id: `desk${i}`,
       nameKey: "object.desk",
       kind: "decor" as const,
       x,
-      y: 202,
-      render: { className: "office-desk", bar: { width: 56, height: 14 } },
-      behaviors: [],
-    })),
+      y: 214,
+      render: { prop: { id: "desk" as const, scale: 1.6 } },
+      behaviors: []})),
 
     /* the developer you hand confirmed defects to */
     {
@@ -87,12 +85,19 @@ export const officeScene: SceneSpec = {
       x: 316,
       y: 470,
       z: 2,
-      render: { sprite: D(2, 7, 2), shadow: { offsetX: 8, width: 22 } },
+      render: {
+        actor: {
+          sheet: "worker2",
+          rows: { down: 0, right: 2, up: 4, left: 6 },
+          idle: 0,
+          walk: [1, 2, 3, 4],
+          fps: 8,
+          scale: 1.5}
+      },
       behaviors: [
         { t: "blocker", radius: 22 },
         { t: "station", radius: 58, labelKey: "office.talkDev" },
-      ],
-    },
+      ]},
 
     /* filing cabinet, purely to break up the room */
     {
@@ -101,9 +106,8 @@ export const officeScene: SceneSpec = {
       kind: "decor",
       x: 44,
       y: 470,
-      render: { sprite: D(3, 5, 2), shadow: { offsetX: 8, width: 22 } },
-      behaviors: [{ t: "blocker", radius: 22 }],
-    },
+      render: { prop: { id: "bookshelf" as const, scale: 1.5 } },
+      behaviors: [{ t: "blocker", radius: 22 }]},
 
     /* the door home */
     {
@@ -113,8 +117,6 @@ export const officeScene: SceneSpec = {
       x: 180,
       y: 604,
       z: 1,
-      render: { sprite: D(6, 5, 2.2) },
-      behaviors: [{ t: "station", radius: 56, labelKey: "office.goHome" }],
-    },
-  ],
-};
+      render: { prop: { id: "door" as const, scale: 1.5 } },
+      behaviors: [{ t: "station", radius: 56, labelKey: "office.goHome" }]},
+  ]};

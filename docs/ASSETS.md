@@ -97,3 +97,28 @@ the art is smooth vector rather than pixel. Dropping it beside 16px tiles
 would repeat the mismatch that made stage 1's Tiny Town trees read as holes in
 the field, only far worse. People stay on `platchars` (24px), and the office
 can use Tiny Dungeon's own 16px characters where the scale has to match props.
+
+## Puny Characters (CC0)
+
+https://merchant-shade.itch.io/16x16-puny-characters
+
+`src/assets/sheets/worker.png` and `worker2.png` are Human-Worker-Cyan and
+Human-Worker-Red. 32px frames on a 24x8 grid: rows are the eight facings
+counter-clockwise from down, so rows 0/2/4/6 are down/right/up/left. Column 0
+is idle and 1-4 are the walk cycle.
+
+## Fantasy Interior Tiles (CC0)
+
+https://cardinalzebra.itch.io/fantasy-interior-tiles
+
+By Rostislav Gnatovsky. Credits are not required but are given here anyway.
+The pack ships loose PNGs at their own sizes rather than a grid, which is why
+`props.ts` exists beside `sheets.ts`. Only the office uses these.
+
+## Why the office and the builds look different
+
+The office is drawn from Puny and Fantasy Interior (32px, thin outlines); the
+builds under test stay on Kenney (16px, heavy outlines). Mixing those two
+within one screen is what made stage 1 trees read as holes, but the office and
+a build never share a screen — and the player is meant to be looking at
+somebody else's game when a build is running.

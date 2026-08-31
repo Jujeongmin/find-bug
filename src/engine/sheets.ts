@@ -23,6 +23,10 @@ export const SHEETS = {
   // same 12x11 grid and same outline weight as tinytown, so the two mix
   // without the seam that cost stage 1 its trees
   dungeon: { tile: 16, margin: 0, cols: 12, rows: 11 },
+  // Puny Characters (CC0): 32px frames, rows are the eight facings in
+  // counter-clockwise order from down, columns are idle then the walk cycle
+  worker: { tile: 32, margin: 0, cols: 24, rows: 8 },
+  worker2: { tile: 32, margin: 0, cols: 24, rows: 8 },
 } as const satisfies Record<string, SheetSpec>;
 
 export type SheetId = keyof typeof SHEETS;

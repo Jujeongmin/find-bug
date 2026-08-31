@@ -8,7 +8,7 @@ import { ResultModal } from "../components/ResultModal";
 import { FieldScaler, FIELD_W, FIELD_H } from "../components/FieldScaler";
 import { TouchControls } from "../components/TouchControls";
 import { PlaytestBar } from "../components/PlaytestBar";
-import { spriteStyle } from "./spriteStyle";
+import { propStyle, spriteStyle } from "./spriteStyle";
 import { sfx } from "../audio/sfx";
 import type { SceneSpec } from "./types";
 import { SceneRuntime } from "./runtime";
@@ -94,17 +94,22 @@ export function EngineStage({
     () => tutorial && !localStorage.getItem("fb_seen_tutorial")
   );
 
+  // Only the judging flow plants a defect. The office is driven through the
+  // same component, and it has no fair bug candidates at all, so generating a
+  // pool there produced an empty list and picked undefined out of it.
+  const judging = mode === "judge";
   const mutations = useMemo(() => {
+    if (!judging) return [];
     const banded = poolFor(scene, minBand, maxBand);
     // never leave a stage with nothing to show
     return banded.length >= 1 ? banded : generateMutations(scene);
   }, [scene, minBand, maxBand]);
-  const [mutation, setMutation] = useState<Mutation>(() =>
-    pickMutation(mutations)
+  const [mutation, setMutation] = useState<Mutation | null>(() =>
+    mutations.length ? pickMutation(mutations) : null
   );
 
   const runtimeRef = useRef<SceneRuntime>(
-    new SceneRuntime(applyMutation(scene, mutation))
+    new SceneRuntime(mutation ? applyMutation(scene, mutation) : scene)
   );
   const phaseRef = useRef<Phase>(phase);
   phaseRef.current = phase;
@@ -512,7 +517,9 @@ export function EngineStage({
                       style={{
                         width: o.render.shadow.width,
                         marginLeft: -o.render.shadow.width / 2,
-                        transform: `translateX(${o.render.shadow.offsetX}px)`,
+                        transform: `translate(${o.render.shadow.offsetX}px, ${
+                          o.render.shadow.offsetY ?? 0
+                        }px)`,
                       }}
                     />
                   )}
@@ -525,13 +532,31 @@ export function EngineStage({
                         : ""
                     }`}
                     style={{
-                      ...(o.render.sprite ? spriteStyle(o.render.sprite) : null),
+                      ...(o.render.actor
+                        ? spriteStyle({
+                            sheet: o.render.actor.sheet,
+                            row: o.render.actor.rows[os.dir4],
+                            col: os.moving
+                              ? o.render.actor.walk[
+                                  Math.floor(st.now * o.render.actor.fps) %
+                                    o.render.actor.walk.length
+                                ]
+                              : o.render.actor.idle,
+                            scale: o.render.actor.scale,
+                          })
+                        : o.render.prop
+                          ? propStyle(o.render.prop)
+                          : o.render.sprite
+                            ? spriteStyle(o.render.sprite)
+                            : null),
                       ...(anim && anim.t === "animate"
                         ? ({ "--anim-period": `${anim.period}s` } as CSSProperties)
                         : null),
                       fontSize: o.render.fontSize,
                       bottom: o.render.liftY ?? 0,
-                      transform: `scaleX(${os.facing}) scaleY(${
+                      transform: `scaleX(${
+                        o.render.actor ? 1 : os.facing
+                      }) scaleY(${
                         o.render.upsideDown ? -1 : 1
                       }) rotate(${os.angle}deg)`,
                     }}

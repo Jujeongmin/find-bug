@@ -7,6 +7,10 @@ export interface ObjectState {
   /** vertical velocity, side-view scenes only */
   vy: number;
   facing: 1 | -1;
+  /** which way the object is pointed, for directional sheets */
+  dir4: "down" | "up" | "left" | "right";
+  /** true while it actually travelled this frame */
+  moving: boolean;
   dir: 1 | -1;
   alive: boolean;
   respawnAt: number;
@@ -65,6 +69,8 @@ export class SceneRuntime {
         y: o.y,
         vy: 0,
         facing: 1,
+        dir4: "down",
+        moving: false,
         dir: 1,
         alive: true,
         respawnAt: 0,
@@ -250,7 +256,21 @@ export class SceneRuntime {
             if (this.keys.has("arrowright") || this.keys.has("d")) dx += 1;
             if (this.keys.has("arrowup") || this.keys.has("w")) dy -= 1;
             if (this.keys.has("arrowdown") || this.keys.has("s")) dy += 1;
-            if (dx === 0 && dy === 0) break;
+            if (dx === 0 && dy === 0) {
+              os.moving = false;
+              break;
+            }
+            os.moving = true;
+            // vertical wins ties, which reads better than flickering between
+            // two facings while walking diagonally
+            os.dir4 =
+              Math.abs(dy) >= Math.abs(dx)
+                ? dy < 0
+                  ? "up"
+                  : "down"
+                : dx < 0
+                  ? "left"
+                  : "right";
             const len = Math.hypot(dx, dy);
             const nx = Math.max(
               20,

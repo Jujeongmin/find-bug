@@ -1,0 +1,40 @@
+<!doctype html><meta charset="utf-8"><title>pack comparison</title>
+<style>
+body{background:#14141f;color:#e6e9f2;font:13px system-ui,sans-serif;margin:0;padding:16px}
+h2{font-size:14px;color:#9ad;margin:20px 0 8px}
+.row{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;padding:14px;border-radius:10px}
+.row.grass{background:#7ec96d}.row.floor{background:#b8834f}.row.dark{background:#2c2a3a}
+.s{image-rendering:pixelated}
+figure{margin:0;text-align:center}
+figcaption{font-size:10px;color:#000a;margin-top:4px}
+.row.dark figcaption{color:#aab}
+</style>
+<h2>같은 배경 위에서 윤곽선 두께 비교 — 사무실 바닥</h2>
+<div class="row floor" id="a"></div>
+<h2>어두운 배경</h2>
+<div class="row dark" id="b"></div>
+<h2>Puny 워커 시트 전체 (32px 프레임)</h2>
+<div id="c"></div>
+<h2>Fantasy Interior 전체 (16px)</h2>
+<div id="d"></div>
+<script type="module">
+const SC=4;
+const tile=(sheet,tw,cols,rows,margin,col,row,label)=>{
+  const step=(tw+margin)*SC, size=tw*SC;
+  return `<figure><div class="s" style="width:${size}px;height:${size}px;
+    background-image:url(/src/assets/sheets/${sheet}.png);
+    background-position:${-col*step}px ${-row*step}px;
+    background-size:${cols*step}px ${rows*step}px;background-repeat:no-repeat"></div>
+    <figcaption>${label}</figcaption></figure>`;
+};
+const set = [
+  tile('platchars',24,9,3,0,0,1,'현재 플레이어<br>platchars'),
+  tile('puny_worker',32,24,8,0,0,0,'Puny 워커<br>32px'),
+  tile('dungeon',16,12,11,0,6,4,'기기<br>Kenney dungeon'),
+  tile('tinytown',16,12,11,0,5,0,'덤불<br>Kenney tinytown'),
+  tile('interior',16,16,16,0,0,4,'가구<br>Fantasy Interior'),
+].join('');
+a.innerHTML=set; b.innerHTML=set;
+c.innerHTML=`<img class="s" style="width:${768*2}px" src="/src/assets/sheets/puny_worker.png">`;
+d.innerHTML=`<img class="s" style="width:${256*3}px" src="/src/assets/sheets/interior.png">`;
+</script>

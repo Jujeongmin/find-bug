@@ -4,6 +4,18 @@ import platformerSrc from "../assets/sheets/platformer.png";
 import platcharsSrc from "../assets/sheets/platchars.png";
 import roguelikeSrc from "../assets/sheets/roguelike.png";
 import dungeonSrc from "../assets/sheets/dungeon.png";
+import workerSrc from "../assets/sheets/worker.png";
+import worker2Src from "../assets/sheets/worker2.png";
+import deskSrc from "../assets/props/desk.png";
+import bookshelfSrc from "../assets/props/bookshelf.png";
+import chairSrc from "../assets/props/chair.png";
+import chairSideSrc from "../assets/props/chairSide.png";
+import doorSrc from "../assets/props/door.png";
+import doorOpenSrc from "../assets/props/doorOpen.png";
+import crateSrc from "../assets/props/crate.png";
+import barrelSrc from "../assets/props/barrel.png";
+import rugSrc from "../assets/props/rug.png";
+import { PROPS, type PropId, type PropRef } from "./props";
 
 /**
  * Bundled sheet images. Importing them (rather than pointing at /public) lets
@@ -16,6 +28,8 @@ const SHEET_SRC: Record<SheetId, string> = {
   platchars: platcharsSrc,
   roguelike: roguelikeSrc,
   dungeon: dungeonSrc,
+  worker: workerSrc,
+  worker2: worker2Src,
 };
 
 /** CSS needed to show one sprite, scaled and pixel-crisp */
@@ -31,6 +45,32 @@ export function spriteStyle(s: SpriteSpec): React.CSSProperties {
     backgroundImage: `url(${SHEET_SRC[s.sheet]})`,
     backgroundPosition: `${-s.col * step * scale}px ${-s.row * step * scale}px`,
     backgroundSize: `${sheet.cols * step * scale}px ${sheet.rows * step * scale}px`,
+    backgroundRepeat: "no-repeat",
+    imageRendering: "pixelated",
+  };
+}
+
+const PROP_SRC: Record<PropId, string> = {
+  desk: deskSrc,
+  bookshelf: bookshelfSrc,
+  chair: chairSrc,
+  chairSide: chairSideSrc,
+  door: doorSrc,
+  doorOpen: doorOpenSrc,
+  crate: crateSrc,
+  barrel: barrelSrc,
+  rug: rugSrc,
+};
+
+/** CSS for a standalone prop image, drawn at its authored aspect ratio */
+export function propStyle(p: PropRef): React.CSSProperties {
+  const spec = PROPS[p.id];
+  const scale = p.scale ?? 1;
+  return {
+    width: spec.w * scale,
+    height: spec.h * scale,
+    backgroundImage: `url(${PROP_SRC[p.id]})`,
+    backgroundSize: "100% 100%",
     backgroundRepeat: "no-repeat",
     imageRendering: "pixelated",
   };

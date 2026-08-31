@@ -1,5 +1,6 @@
 import type { BugCategory } from "../core/types";
-import type { SpriteSpec } from "./sheets";
+import type { SheetId, SpriteSpec } from "./sheets";
+import type { PropRef } from "./props";
 
 /* ---------- actions ---------- */
 
@@ -89,13 +90,37 @@ export type Behavior =
 
 /* ---------- objects ---------- */
 
+/**
+ * A character sheet with one row per facing and a walk cycle across columns.
+ * Facing comes from the direction of travel, so the sprite turns instead of
+ * being mirrored — the old scaleX flip could only ever show two of the four.
+ */
+export interface ActorSpec {
+  sheet: SheetId;
+  rows: { down: number; up: number; left: number; right: number };
+  /** column shown while standing still */
+  idle: number;
+  /** columns cycled while moving */
+  walk: number[];
+  fps: number;
+  scale: number;
+}
+
 export interface RenderSpec {
   /** pixel-art sprite; takes priority over emoji when both are set */
   sprite?: SpriteSpec;
+  /** standalone prop image, for art that no grid describes */
+  prop?: PropRef;
+  /** directional character sheet; takes priority over sprite */
+  actor?: ActorSpec;
   emoji?: string;
   fontSize?: number;
-  /** ground shadow; offsetX sign encodes which side the light is on */
-  shadow?: { offsetX: number; width: number };
+  /**
+   * Ground shadow; offsetX sign encodes which side the light is on. offsetY
+   * lifts it to meet the feet when a character sheet leaves padding under the
+   * art, as a 32px canvas around a 16px character does.
+   */
+  shadow?: { offsetX: number; width: number; offsetY?: number };
   /** light halo, offset from the object's own position */
   glow?: { radius: number; offsetX: number; offsetY: number };
   /** lifts the sprite off the ground without moving its shadow */
