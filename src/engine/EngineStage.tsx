@@ -119,7 +119,10 @@ export function EngineStage({
   const runtime = runtimeRef.current;
   const picking = phase === "picking";
   // in observe mode every object is tappable, the same affordance picking uses
-  const tappable = picking || bare;
+  // the pickable outline belongs to the report step. Observe mode wants it too,
+  // since tapping is how you measure there — but ordinary play does not, and it
+  // was outlining every prop the cursor passed over.
+  const tappable = picking || observing;
   /** TouchControls writes into the same key set the keyboard uses */
   const keysRef = useRef(runtime.keys);
   const fieldRef = useRef<HTMLDivElement>(null);

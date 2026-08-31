@@ -84,7 +84,7 @@
   "object.shuffleBtn": "셔플 버튼",
   "object.pot": "화분",
   "object.frame": "액자",
-  "object.lamp": "램프",
+  "object.lamp": "가로등",
   "object.curtain": "커튼",
   "object.table": "테이블",
   "bug.E1.desc": "카드: 한 장이 클릭해도 뒤집히지 않았다.",
@@ -409,5 +409,14 @@
   "home.journalLine": "{n}일차까지 왔다. 출시까지 {left}일. 지금까지 흘려보낸 결함 {shipped}건.",
   "object.bed": "침대",
   "object.sofa": "소파",
-  "object.journal": "개발 일지"
+  "object.journal": "개발 일지",
+  "street.name": "출근길",
+  "street.intro": "사무실까지 걸어간다.",
+  "street.enter": "사무실 들어가기",
+  "street.coffee": "커피 사기",
+  "street.gotCoffee": "커피를 샀다. 정신이 든다. ({n}분)",
+  "street.hadCoffee": "오늘은 이미 마셨다.",
+  "object.officeDoor": "사무실 입구",
+  "object.coffeeStand": "커피 가판대",
+  "object.block": "사무실 건물"
 }

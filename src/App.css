@@ -600,3 +600,56 @@
   color: #ffd98a;
   letter-spacing: 2px;
 }
+
+/* ---- the walk to work ---- */
+.street-ground {
+  background:
+    /* pavement edge under the building */
+    linear-gradient(#9a948a 150px 196px, transparent 196px),
+    /* road markings down the middle */
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 26px,
+      rgba(255, 240, 190, 0.5) 26px 52px
+    ) 176px 196px / 8px 78px no-repeat,
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 26px,
+      rgba(255, 240, 190, 0.5) 26px 52px
+    ) 176px 274px / 8px 340px no-repeat,
+    linear-gradient(#4a4740 196px, #3f3d37 196px);
+}
+.street-block {
+  background:
+    url("./assets/props/tile1.png") 0 0 / 48px 48px repeat,
+    linear-gradient(#6b4a3a, #52382c);
+  border: none;
+  border-radius: 0;
+  border-bottom: 5px solid #2a1f19;
+  image-rendering: pixelated;
+}
+.street-lamp {
+  background: linear-gradient(#6f6a5c, #4a463c);
+  border: none;
+  border-radius: 2px;
+}
+.street-lamp::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -9px;
+  width: 18px;
+  height: 12px;
+  margin-left: -9px;
+  border-radius: 4px 4px 2px 2px;
+  background: radial-gradient(circle at 50% 70%, #fff3c4 0 45%, #e0b23f 100%);
+  border: 2px solid #4a463c;
+}
+.street-coffee {
+  background:
+    linear-gradient(#c9552f 0 14px, transparent 14px),
+    linear-gradient(#e8dcc0, #c6b696);
+  border: 3px solid #4a3a2c;
+  border-radius: 4px;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
+}

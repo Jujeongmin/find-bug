@@ -4,6 +4,7 @@ import { useI18n } from "../i18n";
 import { EngineStage } from "../engine/EngineStage";
 import { officeScene, MACHINES, type MachineId } from "./scene";
 import { homeScene } from "../home/scene";
+import { streetScene } from "../street/scene";
 import { ENGINE_SCENES } from "../stages/registry";
 import { sfx } from "../audio/sfx";
 
@@ -77,6 +78,9 @@ const FATIGUE_START_COST = 20;
 /** finishing after this leaves you tired */
 const LATE_FINISH = 16 * 60 + 30;
 
+/** what a coffee on the way in costs, and what it is worth */
+const COFFEE_MINUTES = 15;
+
 interface Assignment {
   machine: MachineId;
   sceneId: string;
@@ -130,7 +134,9 @@ export function Office({ onExit }: { onExit: () => void }) {
   /** caught, but the day ended before it reached the developer */
   const [late, setLate] = useState(0);
   const [shipped_, setShipped_] = useState<Severity[]>([]);
-  const [place, setPlace] = useState<"office" | "home">("office");
+  const [place, setPlace] = useState<"office" | "home" | "street">("street");
+  /** one coffee per commute */
+  const [hadCoffee, setHadCoffee] = useState(false);
   const [fatigue, setFatigue] = useState(0);
   /** one restful thing per evening */
   const [restedTonight, setRestedTonight] = useState(false);
@@ -212,6 +218,23 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (left === 0) return "office.dev.allDone";
     if (day >= DAYS) return "office.dev.lastDay";
     return `office.dev.idle${talks % IDLE_LINES}`;
+  };
+
+  const onStreetStation = (id: string) => {
+    if (id === "officeDoor") {
+      sfx.play("click");
+      setPlace("office");
+      setNote(null);
+      return;
+    }
+    if (id === "coffee") {
+      if (hadCoffee) return setNote(t("street.hadCoffee"));
+      setHadCoffee(true);
+      setFatigue((f) => Math.max(0, f - 1));
+      setMinutes((m) => Math.min(DAY_END, m + COFFEE_MINUTES));
+      sfx.play("pick");
+      return setNote(tp("street.gotCoffee", { n: String(COFFEE_MINUTES) }));
+    }
   };
 
   const onHomeStation = (id: string) => {
@@ -321,7 +344,29 @@ export function Office({ onExit }: { onExit: () => void }) {
         } as CSSProperties
       }
     >
-      {place === "home" ? (
+      {place === "street" ? (
+        <EngineStage
+          key={`street-${day}`}
+          scene={streetScene}
+          mode="play"
+          header={
+            <div className="wb-header">
+              <button className="exit-btn" onClick={onExit} title={t("game.exit")}>
+                ←
+              </button>
+              <span className="wb-build">{tp("office.day", { n: String(day) })}</span>
+              <span className="office-clock">{clock(minutes)}</span>
+              <span className="office-fatigue">
+                {t("home.fatigue")} {"●".repeat(fatigue)}
+                {"○".repeat(MAX_FATIGUE - fatigue)}
+              </span>
+            </div>
+          }
+          onStation={onStreetStation}
+          onClear={() => {}}
+          onExit={onExit}
+        />
+      ) : place === "home" ? (
         <EngineStage
           key={`home-${day}`}
           scene={homeScene}

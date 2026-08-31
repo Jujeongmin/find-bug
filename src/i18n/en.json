@@ -84,7 +84,7 @@
   "object.shuffleBtn": "Shuffle button",
   "object.pot": "Flower pot",
   "object.frame": "Picture frame",
-  "object.lamp": "Lamp",
+  "object.lamp": "Street lamp",
   "object.curtain": "Curtain",
   "object.table": "Table",
   "bug.E1.desc": "Cards: one card wouldn't flip no matter how you clicked it.",
@@ -409,5 +409,14 @@
   "home.journalLine": "Day {n} done. {left} to ship. {shipped} defects have gone out so far.",
   "object.bed": "Bed",
   "object.sofa": "Sofa",
-  "object.journal": "Journal"
+  "object.journal": "Journal",
+  "street.name": "The walk in",
+  "street.intro": "You walk to the office.",
+  "street.enter": "Go inside",
+  "street.coffee": "Buy a coffee",
+  "street.gotCoffee": "Coffee bought. That helps. ({n} min)",
+  "street.hadCoffee": "You already had one today.",
+  "object.officeDoor": "Office entrance",
+  "object.coffeeStand": "Coffee stand",
+  "object.block": "Office building"
 }
