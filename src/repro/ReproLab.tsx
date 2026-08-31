@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useI18n } from "../i18n";
 import { EngineStage } from "../engine/EngineStage";
 import { stage02Scene } from "../stages/stage02/scene";
