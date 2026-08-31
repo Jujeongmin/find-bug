@@ -456,7 +456,12 @@ export const noHit: Mutator = {
   requiresPeer: true,
   comparative: false,
   candidates: (s) =>
-    withPeers(s, byBehavior(s, "killable")).map((o) => ({ objectId: o.id })),
+    withPeers(
+      s,
+      byBehavior(s, "killable").filter((o) =>
+        o.behaviors.some((b) => b.t === "killable" && b.tappable)
+      )
+    ).map((o) => ({ objectId: o.id })),
   apply: (s, t) =>
     mapObject(s, t.objectId, (o) => {
       o.behaviors = o.behaviors.map((b) =>

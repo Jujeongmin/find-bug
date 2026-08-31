@@ -3,7 +3,6 @@
  *
  * Paste a bug id here to drop it from every stage pool. Ids come from the
  * review report (`npm run report`) and look like:
- *   "stage01:floating:sign"        scene : mutator : object
  *   "stage06:wiringSwap:leverA:leverB"
  *
  * Excluding is safe: the curriculum re-checks pool sizes, and `npm run verify`
@@ -22,12 +21,10 @@ export const EXCLUDED_BUGS: string[] = [
   "stage01:floating:slimeC",
   "stage01:freezeAnimation:slimeA",
   "stage01:freezeAnimation:slimeC",
-  "stage01:mirrorShadow:sign",
   "stage01:mirrorShadow:slimeA",
   "stage01:mirrorShadow:slimeB",
   "stage01:mirrorShadow:slimeC",
   "stage01:mirrorShadow:tree2",
-  "stage01:mirrorShadow:well",
   "stage01:teleportOnEnd:slimeB:teleport",
   "stage01:teleportOnEnd:slimeC:teleport",
   "stage02:floating:cat",

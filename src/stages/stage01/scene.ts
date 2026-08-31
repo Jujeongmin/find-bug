@@ -180,30 +180,6 @@ export const stage01Scene: SceneSpec = {
       behaviors: [],
     },
     {
-      id: "well",
-      nameKey: "object.well",
-      kind: "decor",
-      x: 180,
-      y: 215,
-      render: {
-        sprite: { sheet: "tinytown" as const, col: 11, row: 10, scale: 3 },
-        shadow: { offsetX: 10, width: 30 },
-      },
-      behaviors: [{ t: "blocker", radius: 34 }],
-    },
-    {
-      id: "sign",
-      nameKey: "object.sign",
-      kind: "decor",
-      x: 320,
-      y: 560,
-      render: {
-        sprite: { sheet: "tinytown" as const, col: 11, row: 6, scale: 2.6 },
-        shadow: { offsetX: 10, width: 22 },
-      },
-      behaviors: [],
-    },
-    {
       id: "cloud",
       nameKey: "object.cloud",
       kind: "decor",

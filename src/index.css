@@ -2,8 +2,14 @@
   box-sizing: border-box;
 }
 
+html {
+  height: 100%;
+}
+
 body {
   margin: 0;
+  height: 100%;
+  overflow: hidden;
   /* Korean has no hyphenation, so the default breaks words mid-eojeol
      ("만져봐 / 라"). keep-all breaks at spaces instead; break-word stays as the
      escape hatch for a single token wider than its box. */

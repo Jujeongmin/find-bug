@@ -4,13 +4,16 @@
   align-items: center;
   gap: 8px;
   width: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 .stage-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: min(96vw, calc((100vh - 90px) * 0.5625));
+  width: 100%;
+  flex: none;
 }
 
 .stage-name {
@@ -80,9 +83,7 @@
   position: relative;
 }
 
-.s1-field {
-  background: linear-gradient(#aee2ff 0 150px, #7ec96d 150px);
-}
+
 
 .sun {
   position: absolute;
@@ -578,12 +579,16 @@
   box-shadow: 14px -9px 0 -2px #fdfdff, -14px -6px 0 -4px #fdfdff;
 }
 
-/* grass ground, tiled from the Tiny Town sheet */
+/* Ground in the Tiny Town palette. The pack's props carry a heavy dark
+   outline, which reads as a hole punched in a flat field; on a green close to
+   the props' own fill the outline reads as an outline. The speckles are the
+   pack's grass detail, done in CSS so no extra tile has to ship. */
 .s1-field {
   background:
     linear-gradient(#aee2ff 0 150px, transparent 150px),
-    url("../assets/sheets/grass.png") 0 150px / 48px 48px repeat;
-  image-rendering: pixelated;
+    radial-gradient(circle at 22% 30%, #96d97e 0 3px, transparent 3px) 0 150px / 48px 48px repeat,
+    radial-gradient(circle at 68% 74%, #96d97e 0 2px, transparent 2px) 11px 150px / 67px 53px repeat,
+    linear-gradient(transparent 0 150px, #7ec96d 150px);
 }
 
 .hud-heart { display: inline-block; vertical-align: middle; }

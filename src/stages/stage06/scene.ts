@@ -85,6 +85,7 @@ export const stage06Scene: SceneSpec = {
           t: "killable" as const,
           radius: 30,
           respawn: 1.6,
+          tappable: true,
           onKill: [
             { a: "increment" as const, counter: "score", by: 10 },
             { a: "increment" as const, counter: "hits", by: 1 },

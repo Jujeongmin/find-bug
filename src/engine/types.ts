@@ -51,6 +51,12 @@ export type Behavior =
       radius: number;
       respawn: number;
       onKill: Action[];
+      /**
+       * Whether tapping the object knocks it down. Off by default: scenes with
+       * an attack button expect the button (or space) to be the only way to
+       * kill, and a tap that also kills makes the button look pointless.
+       */
+      tappable?: boolean;
       /** set by the noHit mutator: the object shrugs off taps */
       ignoreTaps?: boolean;
     }

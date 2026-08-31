@@ -1,21 +1,6 @@
 {
   "rows": [
     {
-      "fullId": "stage01:floating:well",
-      "scene": "stage01",
-      "sceneName": "슬라임 사냥터",
-      "mutator": "floating",
-      "category": "physics",
-      "categoryLabel": "물리 오류",
-      "answers": "물통",
-      "desc": "물통: 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.27,
-      "band": 1,
-      "stages": [
-        1
-      ]
-    },
-    {
       "fullId": "stage01:noCollision:tree1",
       "scene": "stage01",
       "sceneName": "슬라임 사냥터",
@@ -76,21 +61,6 @@
       ]
     },
     {
-      "fullId": "stage01:noHit:slimeB",
-      "scene": "stage01",
-      "sceneName": "슬라임 사냥터",
-      "mutator": "noHit",
-      "category": "no-action",
-      "categoryLabel": "동작 안 함",
-      "answers": "젤리 몬스터 B",
-      "desc": "젤리 몬스터 B: 눌러도 맞지 않았다. 다른 것들은 잘 맞는데.",
-      "score": 1.39,
-      "band": 1,
-      "stages": [
-        1
-      ]
-    },
-    {
       "fullId": "stage01:noAction:attackBtn",
       "scene": "stage01",
       "sceneName": "슬라임 사냥터",
@@ -100,36 +70,6 @@
       "answers": "공격 버튼",
       "desc": "공격 버튼: 눌러도 아무 반응이 없었다.",
       "score": 1.39,
-      "band": 1,
-      "stages": [
-        1
-      ]
-    },
-    {
-      "fullId": "stage01:noHit:slimeC",
-      "scene": "stage01",
-      "sceneName": "슬라임 사냥터",
-      "mutator": "noHit",
-      "category": "no-action",
-      "categoryLabel": "동작 안 함",
-      "answers": "젤리 몬스터 C",
-      "desc": "젤리 몬스터 C: 눌러도 맞지 않았다. 다른 것들은 잘 맞는데.",
-      "score": 1.43,
-      "band": 1,
-      "stages": [
-        1
-      ]
-    },
-    {
-      "fullId": "stage01:noHit:slimeA",
-      "scene": "stage01",
-      "sceneName": "슬라임 사냥터",
-      "mutator": "noHit",
-      "category": "no-action",
-      "categoryLabel": "동작 안 함",
-      "answers": "젤리 몬스터 A",
-      "desc": "젤리 몬스터 A: 눌러도 맞지 않았다. 다른 것들은 잘 맞는데.",
-      "score": 1.44,
       "band": 1,
       "stages": [
         1
@@ -160,23 +100,6 @@
       "answers": "물약",
       "desc": "물약: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.53,
-      "band": 2,
-      "stages": [
-        6,
-        12,
-        17
-      ]
-    },
-    {
-      "fullId": "stage01:floating:sign",
-      "scene": "stage01",
-      "sceneName": "슬라임 사냥터",
-      "mutator": "floating",
-      "category": "physics",
-      "categoryLabel": "물리 오류",
-      "answers": "표지판",
-      "desc": "표지판: 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.56,
       "band": 2,
       "stages": [
         6,

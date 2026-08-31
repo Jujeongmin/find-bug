@@ -210,7 +210,7 @@ export class SceneRuntime {
     // a killable object can also be knocked down by tapping it, not only by an
     // attack — that is what makes a shooting-gallery target work
     const k = o.behaviors.find((b) => b.t === "killable");
-    if (k && k.t === "killable") {
+    if (k && k.t === "killable" && k.tappable) {
       if (k.ignoreTaps) return;
       const os = this.state.objects[o.id];
       if (!os.alive) return;

@@ -57,6 +57,8 @@ export default function App() {
   return (
     <I18nContext.Provider value={i18n}>
       <div className="app-root">
+        {/* one phone-shaped frame; nothing outside it ever scrolls */}
+        <div className="app-frame">
         <div className="lang-switch">
           <button
             className={lang === "ko" ? "on" : ""}
@@ -144,6 +146,7 @@ export default function App() {
             title={t(stage.nameKey)}
           />
         )}
+        </div>
       </div>
     </I18nContext.Provider>
   );
