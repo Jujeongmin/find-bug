@@ -138,11 +138,26 @@ export class SceneRuntime {
     return this.scene.objects.find((o) => o.kind === "player");
   }
 
+  /**
+   * A floating number over the spot something happened.
+   *
+   * One tap can run several actions — knocking a target down pays score and
+   * counts a hit — and their popups landed on the same pixel and printed over
+   * each other. Anything spawned at the same place in the same instant is
+   * stacked upward instead.
+   */
   private addPopup(x: number, y: number, text: string) {
+    const STACK = 15;
+    let dy = 0;
+    for (const p of this.state.popups) {
+      if (p.bornAt !== this.state.now) continue;
+      if (Math.abs(p.x - x) > 24) continue;
+      dy = Math.min(dy, p.y - y - STACK);
+    }
     this.state.popups.push({
       id: this.popupSeq++,
       x,
-      y,
+      y: y + dy,
       text,
       bornAt: this.state.now,
     });
