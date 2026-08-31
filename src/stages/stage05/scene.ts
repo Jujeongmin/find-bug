@@ -1,9 +1,9 @@
 import type { SceneSpec } from "../../engine/types";
 
 const INGREDIENTS = [
-  { id: "herb", sprite: { sheet: "roguelike" as const, col: 55, row: 17 }, x: 70 },
+  { id: "herb", sprite: { sheet: "roguelike" as const, col: 44, row: 23 }, x: 70 },
   { id: "mushroom", sprite: { sheet: "platformer" as const, col: 8, row: 6 }, x: 180 },
-  { id: "crystal", sprite: { sheet: "roguelike" as const, col: 33, row: 9 }, x: 290 },
+  { id: "crystal", sprite: { sheet: "roguelike" as const, col: 50, row: 9 }, x: 290 },
 ];
 
 export const stage05Scene: SceneSpec = {
@@ -55,18 +55,18 @@ export const stage05Scene: SceneSpec = {
       x: 180,
       y: 300,
       z: 2,
-      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 7, scale: 3 }, shadow: { offsetX: 10, width: 34 } },
+      render: { sprite: { sheet: "roguelike" as const, col: 51, row: 16, scale: 3 }, shadow: { offsetX: 10, width: 34 }, timer: "brew" },
       behaviors: [],
     },
     {
       id: "fire",
       nameKey: "object.fire",
       kind: "decor",
-      x: 160,
-      y: 302,
+      x: 163,
+      y: 286,
       z: 1,
       overlaps: "cauldron",
-      render: { className: "s5-flame", bar: { width: 40, height: 16 }, glow: { radius: 90, offsetX: 20, offsetY: 8 } },
+      render: { className: "s5-flame", bar: { width: 34, height: 26 }, glow: { radius: 90, offsetX: 17, offsetY: 13 } },
       behaviors: [{ t: "animate", name: "flicker", period: 0.5 }],
     },
 
@@ -108,7 +108,7 @@ export const stage05Scene: SceneSpec = {
       kind: "sprite",
       x: 60,
       y: 560,
-      render: { sprite: { sheet: "platchars" as const, col: 0, row: 2, scale: 1.6 }, shadow: { offsetX: 10, width: 26 } },
+      render: { sprite: { sheet: "platchars" as const, col: 8, row: 0, scale: 1.6 }, shadow: { offsetX: 10, width: 26 } },
       behaviors: [
         { t: "patrol", axis: "x", min: 40, max: 300, speed: 42, flipSprite: true },
       ],

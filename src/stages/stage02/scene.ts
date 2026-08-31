@@ -2,11 +2,11 @@ import type { SceneSpec } from "../../engine/types";
 
 /** shelf stock, drawn from the Roguelike pack */
 const ITEMS = [
-  { id: "apple", sprite: { sheet: "roguelike" as const, col: 49, row: 15 }, x: 60 },
-  { id: "potion", sprite: { sheet: "roguelike" as const, col: 55, row: 17 }, x: 120 },
-  { id: "sword", sprite: { sheet: "roguelike" as const, col: 44, row: 15 }, x: 180 },
-  { id: "shield", sprite: { sheet: "roguelike" as const, col: 45, row: 11 }, x: 240 },
-  { id: "gem", sprite: { sheet: "roguelike" as const, col: 33, row: 9 }, x: 300 },
+  { id: "book", sprite: { sheet: "roguelike" as const, col: 46, row: 15 }, x: 60 },
+  { id: "potion", sprite: { sheet: "roguelike" as const, col: 54, row: 12 }, x: 120 },
+  { id: "scroll", sprite: { sheet: "roguelike" as const, col: 44, row: 15 }, x: 180 },
+  { id: "meat", sprite: { sheet: "roguelike" as const, col: 54, row: 15 }, x: 240 },
+  { id: "fish", sprite: { sheet: "roguelike" as const, col: 56, row: 12 }, x: 300 },
 ];
 
 export const stage02Scene: SceneSpec = {
@@ -50,7 +50,7 @@ export const stage02Scene: SceneSpec = {
       x: 40,
       y: 210,
       peerGroup: "candle",
-      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 7, scale: 2.2 }, glow: { radius: 70, offsetX: 0, offsetY: 0 } },
+      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 11, scale: 2.2 }, glow: { radius: 70, offsetX: 0, offsetY: 0 } },
       behaviors: [{ t: "animate", name: "flicker", period: 0.6, essential: true }],
     },
     {
@@ -60,7 +60,7 @@ export const stage02Scene: SceneSpec = {
       x: 310,
       y: 210,
       peerGroup: "candle",
-      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 7, scale: 2.2 }, glow: { radius: 70, offsetX: 0, offsetY: 0 } },
+      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 11, scale: 2.2 }, glow: { radius: 70, offsetX: 0, offsetY: 0 } },
       behaviors: [{ t: "animate", name: "flicker", period: 0.6, essential: true }],
     },
 
@@ -93,7 +93,7 @@ export const stage02Scene: SceneSpec = {
       x: 260,
       y: 440,
       peerGroup: "person",
-      render: { sprite: { sheet: "platchars" as const, col: 0, row: 0, scale: 1.9 }, orientable: true, shadow: { offsetX: 10, width: 28 } },
+      render: { sprite: { sheet: "platchars" as const, col: 0, row: 1, scale: 1.9 }, orientable: true, shadow: { offsetX: 10, width: 28 } },
       behaviors: [],
     },
     {
@@ -103,7 +103,7 @@ export const stage02Scene: SceneSpec = {
       x: 120,
       y: 550,
       peerGroup: "person",
-      render: { sprite: { sheet: "platchars" as const, col: 4, row: 1, scale: 1.6 }, orientable: true, directional: true, shadow: { offsetX: 10, width: 24 } },
+      render: { sprite: { sheet: "platchars" as const, col: 2, row: 1, scale: 1.6 }, orientable: true, directional: true, shadow: { offsetX: 10, width: 24 } },
       behaviors: [
         { t: "patrol", axis: "x", min: 50, max: 310, speed: 40, flipSprite: true },
       ],

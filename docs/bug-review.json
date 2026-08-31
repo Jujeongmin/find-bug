@@ -157,8 +157,8 @@
       "mutator": "floating",
       "category": "physics",
       "categoryLabel": "물리 오류",
-      "answers": "버섯",
-      "desc": "버섯: 공중에 뜬 채 떨어지지 않았다.",
+      "answers": "물약",
+      "desc": "물약: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.51,
       "band": 2,
       "stages": [
@@ -259,8 +259,8 @@
       "mutator": "mirrorShadow",
       "category": "graphic",
       "categoryLabel": "그래픽 오류",
-      "answers": "버섯",
-      "desc": "버섯: 그림자가 광원 반대 방향으로 드리워져 있었다.",
+      "answers": "물약",
+      "desc": "물약: 그림자가 광원 반대 방향으로 드리워져 있었다.",
       "score": 2.51,
       "band": 3,
       "stages": [
@@ -284,6 +284,36 @@
         17,
         23,
         28
+      ]
+    },
+    {
+      "fullId": "stage02:noAction:scroll",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "noAction",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "두루마리",
+      "desc": "두루마리: 눌러도 아무 반응이 없었다.",
+      "score": 1.32,
+      "band": 1,
+      "stages": [
+        2
+      ]
+    },
+    {
+      "fullId": "stage02:floating:scroll",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "floating",
+      "category": "physics",
+      "categoryLabel": "물리 오류",
+      "answers": "두루마리",
+      "desc": "두루마리: 공중에 뜬 채 떨어지지 않았다.",
+      "score": 1.32,
+      "band": 1,
+      "stages": [
+        2
       ]
     },
     {
@@ -317,14 +347,29 @@
       ]
     },
     {
-      "fullId": "stage02:noAction:shield",
+      "fullId": "stage02:noAction:meat",
       "scene": "stage02",
       "sceneName": "마법 상점",
       "mutator": "noAction",
       "category": "no-action",
       "categoryLabel": "동작 안 함",
-      "answers": "방패",
-      "desc": "방패: 눌러도 아무 반응이 없었다.",
+      "answers": "말린 고기",
+      "desc": "말린 고기: 눌러도 아무 반응이 없었다.",
+      "score": 1.41,
+      "band": 1,
+      "stages": [
+        2
+      ]
+    },
+    {
+      "fullId": "stage02:floating:meat",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "floating",
+      "category": "physics",
+      "categoryLabel": "물리 오류",
+      "answers": "말린 고기",
+      "desc": "말린 고기: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.41,
       "band": 1,
       "stages": [
@@ -362,14 +407,14 @@
       ]
     },
     {
-      "fullId": "stage02:noAction:apple",
+      "fullId": "stage02:noAction:book",
       "scene": "stage02",
       "sceneName": "마법 상점",
       "mutator": "noAction",
       "category": "no-action",
       "categoryLabel": "동작 안 함",
-      "answers": "사과",
-      "desc": "사과: 눌러도 아무 반응이 없었다.",
+      "answers": "책",
+      "desc": "책: 눌러도 아무 반응이 없었다.",
       "score": 1.52,
       "band": 2,
       "stages": [
@@ -380,14 +425,14 @@
       ]
     },
     {
-      "fullId": "stage02:floating:apple",
+      "fullId": "stage02:noAction:fish",
       "scene": "stage02",
       "sceneName": "마법 상점",
-      "mutator": "floating",
-      "category": "physics",
-      "categoryLabel": "물리 오류",
-      "answers": "사과",
-      "desc": "사과: 공중에 뜬 채 떨어지지 않았다.",
+      "mutator": "noAction",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "말린 생선",
+      "desc": "말린 생선: 눌러도 아무 반응이 없었다.",
       "score": 1.52,
       "band": 2,
       "stages": [
@@ -398,14 +443,32 @@
       ]
     },
     {
-      "fullId": "stage02:floating:gem",
+      "fullId": "stage02:floating:book",
       "scene": "stage02",
       "sceneName": "마법 상점",
       "mutator": "floating",
       "category": "physics",
       "categoryLabel": "물리 오류",
-      "answers": "보석",
-      "desc": "보석: 공중에 뜬 채 떨어지지 않았다.",
+      "answers": "책",
+      "desc": "책: 공중에 뜬 채 떨어지지 않았다.",
+      "score": 1.52,
+      "band": 2,
+      "stages": [
+        2,
+        7,
+        13,
+        18
+      ]
+    },
+    {
+      "fullId": "stage02:floating:fish",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "floating",
+      "category": "physics",
+      "categoryLabel": "물리 오류",
+      "answers": "말린 생선",
+      "desc": "말린 생선: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.52,
       "band": 2,
       "stages": [
@@ -506,14 +569,14 @@
       ]
     },
     {
-      "fullId": "stage02:counterSkew:sword:items",
+      "fullId": "stage02:counterSkew:scroll:items",
       "scene": "stage02",
       "sceneName": "마법 상점",
       "mutator": "counterSkew",
       "category": "logic",
       "categoryLabel": "논리 오류",
-      "answers": "인벤토리 / 검",
-      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (검)",
+      "answers": "인벤토리 / 두루마리",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (두루마리)",
       "score": 2.32,
       "band": 3,
       "stages": [
@@ -546,8 +609,8 @@
       "mutator": "counterSkew",
       "category": "logic",
       "categoryLabel": "논리 오류",
-      "answers": "인벤토리 / 버섯",
-      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (버섯)",
+      "answers": "인벤토리 / 물약",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (물약)",
       "score": 2.41,
       "band": 3,
       "stages": [
@@ -557,14 +620,14 @@
       ]
     },
     {
-      "fullId": "stage02:counterSkew:shield:items",
+      "fullId": "stage02:counterSkew:meat:items",
       "scene": "stage02",
       "sceneName": "마법 상점",
       "mutator": "counterSkew",
       "category": "logic",
       "categoryLabel": "논리 오류",
-      "answers": "인벤토리 / 방패",
-      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (방패)",
+      "answers": "인벤토리 / 말린 고기",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (말린 고기)",
       "score": 2.41,
       "band": 3,
       "stages": [
@@ -591,14 +654,14 @@
       ]
     },
     {
-      "fullId": "stage02:counterSkew:apple:items",
+      "fullId": "stage02:counterSkew:book:items",
       "scene": "stage02",
       "sceneName": "마법 상점",
       "mutator": "counterSkew",
       "category": "logic",
       "categoryLabel": "논리 오류",
-      "answers": "인벤토리 / 사과",
-      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (사과)",
+      "answers": "인벤토리 / 책",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (책)",
       "score": 2.52,
       "band": 3,
       "stages": [
@@ -608,14 +671,14 @@
       ]
     },
     {
-      "fullId": "stage02:counterSkew:gem:items",
+      "fullId": "stage02:counterSkew:fish:items",
       "scene": "stage02",
       "sceneName": "마법 상점",
       "mutator": "counterSkew",
       "category": "logic",
       "categoryLabel": "논리 오류",
-      "answers": "인벤토리 / 보석",
-      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (보석)",
+      "answers": "인벤토리 / 말린 생선",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (말린 생선)",
       "score": 2.52,
       "band": 3,
       "stages": [
@@ -1044,13 +1107,12 @@
       "categoryLabel": "그래픽 오류",
       "answers": "모닥불",
       "desc": "모닥불: 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
-      "score": 2.27,
-      "band": 2,
+      "score": 2.32,
+      "band": 3,
       "stages": [
-        4,
-        10,
         15,
-        21
+        21,
+        26
       ]
     },
     {
@@ -1062,13 +1124,12 @@
       "categoryLabel": "그래픽 오류",
       "answers": "모닥불",
       "desc": "모닥불: 다른 물체 위에 겹쳐 그려졌다.",
-      "score": 2.27,
-      "band": 2,
+      "score": 2.32,
+      "band": 3,
       "stages": [
-        4,
-        10,
         15,
-        21
+        21,
+        26
       ]
     },
     {

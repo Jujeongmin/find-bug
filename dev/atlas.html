@@ -1,0 +1,48 @@
+<!doctype html><meta charset="utf-8"><title>sprite atlas</title>
+<!--
+  Dev-only tile browser. Lives outside public/ so it is never bundled into dist.
+  Open http://localhost:5173/dev/atlas.html?sheet=roguelike&r0=5&r1=21
+  Every cell is labelled with the col,row you paste into a SpriteSpec.
+  Built after several scenes shipped with sprites that did not match their
+  names (a "sword" that drew a scroll, a "cauldron" that drew a campfire).
+-->
+<style>
+body{background:#111;color:#ddd;font:11px monospace;margin:0;padding:8px}
+.grid{display:grid;gap:2px}
+.c{background:#222}
+.s{image-rendering:pixelated}
+.l{font-size:9px;color:#8c8;text-align:center}
+h1{font-size:13px;color:#8c8}
+</style>
+<h1 id="h"></h1>
+<div id="g" class="grid"></div>
+<script type="module">
+const SHEETS = {
+  tinytown: { tile: 16, margin: 0, cols: 12, rows: 11 },
+  platformer: { tile: 18, margin: 0, cols: 20, rows: 9 },
+  platchars: { tile: 24, margin: 0, cols: 9, rows: 3 },
+  roguelike: { tile: 16, margin: 1, cols: 57, rows: 31 },
+};
+const q = new URLSearchParams(location.search);
+const id = q.get("sheet") || "roguelike";
+const s = SHEETS[id];
+const c0 = +(q.get("c0") ?? 0), c1 = +(q.get("c1") ?? s.cols);
+const r0 = +(q.get("r0") ?? 0), r1 = +(q.get("r1") ?? s.rows);
+const SC = +(q.get("scale") ?? (s.tile > 20 ? 3 : 2));
+const step = (s.tile + s.margin) * SC, cell = s.tile * SC;
+document.getElementById("h").textContent =
+  `${id} — cols ${c0}..${c1 - 1}, rows ${r0}..${r1 - 1} (?sheet=&c0=&c1=&r0=&r1=&scale=)`;
+const g = document.getElementById("g");
+g.style.gridTemplateColumns = `repeat(${c1 - c0}, ${cell + 2}px)`;
+for (let r = r0; r < r1; r++) for (let c = c0; c < c1; c++) {
+  const d = document.createElement("div");
+  d.className = "c";
+  d.innerHTML =
+    `<div class="s" style="width:${cell}px;height:${cell}px;` +
+    `background-image:url(/src/assets/sheets/${id}.png);` +
+    `background-position:${-c * step}px ${-r * step}px;` +
+    `background-size:${s.cols * step}px ${s.rows * step}px"></div>` +
+    `<div class="l">${c},${r}</div>`;
+  g.appendChild(d);
+}
+</script>

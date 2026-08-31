@@ -104,6 +104,12 @@ export interface RenderSpec {
   orientable?: boolean;
   /** sprite has a visible left/right facing — gates the reverseDirection mutator */
   directional?: boolean;
+  /**
+   * id of a timer whose progress is drawn as a bar over this object. Without
+   * it a timed process is invisible: the player presses a button, nothing
+   * happens for seconds, and a counter ticks up with no cause on screen.
+   */
+  timer?: string;
 }
 
 export interface ObjectSpec {

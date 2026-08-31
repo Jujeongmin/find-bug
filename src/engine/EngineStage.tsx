@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import type { BugCategory } from "../core/types";
 import { useI18n } from "../i18n";
 import { CategorySelect } from "../components/CategorySelect";
@@ -393,6 +394,18 @@ export function EngineStage({
                       style={{ transform: `rotate(${needle}deg)` }}
                     />
                   )}
+                  {o.render.timer &&
+                    runtime.timerProgress(o.render.timer) !== null && (
+                      <div className="eng-progress">
+                        <i
+                          style={{
+                            width: `${Math.round(
+                              (runtime.timerProgress(o.render.timer) ?? 0) * 100
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                    )}
                   {o.render.shadow && (
                     <div
                       className="shadow"
@@ -413,6 +426,9 @@ export function EngineStage({
                     }`}
                     style={{
                       ...(o.render.sprite ? spriteStyle(o.render.sprite) : null),
+                      ...(anim && anim.t === "animate"
+                        ? ({ "--anim-period": `${anim.period}s` } as CSSProperties)
+                        : null),
                       fontSize: o.render.fontSize,
                       bottom: o.render.liftY ?? 0,
                       transform: `scaleX(${os.facing}) scaleY(${
