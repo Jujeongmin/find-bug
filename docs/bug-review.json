@@ -898,7 +898,7 @@
       "categoryLabel": "물리 오류",
       "answers": "화로",
       "desc": "화로: 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.13,
+      "score": 1.2,
       "band": 1,
       "stages": [
         4
@@ -1066,7 +1066,7 @@
       "categoryLabel": "그래픽 오류",
       "answers": "모닥불",
       "desc": "모닥불: 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
-      "score": 2.38,
+      "score": 2.39,
       "band": 3,
       "stages": [
         15,
@@ -1083,7 +1083,7 @@
       "categoryLabel": "그래픽 오류",
       "answers": "모닥불",
       "desc": "모닥불: 다른 물체 위에 겹쳐 그려졌다.",
-      "score": 2.38,
+      "score": 2.39,
       "band": 3,
       "stages": [
         15,

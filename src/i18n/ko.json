@@ -418,5 +418,10 @@
   "street.hadCoffee": "오늘은 이미 마셨다.",
   "object.officeDoor": "사무실 입구",
   "object.coffeeStand": "커피 가판대",
-  "object.block": "사무실 건물"
+  "object.block": "사무실 건물",
+  "goal.stage01": "젤리 몬스터를 공격해 점수를 올려라",
+  "goal.stage02": "선반의 물건을 눌러 장바구니에 담아라",
+  "goal.stage03": "코인을 모아라. 가시와 박쥐는 피해라.",
+  "goal.stage05": "재료를 챙기고 화로에 불을 올려 완성품을 만들어라",
+  "goal.stage06": "레일 위 표적을 눌러 맞혀라"
 }

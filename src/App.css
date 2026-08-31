@@ -653,3 +653,28 @@
   border-radius: 4px;
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
 }
+
+/* What the build is for, kept on screen instead of only in the modal before
+   it. A tester who cannot tell what the game is meant to do cannot tell when
+   it is doing the wrong thing. */
+.goal-banner {
+  position: absolute;
+  left: 50%;
+  top: 66px;
+  transform: translateX(-50%);
+  z-index: 5;
+  max-width: 92%;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(12, 12, 20, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #eef;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}

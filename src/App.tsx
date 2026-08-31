@@ -26,8 +26,12 @@ const PLAYTEST = new URLSearchParams(location.search).has("playtest");
 const LAB = new URLSearchParams(location.search).has("lab");
 /** ?repro=1 opens the reproduction prototype */
 const REPRO = new URLSearchParams(location.search).has("repro");
-/** ?office=1 opens the QA floor prototype */
-const OFFICE = new URLSearchParams(location.search).has("office");
+/**
+ * The QA floor is the game now. The stage grid it replaced is still reachable
+ * at ?stages=1 while its scenes are being reworked, along with the two
+ * prototypes that were tried and set aside.
+ */
+const STAGES = new URLSearchParams(location.search).has("stages");
 
 export default function App() {
   const [lang, setLang] = useState<Lang>(detectLang);
@@ -68,7 +72,7 @@ export default function App() {
       <div className="app-root">
         {/* one phone-shaped frame; nothing outside it ever scrolls */}
         <div className="app-frame">
-        {OFFICE ? (
+        {!STAGES && !REPRO && !LAB ? (
           <Office onExit={() => location.assign(location.pathname)} />
         ) : REPRO ? (
           <ReproLab onExit={() => location.assign(location.pathname)} />

@@ -418,5 +418,10 @@
   "street.hadCoffee": "You already had one today.",
   "object.officeDoor": "Office entrance",
   "object.coffeeStand": "Coffee stand",
-  "object.block": "Office building"
+  "object.block": "Office building",
+  "goal.stage01": "Attack the jelly monsters for points",
+  "goal.stage02": "Tap shelf items to add them to the basket",
+  "goal.stage03": "Collect the coins. Avoid the spikes and bats.",
+  "goal.stage05": "Gather ingredients and fire the hearth to finish a batch",
+  "goal.stage06": "Tap the targets riding the rails"
 }

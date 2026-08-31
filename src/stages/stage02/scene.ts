@@ -13,6 +13,7 @@ export const stage02Scene: SceneSpec = {
   id: "stage02",
   nameKey: "stage.stage02.name",
   introKey: "intro.stage02.line",
+  goalKey: "goal.stage02",
   backgroundClass: "s2-room",
   counters: [
     { id: "gold", nameKey: "counter.gold", initial: 50, display: "number" },

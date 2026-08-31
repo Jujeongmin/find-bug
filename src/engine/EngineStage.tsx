@@ -406,6 +406,9 @@ export function EngineStage({
           onPointerCancel={stickable ? stickUp : undefined}
           style={{ width: FIELD_W, height: FIELD_H }}
         >
+          {live.goalKey && !picking && (
+            <div className="goal-banner">{t(live.goalKey)}</div>
+          )}
           {/* HUD widgets */}
           <div className="hud">
             {live.objects

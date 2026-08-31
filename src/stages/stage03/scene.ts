@@ -6,6 +6,7 @@ export const stage03Scene: SceneSpec = {
   id: "stage03",
   nameKey: "stage.stage03.name",
   introKey: "intro.stage03.line",
+  goalKey: "goal.stage03",
   backgroundClass: "s3-field",
   sideView: { groundY: GROUND_Y },
   counters: [
@@ -186,14 +187,5 @@ export const stage03Scene: SceneSpec = {
       behaviors: [{ t: "animate", name: "flicker", period: 0.5, essential: true }],
     },
 
-    {
-      id: "door",
-      nameKey: "object.door",
-      kind: "decor",
-      x: 300,
-      y: 430,
-      render: { sprite: { sheet: "tinytown" as const, col: 5, row: 7, scale: 2.8 } },
-      behaviors: [],
-    },
   ],
 };

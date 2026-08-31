@@ -22,6 +22,7 @@ export const stage06Scene: SceneSpec = {
   id: "stage06",
   nameKey: "stage.stage06.name",
   introKey: "intro.stage06.line",
+  goalKey: "goal.stage06",
   backgroundClass: "s6-room",
   light: { objectId: "boothLamp", x: 60 },
   counters: [

@@ -207,6 +207,12 @@ export interface SceneSpec {
    */
   light?: { objectId: string; x: number };
   /**
+   * One line saying what the build is for, shown while playing rather than
+   * only in the modal before it. A tester who cannot tell what the game is
+   * supposed to do cannot tell when it is doing the wrong thing.
+   */
+  goalKey?: string;
+  /**
    * A play area larger than the 360x640 viewport. The camera follows the
    * player inside it, clamped to the edges. Without it the world is exactly
    * the viewport and nothing scrolls.
