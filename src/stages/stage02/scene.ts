@@ -28,7 +28,7 @@ export const stage02Scene: SceneSpec = {
       nameKey: `object.${it.id}`,
       kind: "sprite" as const,
       x: it.x,
-      y: 310,
+      y: 322,
       peerGroup: "item",
       render: {
         sprite: { ...it.sprite, scale: 1.9 },

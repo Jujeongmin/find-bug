@@ -171,7 +171,7 @@
   "bugdesc.noAction": "{obj}: 눌러도 아무 반응이 없었다.",
   "bugdesc.noCollision": "{obj}: 캐릭터가 그대로 통과할 수 있었다.",
   "bugdesc.floating": "{obj}: 공중에 뜬 채 떨어지지 않았다.",
-  "bugdesc.freezeAnimation": "{obj}: 움직임 애니메이션 없이 미끄러지듯 이동했다.",
+  "bugdesc.freezeAnimation": "{obj}: 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
   "bugdesc.reverseDirection": "{obj}: 이동 방향과 반대로 몸이 향해 있었다.",
   "bugdesc.mirrorShadow": "{obj}: 그림자가 광원 반대 방향으로 드리워져 있었다.",
   "bugdesc.counterSkew": "{counter}: 표시된 값과 실제로 오르내린 양이 달랐다. ({obj})",

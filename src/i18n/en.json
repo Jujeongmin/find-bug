@@ -171,7 +171,7 @@
   "bugdesc.noAction": "{obj}: pressing it did nothing at all.",
   "bugdesc.noCollision": "{obj}: the character could walk straight through it.",
   "bugdesc.floating": "{obj}: it hovered in mid-air and never fell.",
-  "bugdesc.freezeAnimation": "{obj}: it slid around without any movement animation.",
+  "bugdesc.freezeAnimation": "{obj}: its animation was frozen, while the others of its kind kept moving.",
   "bugdesc.reverseDirection": "{obj}: it faced the opposite way from where it moved.",
   "bugdesc.mirrorShadow": "{obj}: its shadow fell on the wrong side of the light.",
   "bugdesc.counterSkew": "{counter}: it moved by a different amount than it displayed. ({obj})",
