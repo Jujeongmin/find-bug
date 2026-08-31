@@ -3,6 +3,7 @@ import tinytownSrc from "../assets/sheets/tinytown.png";
 import platformerSrc from "../assets/sheets/platformer.png";
 import platcharsSrc from "../assets/sheets/platchars.png";
 import roguelikeSrc from "../assets/sheets/roguelike.png";
+import dungeonSrc from "../assets/sheets/dungeon.png";
 
 /**
  * Bundled sheet images. Importing them (rather than pointing at /public) lets
@@ -14,6 +15,7 @@ const SHEET_SRC: Record<SheetId, string> = {
   platformer: platformerSrc,
   platchars: platcharsSrc,
   roguelike: roguelikeSrc,
+  dungeon: dungeonSrc,
 };
 
 /** CSS needed to show one sprite, scaled and pixel-crisp */

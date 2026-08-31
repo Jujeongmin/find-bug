@@ -80,3 +80,20 @@
 - **난이도 점수는 스프라이트 크기를 읽는다.** [score.ts](../src/engine/score.ts)의 `displaySize()`가 시트 타일 크기 × 배율로 화면 크기를 계산한다. 배율을 바꾸면 난이도 밴드가 움직이므로 `npm run verify`로 확인할 것.
 - **시각 판정 플래그 재확인 필요.** `orientable`(상하 반전이 보이는가) / `directional`(좌우 반전이 보이는가)은 이모지 기준으로 붙여둔 값이다. 스프라이트로 교체한 오브젝트는 다시 판단해야 한다.
 - **에셋 교체 후에는 반드시 `npx tsx scripts/audit.ts`로 버그 풀을 확인할 것.** 이모지를 전제로 짠 판정 조건이 스프라이트에서 조용히 실패한 사례가 두 번 있었다 (난이도 공식의 `fontSize`, 색상 변형의 `emoji` 조건).
+
+## Kenney — Tiny Dungeon (CC0)
+
+https://kenney.nl/assets/tiny-dungeon
+
+`src/assets/sheets/dungeon.png` is the pack's `Tilemap/tilemap_packed.png`.
+192x176 — a 12x11 grid of 16px tiles, identical geometry to Tiny Town and
+drawn with the same outline weight, so the two can share a scene. Carries the
+walls, floors, doors, crates, shelves and 16px people the office needs.
+
+## Rejected: Kenney — Toon Characters
+
+Downloaded and not used. The sheet is 864x640, roughly 96x128 per frame, and
+the art is smooth vector rather than pixel. Dropping it beside 16px tiles
+would repeat the mismatch that made stage 1's Tiny Town trees read as holes in
+the field, only far worse. People stay on `platchars` (24px), and the office
+can use Tiny Dungeon's own 16px characters where the scale has to match props.

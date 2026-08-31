@@ -20,6 +20,9 @@ export const SHEETS = {
   // characters are 24px, not 18px like the rest of the platformer pack
   platchars: { tile: 24, margin: 0, cols: 9, rows: 3 },
   roguelike: { tile: 16, margin: 1, cols: 57, rows: 31 },
+  // same 12x11 grid and same outline weight as tinytown, so the two mix
+  // without the seam that cost stage 1 its trees
+  dungeon: { tile: 16, margin: 0, cols: 12, rows: 11 },
 } as const satisfies Record<string, SheetSpec>;
 
 export type SheetId = keyof typeof SHEETS;
