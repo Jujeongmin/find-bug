@@ -467,7 +467,10 @@ export function EngineStage({
                             })}
                           />
                         ))
-                      : `${t(spec?.nameKey ?? o.nameKey)}: ${value}${
+                      : // a max is shown only where one really binds — the basket stops
+                        // accepting at eight, and hiding that would make a full basket
+                        // look like a button that had stopped working
+                        `${t(spec?.nameKey ?? o.nameKey)}: ${value}${
                           spec?.max !== undefined ? ` / ${spec.max}` : ""
                         }`}
                   </div>
