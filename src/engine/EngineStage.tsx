@@ -292,7 +292,7 @@ export function EngineStage({
           </div>
         </div>
   
-        {playtest && (
+        {playtest && mutation && (
           <PlaytestBar
             info={{
               sceneId: scene.id,
