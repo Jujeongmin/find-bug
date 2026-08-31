@@ -7,6 +7,7 @@ import { FieldScaler, FIELD_W, FIELD_H } from "../components/FieldScaler";
 import { TouchControls } from "../components/TouchControls";
 import { PlaytestBar } from "../components/PlaytestBar";
 import { spriteStyle } from "./spriteStyle";
+import { sfx } from "../audio/sfx";
 import type { SceneSpec } from "./types";
 import { SceneRuntime } from "./runtime";
 import {
@@ -119,7 +120,10 @@ export function EngineStage({
       last = nowMs;
       if (phaseRef.current !== "play") return;
       runtimeRef.current.tick(dt);
-      if (runtimeRef.current.state.dead) setPhase("dead");
+      if (runtimeRef.current.state.dead) {
+        sfx.play("death");
+        setPhase("dead");
+      }
       setFrame((f) => f + 1);
     };
     raf = requestAnimationFrame(loop);
@@ -129,10 +133,12 @@ export function EngineStage({
   const onObjectTap = useCallback(
     (objectId: string) => {
       if (picking) {
+        sfx.play("pick");
         setPickedObject(objectId);
         setPhase("category");
         return;
       }
+      sfx.play("click");
       runtimeRef.current.click(objectId);
     },
     [picking]
@@ -142,6 +148,7 @@ export function EngineStage({
     const correct =
       mutation.bug.objectIds.includes(pickedObject!) &&
       mutation.bug.category === category;
+    sfx.play(correct ? "success" : "fail");
     setResultSuccess(correct);
     setPhase("result");
   };
@@ -193,6 +200,7 @@ export function EngineStage({
                 localStorage.setItem("fb_seen_tutorial", "1");
                 setShowHint(false);
               }
+              sfx.play("click");
               setPhase("picking");
             }}
           >

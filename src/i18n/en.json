@@ -243,5 +243,7 @@
   "ending.stat.shipped": "Game shipped",
   "ending.note": "Your name isn't in the release notes. But not a single bug report came in.",
   "ending.back": "Back to title",
-  "ending.replay": "Replay ending"
+  "ending.replay": "Replay ending",
+  "sound.on": "Sound on",
+  "sound.off": "Sound off"
 }

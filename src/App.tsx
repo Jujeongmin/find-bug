@@ -12,6 +12,8 @@ import { ENGINE_SCENES, SCENE_BY_ID } from "./stages/registry";
 import { Stage04 } from "./stages/stage04/Stage04";
 import { useProgress } from "./net/useProgress";
 import { EndingScreen } from "./components/EndingScreen";
+import { MuteToggle } from "./components/MuteToggle";
+import { sfx } from "./audio/sfx";
 import "./App.css";
 
 const CURRICULUM = buildCurriculum(ENGINE_SCENES, 30);
@@ -68,6 +70,7 @@ export default function App() {
           >
             EN
           </button>
+          <MuteToggle />
         </div>
 
         {showEnding && (
@@ -100,7 +103,10 @@ export default function App() {
                       unlocked ? "" : "locked"
                     }`}
                     disabled={!unlocked}
-                    onClick={() => setPlaying(s.n)}
+                    onClick={() => {
+                      sfx.play("click");
+                      setPlaying(s.n);
+                    }}
                   >
                     <span className="cell-no">{s.n}</span>
                     <span className="cell-name">{t(s.nameKey)}</span>

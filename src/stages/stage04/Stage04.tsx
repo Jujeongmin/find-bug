@@ -8,6 +8,7 @@ import { ResultModal } from "../../components/ResultModal";
 import { FieldScaler, FIELD_W, FIELD_H } from "../../components/FieldScaler";
 import { PlaytestBar } from "../../components/PlaytestBar";
 import { spriteStyle } from "../../engine/spriteStyle";
+import { sfx } from "../../audio/sfx";
 import face0 from "../../assets/cards/card_hearts_A.png";
 import face1 from "../../assets/cards/card_spades_02.png";
 import face2 from "../../assets/cards/card_diamonds_03.png";
@@ -117,6 +118,7 @@ export function Stage04({
     if (c.flipped || c.matched) return;
     // E1: one designated card refuses to flip
     if (bugId === "E1" && idx === deal.bugCardIdx) return;
+    sfx.play("click");
 
     const next = deal.cards.map((card, i) =>
       i === idx ? { ...card, flipped: true } : card
@@ -193,12 +195,15 @@ export function Stage04({
   };
 
   const onPickObject = (objectId: string) => {
+    sfx.play("pick");
     setPickedObject(objectId);
     setPhase("category");
   };
 
   const onSubmitCategory = (category: BugCategory) => {
-    setResultSuccess(judge(bug, pickedObject!, category).correct);
+    const correct = judge(bug, pickedObject!, category).correct;
+    sfx.play(correct ? "success" : "fail");
+    setResultSuccess(correct);
     setPhase("result");
   };
 

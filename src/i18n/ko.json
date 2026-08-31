@@ -243,5 +243,7 @@
   "ending.stat.shipped": "출시한 게임",
   "ending.note": "출시 노트에 당신 이름은 없다. 대신 버그 리포트가 하나도 안 올라왔다.",
   "ending.back": "타이틀로",
-  "ending.replay": "엔딩 다시 보기"
+  "ending.replay": "엔딩 다시 보기",
+  "sound.on": "소리 켜기",
+  "sound.off": "소리 끄기"
 }

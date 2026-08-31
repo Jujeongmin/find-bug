@@ -1,6 +1,7 @@
 import { ALL_CATEGORIES, type BugCategory } from "../core/types";
 import { useI18n } from "../i18n";
 import { useState } from "react";
+import { sfx } from "../audio/sfx";
 
 interface Props {
   targetObjectId: string;
@@ -31,7 +32,10 @@ export function CategorySelect({
             <button
               key={c}
               className={`category-item ${selected === c ? "selected" : ""}`}
-              onClick={() => setSelected(c)}
+              onClick={() => {
+                sfx.play("click");
+                setSelected(c);
+              }}
             >
               <span className="category-label">{t(`category.${c}`)}</span>
               <span className="category-desc">{t(`category.${c}.desc`)}</span>

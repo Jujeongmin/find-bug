@@ -267,3 +267,18 @@
   cursor: pointer;
   margin-left: 8px;
 }
+
+.mute-btn {
+  background: transparent;
+  border: 1px solid #556;
+  color: #aab;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 13px;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.mute-btn.off {
+  opacity: 0.55;
+}
