@@ -310,3 +310,59 @@
 .mute-btn.off {
   opacity: 0.55;
 }
+
+/* ---- regression workbench (prototype) ---- */
+.wb-root { display: flex; flex-direction: column; flex: 1; min-height: 0; width: 100%; }
+
+.wb-header {
+  display: flex; align-items: center; gap: 8px; width: 100%; flex: none;
+  font-size: 13px;
+}
+.wb-build { font-weight: 800; }
+.wb-budget { margin-left: auto; color: #9ab; font-variant-numeric: tabular-nums; }
+
+.wb-panel-full {
+  display: flex; flex-direction: column; flex: 1; min-height: 0; width: 100%; gap: 8px;
+}
+.wb-notes { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.wb-patch {
+  background: #1c2230; border: 1px solid #33405a; border-radius: 8px;
+  padding: 8px 10px; font-size: 12px; color: #b8c6dd; margin: 0 0 8px; line-height: 1.5;
+}
+.wb-empty { color: #8a94a8; font-size: 13px; text-align: center; padding: 24px 8px; }
+
+.wb-entry {
+  display: flex; align-items: center; gap: 8px;
+  background: #1a1d27; border: 1px solid #2c3242; border-left: 3px solid #2c3242;
+  border-radius: 8px; padding: 8px 10px; margin-bottom: 6px;
+}
+.wb-entry.ok { border-left-color: #3fa05a; }
+.wb-entry.bad { border-left-color: #d4423f; }
+.wb-entry-main { display: flex; flex-direction: column; gap: 2px; font-size: 12px; min-width: 0; }
+.wb-entry-main b { font-size: 13px; }
+.wb-entry-main span { color: #9aa6bb; }
+.wb-entry-main small { color: #6b7488; font-size: 10px; }
+.wb-entry-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; flex: none; }
+.wb-ok { color: #6ed48a; font-size: 12px; font-weight: 700; }
+.wb-bad { color: #ff8a87; font-size: 12px; font-weight: 700; }
+.wb-entry code, .wb-fact code {
+  background: #262c3a; color: #e8d9a8; border-radius: 4px; padding: 1px 5px;
+  font-size: 12px; align-self: flex-start;
+}
+.wb-next { flex: none; width: 100%; }
+
+.wb-observe { max-width: 340px; }
+.wb-facts { display: flex; flex-direction: column; gap: 6px; margin: 12px 0; }
+.wb-fact {
+  display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px;
+  background: #f2f4ff; border: 1px solid #ccd3ee; border-radius: 8px;
+  padding: 8px 10px; cursor: pointer; text-align: left; font-size: 13px; color: #223;
+}
+.wb-fact.on { background: #e4f3e8; border-color: #86c79a; }
+.wb-fact code { background: #dde3f7; color: #2b3a66; }
+.wb-fact em { font-style: normal; font-size: 11px; color: #6a7391; }
+.wb-fact.on em { color: #2f7a4a; font-weight: 700; }
+.wb-answer {
+  font-family: monospace; font-size: 10px; color: #1a1408;
+  background: #b3801f; border-radius: 4px; padding: 2px 6px;
+}

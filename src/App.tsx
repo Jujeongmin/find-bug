@@ -11,6 +11,7 @@ import { buildCurriculum } from "./engine/curriculum";
 import { ENGINE_SCENES, SCENE_BY_ID } from "./stages/registry";
 import { Stage04 } from "./stages/stage04/Stage04";
 import { useProgress } from "./net/useProgress";
+import { Workbench } from "./regression/Workbench";
 import { EndingScreen } from "./components/EndingScreen";
 import { MuteToggle } from "./components/MuteToggle";
 import { sfx } from "./audio/sfx";
@@ -19,6 +20,8 @@ import "./App.css";
 const CURRICULUM = buildCurriculum(ENGINE_SCENES, 30);
 /** ?playtest=1 unlocks every stage and reveals answers — dev only */
 const PLAYTEST = new URLSearchParams(location.search).has("playtest");
+/** ?lab=1 opens the regression prototype instead of the stage list */
+const LAB = new URLSearchParams(location.search).has("lab");
 
 export default function App() {
   const [lang, setLang] = useState<Lang>(detectLang);
@@ -59,6 +62,10 @@ export default function App() {
       <div className="app-root">
         {/* one phone-shaped frame; nothing outside it ever scrolls */}
         <div className="app-frame">
+        {LAB ? (
+          <Workbench onExit={() => location.assign(location.pathname)} />
+        ) : (
+        <>
         <div className="lang-switch">
           <button
             className={lang === "ko" ? "on" : ""}
@@ -145,6 +152,8 @@ export default function App() {
             stageNo={stage.n}
             title={t(stage.nameKey)}
           />
+        )}
+        </>
         )}
         </div>
       </div>

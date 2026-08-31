@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { BugCategory } from "../core/types";
 import { useI18n } from "../i18n";
 import { CategorySelect } from "../components/CategorySelect";
@@ -39,6 +39,15 @@ interface Props {
   tutorial?: boolean;
   /** dev overlay that reveals the live answer */
   playtest?: boolean;
+  /**
+   * "observe" drops the judging flow entirely and routes every tap to
+   * onObserve. The regression prototype drives the scene this way: the player
+   * is measuring the world, not accusing it.
+   */
+  mode?: "judge" | "observe";
+  onObserve?: (objectId: string) => void;
+  /** replaces the stage header in observe mode */
+  header?: ReactNode;
 }
 
 export function EngineStage({
@@ -51,7 +60,11 @@ export function EngineStage({
   title,
   tutorial = false,
   playtest = false,
+  mode = "judge",
+  onObserve,
+  header,
 }: Props) {
+  const observing = mode === "observe";
   const { t, tp } = useI18n();
   const [phase, setPhase] = useState<Phase>("intro");
   const [, setFrame] = useState(0);
@@ -80,6 +93,8 @@ export function EngineStage({
 
   const runtime = runtimeRef.current;
   const picking = phase === "picking";
+  // in observe mode every object is tappable, the same affordance picking uses
+  const tappable = picking || mode === "observe";
   /** TouchControls writes into the same key set the keyboard uses */
   const keysRef = useRef(runtime.keys);
 
@@ -133,6 +148,11 @@ export function EngineStage({
 
   const onObjectTap = useCallback(
     (objectId: string) => {
+      if (observing) {
+        sfx.play("pick");
+        onObserve?.(objectId);
+        return;
+      }
       if (picking) {
         sfx.play("pick");
         setPickedObject(objectId);
@@ -142,7 +162,7 @@ export function EngineStage({
       sfx.play("click");
       runtimeRef.current.click(objectId);
     },
-    [picking]
+    [picking, observing, onObserve]
   );
 
   const onSubmitCategory = (category: BugCategory) => {
@@ -181,63 +201,70 @@ export function EngineStage({
 
   return (
     <div className="stage-frame">
-      <div className="stage-header">
-        <span className="stage-name">
-          <button className="exit-btn" onClick={onExit} title={t("game.exit")}>
-            ←
-          </button>
-          {stageNo ? stageNo + ". " : ""}
-          {title ?? t(scene.nameKey)}
-        </span>
-        <div className="challenge-wrap">
-          {phase === "play" && showHint && (
-            <div className="tutorial-hint">⬇ {t("challenge.tutorial")}</div>
-          )}
-          <button
-            className="challenge-btn"
-            disabled={phase !== "play"}
-            onClick={() => {
-              if (showHint) {
-                localStorage.setItem("fb_seen_tutorial", "1");
-                setShowHint(false);
-              }
-              sfx.play("click");
-              setPhase("picking");
-            }}
-          >
-            {t("challenge.button")}
-          </button>
+      {mode === "observe" ? (
+        header
+      ) : (
+        <>
+        <div className="stage-header">
+          <span className="stage-name">
+            <button className="exit-btn" onClick={onExit} title={t("game.exit")}>
+              ←
+            </button>
+            {stageNo ? stageNo + ". " : ""}
+            {title ?? t(scene.nameKey)}
+          </span>
+          <div className="challenge-wrap">
+            {phase === "play" && showHint && (
+              <div className="tutorial-hint">⬇ {t("challenge.tutorial")}</div>
+            )}
+            <button
+              className="challenge-btn"
+              disabled={phase !== "play"}
+              onClick={() => {
+                if (showHint) {
+                  localStorage.setItem("fb_seen_tutorial", "1");
+                  setShowHint(false);
+                }
+                sfx.play("click");
+                setPhase("picking");
+              }}
+            >
+              {t("challenge.button")}
+            </button>
+          </div>
         </div>
-      </div>
-
-      {playtest && (
-        <PlaytestBar
-          info={{
-            sceneId: scene.id,
-            stageNo,
-            band: (mutation as { band?: number }).band,
-            score: (mutation as { score?: number }).score,
-            poolSize: mutations.length,
-            bugId: mutation.bug.id,
-            answers: mutation.bug.objectIds
-              .map((id) => t(live.objects.find((o) => o.id === id)?.nameKey ?? id))
-              .join(" / "),
-            category: t(`category.${mutation.bug.category}`),
-            desc: tp(mutation.bug.descKey, {
-              ...mutation.bug.descParams,
-              obj: t(mutation.bug.descParams.obj),
-              counter: mutation.bug.descParams.counter
-                ? t(mutation.bug.descParams.counter)
-                : "",
-            }),
-          }}
-          onReroll={nextRound}
-        />
+  
+        {playtest && (
+          <PlaytestBar
+            info={{
+              sceneId: scene.id,
+              stageNo,
+              band: (mutation as { band?: number }).band,
+              score: (mutation as { score?: number }).score,
+              poolSize: mutations.length,
+              bugId: mutation.bug.id,
+              answers: mutation.bug.objectIds
+                .map((id) => t(live.objects.find((o) => o.id === id)?.nameKey ?? id))
+                .join(" / "),
+              category: t(`category.${mutation.bug.category}`),
+              desc: tp(mutation.bug.descKey, {
+                ...mutation.bug.descParams,
+                obj: t(mutation.bug.descParams.obj),
+                counter: mutation.bug.descParams.counter
+                  ? t(mutation.bug.descParams.counter)
+                  : "",
+              }),
+            }}
+            onReroll={nextRound}
+          />
+        )}
+  
+  
+        </>
       )}
-
       <FieldScaler>
         <div
-          className={`field ${live.backgroundClass} ${picking ? "picking" : ""}`}
+          className={`field ${live.backgroundClass} ${tappable ? "picking" : ""}`}
           style={{ width: FIELD_W, height: FIELD_H }}
         >
           {/* HUD widgets */}
@@ -252,7 +279,7 @@ export function EngineStage({
                     key={o.id}
                     className={`${
                       spec?.display === "hearts" ? "hp-bar" : "score-box"
-                    } ${picking ? "pickable" : ""}`}
+                    } ${tappable ? "pickable" : ""}`}
                     onClick={
                       picking
                         ? (e) => {
@@ -321,7 +348,7 @@ export function EngineStage({
                   <div
                     key={o.id}
                     className={`eng-bar ${o.render.className ?? ""} ${
-                      picking ? "pickable" : ""
+                      tappable ? "pickable" : ""
                     } ${high ? "meter-high" : ""} ${
                       triggered ? "triggered" : ""
                     } ${flagClass} ${
@@ -388,7 +415,7 @@ export function EngineStage({
                 <div
                   key={o.id}
                   className={`entity ${hurt ? "flash" : ""} ${
-                    picking ? "pickable" : ""
+                    tappable ? "pickable" : ""
                   } ${high ? "meter-high" : ""} ${
                     triggered ? "triggered" : ""
                   }`}
@@ -481,7 +508,7 @@ export function EngineStage({
               <button
                 key={o.id}
                 className={`engine-btn ${o.render.className ?? ""} ${
-                  picking ? "pickable" : ""
+                  tappable ? "pickable" : ""
                 }`}
                 style={{ left: o.x, top: o.y }}
                 onPointerDown={picking ? undefined : () => onObjectTap(o.id)}
@@ -530,7 +557,7 @@ export function EngineStage({
         </div>
       </FieldScaler>
 
-      {phase === "intro" && (
+      {phase === "intro" && mode === "judge" && (
         <div className="modal-backdrop">
           <div className="modal">
             <h2>🐛 {t(scene.introKey)}</h2>
