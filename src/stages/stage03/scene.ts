@@ -188,7 +188,7 @@ export const stage03Scene: SceneSpec = {
       kind: "decor",
       x: 300,
       y: 430,
-      render: { sprite: { sheet: "roguelike" as const, col: 28, row: 6, scale: 2.8 } },
+      render: { sprite: { sheet: "tinytown" as const, col: 5, row: 7, scale: 2.8 } },
       behaviors: [],
     },
   ],

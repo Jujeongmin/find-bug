@@ -103,7 +103,7 @@ export const stage02Scene: SceneSpec = {
       x: 120,
       y: 550,
       peerGroup: "person",
-      render: { sprite: { sheet: "platchars" as const, col: 2, row: 1, scale: 1.6 }, orientable: true, directional: true, shadow: { offsetX: 10, width: 24 } },
+      render: { sprite: { sheet: "platchars" as const, col: 2, row: 0, scale: 1.6 }, orientable: true, directional: true, shadow: { offsetX: 10, width: 24 } },
       behaviors: [
         { t: "patrol", axis: "x", min: 50, max: 310, speed: 40, flipSprite: true },
       ],
@@ -125,7 +125,7 @@ export const stage02Scene: SceneSpec = {
       kind: "decor",
       x: 55,
       y: 440,
-      render: { sprite: { sheet: "roguelike" as const, col: 28, row: 6, scale: 3 }, shadow: { offsetX: 10, width: 26 } },
+      render: { sprite: { sheet: "tinytown" as const, col: 5, row: 7, scale: 3 }, shadow: { offsetX: 10, width: 26 } },
       behaviors: [],
     },
 

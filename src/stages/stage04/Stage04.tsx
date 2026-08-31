@@ -297,7 +297,7 @@ export function Stage04({
           <div {...pickableProps("frame", "s4-frame")}>
             <span
               className={`s4-picture ${bugId === "E7" ? "upside" : ""}`}
-              style={spriteStyle({ sheet: "roguelike", col: 29, row: 10, scale: 2 })}
+              style={spriteStyle({ sheet: "roguelike", col: 28, row: 9, scale: 2 })}
             />
           </div>
           <div {...pickableProps("lamp", "s4-lamp")}>
@@ -366,7 +366,7 @@ export function Stage04({
               style={spriteStyle({ sheet: "roguelike", col: 24, row: 9, scale: 2 })}
             />
           </div>
-          <div {...pickableProps("cat", "s4-cat")}>
+          <div {...pickableProps("doll", "s4-cat")}>
             <span
               style={spriteStyle({ sheet: "platchars", col: 4, row: 1, scale: 1.5 })}
             />

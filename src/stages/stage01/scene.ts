@@ -124,7 +124,7 @@ export const stage01Scene: SceneSpec = {
       x: 55,
       y: 460,
       render: {
-        sprite: { sheet: "tinytown" as const, col: 5, row: 2, scale: 2.4 },
+        sprite: { sheet: "roguelike" as const, col: 54, row: 12, scale: 2.2 },
         shadow: { offsetX: 10, width: 18 },
       },
       behaviors: [
@@ -186,7 +186,7 @@ export const stage01Scene: SceneSpec = {
       x: 180,
       y: 215,
       render: {
-        sprite: { sheet: "tinytown" as const, col: 9, row: 4, scale: 3 },
+        sprite: { sheet: "tinytown" as const, col: 11, row: 10, scale: 3 },
         shadow: { offsetX: 10, width: 30 },
       },
       behaviors: [{ t: "blocker", radius: 34 }],

@@ -313,6 +313,15 @@
 
 .modal h2 {
   margin: 0 0 10px;
+  /* even lines, so a two-line title does not leave one word stranded */
+  text-wrap: balance;
+  line-height: 1.4;
+}
+
+.modal p,
+.intro-line {
+  text-wrap: pretty;
+  line-height: 1.55;
 }
 
 .modal-target {
