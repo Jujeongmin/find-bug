@@ -481,62 +481,6 @@
 
 .hud-heart { display: inline-block; vertical-align: middle; }
 
-/* ---- CSS-drawn props (no pixel-art match in the packs) ---- */
-.s5-flame {
-  background: radial-gradient(ellipse at 50% 80%, #ffe066 0 30%, #ff8c1a 60%, #d43b0c 100%);
-  border-radius: 50% 50% 40% 40%;
-  border: none;
-  animation: eng-flicker 0.5s ease-in-out infinite alternate;
-}
-.s5-moon {
-  background: radial-gradient(circle at 38% 34%, #fffbe8 0 45%, #ffe9a8 100%);
-  border-radius: 50%;
-  border: none;
-}
-.s6-door { border: 3px solid #14161c; border-radius: 3px; }
-.s6-door.red { background: linear-gradient(#e0574f, #a8322c); }
-.s6-door.blue { background: linear-gradient(#4f8fe0, #2c5aa8); }
-.s6-door.yellow { background: linear-gradient(#e0c24f, #a8892c); }
-.s6-gear {
-  background: url("../assets/gear.svg") center / contain no-repeat;
-  border: none;
-  box-shadow: none;
-  image-rendering: pixelated;
-}
-.s6-bulb {
-  background: radial-gradient(circle at 40% 35%, #fff6c9 0 40%, #ffd34a 100%);
-  border-radius: 50%;
-  border: 2px solid #7a6320;
-}
-.s6-bulb.small { border-width: 1px; }
-.s6-water-strip {
-  background: repeating-linear-gradient(90deg, #2f7fc4 0 12px, #4aa0e0 12px 24px);
-  border-radius: 8px;
-  border: 2px solid #26557f;
-}
-.s6-gauge {
-  background: radial-gradient(circle at 50% 55%, #f2ead9 0 60%, #cfc6b2 100%);
-  border-radius: 50%;
-  border: 3px solid #4a4f5e;
-}
-.s6-alarm {
-  background: radial-gradient(circle at 40% 35%, #ff9a8a 0 40%, #c0392b 100%);
-  border-radius: 50%;
-  border: 2px solid #6d1f16;
-}
-
-.s2-plank {
-  background: linear-gradient(#7a5230, #543720);
-  border-radius: 3px;
-  border-top: 2px solid #a2764a;
-}
-.s2-hand {
-  background: #c0392b;
-  border: none;
-  border-radius: 2px;
-  transform-origin: bottom center;
-}
-
 /* ---- meters ---- */
 .eng-needle {
   position: absolute;
@@ -605,13 +549,6 @@
 
 /* ---- machine room props ---- */
 
-.s6-gauge {
-  background: radial-gradient(circle at 50% 60%, #f6f0e2 0 62%, #cabfa8 100%);
-  border-radius: 50%;
-  border: 3px solid #3f4551;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
-}
-
 /* ---- machine room: make the room and its wiring readable ---- */
 .s6-room {
   background:
@@ -625,95 +562,82 @@
     );
 }
 
-/* a door is a dark frame; the coloured panel slides out of it when opened */
-.s6-door {
-  background: #0e1014;
-  border: 3px solid #4a4f5e;
-  border-radius: 3px;
-  overflow: hidden;
+/* ---- wiring test bench ---- */
+.s6-room {
+  background:
+    linear-gradient(#20232c 0 270px, #1a1d24 270px 400px, #262a34 400px),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0 2px,
+      transparent 2px 60px
+    );
 }
 
-.s6-door::after {
+/* a lamp is dark until its channel fires */
+.s6-lamp {
+  border-radius: 50%;
+  border: 4px solid #3a4150;
+  background: #23272f;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.6);
+  transition: background 0.12s, box-shadow 0.12s;
+}
+
+.s6-lamp.triggered.red {
+  background: radial-gradient(circle at 38% 32%, #ff8f86 0 18%, #e0342a 62%, #a01b14 100%);
+  box-shadow: 0 0 18px 4px rgba(224, 87, 79, 0.65);
+}
+.s6-lamp.triggered.blue {
+  background: radial-gradient(circle at 38% 32%, #8ec2ff 0 18%, #2f7fd4 62%, #14458a 100%);
+  box-shadow: 0 0 18px 4px rgba(79, 143, 224, 0.65);
+}
+.s6-lamp.triggered.yellow {
+  background: radial-gradient(circle at 38% 32%, #ffe27a 0 18%, #e0b21a 62%, #8a6c0d 100%);
+  box-shadow: 0 0 18px 4px rgba(224, 194, 79, 0.65);
+}
+
+/* printed pairing card: three swatch pairs, red/blue/yellow left to right */
+.s6-legend {
+  border-radius: 4px;
+  border: 2px solid #4a5160;
+  background: #eae4d6;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.s6-legend::before {
   content: "";
   position: absolute;
-  inset: 0;
-  transition: transform 0.35s ease;
+  inset: 9px 12px;
+  background:
+    linear-gradient(90deg, #d4433f 0 22px, transparent 22px 34px, #d4433f 34px 56px) 0 0 / 96px 100% no-repeat,
+    linear-gradient(90deg, #3f7fd4 0 22px, transparent 22px 34px, #3f7fd4 34px 56px) 100px 0 / 96px 100% no-repeat,
+    linear-gradient(90deg, #d4b53f 0 22px, transparent 22px 34px, #d4b53f 34px 56px) 200px 0 / 96px 100% no-repeat;
 }
 
-.s6-door.red::after { background: linear-gradient(#e0574f, #a8322c); }
-.s6-door.blue::after { background: linear-gradient(#4f8fe0, #2c5aa8); }
-.s6-door.yellow::after { background: linear-gradient(#e0c24f, #a8892c); }
+/* switch bases carry the channel colour so the pairing is unmistakable */
+.s6-switch { position: relative; }
 
-/* open: the panel retracts, showing the dark doorway behind it */
-.s6-door.triggered::after {
-  transform: translateY(-88%);
-}
-
-/* levers kick when pulled so the cause is visible too */
-.s6-lever-red .sprite-emoji,
-.s6-lever-blue .sprite-emoji,
-.s6-lever-yellow .sprite-emoji {
-  transition: transform 0.12s;
-}
-
-/* levers are colour-coded to the door they drive — without this the whole
-   "which lever opens which door" premise is invisible */
-.s6-lever-red,
-.s6-lever-blue,
-.s6-lever-yellow {
-  position: relative;
-}
-
-.s6-lever-red::before,
-.s6-lever-blue::before,
-.s6-lever-yellow::before {
+.s6-switch::before {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: -6px;
-  width: 42px;
-  height: 12px;
-  margin-left: -21px;
+  bottom: -8px;
+  width: 46px;
+  height: 14px;
+  margin-left: -23px;
   border-radius: 3px;
   border: 2px solid rgba(0, 0, 0, 0.5);
   z-index: -1;
 }
 
-.s6-lever-red::before { background: #d4433f; }
-.s6-lever-blue::before { background: #3f7fd4; }
-.s6-lever-yellow::before { background: #d4b53f; }
+.s6-switch.red::before { background: #d4433f; }
+.s6-switch.blue::before { background: #3f7fd4; }
+.s6-switch.yellow::before { background: #d4b53f; }
 
-/* doors read as doors: frame, handle, and a panel that slides aside */
-.s6-door::before {
-  content: "";
-  position: absolute;
-  right: 7px;
-  top: 50%;
-  width: 6px;
-  height: 6px;
-  margin-top: -3px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.55);
-  z-index: 2;
+.s6-gear {
+  background: url("../assets/gear.svg") center / contain no-repeat;
+  border: none;
+  box-shadow: none;
+  image-rendering: pixelated;
 }
-
-.s6-door.triggered::after {
-  transform: translateX(-92%);
-}
-
-.s6-door.triggered::before {
-  opacity: 0;
-}
-
-/* water only reads as flowing when the valve is open */
-.s6-water-strip { opacity: 0.35; filter: grayscale(0.7); }
-.s6-water-strip.flowing {
-  opacity: 1;
-  filter: none;
-  animation: eng-flow 0.6s linear infinite;
-}
-
-/* the ceiling bulb lights the whole room, so the switch has a visible effect */
-.s6-bulb:not(.small) { filter: brightness(0.45); }
-.s6-bulb.lit { filter: brightness(1.25) drop-shadow(0 0 6px #ffd34a); }
-.field:has(.s6-bulb.lit) { filter: brightness(1.35); }

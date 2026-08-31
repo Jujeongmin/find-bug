@@ -73,36 +73,31 @@ for (const scene of ENGINE_SCENES) {
   ok("stage03: noPlatform drops the player through", r4.state.objects.player.y > 500);
 }
 
-/* stage 6: causal wiring */
+/* stage 6: the wiring bench — a switch lights its own lamp and counts a check */
 {
   const r = new SceneRuntime(stage06Scene);
-  r.click("leverA");
-  ok("stage06: leverA opens doorA", r.isTriggered("doorA") && !r.isTriggered("doorB"));
-  r.click("valve");
-  ok("stage06: valve turns water on", r.state.flags.water === true);
-  tick(r, 1);
-  ok("stage06: pressure rises with water", r.state.counters.pressure > 0);
-  r.click("valve");
-  tick(r, 1);
-  ok("stage06: pressure falls when closed", r.state.counters.pressure < 22);
+  r.click("switchA");
+  ok("stage06: switch A lights lamp A only",
+     r.isTriggered("lampA") && !r.isTriggered("lampB") && !r.isTriggered("lampC"));
+  ok("stage06: a check is recorded", r.state.counters.checks === 1);
 
-  const m = mut(stage06Scene, "wiringSwap:leverA:leverB");
-  const r2 = new SceneRuntime(applyMutation(stage06Scene, m));
-  r2.click("leverA");
-  ok("stage06: wiringSwap makes leverA open doorB", r2.isTriggered("doorB") && !r2.isTriggered("doorA"));
-  r2.click("leverB");
-  ok("stage06: and leverB opens doorA", r2.isTriggered("doorA"));
+  const swapped = mut(stage06Scene, "wiringSwap:switchA:switchB");
+  const r2 = new SceneRuntime(applyMutation(stage06Scene, swapped));
+  r2.click("switchA");
+  ok("stage06: wiringSwap lights the wrong lamp",
+     r2.isTriggered("lampB") && !r2.isTriggered("lampA"));
 
-  const m2 = mut(stage06Scene, "noAction:leverC");
-  const r3 = new SceneRuntime(applyMutation(stage06Scene, m2));
-  r3.click("leverC");
-  ok("stage06: noAction leverC opens nothing", !r3.isTriggered("doorC"));
+  const dead = mut(stage06Scene, "noAction:switchC");
+  const r3 = new SceneRuntime(applyMutation(stage06Scene, dead));
+  r3.click("switchC");
+  ok("stage06: a dead switch lights nothing and counts nothing",
+     !r3.isTriggered("lampC") && r3.state.counters.checks === 0);
 
-  const m3 = mut(stage06Scene, "speedScale:gearL");
-  const r4 = new SceneRuntime(applyMutation(stage06Scene, m3));
-  tick(r4, 1);
-  ok("stage06: speedScale halves gear spin",
-     Math.abs(r4.state.objects.gearL.angle) < Math.abs(r4.state.objects.gearR.angle));
+  const skew = mut(stage06Scene, "counterSkew:switchA:checks");
+  const r4 = new SceneRuntime(applyMutation(stage06Scene, skew));
+  r4.click("switchA");
+  ok("stage06: counterSkew moves the tally by the wrong amount",
+     r4.state.counters.checks !== 1);
 }
 
 console.log(fails === 0 ? "\nALL PASS" : `\n${fails} FAILURES`);

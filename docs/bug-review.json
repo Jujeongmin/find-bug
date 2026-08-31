@@ -118,9 +118,8 @@
       "band": 2,
       "stages": [
         6,
-        11,
-        16,
-        22
+        12,
+        17
       ]
     },
     {
@@ -136,9 +135,8 @@
       "band": 2,
       "stages": [
         6,
-        11,
-        16,
-        22
+        12,
+        17
       ]
     },
     {
@@ -154,9 +152,8 @@
       "band": 2,
       "stages": [
         6,
-        11,
-        16,
-        22
+        12,
+        17
       ]
     },
     {
@@ -172,9 +169,8 @@
       "band": 2,
       "stages": [
         6,
-        11,
-        16,
-        22
+        12,
+        17
       ]
     },
     {
@@ -189,9 +185,9 @@
       "score": 2.43,
       "band": 3,
       "stages": [
-        16,
-        22,
-        27
+        17,
+        23,
+        28
       ]
     },
     {
@@ -206,9 +202,9 @@
       "score": 2.44,
       "band": 3,
       "stages": [
-        16,
-        22,
-        27
+        17,
+        23,
+        28
       ]
     },
     {
@@ -223,9 +219,9 @@
       "score": 2.51,
       "band": 3,
       "stages": [
-        16,
-        22,
-        27
+        17,
+        23,
+        28
       ]
     },
     {
@@ -240,9 +236,9 @@
       "score": 2.86,
       "band": 3,
       "stages": [
-        16,
-        22,
-        27
+        17,
+        23,
+        28
       ]
     },
     {
@@ -334,8 +330,8 @@
       "stages": [
         2,
         7,
-        12,
-        17
+        13,
+        18
       ]
     },
     {
@@ -352,8 +348,8 @@
       "stages": [
         2,
         7,
-        12,
-        17
+        13,
+        18
       ]
     },
     {
@@ -370,8 +366,8 @@
       "stages": [
         2,
         7,
-        12,
-        17
+        13,
+        18
       ]
     },
     {
@@ -388,8 +384,8 @@
       "stages": [
         2,
         7,
-        12,
-        17
+        13,
+        18
       ]
     },
     {
@@ -406,8 +402,8 @@
       "stages": [
         2,
         7,
-        12,
-        17
+        13,
+        18
       ]
     },
     {
@@ -424,8 +420,8 @@
       "stages": [
         2,
         7,
-        12,
-        17
+        13,
+        18
       ]
     },
     {
@@ -442,8 +438,8 @@
       "stages": [
         2,
         7,
-        12,
-        17
+        13,
+        18
       ]
     },
     {
@@ -460,8 +456,8 @@
       "stages": [
         2,
         7,
-        12,
-        17
+        13,
+        18
       ]
     },
     {
@@ -476,9 +472,9 @@
       "score": 2.32,
       "band": 3,
       "stages": [
-        17,
-        23,
-        28
+        18,
+        24,
+        29
       ]
     },
     {
@@ -493,9 +489,9 @@
       "score": 2.37,
       "band": 3,
       "stages": [
-        17,
-        23,
-        28
+        18,
+        24,
+        29
       ]
     },
     {
@@ -510,9 +506,9 @@
       "score": 2.41,
       "band": 3,
       "stages": [
-        17,
-        23,
-        28
+        18,
+        24,
+        29
       ]
     },
     {
@@ -527,9 +523,9 @@
       "score": 2.41,
       "band": 3,
       "stages": [
-        17,
-        23,
-        28
+        18,
+        24,
+        29
       ]
     },
     {
@@ -544,9 +540,9 @@
       "score": 2.5,
       "band": 3,
       "stages": [
-        17,
-        23,
-        28
+        18,
+        24,
+        29
       ]
     },
     {
@@ -561,9 +557,9 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        17,
-        23,
-        28
+        18,
+        24,
+        29
       ]
     },
     {
@@ -578,9 +574,9 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        17,
-        23,
-        28
+        18,
+        24,
+        29
       ]
     },
     {
@@ -595,7 +591,7 @@
       "score": 3.15,
       "band": 4,
       "stages": [
-        28
+        29
       ]
     },
     {
@@ -610,7 +606,7 @@
       "score": 3.17,
       "band": 4,
       "stages": [
-        28
+        29
       ]
     },
     {
@@ -625,7 +621,7 @@
       "score": 3.7,
       "band": 4,
       "stages": [
-        28
+        29
       ]
     },
     {
@@ -687,8 +683,8 @@
       "stages": [
         3,
         9,
-        13,
-        18
+        14,
+        19
       ]
     },
     {
@@ -705,8 +701,8 @@
       "stages": [
         3,
         9,
-        13,
-        18
+        14,
+        19
       ]
     },
     {
@@ -723,8 +719,8 @@
       "stages": [
         3,
         9,
-        13,
-        18
+        14,
+        19
       ]
     },
     {
@@ -741,8 +737,8 @@
       "stages": [
         3,
         9,
-        13,
-        18
+        14,
+        19
       ]
     },
     {
@@ -757,9 +753,9 @@
       "score": 2.33,
       "band": 3,
       "stages": [
-        18,
-        24,
-        29
+        19,
+        25,
+        30
       ]
     },
     {
@@ -774,9 +770,9 @@
       "score": 2.37,
       "band": 3,
       "stages": [
-        18,
-        24,
-        29
+        19,
+        25,
+        30
       ]
     },
     {
@@ -791,9 +787,9 @@
       "score": 2.37,
       "band": 3,
       "stages": [
-        18,
-        24,
-        29
+        19,
+        25,
+        30
       ]
     },
     {
@@ -808,7 +804,7 @@
       "score": 3.28,
       "band": 4,
       "stages": [
-        29
+        30
       ]
     },
     {
@@ -823,7 +819,7 @@
       "score": 3.33,
       "band": 4,
       "stages": [
-        29
+        30
       ]
     },
     {
@@ -900,8 +896,8 @@
       "stages": [
         4,
         10,
-        14,
-        19
+        15,
+        21
       ]
     },
     {
@@ -918,8 +914,8 @@
       "stages": [
         4,
         10,
-        14,
-        19
+        15,
+        21
       ]
     },
     {
@@ -936,8 +932,8 @@
       "stages": [
         4,
         10,
-        14,
-        19
+        15,
+        21
       ]
     },
     {
@@ -954,8 +950,8 @@
       "stages": [
         4,
         10,
-        14,
-        19
+        15,
+        21
       ]
     },
     {
@@ -972,8 +968,8 @@
       "stages": [
         4,
         10,
-        14,
-        19
+        15,
+        21
       ]
     },
     {
@@ -990,8 +986,8 @@
       "stages": [
         4,
         10,
-        14,
-        19
+        15,
+        21
       ]
     },
     {
@@ -1008,8 +1004,8 @@
       "stages": [
         4,
         10,
-        14,
-        19
+        15,
+        21
       ]
     },
     {
@@ -1026,8 +1022,8 @@
       "stages": [
         4,
         10,
-        14,
-        19
+        15,
+        21
       ]
     },
     {
@@ -1042,9 +1038,9 @@
       "score": 2.44,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        15,
+        21,
+        26
       ]
     },
     {
@@ -1059,9 +1055,9 @@
       "score": 2.56,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        15,
+        21,
+        26
       ]
     },
     {
@@ -1076,9 +1072,9 @@
       "score": 2.56,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        15,
+        21,
+        26
       ]
     },
     {
@@ -1093,9 +1089,9 @@
       "score": 2.56,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        15,
+        21,
+        26
       ]
     },
     {
@@ -1109,9 +1105,7 @@
       "desc": "창문: 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
       "score": 3.32,
       "band": 4,
-      "stages": [
-        30
-      ]
+      "stages": []
     },
     {
       "fullId": "stage05:speedScale:clockHand5",
@@ -1124,35 +1118,48 @@
       "desc": "초침: 정상 속도의 절반으로 느리게 움직였다.",
       "score": 3.8,
       "band": 4,
-      "stages": [
-        30
-      ]
+      "stages": []
     },
     {
-      "fullId": "stage06:noAction:valve",
+      "fullId": "stage06:noAction:switchB",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
       "mutator": "noAction",
       "category": "no-action",
       "categoryLabel": "동작 안 함",
-      "answers": "밸브",
-      "desc": "밸브: 눌러도 아무 반응이 없었다.",
-      "score": 1.41,
+      "answers": "스위치 B (파랑)",
+      "desc": "스위치 B (파랑): 눌러도 아무 반응이 없었다.",
+      "score": 1.38,
       "band": 1,
       "stages": [
         5
       ]
     },
     {
-      "fullId": "stage06:noAction:lightSwitch",
+      "fullId": "stage06:noAction:switchA",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
       "mutator": "noAction",
       "category": "no-action",
       "categoryLabel": "동작 안 함",
-      "answers": "조명 스위치",
-      "desc": "조명 스위치: 눌러도 아무 반응이 없었다.",
-      "score": 1.41,
+      "answers": "스위치 A (빨강)",
+      "desc": "스위치 A (빨강): 눌러도 아무 반응이 없었다.",
+      "score": 1.49,
+      "band": 1,
+      "stages": [
+        5
+      ]
+    },
+    {
+      "fullId": "stage06:noAction:switchC",
+      "scene": "stage06",
+      "sceneName": "배선 점검대",
+      "mutator": "noAction",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "스위치 C (노랑)",
+      "desc": "스위치 C (노랑): 눌러도 아무 반응이 없었다.",
+      "score": 1.49,
       "band": 1,
       "stages": [
         5
@@ -1161,271 +1168,248 @@
     {
       "fullId": "stage06:floating:plumberBot",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
       "mutator": "floating",
       "category": "physics",
       "categoryLabel": "물리 오류",
-      "answers": "배관공 로봇",
-      "desc": "배관공 로봇: 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.48,
-      "band": 1,
+      "answers": "점검 로봇",
+      "desc": "점검 로봇: 공중에 뜬 채 떨어지지 않았다.",
+      "score": 1.54,
+      "band": 2,
       "stages": [
-        5
+        5,
+        11,
+        16,
+        22
       ]
     },
     {
       "fullId": "stage06:teleportOnEnd:plumberBot:teleport",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
       "mutator": "teleportOnEnd",
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
-      "answers": "배관공 로봇",
-      "desc": "배관공 로봇: 끝에 닿으면 반대편으로 순간이동해서 되돌아갔다.",
-      "score": 1.48,
-      "band": 1,
-      "stages": [
-        5
-      ]
-    },
-    {
-      "fullId": "stage06:noAction:leverC",
-      "scene": "stage06",
-      "sceneName": "지하 기계실",
-      "mutator": "noAction",
-      "category": "no-action",
-      "categoryLabel": "동작 안 함",
-      "answers": "레버 C (노랑)",
-      "desc": "레버 C (노랑): 눌러도 아무 반응이 없었다.",
-      "score": 1.49,
-      "band": 1,
-      "stages": [
-        5
-      ]
-    },
-    {
-      "fullId": "stage06:noAction:leverA",
-      "scene": "stage06",
-      "sceneName": "지하 기계실",
-      "mutator": "noAction",
-      "category": "no-action",
-      "categoryLabel": "동작 안 함",
-      "answers": "레버 A (빨강)",
-      "desc": "레버 A (빨강): 눌러도 아무 반응이 없었다.",
-      "score": 1.53,
+      "answers": "점검 로봇",
+      "desc": "점검 로봇: 끝에 닿으면 반대편으로 순간이동해서 되돌아갔다.",
+      "score": 1.54,
       "band": 2,
       "stages": [
         5,
-        15,
-        21
+        11,
+        16,
+        22
       ]
     },
     {
-      "fullId": "stage06:flipSprite:leverB",
+      "fullId": "stage06:flipSprite:switchB",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
       "mutator": "flipSprite",
       "category": "graphic",
       "categoryLabel": "그래픽 오류",
-      "answers": "레버 B (파랑)",
-      "desc": "레버 B (파랑): 위아래가 뒤집힌 채로 있었다.",
-      "score": 1.67,
+      "answers": "스위치 B (파랑)",
+      "desc": "스위치 B (파랑): 위아래가 뒤집힌 채로 있었다.",
+      "score": 1.64,
       "band": 2,
       "stages": [
         5,
-        15,
-        21
+        11,
+        16,
+        22
       ]
     },
     {
-      "fullId": "stage06:counterSkew:leverB:shipped",
+      "fullId": "stage06:flipSprite:switchA",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
+      "mutator": "flipSprite",
+      "category": "graphic",
+      "categoryLabel": "그래픽 오류",
+      "answers": "스위치 A (빨강)",
+      "desc": "스위치 A (빨강): 위아래가 뒤집힌 채로 있었다.",
+      "score": 1.75,
+      "band": 2,
+      "stages": [
+        5,
+        11,
+        16,
+        22
+      ]
+    },
+    {
+      "fullId": "stage06:flipSprite:switchC",
+      "scene": "stage06",
+      "sceneName": "배선 점검대",
+      "mutator": "flipSprite",
+      "category": "graphic",
+      "categoryLabel": "그래픽 오류",
+      "answers": "스위치 C (노랑)",
+      "desc": "스위치 C (노랑): 위아래가 뒤집힌 채로 있었다.",
+      "score": 1.75,
+      "band": 2,
+      "stages": [
+        5,
+        11,
+        16,
+        22
+      ]
+    },
+    {
+      "fullId": "stage06:counterSkew:switchB:checks",
+      "scene": "stage06",
+      "sceneName": "배선 점검대",
       "mutator": "counterSkew",
       "category": "logic",
       "categoryLabel": "논리 오류",
-      "answers": "출하 카운터 / 레버 B (파랑)",
-      "desc": "출하 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (레버 B (파랑))",
-      "score": 2.41,
+      "answers": "점검 카운터 / 스위치 B (파랑)",
+      "desc": "점검 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (스위치 B (파랑))",
+      "score": 2.38,
       "band": 3,
       "stages": [
-        15,
-        21,
-        26
+        16,
+        22,
+        27
+      ]
+    },
+    {
+      "fullId": "stage06:counterSkew:switchA:checks",
+      "scene": "stage06",
+      "sceneName": "배선 점검대",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "점검 카운터 / 스위치 A (빨강)",
+      "desc": "점검 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (스위치 A (빨강))",
+      "score": 2.49,
+      "band": 3,
+      "stages": [
+        16,
+        22,
+        27
+      ]
+    },
+    {
+      "fullId": "stage06:counterSkew:switchC:checks",
+      "scene": "stage06",
+      "sceneName": "배선 점검대",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "점검 카운터 / 스위치 C (노랑)",
+      "desc": "점검 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (스위치 C (노랑))",
+      "score": 2.49,
+      "band": 3,
+      "stages": [
+        16,
+        22,
+        27
+      ]
+    },
+    {
+      "fullId": "stage06:offsetGlow:lampB",
+      "scene": "stage06",
+      "sceneName": "배선 점검대",
+      "mutator": "offsetGlow",
+      "category": "graphic",
+      "categoryLabel": "그래픽 오류",
+      "answers": "램프 B (파랑)",
+      "desc": "램프 B (파랑): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
+      "score": 2.52,
+      "band": 3,
+      "stages": [
+        16,
+        22,
+        27
       ]
     },
     {
       "fullId": "stage06:bounceOnEnd:plumberBot:bounce",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
       "mutator": "bounceOnEnd",
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
-      "answers": "배관공 로봇",
-      "desc": "배관공 로봇: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
-      "score": 2.48,
+      "answers": "점검 로봇",
+      "desc": "점검 로봇: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
+      "score": 2.54,
       "band": 3,
       "stages": [
-        15,
-        21,
-        26
+        16,
+        22,
+        27
       ]
     },
     {
-      "fullId": "stage06:zSwap:plumberBot:doorA",
+      "fullId": "stage06:offsetGlow:lampC",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
-      "mutator": "zSwap",
-      "category": "graphic",
-      "categoryLabel": "그래픽 오류",
-      "answers": "배관공 로봇",
-      "desc": "배관공 로봇: 다른 물체 위에 겹쳐 그려졌다.",
-      "score": 2.48,
-      "band": 3,
-      "stages": [
-        15,
-        21,
-        26
-      ]
-    },
-    {
-      "fullId": "stage06:counterSkew:leverC:shipped",
-      "scene": "stage06",
-      "sceneName": "지하 기계실",
-      "mutator": "counterSkew",
-      "category": "logic",
-      "categoryLabel": "논리 오류",
-      "answers": "출하 카운터 / 레버 C (노랑)",
-      "desc": "출하 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (레버 C (노랑))",
-      "score": 2.49,
-      "band": 3,
-      "stages": [
-        15,
-        21,
-        26
-      ]
-    },
-    {
-      "fullId": "stage06:invertMeter:gauge",
-      "scene": "stage06",
-      "sceneName": "지하 기계실",
-      "mutator": "invertMeter",
-      "category": "logic",
-      "categoryLabel": "논리 오류",
-      "answers": "압력 게이지",
-      "desc": "압력 게이지: 실제 값과 반대로 움직였다.",
-      "score": 2.49,
-      "band": 3,
-      "stages": [
-        15,
-        21,
-        26
-      ]
-    },
-    {
-      "fullId": "stage06:counterSkew:leverA:shipped",
-      "scene": "stage06",
-      "sceneName": "지하 기계실",
-      "mutator": "counterSkew",
-      "category": "logic",
-      "categoryLabel": "논리 오류",
-      "answers": "출하 카운터 / 레버 A (빨강)",
-      "desc": "출하 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (레버 A (빨강))",
-      "score": 2.53,
-      "band": 3,
-      "stages": [
-        15,
-        21,
-        26
-      ]
-    },
-    {
-      "fullId": "stage06:invertMeter:alarmLight",
-      "scene": "stage06",
-      "sceneName": "지하 기계실",
-      "mutator": "invertMeter",
-      "category": "logic",
-      "categoryLabel": "논리 오류",
-      "answers": "경고등",
-      "desc": "경고등: 실제 값과 반대로 움직였다.",
-      "score": 2.76,
-      "band": 3,
-      "stages": [
-        15,
-        21,
-        26
-      ]
-    },
-    {
-      "fullId": "stage06:offsetGlow:ceilingLight",
-      "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
       "mutator": "offsetGlow",
       "category": "graphic",
       "categoryLabel": "그래픽 오류",
-      "answers": "천장 조명",
-      "desc": "천장 조명: 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
-      "score": 2.99,
+      "answers": "램프 C (노랑)",
+      "desc": "램프 C (노랑): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
+      "score": 2.58,
       "band": 3,
       "stages": [
-        15,
-        21,
-        26
+        16,
+        22,
+        27
       ]
     },
     {
-      "fullId": "stage06:offsetGlow:sideLamp",
+      "fullId": "stage06:offsetGlow:lampA",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
       "mutator": "offsetGlow",
       "category": "graphic",
       "categoryLabel": "그래픽 오류",
-      "answers": "보조 램프",
-      "desc": "보조 램프: 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
-      "score": 3.1,
+      "answers": "램프 A (빨강)",
+      "desc": "램프 A (빨강): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
+      "score": 2.65,
       "band": 3,
       "stages": [
-        15,
-        21,
-        26
+        16,
+        22,
+        27
       ]
     },
     {
-      "fullId": "stage06:wiringSwap:leverA:leverB",
+      "fullId": "stage06:wiringSwap:switchA:switchB",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
       "mutator": "wiringSwap",
       "category": "logic",
       "categoryLabel": "논리 오류",
-      "answers": "레버 A (빨강) / 레버 B (파랑)",
-      "desc": "레버 A (빨강): 연결이 서로 뒤바뀌어 엉뚱한 대상을 작동시켰다.",
-      "score": 3.53,
+      "answers": "스위치 A (빨강) / 스위치 B (파랑)",
+      "desc": "스위치 A (빨강): 연결이 서로 뒤바뀌어 엉뚱한 대상을 작동시켰다.",
+      "score": 3.49,
       "band": 4,
       "stages": []
     },
     {
       "fullId": "stage06:speedScale:gearR",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
       "mutator": "speedScale",
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
       "answers": "톱니바퀴",
       "desc": "톱니바퀴: 정상 속도의 절반으로 느리게 움직였다.",
-      "score": 3.57,
+      "score": 3.66,
       "band": 4,
       "stages": []
     },
     {
       "fullId": "stage06:speedScale:gearL",
       "scene": "stage06",
-      "sceneName": "지하 기계실",
+      "sceneName": "배선 점검대",
       "mutator": "speedScale",
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
       "answers": "톱니바퀴",
       "desc": "톱니바퀴: 정상 속도의 절반으로 느리게 움직였다.",
-      "score": 3.64,
+      "score": 3.71,
       "band": 4,
       "stages": []
     },
@@ -1637,8 +1621,8 @@
     {
       "n": 11,
       "nameKey": "stage.build.11",
-      "id": "s11-stage01",
-      "sceneId": "stage01",
+      "id": "s11-stage06",
+      "sceneId": "stage06",
       "minBand": 2,
       "maxBand": 2,
       "stars": 1
@@ -1646,8 +1630,8 @@
     {
       "n": 12,
       "nameKey": "stage.build.12",
-      "id": "s12-stage02",
-      "sceneId": "stage02",
+      "id": "s12-stage01",
+      "sceneId": "stage01",
       "minBand": 2,
       "maxBand": 2,
       "stars": 1
@@ -1655,8 +1639,8 @@
     {
       "n": 13,
       "nameKey": "stage.build.13",
-      "id": "s13-stage03",
-      "sceneId": "stage03",
+      "id": "s13-stage02",
+      "sceneId": "stage02",
       "minBand": 2,
       "maxBand": 2,
       "stars": 1
@@ -1664,8 +1648,8 @@
     {
       "n": 14,
       "nameKey": "stage.build.14",
-      "id": "s14-stage05",
-      "sceneId": "stage05",
+      "id": "s14-stage03",
+      "sceneId": "stage03",
       "minBand": 2,
       "maxBand": 2,
       "stars": 1
@@ -1673,8 +1657,8 @@
     {
       "n": 15,
       "nameKey": "stage.build.15",
-      "id": "s15-stage06",
-      "sceneId": "stage06",
+      "id": "s15-stage05",
+      "sceneId": "stage05",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -1682,8 +1666,8 @@
     {
       "n": 16,
       "nameKey": "stage.build.16",
-      "id": "s16-stage01",
-      "sceneId": "stage01",
+      "id": "s16-stage06",
+      "sceneId": "stage06",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -1691,8 +1675,8 @@
     {
       "n": 17,
       "nameKey": "stage.build.17",
-      "id": "s17-stage02",
-      "sceneId": "stage02",
+      "id": "s17-stage01",
+      "sceneId": "stage01",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -1700,8 +1684,8 @@
     {
       "n": 18,
       "nameKey": "stage.build.18",
-      "id": "s18-stage03",
-      "sceneId": "stage03",
+      "id": "s18-stage02",
+      "sceneId": "stage02",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -1709,8 +1693,8 @@
     {
       "n": 19,
       "nameKey": "stage.build.19",
-      "id": "s19-stage05",
-      "sceneId": "stage05",
+      "id": "s19-stage03",
+      "sceneId": "stage03",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -1728,8 +1712,8 @@
     {
       "n": 21,
       "nameKey": "stage.build.21",
-      "id": "s21-stage06",
-      "sceneId": "stage06",
+      "id": "s21-stage05",
+      "sceneId": "stage05",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -1737,8 +1721,8 @@
     {
       "n": 22,
       "nameKey": "stage.build.22",
-      "id": "s22-stage01",
-      "sceneId": "stage01",
+      "id": "s22-stage06",
+      "sceneId": "stage06",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -1746,8 +1730,8 @@
     {
       "n": 23,
       "nameKey": "stage.build.23",
-      "id": "s23-stage02",
-      "sceneId": "stage02",
+      "id": "s23-stage01",
+      "sceneId": "stage01",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -1755,8 +1739,8 @@
     {
       "n": 24,
       "nameKey": "stage.build.24",
-      "id": "s24-stage03",
-      "sceneId": "stage03",
+      "id": "s24-stage02",
+      "sceneId": "stage02",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -1764,8 +1748,8 @@
     {
       "n": 25,
       "nameKey": "stage.build.25",
-      "id": "s25-stage05",
-      "sceneId": "stage05",
+      "id": "s25-stage03",
+      "sceneId": "stage03",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -1773,8 +1757,8 @@
     {
       "n": 26,
       "nameKey": "stage.build.26",
-      "id": "s26-stage06",
-      "sceneId": "stage06",
+      "id": "s26-stage05",
+      "sceneId": "stage05",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -1782,8 +1766,8 @@
     {
       "n": 27,
       "nameKey": "stage.build.27",
-      "id": "s27-stage01",
-      "sceneId": "stage01",
+      "id": "s27-stage06",
+      "sceneId": "stage06",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -1791,8 +1775,8 @@
     {
       "n": 28,
       "nameKey": "stage.build.28",
-      "id": "s28-stage02",
-      "sceneId": "stage02",
+      "id": "s28-stage01",
+      "sceneId": "stage01",
       "minBand": 3,
       "maxBand": 4,
       "stars": 3
@@ -1800,8 +1784,8 @@
     {
       "n": 29,
       "nameKey": "stage.build.29",
-      "id": "s29-stage03",
-      "sceneId": "stage03",
+      "id": "s29-stage02",
+      "sceneId": "stage02",
       "minBand": 3,
       "maxBand": 4,
       "stars": 3
@@ -1809,8 +1793,8 @@
     {
       "n": 30,
       "nameKey": "stage.build.30",
-      "id": "s30-stage05",
-      "sceneId": "stage05",
+      "id": "s30-stage03",
+      "sceneId": "stage03",
       "minBand": 3,
       "maxBand": 4,
       "stars": 3
