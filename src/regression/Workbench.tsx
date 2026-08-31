@@ -10,6 +10,12 @@ import { sfx } from "../audio/sfx";
 /** re-measurements allowed per build; recording is free, checking is not */
 const BUDGET = 8;
 
+/** builds between now and the ship date */
+const BUILDS = 8;
+
+/** what happened to each build's regression once it shipped */
+type Outcome = { build: number; bugId: string; descKey: string; descParams: Record<string, string>; caught: boolean; falseReport: boolean };
+
 /** ?playtest=1 reveals the live regression, for testing the loop */
 const PLAYTEST = new URLSearchParams(location.search).has("playtest");
 
@@ -37,6 +43,10 @@ export function Workbench({ onExit }: { onExit: () => void }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [view, setView] = useState<"world" | "spec">("world");
   const [verdict, setVerdict] = useState<null | { ok: boolean; objectId: string }>(null);
+  /** one report per build: guessing until it lands is not verification */
+  const [reportedThisBuild, setReportedThisBuild] = useState(false);
+  const [log, setLog] = useState<Outcome[]>([]);
+  const [shipped, setShipped] = useState(false);
 
   const live = useMemo(
     () => (mutation ? applyMutation(base, mutation) : base),
@@ -45,6 +55,30 @@ export function Workbench({ onExit }: { onExit: () => void }) {
 
   const nextBuild = () => {
     sfx.play("click");
+    // whatever was not caught in this build ships with it
+    if (mutation) {
+      setLog((l) =>
+        l.some((o) => o.build === build)
+          ? l
+          : [
+              ...l,
+              {
+                build,
+                bugId: mutation.bug.id,
+                descKey: mutation.bug.descKey,
+                descParams: mutation.bug.descParams,
+                caught: false,
+                falseReport: reportedThisBuild,
+              },
+            ]
+      );
+    }
+    if (build >= BUILDS) {
+      setShipped(true);
+      setVerdict(null);
+      return;
+    }
+    setReportedThisBuild(false);
     setMutation(pickMutation(pool));
     setBuild((b) => b + 1);
     setBudget(BUDGET);
@@ -89,21 +123,27 @@ export function Workbench({ onExit }: { onExit: () => void }) {
   };
 
   const report = (objectId: string) => {
-    if (!mutation) {
-      setVerdict({ ok: false, objectId });
-      return;
-    }
+    if (!mutation || reportedThisBuild) return;
     const answers = mutation.mutator.answerIds(base, mutation.target);
     const ok = answers.includes(objectId);
     sfx.play(ok ? "success" : "fail");
+    setReportedThisBuild(true);
+    setLog((l) => [
+      ...l.filter((o) => o.build !== build),
+      {
+        build,
+        bugId: mutation.bug.id,
+        descKey: mutation.bug.descKey,
+        descParams: mutation.bug.descParams,
+        caught: ok,
+        falseReport: !ok,
+      },
+    ]);
     setVerdict({ ok, objectId });
   };
 
   const name = (id: string) =>
     t(live.objects.find((o) => o.id === id)?.nameKey ?? id);
-  // fact params carry i18n keys (a counter name), not display text
-  const xp = (params?: Record<string, string>) =>
-    Object.fromEntries(Object.entries(params ?? {}).map(([k, v]) => [k, t(v)]));
   const factValue = (v: string) => {
     const key = `factval.${v}`;
     const translated = t(key);
@@ -120,6 +160,7 @@ export function Workbench({ onExit }: { onExit: () => void }) {
         ←
       </button>
       <span className="wb-build">{tp("wb.build", { n: String(build) })}</span>
+      <span className="wb-deadline">{tp("wb.deadline", { n: String(BUILDS - build) })}</span>
       {PLAYTEST && mutation && (
         <span className="wb-answer">{mutation.bug.id}</span>
       )}
@@ -131,6 +172,58 @@ export function Workbench({ onExit }: { onExit: () => void }) {
       </button>
     </div>
   );
+
+  // fact and bug params carry i18n keys (an object or counter name), not text
+  const xp = (params?: Record<string, string>) =>
+    Object.fromEntries(Object.entries(params ?? {}).map(([k, v]) => [k, t(v)]));
+
+  const caught = log.filter((o) => o.caught).length;
+  const missed = log.filter((o) => !o.caught);
+  const falseReports = log.filter((o) => o.falseReport).length;
+  // every shipped defect costs half a star, every false report a fifth
+  const rating = Math.max(
+    1,
+    Math.round((5 - missed.length * 0.5 - falseReports * 0.2) * 10) / 10
+  );
+
+  if (shipped) {
+    return (
+      <div className="wb-root wb-ship">
+        <h1>{t("wb.shipTitle")}</h1>
+        <div className="wb-rating">
+          <span className="wb-stars">
+            {"★".repeat(Math.round(rating))}
+            {"☆".repeat(5 - Math.round(rating))}
+          </span>
+          <b>{rating.toFixed(1)}</b>
+        </div>
+        <p className="wb-tally">
+          {tp("wb.tally", {
+            caught: String(caught),
+            total: String(log.length),
+            wrong: String(falseReports),
+          })}
+        </p>
+        <div className="wb-reviews">
+          {missed.length === 0 ? (
+            <p className="wb-review good">{t("wb.reviewClean")}</p>
+          ) : (
+            missed.map((o) => (
+              <p key={o.build} className="wb-review">
+                {"★☆☆☆☆ “"}
+                {tp(o.descKey, xp(o.descParams))}
+                {"”"}
+                <small>{tp("wb.fromBuild", { n: String(o.build) })}</small>
+              </p>
+            ))
+          )}
+        </div>
+        <button className="btn-primary" onClick={onExit}>
+          {t("wb.backToTitle")}
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="wb-root">
@@ -177,7 +270,11 @@ export function Workbench({ onExit }: { onExit: () => void }) {
                           {t("wb.mismatch")}{" "}
                           <code>{factValue(currentValue(live, e.objectId, e.factKey) ?? "-")}</code>
                         </span>
-                        <button className="btn-primary small" onClick={() => report(e.objectId)}>
+                        <button
+                          className="btn-primary small"
+                          disabled={reportedThisBuild}
+                          onClick={() => report(e.objectId)}
+                        >
                           {t("wb.report")}
                         </button>
                       </>

@@ -324,5 +324,11 @@
   "factval.front": "앞",
   "factval.behind": "뒤",
   "factval.normal": "정상",
-  "factval.inverted": "반대"
+  "factval.inverted": "반대",
+  "wb.deadline": "출시 D-{n}",
+  "wb.shipTitle": "출시했다",
+  "wb.tally": "잡은 결함 {caught}/{total} · 오보 {wrong}건",
+  "wb.reviewClean": "★★★★★ \"버그 하나 없네요. 이런 거 오랜만.\"",
+  "wb.fromBuild": "빌드 {n}에서 유출",
+  "wb.backToTitle": "처음으로"
 }

@@ -366,3 +366,20 @@
   font-family: monospace; font-size: 10px; color: #1a1408;
   background: #b3801f; border-radius: 4px; padding: 2px 6px;
 }
+.wb-deadline {
+  font-size: 11px; color: #e0a03f; border: 1px solid #6b5426;
+  border-radius: 4px; padding: 1px 6px; font-variant-numeric: tabular-nums;
+}
+.wb-ship { align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 16px; }
+.wb-ship h1 { font-size: 28px; margin: 0; }
+.wb-rating { display: flex; align-items: baseline; gap: 10px; }
+.wb-stars { color: #f2c14e; font-size: 26px; letter-spacing: 2px; }
+.wb-rating b { font-size: 22px; }
+.wb-tally { color: #9aa6bb; font-size: 13px; margin: 0; }
+.wb-reviews { width: 100%; overflow-y: auto; min-height: 0; flex: 1; text-align: left; }
+.wb-review {
+  background: #1a1d27; border: 1px solid #2c3242; border-radius: 8px;
+  padding: 8px 10px; margin: 0 0 6px; font-size: 12px; line-height: 1.5;
+}
+.wb-review.good { color: #6ed48a; }
+.wb-review small { display: block; color: #6b7488; font-size: 10px; margin-top: 4px; }

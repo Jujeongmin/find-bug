@@ -324,5 +324,11 @@
   "factval.front": "in front",
   "factval.behind": "behind",
   "factval.normal": "normal",
-  "factval.inverted": "inverted"
+  "factval.inverted": "inverted",
+  "wb.deadline": "Ship in {n}",
+  "wb.shipTitle": "Shipped",
+  "wb.tally": "Caught {caught}/{total} · {wrong} false reports",
+  "wb.reviewClean": "★★★★★ \"Not one bug. Been a while.\"",
+  "wb.fromBuild": "leaked in build {n}",
+  "wb.backToTitle": "Back to title"
 }
