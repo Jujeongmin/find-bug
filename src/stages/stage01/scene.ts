@@ -146,7 +146,7 @@ export const stage01Scene: SceneSpec = {
       y: 260,
       peerGroup: "tree",
       render: {
-        sprite: { sheet: "tinytown" as const, col: 5, row: 0, scale: 3 },
+        sprite: { sheet: "platformer" as const, col: 6, row: 6, scale: 2.6 },
         shadow: { offsetX: 10, width: 30 },
       },
       behaviors: [{ t: "blocker", radius: 30 }],
@@ -159,7 +159,7 @@ export const stage01Scene: SceneSpec = {
       y: 245,
       peerGroup: "tree",
       render: {
-        sprite: { sheet: "tinytown" as const, col: 5, row: 0, scale: 3 },
+        sprite: { sheet: "platformer" as const, col: 6, row: 6, scale: 2.6 },
         shadow: { offsetX: 10, width: 30 },
       },
       behaviors: [{ t: "blocker", radius: 30 }],

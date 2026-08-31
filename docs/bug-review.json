@@ -7,9 +7,9 @@
       "mutator": "noCollision",
       "category": "physics",
       "categoryLabel": "물리 오류",
-      "answers": "덤불 (왼쪽)",
-      "desc": "덤불 (왼쪽): 캐릭터가 그대로 통과할 수 있었다.",
-      "score": 1.36,
+      "answers": "나무 (왼쪽)",
+      "desc": "나무 (왼쪽): 캐릭터가 그대로 통과할 수 있었다.",
+      "score": 1.37,
       "band": 1,
       "stages": [
         1
@@ -22,9 +22,9 @@
       "mutator": "floating",
       "category": "physics",
       "categoryLabel": "물리 오류",
-      "answers": "덤불 (왼쪽)",
-      "desc": "덤불 (왼쪽): 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.36,
+      "answers": "나무 (왼쪽)",
+      "desc": "나무 (왼쪽): 공중에 뜬 채 떨어지지 않았다.",
+      "score": 1.37,
       "band": 1,
       "stages": [
         1
@@ -37,9 +37,9 @@
       "mutator": "noCollision",
       "category": "physics",
       "categoryLabel": "물리 오류",
-      "answers": "덤불 (오른쪽)",
-      "desc": "덤불 (오른쪽): 캐릭터가 그대로 통과할 수 있었다.",
-      "score": 1.37,
+      "answers": "나무 (오른쪽)",
+      "desc": "나무 (오른쪽): 캐릭터가 그대로 통과할 수 있었다.",
+      "score": 1.38,
       "band": 1,
       "stages": [
         1
@@ -52,9 +52,9 @@
       "mutator": "floating",
       "category": "physics",
       "categoryLabel": "물리 오류",
-      "answers": "덤불 (오른쪽)",
-      "desc": "덤불 (오른쪽): 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.37,
+      "answers": "나무 (오른쪽)",
+      "desc": "나무 (오른쪽): 공중에 뜬 채 떨어지지 않았다.",
+      "score": 1.38,
       "band": 1,
       "stages": [
         1
@@ -199,9 +199,9 @@
       "mutator": "mirrorShadow",
       "category": "graphic",
       "categoryLabel": "그래픽 오류",
-      "answers": "덤불 (왼쪽)",
-      "desc": "덤불 (왼쪽): 그림자가 광원 반대 방향으로 드리워져 있었다.",
-      "score": 2.86,
+      "answers": "나무 (왼쪽)",
+      "desc": "나무 (왼쪽): 그림자가 광원 반대 방향으로 드리워져 있었다.",
+      "score": 2.87,
       "band": 3,
       "stages": [
         17,
