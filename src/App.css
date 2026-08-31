@@ -715,3 +715,14 @@
   0%, 70% { opacity: 1; }
   100% { opacity: 0; }
 }
+
+/* the stall counter the keeper stands behind, so they read as staff rather
+   than as somebody waiting to be spoken to */
+.s6-counter {
+  background:
+    linear-gradient(#b8353f 0 8px, transparent 8px),
+    linear-gradient(#8a5f38, #5c3d22);
+  border: 2px solid #3a2718;
+  border-radius: 3px;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}

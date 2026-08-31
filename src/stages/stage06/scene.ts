@@ -95,35 +95,25 @@ export const stage06Scene: SceneSpec = {
       ],
     })),
 
-    /* prize wheel: booth dressing, and a home for speed faults */
+
     {
-      id: "wheelL",
-      nameKey: "object.wheel",
-      kind: "decor",
-      x: 40,
-      y: 580,
-      peerGroup: "wheel",
-      render: { className: "s6-wheel", bar: { width: 34, height: 34 } },
-      behaviors: [{ t: "spin", rpm: 20, dir: 1 }],
-    },
-    {
-      id: "wheelR",
-      nameKey: "object.wheel",
-      kind: "decor",
-      x: 84,
-      y: 580,
-      peerGroup: "wheel",
-      render: { className: "s6-wheel", bar: { width: 34, height: 34 } },
-      behaviors: [{ t: "spin", rpm: 20, dir: -1 }],
+      id: "counter",
+      nameKey: "object.counter",
+      kind: "decor" as const,
+      x: 236,
+      y: 596,
+      z: 3,
+      render: { className: "s6-counter", bar: { width: 112, height: 26 } },
+      behaviors: [],
     },
 
-    /* the stall keeper */
+    /* the stall keeper, behind their counter */
     {
       id: "keeper",
       nameKey: "object.keeper",
       kind: "sprite",
-      x: 290,
-      y: 600,
+      x: 292,
+      y: 592,
       render: {
         sprite: { sheet: "platchars" as const, col: 0, row: 1, scale: 1.7 },
         shadow: { offsetX: 10, width: 28 },

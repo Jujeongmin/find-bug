@@ -262,7 +262,6 @@
   "object.railA": "레일 (위)",
   "object.railB": "레일 (가운데)",
   "object.railC": "레일 (아래)",
-  "object.wheel": "경품 바퀴",
   "object.keeper": "사격장 주인",
   "object.boothLamp": "조명",
   "bugdesc.noHit": "{obj}: 눌러도 맞지 않았다. 다른 것들은 잘 맞는데.",
@@ -429,5 +428,6 @@
   "object.belt": "컨베이어",
   "hint.drag": "화면을 드래그해 이동",
   "hint.keys": "방향키로 이동 · 스페이스로 공격",
-  "hint.sideView": "좌우 버튼으로 이동 · ⤒ 로 점프"
+  "hint.sideView": "좌우 버튼으로 이동 · ⤒ 로 점프",
+  "object.counter": "가판 카운터"
 }

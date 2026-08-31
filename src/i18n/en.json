@@ -262,7 +262,6 @@
   "object.railA": "Rail (top)",
   "object.railB": "Rail (middle)",
   "object.railC": "Rail (bottom)",
-  "object.wheel": "Prize wheel",
   "object.keeper": "Stall keeper",
   "object.boothLamp": "Booth lamp",
   "bugdesc.noHit": "{obj}: tapping it never registered a hit, while the others did.",
@@ -429,5 +428,6 @@
   "object.belt": "Conveyor",
   "hint.drag": "Drag anywhere to move",
   "hint.keys": "Arrow keys to move · space to attack",
-  "hint.sideView": "Left and right to move · ⤒ to jump"
+  "hint.sideView": "Left and right to move · ⤒ to jump",
+  "object.counter": "Stall counter"
 }
