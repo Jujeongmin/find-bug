@@ -6,7 +6,7 @@ const ITEMS = [
   { id: "potion", sprite: { sheet: "roguelike" as const, col: 54, row: 12 }, x: 120 },
   { id: "scroll", sprite: { sheet: "roguelike" as const, col: 44, row: 15 }, x: 180 },
   { id: "meat", sprite: { sheet: "roguelike" as const, col: 54, row: 15 }, x: 240 },
-  { id: "fish", sprite: { sheet: "roguelike" as const, col: 56, row: 12 }, x: 300 },
+  { id: "bread", sprite: { sheet: "roguelike" as const, col: 55, row: 13 }, x: 300 },
 ];
 
 export const stage02Scene: SceneSpec = {
@@ -50,7 +50,7 @@ export const stage02Scene: SceneSpec = {
       x: 40,
       y: 210,
       peerGroup: "candle",
-      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 11, scale: 2.2 }, glow: { radius: 70, offsetX: 0, offsetY: 0 } },
+      render: { className: "s2-candle", bar: { width: 10, height: 30 }, glow: { radius: 70, offsetX: 5, offsetY: 4 } },
       behaviors: [{ t: "animate", name: "flicker", period: 0.6, essential: true }],
     },
     {
@@ -60,7 +60,7 @@ export const stage02Scene: SceneSpec = {
       x: 310,
       y: 210,
       peerGroup: "candle",
-      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 11, scale: 2.2 }, glow: { radius: 70, offsetX: 0, offsetY: 0 } },
+      render: { className: "s2-candle", bar: { width: 10, height: 30 }, glow: { radius: 70, offsetX: 5, offsetY: 4 } },
       behaviors: [{ t: "animate", name: "flicker", period: 0.6, essential: true }],
     },
 

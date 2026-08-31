@@ -425,14 +425,14 @@
       ]
     },
     {
-      "fullId": "stage02:noAction:fish",
+      "fullId": "stage02:noAction:bread",
       "scene": "stage02",
       "sceneName": "마법 상점",
       "mutator": "noAction",
       "category": "no-action",
       "categoryLabel": "동작 안 함",
-      "answers": "말린 생선",
-      "desc": "말린 생선: 눌러도 아무 반응이 없었다.",
+      "answers": "빵",
+      "desc": "빵: 눌러도 아무 반응이 없었다.",
       "score": 1.52,
       "band": 2,
       "stages": [
@@ -461,14 +461,14 @@
       ]
     },
     {
-      "fullId": "stage02:floating:fish",
+      "fullId": "stage02:floating:bread",
       "scene": "stage02",
       "sceneName": "마법 상점",
       "mutator": "floating",
       "category": "physics",
       "categoryLabel": "물리 오류",
-      "answers": "말린 생선",
-      "desc": "말린 생선: 공중에 뜬 채 떨어지지 않았다.",
+      "answers": "빵",
+      "desc": "빵: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.52,
       "band": 2,
       "stages": [
@@ -541,7 +541,7 @@
       "categoryLabel": "이상한 움직임",
       "answers": "촛불 (오른쪽)",
       "desc": "촛불 (오른쪽): 움직임 애니메이션 없이 미끄러지듯 이동했다.",
-      "score": 2.15,
+      "score": 2.2,
       "band": 2,
       "stages": [
         2,
@@ -559,7 +559,7 @@
       "categoryLabel": "이상한 움직임",
       "answers": "촛불 (왼쪽)",
       "desc": "촛불 (왼쪽): 움직임 애니메이션 없이 미끄러지듯 이동했다.",
-      "score": 2.17,
+      "score": 2.21,
       "band": 2,
       "stages": [
         2,
@@ -671,14 +671,14 @@
       ]
     },
     {
-      "fullId": "stage02:counterSkew:fish:items",
+      "fullId": "stage02:counterSkew:bread:items",
       "scene": "stage02",
       "sceneName": "마법 상점",
       "mutator": "counterSkew",
       "category": "logic",
       "categoryLabel": "논리 오류",
-      "answers": "인벤토리 / 말린 생선",
-      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (말린 생선)",
+      "answers": "인벤토리 / 빵",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (빵)",
       "score": 2.52,
       "band": 3,
       "stages": [
@@ -696,7 +696,7 @@
       "categoryLabel": "그래픽 오류",
       "answers": "촛불 (오른쪽)",
       "desc": "촛불 (오른쪽): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
-      "score": 3.15,
+      "score": 3.2,
       "band": 4,
       "stages": [
         29
@@ -711,7 +711,7 @@
       "categoryLabel": "그래픽 오류",
       "answers": "촛불 (왼쪽)",
       "desc": "촛불 (왼쪽): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
-      "score": 3.17,
+      "score": 3.21,
       "band": 4,
       "stages": [
         29
@@ -931,15 +931,15 @@
       ]
     },
     {
-      "fullId": "stage05:floating:cauldron",
+      "fullId": "stage05:floating:hearth",
       "scene": "stage05",
       "sceneName": "밤샘 연구실",
       "mutator": "floating",
       "category": "physics",
       "categoryLabel": "물리 오류",
-      "answers": "가마솥",
-      "desc": "가마솥: 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.18,
+      "answers": "화로",
+      "desc": "화로: 공중에 뜬 채 떨어지지 않았다.",
+      "score": 1.13,
       "band": 1,
       "stages": [
         4
@@ -1107,7 +1107,7 @@
       "categoryLabel": "그래픽 오류",
       "answers": "모닥불",
       "desc": "모닥불: 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
-      "score": 2.32,
+      "score": 2.38,
       "band": 3,
       "stages": [
         15,
@@ -1116,7 +1116,7 @@
       ]
     },
     {
-      "fullId": "stage05:zSwap:fire:cauldron",
+      "fullId": "stage05:zSwap:fire:hearth",
       "scene": "stage05",
       "sceneName": "밤샘 연구실",
       "mutator": "zSwap",
@@ -1124,7 +1124,7 @@
       "categoryLabel": "그래픽 오류",
       "answers": "모닥불",
       "desc": "모닥불: 다른 물체 위에 겹쳐 그려졌다.",
-      "score": 2.32,
+      "score": 2.38,
       "band": 3,
       "stages": [
         15,

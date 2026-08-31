@@ -315,6 +315,8 @@ export function EngineStage({
 
               // bars anchor at their left edge so the visual matches collision
               if (o.render.bar) {
+                const barAnim = o.behaviors.find((b) => b.t === "animate");
+                const barGlow = o.render.glow;
                 return (
                   <div
                     key={o.id}
@@ -322,7 +324,11 @@ export function EngineStage({
                       picking ? "pickable" : ""
                     } ${high ? "meter-high" : ""} ${
                       triggered ? "triggered" : ""
-                    } ${flagClass}`}
+                    } ${flagClass} ${
+                      barAnim && barAnim.t === "animate"
+                        ? `anim-${barAnim.name}`
+                        : ""
+                    }`}
                     style={{
                       left: os.x,
                       top: os.y,
@@ -337,6 +343,11 @@ export function EngineStage({
                           .filter(Boolean)
                           .join(" ") || undefined,
                       marginTop: -(o.render.liftY ?? 0),
+                      ...(barAnim && barAnim.t === "animate"
+                        ? ({
+                            "--anim-period": `${barAnim.period}s`,
+                          } as CSSProperties)
+                        : null),
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -344,6 +355,17 @@ export function EngineStage({
                     }}
                     title={picking ? t(o.nameKey) : undefined}
                   >
+                    {barGlow && (
+                      <div
+                        className="eng-glow"
+                        style={{
+                          width: barGlow.radius,
+                          height: barGlow.radius,
+                          left: barGlow.offsetX,
+                          top: barGlow.offsetY,
+                        }}
+                      />
+                    )}
                     {needle !== null && (
                       <div
                         className="eng-needle"

@@ -47,26 +47,26 @@ export const stage05Scene: SceneSpec = {
       ],
     })),
 
-    /* cauldron and fire — fire overlaps the cauldron, enabling zSwap */
+    /* hearth and fire — the fire burns inside the arch, enabling zSwap */
     {
-      id: "cauldron",
-      nameKey: "object.cauldron",
+      id: "hearth",
+      nameKey: "object.hearth",
       kind: "decor",
       x: 180,
       y: 300,
       z: 2,
-      render: { sprite: { sheet: "roguelike" as const, col: 51, row: 16, scale: 3 }, shadow: { offsetX: 10, width: 34 }, timer: "brew" },
+      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 9, scale: 3.4 }, shadow: { offsetX: 10, width: 34 }, timer: "brew" },
       behaviors: [],
     },
     {
       id: "fire",
       nameKey: "object.fire",
       kind: "decor",
-      x: 163,
-      y: 286,
-      z: 1,
-      overlaps: "cauldron",
-      render: { className: "s5-flame", bar: { width: 34, height: 26 }, glow: { radius: 90, offsetX: 17, offsetY: 13 } },
+      x: 166,
+      y: 276,
+      z: 3,
+      overlaps: "hearth",
+      render: { className: "s5-flame", bar: { width: 28, height: 20 }, glow: { radius: 84, offsetX: 14, offsetY: 10 } },
       behaviors: [{ t: "animate", name: "flicker", period: 0.5 }],
     },
 

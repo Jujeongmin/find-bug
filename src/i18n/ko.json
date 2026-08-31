@@ -121,7 +121,6 @@
   "intro.stage05.line": "연구실 빌드 검증. 시간이 흐르는 방식까지 의심하라.",
   "lab.brew": "끓이기",
   "lab.stock": "재고",
-  "object.cauldron": "가마솥",
   "object.herb": "허브",
   "object.mushroom": "버섯",
   "object.crystal": "수정",
@@ -136,9 +135,9 @@
   "object.window": "창문",
   "object.books": "책더미",
   "object.scroll": "두루마리",
-  "bug.F1.desc": "수정: 클릭해도 가마솥에 들어가지 않았다. 다른 재료는 되는데.",
+  "bug.F1.desc": "수정: 눌러도 화로에 들어가지 않았다. 다른 재료는 잘 들어갔다.",
   "bug.F2.desc": "조수 로봇: 벽에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
-  "bug.F3.desc": "모닥불: 불꽃이 가마솥 앞이 아니라 위에 겹쳐 그려졌다.",
+  "bug.F3.desc": "불: 불꽃이 화로 앞이 아니라 화로 위에 그려져 있었다.",
   "bug.F4.desc": "완성품 선반: 물약이 칸이 아니라 선반 사이 허공에 놓였다.",
   "bug.F5.desc": "재고 카운터: 재료를 하나 쓸 때마다 2개씩 줄었다.",
   "bug.F6.desc": "남은 시간 표시: 진행 바는 5초에 차는데 숫자는 3초에 0이 됐다.",
@@ -271,5 +270,6 @@
   "bugdesc.noHit": "{obj}: 눌러도 맞지 않았다. 다른 것들은 잘 맞는데.",
   "object.book": "책",
   "object.meat": "말린 고기",
-  "object.fish": "말린 생선"
+  "object.hearth": "화로",
+  "object.bread": "빵"
 }

@@ -455,12 +455,6 @@
   to { opacity: 1; filter: brightness(1.25); }
 }
 
-/* the CSS-drawn flame is a bar, so it gets the same flicker under its own name */
-@keyframes eng-flicker {
-  from { opacity: 0.85; filter: brightness(0.9); }
-  to { opacity: 1; filter: brightness(1.3); }
-}
-
 /* Sized bars anchor at their LEFT-TOP corner, the same convention the platform
    collision uses, so what you see is what you land on. */
 .eng-bar {
@@ -509,6 +503,22 @@
   background: radial-gradient(circle at 38% 34%, #fffbe8 0 45%, #ffe9a8 100%);
   border-radius: 50%;
   border: none;
+}
+.s2-candle {
+  background: linear-gradient(#f6efdc, #cdc2a6);
+  border: none;
+  border-radius: 2px 2px 1px 1px;
+}
+.s2-candle::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 8px;
+  height: 12px;
+  margin-left: -4px;
+  background: radial-gradient(ellipse at 50% 80%, #ffe89a 0 35%, #ff9c1a 70%, #e0510c 100%);
+  border-radius: 50% 50% 45% 45% / 65% 65% 35% 35%;
 }
 .s2-plank {
   background: linear-gradient(#7a5230, #543720);

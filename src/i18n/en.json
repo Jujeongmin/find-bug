@@ -121,7 +121,6 @@
   "intro.stage05.line": "Lab build. Doubt even how time flows.",
   "lab.brew": "Brew",
   "lab.stock": "Stock",
-  "object.cauldron": "Cauldron",
   "object.herb": "Herb",
   "object.mushroom": "Mushroom",
   "object.crystal": "Crystal",
@@ -136,9 +135,9 @@
   "object.window": "Window",
   "object.books": "Book pile",
   "object.scroll": "Scroll",
-  "bug.F1.desc": "Crystal: clicking it never dropped it into the cauldron. Other ingredients worked.",
+  "bug.F1.desc": "Crystal: clicking it never dropped it into the hearth. Other ingredients worked.",
   "bug.F2.desc": "Assistant robot: it bounced backwards every time it hit a wall.",
-  "bug.F3.desc": "Fire: the flames were drawn on top of the cauldron instead of in front of it.",
+  "bug.F3.desc": "Fire: the flames were drawn on top of the hearth instead of inside it.",
   "bug.F4.desc": "Product shelf: potions landed in mid-air between the shelf slots.",
   "bug.F5.desc": "Stock counter: it dropped by 2 for every single ingredient used.",
   "bug.F6.desc": "Time remaining: the bar filled in 5s but the number hit 0 at 3s.",
@@ -271,5 +270,6 @@
   "bugdesc.noHit": "{obj}: tapping it never registered a hit, while the others did.",
   "object.book": "Book",
   "object.meat": "Cured meat",
-  "object.fish": "Dried fish"
+  "object.hearth": "Hearth",
+  "object.bread": "Loaf of bread"
 }
