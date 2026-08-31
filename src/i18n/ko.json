@@ -394,5 +394,20 @@
   "office.pending": "미전달 {n}",
   "office.dev.handoff": "\"{n}건 접수. 다음 빌드에 반영할게.\"",
   "office.dev.waiting": "\"뭐 잡은 거 있으면 지금 넘겨. 퇴근하고 나면 못 고쳐.\"",
-  "office.tallyDetail": "전달 {delivered} · 미전달 {late} · 치명적 유출 {critical}"
+  "office.tallyDetail": "전달 {delivered} · 미전달 {late} · 치명적 유출 {critical}",
+  "home.name": "내 방",
+  "home.intro": "하루가 끝났다.",
+  "home.evening": "{n}일차 저녁",
+  "home.fatigue": "피로",
+  "home.sleep": "잠자기",
+  "home.rest": "소파에서 쉬기",
+  "home.journal": "개발 일지 보기",
+  "home.goWork": "아직 밤이다",
+  "home.rested": "좀 나아졌다. 내일은 조금 일찍 나갈 수 있겠다.",
+  "home.alreadyRested": "오늘은 충분히 쉬었다.",
+  "home.notYet": "지금 나가봐야 사무실은 잠겨 있다. 자고 가자.",
+  "home.journalLine": "{n}일차까지 왔다. 출시까지 {left}일. 지금까지 흘려보낸 결함 {shipped}건.",
+  "object.bed": "침대",
+  "object.sofa": "소파",
+  "object.journal": "개발 일지"
 }

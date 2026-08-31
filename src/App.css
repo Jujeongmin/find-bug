@@ -562,3 +562,41 @@
   font-style: normal; font-size: 10px; font-weight: 700;
   color: #ffd98a; border: 1px solid #6b5426; border-radius: 4px; padding: 1px 5px;
 }
+
+/* ---- home ---- */
+.home-floor {
+  background: url("./assets/props/tile3.png") 0 0 / 40px 40px repeat;
+  image-rendering: pixelated;
+}
+.home-wall {
+  background:
+    url("./assets/props/tile4.png") 0 100% / 64px 64px repeat-x,
+    linear-gradient(#c9c1b2, #bcb4a4);
+  border: none;
+  border-radius: 0;
+  image-rendering: pixelated;
+}
+.home-bed {
+  background:
+    /* pillow */
+    linear-gradient(#f2ece0, #ddd4c2) 6px 6px / calc(100% - 12px) 26px no-repeat,
+    /* blanket */
+    linear-gradient(#4f7bbf, #38598f) 0 44px / 100% calc(100% - 44px) no-repeat,
+    linear-gradient(#8a5f38, #6a4526);
+  border: 3px solid #4a3a2c;
+  border-radius: 5px;
+}
+.home-sofa {
+  background:
+    linear-gradient(#8e5b52, #6f443d) 0 12px / 100% calc(100% - 12px) no-repeat,
+    linear-gradient(#a76b60, #8e5b52);
+  border: 3px solid #4a2f2a;
+  border-radius: 8px 8px 4px 4px;
+  box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.18);
+}
+.office-fatigue {
+  margin-left: auto;
+  font-size: 12px;
+  color: #ffd98a;
+  letter-spacing: 2px;
+}

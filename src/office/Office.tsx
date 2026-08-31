@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { useI18n } from "../i18n";
 import { EngineStage } from "../engine/EngineStage";
 import { officeScene, MACHINES, type MachineId } from "./scene";
+import { homeScene } from "../home/scene";
 import { ENGINE_SCENES } from "../stages/registry";
 import { sfx } from "../audio/sfx";
 
@@ -66,6 +67,16 @@ const SEVERITY_COST: Record<Severity, number> = {
 /** a defect caught but never walked over to the developer is never fixed */
 const LATE_COST = 0.2;
 
+/**
+ * Tiredness, 0 to 3. A late finish costs a night of it, and every point pushes
+ * tomorrow's start later — so working past the evening is a loan against the
+ * next day rather than free extra time.
+ */
+const MAX_FATIGUE = 3;
+const FATIGUE_START_COST = 20;
+/** finishing after this leaves you tired */
+const LATE_FINISH = 16 * 60 + 30;
+
 interface Assignment {
   machine: MachineId;
   sceneId: string;
@@ -119,12 +130,16 @@ export function Office({ onExit }: { onExit: () => void }) {
   /** caught, but the day ended before it reached the developer */
   const [late, setLate] = useState(0);
   const [shipped_, setShipped_] = useState<Severity[]>([]);
+  const [place, setPlace] = useState<"office" | "home">("office");
+  const [fatigue, setFatigue] = useState(0);
+  /** one restful thing per evening */
+  const [restedTonight, setRestedTonight] = useState(false);
 
   // one clock for the whole day, ticking through the office and the builds
   // alike; goHomeRef keeps the timer from closing over a stale day
   const goHomeRef = useRef<() => void>(() => {});
   useEffect(() => {
-    if (shipped) return;
+    if (shipped || place === "home") return;
     const id = setInterval(() => {
       setMinutes((m) => {
         if (m >= DAY_END) return m;
@@ -153,7 +168,6 @@ export function Office({ onExit }: { onExit: () => void }) {
   };
 
   const goHome = () => {
-    setMinutes(DAY_START);
     // anything still unverified ships as-is
     const unseen = assignments.filter((a) => a.result === null);
     setMissed((n) => n + unseen.length);
@@ -161,14 +175,26 @@ export function Office({ onExit }: { onExit: () => void }) {
     // a defect the developer never heard about does not get fixed
     setLate((n) => n + pending.length);
     setPending([]);
+    // a long day costs a night of sleep, whether or not it was productive
+    if (minutes >= LATE_FINISH) setFatigue((f) => Math.min(MAX_FATIGUE, f + 1));
+    sfx.play("click");
+    setRunning(null);
+    setNote(null);
+    setPlace("home");
+  };
+
+  /** the bed, and the only way into tomorrow */
+  const sleep = () => {
     if (day >= DAYS) {
       setShipped(true);
       return;
     }
     sfx.play("click");
-    setRunning(null);
     setDay((d) => d + 1);
     setAssignments(assignDay(day + 1));
+    setMinutes(DAY_START + fatigue * FATIGUE_START_COST);
+    setRestedTonight(false);
+    setPlace("office");
     setNote(null);
   };
   goHomeRef.current = goHome;
@@ -186,6 +212,27 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (left === 0) return "office.dev.allDone";
     if (day >= DAYS) return "office.dev.lastDay";
     return `office.dev.idle${talks % IDLE_LINES}`;
+  };
+
+  const onHomeStation = (id: string) => {
+    if (id === "bed") return sleep();
+    if (id === "sofa") {
+      if (restedTonight) return setNote(t("home.alreadyRested"));
+      setRestedTonight(true);
+      setFatigue((f) => Math.max(0, f - 1));
+      sfx.play("pick");
+      return setNote(t("home.rested"));
+    }
+    if (id === "journal") {
+      return setNote(
+        tp("home.journalLine", {
+          n: String(day),
+          left: String(DAYS - day),
+          shipped: String(shipped_.length),
+        })
+      );
+    }
+    if (id === "frontDoor") return setNote(t("home.notYet"));
   };
 
   const onStation = (id: string) => {
@@ -274,6 +321,28 @@ export function Office({ onExit }: { onExit: () => void }) {
         } as CSSProperties
       }
     >
+      {place === "home" ? (
+        <EngineStage
+          key={`home-${day}`}
+          scene={homeScene}
+          mode="play"
+          header={
+            <div className="wb-header">
+              <button className="exit-btn" onClick={onExit} title={t("game.exit")}>
+                ←
+              </button>
+              <span className="wb-build">{tp("home.evening", { n: String(day) })}</span>
+              <span className="office-fatigue">
+                {t("home.fatigue")} {"●".repeat(fatigue)}
+                {"○".repeat(MAX_FATIGUE - fatigue)}
+              </span>
+            </div>
+          }
+          onStation={onHomeStation}
+          onClear={() => {}}
+          onExit={onExit}
+        />
+      ) : (
       <EngineStage
         key={`office-${day}`}
         scene={officeScene}
@@ -308,6 +377,8 @@ export function Office({ onExit }: { onExit: () => void }) {
         onClear={() => {}}
         onExit={onExit}
       />
+      )}
+
       {note && (
         <div className="modal-backdrop" onClick={() => setNote(null)}>
           <div className="modal">
