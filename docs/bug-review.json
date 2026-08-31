@@ -737,6 +737,42 @@
       ]
     },
     {
+      "fullId": "stage03:floating:torch1",
+      "scene": "stage03",
+      "sceneName": "점프 던전",
+      "mutator": "floating",
+      "category": "physics",
+      "categoryLabel": "물리 오류",
+      "answers": "벽난로 (왼쪽)",
+      "desc": "벽난로 (왼쪽): 공중에 뜬 채 떨어지지 않았다.",
+      "score": 1.64,
+      "band": 2,
+      "stages": [
+        3,
+        9,
+        14,
+        19
+      ]
+    },
+    {
+      "fullId": "stage03:floating:torch2",
+      "scene": "stage03",
+      "sceneName": "점프 던전",
+      "mutator": "floating",
+      "category": "physics",
+      "categoryLabel": "물리 오류",
+      "answers": "벽난로 (오른쪽)",
+      "desc": "벽난로 (오른쪽): 공중에 뜬 채 떨어지지 않았다.",
+      "score": 1.64,
+      "band": 2,
+      "stages": [
+        3,
+        9,
+        14,
+        19
+      ]
+    },
+    {
       "fullId": "stage03:flipSprite:batA",
       "scene": "stage03",
       "sceneName": "점프 던전",
@@ -781,7 +817,7 @@
       "categoryLabel": "이상한 움직임",
       "answers": "벽난로 (왼쪽)",
       "desc": "벽난로 (왼쪽): 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
-      "score": 2.33,
+      "score": 2.34,
       "band": 3,
       "stages": [
         19,
@@ -824,21 +860,6 @@
       ]
     },
     {
-      "fullId": "stage03:offsetGlow:torch2",
-      "scene": "stage03",
-      "sceneName": "점프 던전",
-      "mutator": "offsetGlow",
-      "category": "graphic",
-      "categoryLabel": "그래픽 오류",
-      "answers": "벽난로 (오른쪽)",
-      "desc": "벽난로 (오른쪽): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
-      "score": 3.28,
-      "band": 4,
-      "stages": [
-        30
-      ]
-    },
-    {
       "fullId": "stage03:offsetGlow:torch1",
       "scene": "stage03",
       "sceneName": "점프 던전",
@@ -847,7 +868,22 @@
       "categoryLabel": "그래픽 오류",
       "answers": "벽난로 (왼쪽)",
       "desc": "벽난로 (왼쪽): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
-      "score": 3.33,
+      "score": 3.34,
+      "band": 4,
+      "stages": [
+        30
+      ]
+    },
+    {
+      "fullId": "stage03:offsetGlow:torch2",
+      "scene": "stage03",
+      "sceneName": "점프 던전",
+      "mutator": "offsetGlow",
+      "category": "graphic",
+      "categoryLabel": "그래픽 오류",
+      "answers": "벽난로 (오른쪽)",
+      "desc": "벽난로 (오른쪽): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
+      "score": 3.34,
       "band": 4,
       "stages": [
         30

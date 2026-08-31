@@ -160,25 +160,29 @@ export const stage03Scene: SceneSpec = {
       ],
     })),
 
-    /* torches — peers, glow comparison */
+    /* Floor braziers, peers of each other, for glow comparison.
+       They hung in mid-air before. Nothing in the scene draws a wall, so there
+       was no reason on screen for them to be up there and they read as
+       floating — the same trap as stage 1's well: correct, but fault-shaped.
+       On the floor with a shadow, their position explains itself. */
     {
       id: "torch1",
       nameKey: "object.torch1",
       kind: "decor",
-      x: 35,
-      y: 150,
+      x: 20,
+      y: GROUND_Y,
       peerGroup: "torch",
-      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 7, scale: 1.8 }, glow: { radius: 110, offsetX: 0, offsetY: 0 } },
+      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 7, scale: 2.2 }, glow: { radius: 110, offsetX: 0, offsetY: -12 }, shadow: { offsetX: 10, width: 26 } },
       behaviors: [{ t: "animate", name: "flicker", period: 0.5, essential: true }],
     },
     {
       id: "torch2",
       nameKey: "object.torch2",
       kind: "decor",
-      x: 325,
-      y: 300,
+      x: 340,
+      y: GROUND_Y,
       peerGroup: "torch",
-      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 7, scale: 1.8 }, glow: { radius: 110, offsetX: 0, offsetY: 0 } },
+      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 7, scale: 2.2 }, glow: { radius: 110, offsetX: 0, offsetY: -12 }, shadow: { offsetX: 10, width: 26 } },
       behaviors: [{ t: "animate", name: "flicker", period: 0.5, essential: true }],
     },
 
