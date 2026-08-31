@@ -143,7 +143,14 @@ export function EngineStage({
     return { x: (e.clientX - r.left) / k, y: (e.clientY - r.top) / k };
   };
 
+  /**
+   * Drag-to-move is a touch control. On a desktop the arrow keys already move
+   * the player, and dragging the mouse to walk fights with clicking things.
+   */
+  const isTouch = (e: React.PointerEvent) => e.pointerType !== "mouse";
+
   const stickDown = (e: React.PointerEvent) => {
+    if (!isTouch(e)) return;
     if (stickId.current !== null) return;
     const p = fieldPoint(e);
     if (!p) return;
@@ -152,6 +159,7 @@ export function EngineStage({
   };
 
   const stickMove = (e: React.PointerEvent) => {
+    if (!isTouch(e)) return;
     if (stickId.current !== e.pointerId) return;
     const p = fieldPoint(e);
     setStick((s) => {
@@ -168,6 +176,7 @@ export function EngineStage({
   };
 
   const stickUp = (e: React.PointerEvent) => {
+    if (!isTouch(e)) return;
     if (stickId.current !== e.pointerId) return;
     stickId.current = null;
     runtimeRef.current.stick = null;
