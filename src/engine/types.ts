@@ -46,7 +46,14 @@ export type Behavior =
   /** hurts the player on contact */
   | { t: "damage"; counter: string; amount: number; radius: number }
   /** can be destroyed by an attack; respawns later */
-  | { t: "killable"; radius: number; respawn: number; onKill: Action[] }
+  | {
+      t: "killable";
+      radius: number;
+      respawn: number;
+      onKill: Action[];
+      /** set by the noHit mutator: the object shrugs off taps */
+      ignoreTaps?: boolean;
+    }
   /** consumed on touch */
   | { t: "pickup"; radius: number; respawn: number; onPickup: Action[]; popup?: string }
   /** responds to a tap; `action: null` means it looks pressable but does nothing */

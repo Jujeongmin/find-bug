@@ -73,31 +73,28 @@ for (const scene of ENGINE_SCENES) {
   ok("stage03: noPlatform drops the player through", r4.state.objects.player.y > 500);
 }
 
-/* stage 6: the wiring bench — a switch lights its own lamp and counts a check */
+/* stage 6: the shooting gallery — tap a target, it drops and scores */
 {
   const r = new SceneRuntime(stage06Scene);
-  r.click("switchA");
-  ok("stage06: switch A lights lamp A only",
-     r.isTriggered("lampA") && !r.isTriggered("lampB") && !r.isTriggered("lampC"));
-  ok("stage06: a check is recorded", r.state.counters.checks === 1);
+  r.click("targetA");
+  ok("stage06: tapping a target knocks it down", !r.state.objects.targetA.alive);
+  ok("stage06: a hit scores", r.state.counters.score === 10 && r.state.counters.hits === 1);
+  tick(r, 2);
+  ok("stage06: the target pops back up", r.state.objects.targetA.alive);
 
-  const swapped = mut(stage06Scene, "wiringSwap:switchA:switchB");
-  const r2 = new SceneRuntime(applyMutation(stage06Scene, swapped));
-  r2.click("switchA");
-  ok("stage06: wiringSwap lights the wrong lamp",
-     r2.isTriggered("lampB") && !r2.isTriggered("lampA"));
+  const dead = mut(stage06Scene, "noHit:targetB");
+  const r2 = new SceneRuntime(applyMutation(stage06Scene, dead));
+  r2.click("targetB");
+  ok("stage06: a target that ignores taps stays up", r2.state.objects.targetB.alive);
 
-  const dead = mut(stage06Scene, "noAction:switchC");
-  const r3 = new SceneRuntime(applyMutation(stage06Scene, dead));
-  r3.click("switchC");
-  ok("stage06: a dead switch lights nothing and counts nothing",
-     !r3.isTriggered("lampC") && r3.state.counters.checks === 0);
+  const skew = mut(stage06Scene, "counterSkew:targetA:score");
+  const r3 = new SceneRuntime(applyMutation(stage06Scene, skew));
+  r3.click("targetA");
+  ok("stage06: counterSkew scores the wrong amount", r3.state.counters.score !== 10);
 
-  const skew = mut(stage06Scene, "counterSkew:switchA:checks");
-  const r4 = new SceneRuntime(applyMutation(stage06Scene, skew));
-  r4.click("switchA");
-  ok("stage06: counterSkew moves the tally by the wrong amount",
-     r4.state.counters.checks !== 1);
+  const base = new SceneRuntime(stage06Scene);
+  tick(base, 1);
+  ok("stage06: targets ride their rails", base.state.objects.targetC.x > stage06Scene.objects.find(o => o.id === "targetC")!.x);
 }
 
 console.log(fails === 0 ? "\nALL PASS" : `\n${fails} FAILURES`);

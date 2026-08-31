@@ -328,7 +328,13 @@ export function EngineStage({
                       width: o.render.bar.width,
                       height: o.render.bar.height,
                       zIndex: o.z ?? 1,
-                      transform: o.render.upsideDown ? "scaleY(-1)" : undefined,
+                      transform:
+                        [
+                          o.render.upsideDown ? "scaleY(-1)" : "",
+                          os.angle ? `rotate(${os.angle}deg)` : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" ") || undefined,
                       marginTop: -(o.render.liftY ?? 0),
                     }}
                     onClick={(e) => {

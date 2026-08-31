@@ -426,15 +426,16 @@
 .s2-room { background: linear-gradient(#5d4a66 0 500px, #8a6f4d 500px); }
 .s3-field { background: linear-gradient(#2b2438 0 555px, #4a3a2c 555px); }
 .s5-lab { background: linear-gradient(#241f33 0 430px, #3a2f28 430px); }
-.s6-room { background: linear-gradient(#1e2028 0 420px, #2b2e38 420px); }
-
-/* engine bars: anchored at their left edge, sized to their collision box */
+/* Sized bars anchor at their LEFT-TOP corner, the same convention the platform
+   collision uses, so what you see is what you land on. */
 .eng-bar {
   position: absolute;
-  border-radius: 4px;
-  background: linear-gradient(#6e5a45, #4c3d2c);
-  border-top: 2px solid #8a7358;
+  box-sizing: border-box;
+  background: linear-gradient(#7b6a52, #4b3f30);
+  border-top: 2px solid #a18f70;
+  border-radius: 3px;
 }
+
 .eng-bar.moving {
   background: linear-gradient(#5a6ea0, #3c4a75);
   border-top-color: #7d92c9;
@@ -547,97 +548,53 @@
   border-width: 2px;
 }
 
-/* ---- machine room props ---- */
 
-/* ---- machine room: make the room and its wiring readable ---- */
+/* ---- shooting gallery ---- */
 .s6-room {
   background:
-    /* floor */
-    linear-gradient(#1e2028 0 420px, #2b2e38 420px),
-    /* wall panel seams */
+    /* striped awning across the top of the booth */
     repeating-linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.03) 0 2px,
-      transparent 2px 60px
-    );
+      #b8353f 0 34px,
+      #f0e3d0 34px 68px
+    ) 0 0 / 100% 46px no-repeat,
+    /* back wall, then the counter the keeper stands behind */
+    linear-gradient(#2c2a3a 46px 640px, #3a2f2c 640px);
 }
 
-/* ---- wiring test bench ---- */
-.s6-room {
-  background:
-    linear-gradient(#20232c 0 270px, #1a1d24 270px 400px, #262a34 400px),
-    repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.03) 0 2px,
-      transparent 2px 60px
-    );
-}
-
-/* a lamp is dark until its channel fires */
-.s6-lamp {
+.s6-wheel {
   border-radius: 50%;
-  border: 4px solid #3a4150;
-  background: #23272f;
-  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.6);
-  transition: background 0.12s, box-shadow 0.12s;
+  border: 3px solid #f0e3d0;
+  background: conic-gradient(
+    #e0575f 0 60deg,
+    #f2c14e 60deg 120deg,
+    #4f9d69 120deg 180deg,
+    #4a7bc8 180deg 240deg,
+    #f2c14e 240deg 300deg,
+    #e0575f 300deg
+  );
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35);
 }
 
-.s6-lamp.triggered.red {
-  background: radial-gradient(circle at 38% 32%, #ff8f86 0 18%, #e0342a 62%, #a01b14 100%);
-  box-shadow: 0 0 18px 4px rgba(224, 87, 79, 0.65);
-}
-.s6-lamp.triggered.blue {
-  background: radial-gradient(circle at 38% 32%, #8ec2ff 0 18%, #2f7fd4 62%, #14458a 100%);
-  box-shadow: 0 0 18px 4px rgba(79, 143, 224, 0.65);
-}
-.s6-lamp.triggered.yellow {
-  background: radial-gradient(circle at 38% 32%, #ffe27a 0 18%, #e0b21a 62%, #8a6c0d 100%);
-  box-shadow: 0 0 18px 4px rgba(224, 194, 79, 0.65);
-}
-
-/* printed pairing card: three swatch pairs, red/blue/yellow left to right */
-.s6-legend {
+/* rails the targets ride along */
+.s6-rail {
+  background: linear-gradient(#6b7280, #39404b);
   border-radius: 4px;
-  border: 2px solid #4a5160;
-  background: #eae4d6;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+  border-top: 2px solid #939cab;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
 }
 
-.s6-legend::before {
-  content: "";
-  position: absolute;
-  inset: 9px 12px;
-  background:
-    linear-gradient(90deg, #d4433f 0 22px, transparent 22px 34px, #d4433f 34px 56px) 0 0 / 96px 100% no-repeat,
-    linear-gradient(90deg, #3f7fd4 0 22px, transparent 22px 34px, #3f7fd4 34px 56px) 100px 0 / 96px 100% no-repeat,
-    linear-gradient(90deg, #d4b53f 0 22px, transparent 22px 34px, #d4b53f 34px 56px) 200px 0 / 96px 100% no-repeat;
+.s6-booth-lamp {
+  background: radial-gradient(circle at 40% 35%, #fff6c9 0 40%, #ffd34a 100%);
+  border-radius: 50%;
+  border: 2px solid #7a6320;
 }
-
-/* switch bases carry the channel colour so the pairing is unmistakable */
-.s6-switch { position: relative; }
-
-.s6-switch::before {
+.s6-booth-lamp::before {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: -8px;
-  width: 46px;
-  height: 14px;
-  margin-left: -23px;
-  border-radius: 3px;
-  border: 2px solid rgba(0, 0, 0, 0.5);
-  z-index: -1;
-}
-
-.s6-switch.red::before { background: #d4433f; }
-.s6-switch.blue::before { background: #3f7fd4; }
-.s6-switch.yellow::before { background: #d4b53f; }
-
-.s6-gear {
-  background: url("../assets/gear.svg") center / contain no-repeat;
-  border: none;
-  box-shadow: none;
-  image-rendering: pixelated;
+  bottom: 100%;
+  width: 2px;
+  height: 60px;
+  background: #6c5c3a;
 }

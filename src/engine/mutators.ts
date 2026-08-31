@@ -448,7 +448,26 @@ export const invertMeter: Mutator = {
   answerIds: (_s, t) => [t.objectId],
 };
 
+export const noHit: Mutator = {
+  id: "noHit",
+  category: "no-action",
+  descKey: "bugdesc.noHit",
+  subtlety: 2,
+  requiresPeer: true,
+  comparative: false,
+  candidates: (s) =>
+    withPeers(s, byBehavior(s, "killable")).map((o) => ({ objectId: o.id })),
+  apply: (s, t) =>
+    mapObject(s, t.objectId, (o) => {
+      o.behaviors = o.behaviors.map((b) =>
+        b.t === "killable" ? { ...b, ignoreTaps: true } : b
+      );
+    }),
+  answerIds: (_s, t) => [t.objectId],
+};
+
 export const MUTATORS: Mutator[] = [
+  noHit,
   invertMeter,
   noBounce,
   noPlatform,

@@ -206,6 +206,20 @@ export class SceneRuntime {
   click(objectId: string) {
     const o = this.scene.objects.find((x) => x.id === objectId);
     if (!o) return;
+
+    // a killable object can also be knocked down by tapping it, not only by an
+    // attack — that is what makes a shooting-gallery target work
+    const k = o.behaviors.find((b) => b.t === "killable");
+    if (k && k.t === "killable") {
+      if (k.ignoreTaps) return;
+      const os = this.state.objects[o.id];
+      if (!os.alive) return;
+      os.alive = false;
+      os.respawnAt = this.state.now + k.respawn;
+      this.runActions(k.onKill, { x: os.x, y: os.y });
+      return;
+    }
+
     const c = o.behaviors.find((b) => b.t === "clickable");
     if (!c || c.t !== "clickable") return;
     // a null action is the noAction bug: it still looks pressable
