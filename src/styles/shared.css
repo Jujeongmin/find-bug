@@ -537,3 +537,89 @@
   border-radius: 2px;
   transform-origin: bottom center;
 }
+
+/* ---- meters ---- */
+.eng-needle {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 3px;
+  height: 40%;
+  margin-left: -1.5px;
+  background: #c0392b;
+  border-radius: 1px;
+  transform-origin: bottom center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.entity.meter-high .sprite-emoji,
+.entity.meter-high .eng-bar {
+  animation: meter-alarm 0.5s steps(2) infinite;
+}
+
+@keyframes meter-alarm {
+  50% { filter: brightness(2.2); }
+}
+
+/* ---- buttons: hard edges and a solid offset shadow to sit with pixel art ---- */
+.btn-primary,
+.challenge-btn,
+.engine-btn,
+.attack-btn,
+.s3-jump-btn,
+.s4-shuffle-btn,
+.s2-buy-btn,
+.s5-brew-btn {
+  border-radius: 4px;
+  border: 2px solid rgba(0, 0, 0, 0.55);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.45);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+  transition: transform 0.04s, box-shadow 0.04s;
+}
+
+.btn-primary:active:not(:disabled),
+.challenge-btn:active:not(:disabled),
+.engine-btn:active,
+.attack-btn:active,
+.s3-jump-btn:active,
+.s4-shuffle-btn:active,
+.s2-buy-btn:active:not(:disabled),
+.s5-brew-btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.s3-jump-btn { border-radius: 50%; }
+
+.btn-ghost,
+.exit-btn,
+.mute-btn,
+.lang-switch button {
+  border-radius: 4px;
+}
+
+.stage-cell {
+  border-radius: 4px;
+  border-width: 2px;
+}
+
+/* ---- machine room props ---- */
+.s6-gear {
+  background:
+    repeating-conic-gradient(
+      from 0deg,
+      #9aa3b2 0deg 14deg,
+      #5b6472 14deg 30deg
+    );
+  border-radius: 50%;
+  border: 2px solid #333a45;
+  box-shadow: inset 0 0 0 7px #444c59, inset 0 0 0 9px #2b313a;
+}
+
+.s6-gauge {
+  background: radial-gradient(circle at 50% 60%, #f6f0e2 0 62%, #cabfa8 100%);
+  border-radius: 50%;
+  border: 3px solid #3f4551;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+}

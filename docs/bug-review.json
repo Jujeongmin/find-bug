@@ -1121,6 +1121,42 @@
       ]
     },
     {
+      "fullId": "stage06:invertMeter:gauge",
+      "scene": "stage06",
+      "sceneName": "지하 기계실",
+      "mutator": "invertMeter",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "압력 게이지",
+      "desc": "압력 게이지: 실제 값과 반대로 움직였다.",
+      "score": 2.49,
+      "band": 3,
+      "stages": [
+        15,
+        21,
+        24,
+        27
+      ]
+    },
+    {
+      "fullId": "stage06:invertMeter:alarmLight",
+      "scene": "stage06",
+      "sceneName": "지하 기계실",
+      "mutator": "invertMeter",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "경고등",
+      "desc": "경고등: 실제 값과 반대로 움직였다.",
+      "score": 2.76,
+      "band": 3,
+      "stages": [
+        15,
+        21,
+        24,
+        27
+      ]
+    },
+    {
       "fullId": "stage06:offsetGlow:ceilingLight",
       "scene": "stage06",
       "sceneName": "지하 기계실",
@@ -1228,22 +1264,6 @@
       ]
     },
     {
-      "fullId": "stage04:E3",
-      "scene": "stage04",
-      "sceneName": "카드의 방",
-      "mutator": "(수기)",
-      "category": "graphic",
-      "categoryLabel": "그래픽 오류",
-      "answers": "카드",
-      "desc": "카드: 한 짝은 두 카드의 그림 색이 서로 달랐다. 매칭은 됐지만.",
-      "score": 0,
-      "band": 0,
-      "stages": [
-        8,
-        20
-      ]
-    },
-    {
       "fullId": "stage04:E4",
       "scene": "stage04",
       "sceneName": "카드의 방",
@@ -1327,6 +1347,7 @@
   "curriculum": [
     {
       "n": 1,
+      "nameKey": "stage.build.01",
       "id": "s1-stage01",
       "sceneId": "stage01",
       "minBand": 1,
@@ -1335,6 +1356,7 @@
     },
     {
       "n": 2,
+      "nameKey": "stage.build.02",
       "id": "s2-stage02",
       "sceneId": "stage02",
       "minBand": 1,
@@ -1343,6 +1365,7 @@
     },
     {
       "n": 3,
+      "nameKey": "stage.build.03",
       "id": "s3-stage03",
       "sceneId": "stage03",
       "minBand": 1,
@@ -1351,6 +1374,7 @@
     },
     {
       "n": 4,
+      "nameKey": "stage.build.04",
       "id": "s4-stage05",
       "sceneId": "stage05",
       "minBand": 1,
@@ -1359,6 +1383,7 @@
     },
     {
       "n": 5,
+      "nameKey": "stage.build.05",
       "id": "s5-stage06",
       "sceneId": "stage06",
       "minBand": 1,
@@ -1367,6 +1392,7 @@
     },
     {
       "n": 6,
+      "nameKey": "stage.build.06",
       "id": "s6-stage01",
       "sceneId": "stage01",
       "minBand": 2,
@@ -1375,6 +1401,7 @@
     },
     {
       "n": 7,
+      "nameKey": "stage.build.07",
       "id": "s7-stage02",
       "sceneId": "stage02",
       "minBand": 2,
@@ -1383,6 +1410,7 @@
     },
     {
       "n": 8,
+      "nameKey": "stage.build.08",
       "id": "s8-stage04",
       "sceneId": "stage04",
       "minBand": 2,
@@ -1392,6 +1420,7 @@
     },
     {
       "n": 9,
+      "nameKey": "stage.build.09",
       "id": "s9-stage03",
       "sceneId": "stage03",
       "minBand": 2,
@@ -1400,6 +1429,7 @@
     },
     {
       "n": 10,
+      "nameKey": "stage.build.10",
       "id": "s10-stage05",
       "sceneId": "stage05",
       "minBand": 2,
@@ -1408,6 +1438,7 @@
     },
     {
       "n": 11,
+      "nameKey": "stage.build.11",
       "id": "s11-stage01",
       "sceneId": "stage01",
       "minBand": 2,
@@ -1416,6 +1447,7 @@
     },
     {
       "n": 12,
+      "nameKey": "stage.build.12",
       "id": "s12-stage02",
       "sceneId": "stage02",
       "minBand": 2,
@@ -1424,6 +1456,7 @@
     },
     {
       "n": 13,
+      "nameKey": "stage.build.13",
       "id": "s13-stage03",
       "sceneId": "stage03",
       "minBand": 2,
@@ -1432,6 +1465,7 @@
     },
     {
       "n": 14,
+      "nameKey": "stage.build.14",
       "id": "s14-stage05",
       "sceneId": "stage05",
       "minBand": 2,
@@ -1440,6 +1474,7 @@
     },
     {
       "n": 15,
+      "nameKey": "stage.build.15",
       "id": "s15-stage06",
       "sceneId": "stage06",
       "minBand": 2,
@@ -1448,6 +1483,7 @@
     },
     {
       "n": 16,
+      "nameKey": "stage.build.16",
       "id": "s16-stage01",
       "sceneId": "stage01",
       "minBand": 2,
@@ -1456,6 +1492,7 @@
     },
     {
       "n": 17,
+      "nameKey": "stage.build.17",
       "id": "s17-stage02",
       "sceneId": "stage02",
       "minBand": 2,
@@ -1464,6 +1501,7 @@
     },
     {
       "n": 18,
+      "nameKey": "stage.build.18",
       "id": "s18-stage03",
       "sceneId": "stage03",
       "minBand": 2,
@@ -1472,6 +1510,7 @@
     },
     {
       "n": 19,
+      "nameKey": "stage.build.19",
       "id": "s19-stage05",
       "sceneId": "stage05",
       "minBand": 2,
@@ -1480,6 +1519,7 @@
     },
     {
       "n": 20,
+      "nameKey": "stage.build.20",
       "id": "s20-stage04",
       "sceneId": "stage04",
       "minBand": 2,
@@ -1489,6 +1529,7 @@
     },
     {
       "n": 21,
+      "nameKey": "stage.build.21",
       "id": "s21-stage06",
       "sceneId": "stage06",
       "minBand": 2,
@@ -1497,6 +1538,7 @@
     },
     {
       "n": 22,
+      "nameKey": "stage.build.22",
       "id": "s22-stage01",
       "sceneId": "stage01",
       "minBand": 2,
@@ -1505,6 +1547,7 @@
     },
     {
       "n": 23,
+      "nameKey": "stage.build.23",
       "id": "s23-stage03",
       "sceneId": "stage03",
       "minBand": 3,
@@ -1513,6 +1556,7 @@
     },
     {
       "n": 24,
+      "nameKey": "stage.build.24",
       "id": "s24-stage06",
       "sceneId": "stage06",
       "minBand": 3,
@@ -1521,6 +1565,7 @@
     },
     {
       "n": 25,
+      "nameKey": "stage.build.25",
       "id": "s25-stage01",
       "sceneId": "stage01",
       "minBand": 3,
@@ -1529,6 +1574,7 @@
     },
     {
       "n": 26,
+      "nameKey": "stage.build.26",
       "id": "s26-stage03",
       "sceneId": "stage03",
       "minBand": 3,
@@ -1537,6 +1583,7 @@
     },
     {
       "n": 27,
+      "nameKey": "stage.build.27",
       "id": "s27-stage06",
       "sceneId": "stage06",
       "minBand": 3,
@@ -1545,6 +1592,7 @@
     },
     {
       "n": 28,
+      "nameKey": "stage.build.28",
       "id": "s28-stage01",
       "sceneId": "stage01",
       "minBand": 3,
@@ -1553,6 +1601,7 @@
     },
     {
       "n": 29,
+      "nameKey": "stage.build.29",
       "id": "s29-stage02",
       "sceneId": "stage02",
       "minBand": 3,
@@ -1561,6 +1610,7 @@
     },
     {
       "n": 30,
+      "nameKey": "stage.build.30",
       "id": "s30-stage03",
       "sceneId": "stage03",
       "minBand": 3,

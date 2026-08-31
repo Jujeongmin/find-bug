@@ -429,7 +429,25 @@ export const noPlatform: Mutator = {
   answerIds: (_s, t) => [t.objectId],
 };
 
+export const invertMeter: Mutator = {
+  id: "invertMeter",
+  category: "logic",
+  descKey: "bugdesc.invertMeter",
+  subtlety: 3,
+  requiresPeer: false,
+  comparative: false,
+  candidates: (s) => byBehavior(s, "meter").map((o) => ({ objectId: o.id })),
+  apply: (s, t) =>
+    mapObject(s, t.objectId, (o) => {
+      o.behaviors = o.behaviors.map((b) =>
+        b.t === "meter" ? { ...b, invert: !b.invert } : b
+      );
+    }),
+  answerIds: (_s, t) => [t.objectId],
+};
+
 export const MUTATORS: Mutator[] = [
+  invertMeter,
   noBounce,
   noPlatform,
   noAction,

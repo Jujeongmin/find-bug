@@ -245,5 +245,6 @@
   "ending.back": "Back to title",
   "ending.replay": "Replay ending",
   "sound.on": "Sound on",
-  "sound.off": "Sound off"
+  "sound.off": "Sound off",
+  "bugdesc.invertMeter": "{obj}: it moved the opposite way from the real value."
 }

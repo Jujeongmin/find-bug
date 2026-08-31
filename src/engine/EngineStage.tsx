@@ -288,6 +288,20 @@ export function EngineStage({
               const os = st.objects[o.id];
               if (!os.alive) return null;
 
+              // a meter reads a counter: the needle turns with it, and a high
+              // reading is flagged so alarms can light up. Computed before the
+              // bar branch because gauges are drawn as bars.
+              const meterB = o.behaviors.find((b) => b.t === "meter");
+              let needle: number | null = null;
+              let high = false;
+              if (meterB && meterB.t === "meter") {
+                const raw = st.counters[meterB.counter] ?? 0;
+                const ratio = Math.max(0, Math.min(1, raw / meterB.max));
+                const shown = meterB.invert ? 1 - ratio : ratio;
+                needle = -90 + shown * 180;
+                high = shown >= 0.8;
+              }
+
               // bars anchor at their left edge so the visual matches collision
               if (o.render.bar) {
                 return (
@@ -295,7 +309,7 @@ export function EngineStage({
                     key={o.id}
                     className={`eng-bar ${o.render.className ?? ""} ${
                       picking ? "pickable" : ""
-                    }`}
+                    } ${high ? "meter-high" : ""}`}
                     style={{
                       left: os.x,
                       top: os.y,
@@ -310,7 +324,14 @@ export function EngineStage({
                       onObjectTap(o.id);
                     }}
                     title={picking ? t(o.nameKey) : undefined}
-                  />
+                  >
+                    {needle !== null && (
+                      <div
+                        className="eng-needle"
+                        style={{ transform: `rotate(${needle}deg)` }}
+                      />
+                    )}
+                  </div>
                 );
               }
               const anim = o.behaviors.find((b) => b.t === "animate");
@@ -327,7 +348,7 @@ export function EngineStage({
                   key={o.id}
                   className={`entity ${hurt ? "flash" : ""} ${
                     picking ? "pickable" : ""
-                  }`}
+                  } ${high ? "meter-high" : ""}`}
                   style={{ left: os.x, top: os.y, zIndex: o.z ?? 1 }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -344,6 +365,12 @@ export function EngineStage({
                         left: g.offsetX,
                         top: g.offsetY,
                       }}
+                    />
+                  )}
+                  {needle !== null && (
+                    <div
+                      className="eng-needle"
+                      style={{ transform: `rotate(${needle}deg)` }}
                     />
                   )}
                   {o.render.shadow && (

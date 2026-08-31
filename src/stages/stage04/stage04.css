@@ -5,6 +5,7 @@
 /* wall decorations */
 .s4-curtain {
   position: absolute;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 46px;
@@ -79,6 +80,7 @@
 /* table */
 .s4-table {
   position: absolute;
+  z-index: 1;
   left: 10px;
   top: 150px;
   width: 340px;

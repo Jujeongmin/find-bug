@@ -245,5 +245,6 @@
   "ending.back": "타이틀로",
   "ending.replay": "엔딩 다시 보기",
   "sound.on": "소리 켜기",
-  "sound.off": "소리 끄기"
+  "sound.off": "소리 끄기",
+  "bugdesc.invertMeter": "{obj}: 실제 값과 반대로 움직였다."
 }
