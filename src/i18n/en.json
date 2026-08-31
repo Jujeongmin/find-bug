@@ -362,7 +362,6 @@
   "office.day": "Day {n}",
   "office.shipIn": "Ship in {n}",
   "office.queue": "{n} builds left",
-  "office.devLine": "\"Send them over as you find them. I will land the fix in the next build.\"",
   "office.alreadyDone": "This machine is done for today.",
   "office.buildTitle": "{machine} build",
   "office.shipTitle": "Shipped",
@@ -379,5 +378,15 @@
   "object.barrel": "Barrel",
   "object.rug": "Rug",
   "object.chair": "Chair",
-  "object.devCrt": "Developer's monitor"
+  "object.devCrt": "Developer's monitor",
+  "office.dev.intro": "\"Three new builds are up. Take them one at a time — there is one in each.\"",
+  "office.dev.caught": "\"Reproduced it on the first try. The fix lands in the next build.\"",
+  "office.dev.missed": "\"You let that one through, right? ...I will note it down anyway.\"",
+  "office.dev.allDone": "\"That is today's lot. You can clock out.\"",
+  "office.dev.lastDay": "\"We ship tomorrow. Whatever you miss today goes out as it is.\"",
+  "office.dev.idle0": "\"There is coffee. Over by the bookcase.\"",
+  "office.dev.idle1": "\"Nothing scares me like something that used to work.\"",
+  "office.dev.idle2": "\"I do not trust my own code either. That is what you are for.\"",
+  "office.dev.idle3": "\"If the build numbers blur, just call them by the machine. A, B, C.\"",
+  "office.dev.idle4": "\"Did I ask about moving the date? I did. They said no.\""
 }

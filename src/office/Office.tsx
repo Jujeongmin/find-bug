@@ -18,6 +18,9 @@ const DAY_END = 18 * 60;
  */
 const MINUTES_PER_SECOND = 2;
 
+/** things the developer says when there is nothing more pressing */
+const IDLE_LINES = 5;
+
 const clock = (m: number) =>
   `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(Math.floor(m % 60)).padStart(2, "0")}`;
 
@@ -56,6 +59,10 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [caught, setCaught] = useState(0);
   const [missed, setMissed] = useState(0);
   const [minutes, setMinutes] = useState(DAY_START);
+  /** how many times the developer has been spoken to, so idle lines rotate */
+  const [talks, setTalks] = useState(0);
+  /** the last build signed off, so the developer can react to it once */
+  const [lastResult, setLastResult] = useState<null | "caught" | "missed">(null);
 
   // one clock for the whole day, ticking through the office and the builds
   // alike; goHomeRef keeps the timer from closing over a stale day
@@ -80,6 +87,7 @@ export function Office({ onExit }: { onExit: () => void }) {
 
   const finish = (result: "caught" | "missed") => {
     if (!running) return;
+    setLastResult(result);
     if (result === "caught") setCaught((n) => n + 1);
     else setMissed((n) => n + 1);
     setAssignments((as) =>
@@ -105,13 +113,30 @@ export function Office({ onExit }: { onExit: () => void }) {
   };
   goHomeRef.current = goHome;
 
+  /**
+   * What the developer says, most pressing first. Reacting to the build you
+   * just signed off matters more than the day, and the day matters more than
+   * small talk — otherwise the same line comes back and they stop reading it.
+   */
+  const devLine = () => {
+    const left = assignments.filter((a) => a.result === null).length;
+    if (day === 1 && talks === 0) return "office.dev.intro";
+    if (lastResult === "caught") return "office.dev.caught";
+    if (lastResult === "missed") return "office.dev.missed";
+    if (left === 0) return "office.dev.allDone";
+    if (day >= DAYS) return "office.dev.lastDay";
+    return `office.dev.idle${talks % IDLE_LINES}`;
+  };
+
   const onStation = (id: string) => {
     if (id === "exitDoor") {
       goHome();
       return;
     }
     if (id === "dev") {
-      setNote(t("office.devLine"));
+      setNote(t(devLine()));
+      setTalks((n) => n + 1);
+      setLastResult(null);
       return;
     }
     const a = assignments.find((x) => x.machine === id);

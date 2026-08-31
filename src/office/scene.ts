@@ -126,7 +126,7 @@ export const officeScene: SceneSpec = {
       x: 285,
       y: 432,
       z: 3,
-      render: { className: "office-crt", bar: { width: 30, height: 26 } },
+      render: { className: "office-crt-back", bar: { width: 30, height: 26 } },
       behaviors: [],
     },
     {

@@ -362,7 +362,6 @@
   "office.day": "{n}일차",
   "office.shipIn": "출시 D-{n}",
   "office.queue": "남은 빌드 {n}",
-  "office.devLine": "\"잡히는 대로 바로 넘겨줘. 다음 빌드에 반영할게.\"",
   "office.alreadyDone": "이 기기는 오늘 검증이 끝났다.",
   "office.buildTitle": "{machine} 빌드",
   "office.shipTitle": "출시했다",
@@ -379,5 +378,15 @@
   "object.barrel": "통",
   "object.rug": "러그",
   "object.chair": "의자",
-  "object.devCrt": "개발자 모니터"
+  "object.devCrt": "개발자 모니터",
+  "office.dev.intro": "\"새 빌드 세 개 올려놨어. 하나씩 켜서 봐줘. 하나에 하나씩은 있을 거야.\"",
+  "office.dev.caught": "\"방금 그거 재현했어. 다음 빌드에 고쳐서 올릴게.\"",
+  "office.dev.missed": "\"그 빌드는 그냥 넘어간 거지? ...일단 기록은 해둘게.\"",
+  "office.dev.allDone": "\"오늘 치 다 봤네. 퇴근해도 돼.\"",
+  "office.dev.lastDay": "\"내일이 출시야. 오늘 놓친 건 그대로 나간다.\"",
+  "office.dev.idle0": "\"커피 있어. 저기 책장 옆에.\"",
+  "office.dev.idle1": "\"예전에 멀쩡했던 게 갑자기 깨지는 게 제일 무섭지.\"",
+  "office.dev.idle2": "\"나도 내 코드 못 믿어. 그래서 네가 있는 거고.\"",
+  "office.dev.idle3": "\"빌드 헷갈리면 기계 이름으로 불러. A, B, C.\"",
+  "office.dev.idle4": "\"출시일 밀리냐고? 물어봤어. 안 밀린대.\""
 }

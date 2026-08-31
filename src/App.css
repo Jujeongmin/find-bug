@@ -497,3 +497,18 @@
   border: 2px solid rgba(255, 255, 255, 0.8);
 }
 .field { touch-action: none; }
+
+/* The developer sits above their desk looking down at it, so their monitor is
+   turned away from us — what we see is the back of the case, not the screen.
+   Drawing the lit screen there would mean it faces the room, not them. */
+.office-crt-back {
+  background:
+    repeating-linear-gradient(
+      #6f6a5c 0 2px,
+      #5d594d 2px 5px
+    ) center / 62% 46% no-repeat,
+    linear-gradient(#a29b88, #7d7767);
+  border: 3px solid #4a4438;
+  border-radius: 4px 4px 2px 2px;
+  box-shadow: inset 0 0 0 2px #2a2620, 0 2px 0 rgba(0, 0, 0, 0.35);
+}
