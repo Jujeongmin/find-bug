@@ -443,3 +443,8 @@
   font-family: inherit; cursor: pointer; white-space: nowrap;
 }
 .eng-station-btn:active { transform: translateX(-50%) translateY(2px); border-bottom-width: 1px; }
+.office-clock {
+  font-variant-numeric: tabular-nums; font-weight: 800; font-size: 13px;
+  color: #ffd98a; background: #3a2f1a; border: 1px solid #6b5426;
+  border-radius: 4px; padding: 1px 7px;
+}

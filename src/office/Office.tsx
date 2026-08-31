@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "../i18n";
 import { EngineStage } from "../engine/EngineStage";
 import { officeScene, MACHINES, type MachineId } from "./scene";
@@ -6,6 +6,20 @@ import { ENGINE_SCENES } from "../stages/registry";
 import { sfx } from "../audio/sfx";
 
 const DAYS = 5;
+
+/** the working day, 09:00 to 18:00 */
+const DAY_START = 9 * 60;
+const DAY_END = 18 * 60;
+
+/**
+ * Game minutes per real second. The clock runs while the world does, so
+ * nothing has to be charged for explicitly: crossing the room costs what
+ * crossing the room takes, and a build costs what it takes to inspect.
+ */
+const MINUTES_PER_SECOND = 2;
+
+const clock = (m: number) =>
+  `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(Math.floor(m % 60)).padStart(2, "0")}`;
 
 interface Assignment {
   machine: MachineId;
@@ -41,6 +55,23 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [shipped, setShipped] = useState(false);
   const [caught, setCaught] = useState(0);
   const [missed, setMissed] = useState(0);
+  const [minutes, setMinutes] = useState(DAY_START);
+
+  // one clock for the whole day, ticking through the office and the builds
+  // alike; goHomeRef keeps the timer from closing over a stale day
+  const goHomeRef = useRef<() => void>(() => {});
+  useEffect(() => {
+    if (shipped) return;
+    const id = setInterval(() => {
+      setMinutes((m) => {
+        if (m >= DAY_END) return m;
+        const next = m + MINUTES_PER_SECOND / 4;
+        if (next >= DAY_END) goHomeRef.current();
+        return Math.min(next, DAY_END);
+      });
+    }, 250);
+    return () => clearInterval(id);
+  }, [shipped]);
 
   const scenesById = useMemo(
     () => Object.fromEntries(ENGINE_SCENES.map((s) => [s.id, s])),
@@ -58,6 +89,7 @@ export function Office({ onExit }: { onExit: () => void }) {
   };
 
   const goHome = () => {
+    setMinutes(DAY_START);
     // anything still unverified ships as-is
     const left = assignments.filter((a) => a.result === null).length;
     setMissed((n) => n + left);
@@ -66,10 +98,12 @@ export function Office({ onExit }: { onExit: () => void }) {
       return;
     }
     sfx.play("click");
+    setRunning(null);
     setDay((d) => d + 1);
     setAssignments(assignDay(day + 1));
     setNote(null);
   };
+  goHomeRef.current = goHome;
 
   const onStation = (id: string) => {
     if (id === "exitDoor") {
@@ -119,7 +153,7 @@ export function Office({ onExit }: { onExit: () => void }) {
         key={`${day}-${running.machine}`}
         scene={scene}
         stageNo={day}
-        title={tp("office.buildTitle", { machine: t(`object.${running.machine}`) })}
+        title={`${tp("office.buildTitle", { machine: t(`object.${running.machine}`) })} · ${clock(minutes)}`}
         onClear={() => finish("caught")}
         onExit={() => finish("missed")}
       />
@@ -140,6 +174,7 @@ export function Office({ onExit }: { onExit: () => void }) {
               ←
             </button>
             <span className="wb-build">{tp("office.day", { n: String(day) })}</span>
+            <span className="office-clock">{clock(minutes)}</span>
             <span className="wb-deadline">
               {tp("office.shipIn", { n: String(DAYS - day) })}
             </span>
