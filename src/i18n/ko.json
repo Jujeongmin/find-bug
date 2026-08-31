@@ -420,11 +420,14 @@
   "object.coffeeStand": "커피 가판대",
   "object.block": "사무실 건물",
   "goal.stage01": "젤리 몬스터를 공격해 점수를 올려라",
-  "goal.stage02": "선반의 물건을 눌러 장바구니에 담아라",
+  "goal.stage02": "선반의 물건을 눌러 사라. 한 개에 10골드.",
   "goal.stage03": "코인을 모아라. 가시와 박쥐는 피해라.",
   "goal.stage05": "재료를 눌러 화로에 넣고, 불을 올려 완성품을 만들어라",
-  "goal.stage06": "레일 위 표적을 눌러 맞혀라",
+  "goal.stage06": "레일 위 표적을 눌러 맞혀라. 아래쪽 표적일수록 빠르고 점수가 높다.",
   "counter.loaded": "투입",
   "object.loadedHud": "투입량",
-  "object.belt": "컨베이어"
+  "object.belt": "컨베이어",
+  "hint.drag": "화면을 드래그해 이동",
+  "hint.keys": "방향키로 이동 · 스페이스로 공격",
+  "hint.sideView": "좌우 버튼으로 이동 · ⤒ 로 점프"
 }

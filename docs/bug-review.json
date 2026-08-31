@@ -240,21 +240,6 @@
       ]
     },
     {
-      "fullId": "stage02:noAction:buyBtn",
-      "scene": "stage02",
-      "sceneName": "마법 상점",
-      "mutator": "noAction",
-      "category": "no-action",
-      "categoryLabel": "동작 안 함",
-      "answers": "구매 버튼",
-      "desc": "구매 버튼: 눌러도 아무 반응이 없었다.",
-      "score": 1.37,
-      "band": 1,
-      "stages": [
-        2
-      ]
-    },
-    {
       "fullId": "stage02:floating:merchant",
       "scene": "stage02",
       "sceneName": "마법 상점",
@@ -492,6 +477,23 @@
       ]
     },
     {
+      "fullId": "stage02:counterSkew:scroll:gold",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "골드 표시 / 두루마리",
+      "desc": "골드 표시: 표시된 값과 실제로 오르내린 양이 달랐다. (두루마리)",
+      "score": 2.31,
+      "band": 3,
+      "stages": [
+        18,
+        24,
+        29
+      ]
+    },
+    {
       "fullId": "stage02:counterSkew:scroll:items",
       "scene": "stage02",
       "sceneName": "마법 상점",
@@ -509,15 +511,15 @@
       ]
     },
     {
-      "fullId": "stage02:counterSkew:buyBtn:items",
+      "fullId": "stage02:counterSkew:potion:gold",
       "scene": "stage02",
       "sceneName": "마법 상점",
       "mutator": "counterSkew",
       "category": "logic",
       "categoryLabel": "논리 오류",
-      "answers": "인벤토리 / 구매 버튼",
-      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (구매 버튼)",
-      "score": 2.37,
+      "answers": "골드 표시 / 물약",
+      "desc": "골드 표시: 표시된 값과 실제로 오르내린 양이 달랐다. (물약)",
+      "score": 2.41,
       "band": 3,
       "stages": [
         18,
@@ -534,6 +536,23 @@
       "categoryLabel": "논리 오류",
       "answers": "인벤토리 / 물약",
       "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (물약)",
+      "score": 2.41,
+      "band": 3,
+      "stages": [
+        18,
+        24,
+        29
+      ]
+    },
+    {
+      "fullId": "stage02:counterSkew:meat:gold",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "골드 표시 / 말린 고기",
+      "desc": "골드 표시: 표시된 값과 실제로 오르내린 양이 달랐다. (말린 고기)",
       "score": 2.41,
       "band": 3,
       "stages": [
@@ -577,6 +596,23 @@
       ]
     },
     {
+      "fullId": "stage02:counterSkew:book:gold",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "골드 표시 / 책",
+      "desc": "골드 표시: 표시된 값과 실제로 오르내린 양이 달랐다. (책)",
+      "score": 2.52,
+      "band": 3,
+      "stages": [
+        18,
+        24,
+        29
+      ]
+    },
+    {
       "fullId": "stage02:counterSkew:book:items",
       "scene": "stage02",
       "sceneName": "마법 상점",
@@ -585,6 +621,23 @@
       "categoryLabel": "논리 오류",
       "answers": "인벤토리 / 책",
       "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (책)",
+      "score": 2.52,
+      "band": 3,
+      "stages": [
+        18,
+        24,
+        29
+      ]
+    },
+    {
+      "fullId": "stage02:counterSkew:bread:gold",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "골드 표시 / 빵",
+      "desc": "골드 표시: 표시된 값과 실제로 오르내린 양이 달랐다. (빵)",
       "score": 2.52,
       "band": 3,
       "stages": [

@@ -13,9 +13,9 @@ import type { SceneSpec } from "../../engine/types";
  */
 
 const RAILS = [
-  { id: "A", y: 250, min: 40, max: 300, speed: 55, col: 0 },
-  { id: "B", y: 360, min: 40, max: 300, speed: 75, col: 2 },
-  { id: "C", y: 470, min: 40, max: 300, speed: 95, col: 4 },
+  { id: "A", y: 250, min: 40, max: 300, speed: 55, col: 0, score: 10 },
+  { id: "B", y: 360, min: 40, max: 300, speed: 75, col: 2, score: 20 },
+  { id: "C", y: 470, min: 40, max: 300, speed: 95, col: 4, score: 30 },
 ];
 
 export const stage06Scene: SceneSpec = {
@@ -88,7 +88,7 @@ export const stage06Scene: SceneSpec = {
           respawn: 1.6,
           tappable: true,
           onKill: [
-            { a: "increment" as const, counter: "score", by: 10 },
+            { a: "increment" as const, counter: "score", by: r.score },
             { a: "increment" as const, counter: "hits", by: 1 },
           ],
         },

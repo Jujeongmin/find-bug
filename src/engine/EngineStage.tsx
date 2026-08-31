@@ -131,6 +131,15 @@ export function EngineStage({
     null
   );
   const stickId = useRef<number | null>(null);
+  /**
+   * How to move, shown for a few seconds when a build starts. The touch pad
+   * was replaced by drag-to-move, which leaves nothing on screen saying so.
+   */
+  const [showControls, setShowControls] = useState(true);
+  useEffect(() => {
+    const id = setTimeout(() => setShowControls(false), 5000);
+    return () => clearTimeout(id);
+  }, [scene]);
 
   /** drag distance, in field units, that means "full speed" */
   const STICK_R = 46;
@@ -406,6 +415,17 @@ export function EngineStage({
           onPointerCancel={stickable ? stickUp : undefined}
           style={{ width: FIELD_W, height: FIELD_H }}
         >
+          {hasPlayer && showControls && !picking && (
+            <div className="control-hint">
+              {t(
+                scene.sideView
+                  ? "hint.sideView"
+                  : matchMedia("(pointer: coarse)").matches
+                    ? "hint.drag"
+                    : "hint.keys"
+              )}
+            </div>
+          )}
           {live.goalKey && !picking && (
             <div className="goal-banner">{t(live.goalKey)}</div>
           )}

@@ -14,7 +14,6 @@ export const stage01Scene: SceneSpec = {
   counters: [
     { id: "hp", nameKey: "counter.hp", initial: 5, max: 5, display: "hearts" },
     { id: "score", nameKey: "hud.score", initial: 0, display: "number" },
-    { id: "kills", nameKey: "hud.kills", initial: 0, display: "number" },
   ],
   objects: [
     /* HUD */
@@ -59,7 +58,6 @@ export const stage01Scene: SceneSpec = {
           respawn: 4,
           onKill: [
             { a: "increment", counter: "score", by: 10 },
-            { a: "increment", counter: "kills", by: 1 },
           ],
         },
       ],
@@ -85,7 +83,6 @@ export const stage01Scene: SceneSpec = {
           respawn: 4,
           onKill: [
             { a: "increment", counter: "score", by: 10 },
-            { a: "increment", counter: "kills", by: 1 },
           ],
         },
       ],
@@ -111,7 +108,6 @@ export const stage01Scene: SceneSpec = {
           respawn: 4,
           onKill: [
             { a: "increment", counter: "score", by: 10 },
-            { a: "increment", counter: "kills", by: 1 },
           ],
         },
       ],

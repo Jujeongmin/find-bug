@@ -420,11 +420,14 @@
   "object.coffeeStand": "Coffee stand",
   "object.block": "Office building",
   "goal.stage01": "Attack the jelly monsters for points",
-  "goal.stage02": "Tap shelf items to add them to the basket",
+  "goal.stage02": "Tap a shelf item to buy it. Ten gold each.",
   "goal.stage03": "Collect the coins. Avoid the spikes and bats.",
   "goal.stage05": "Tap ingredients into the hearth, then fire it to finish a batch",
-  "goal.stage06": "Tap the targets riding the rails",
+  "goal.stage06": "Tap the targets on the rails. The lower rails run faster and pay more.",
   "counter.loaded": "Loaded",
   "object.loadedHud": "Loaded count",
-  "object.belt": "Conveyor"
+  "object.belt": "Conveyor",
+  "hint.drag": "Drag anywhere to move",
+  "hint.keys": "Arrow keys to move · space to attack",
+  "hint.sideView": "Left and right to move · ⤒ to jump"
 }

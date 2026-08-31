@@ -38,7 +38,10 @@ export const stage02Scene: SceneSpec = {
       behaviors: [
         {
           t: "clickable" as const,
-          action: { a: "increment" as const, counter: "items", by: 1 },
+          action: [
+            { a: "increment" as const, counter: "gold", by: -10 },
+            { a: "increment" as const, counter: "items", by: 1 },
+          ],
         },
       ],
     })),
@@ -130,17 +133,5 @@ export const stage02Scene: SceneSpec = {
       behaviors: [],
     },
 
-    /* buy button */
-    {
-      id: "buyBtn",
-      nameKey: "object.buyBtn",
-      kind: "button",
-      x: 180,
-      y: 600,
-      render: { emoji: "🛒", labelKey: "shop.buy" },
-      behaviors: [
-        { t: "clickable", action: { a: "increment", counter: "items", by: 1 } },
-      ],
-    },
   ],
 };

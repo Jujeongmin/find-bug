@@ -673,9 +673,8 @@
   font-weight: 700;
   line-height: 1.4;
   text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* two lines rather than an ellipsis: a goal you cannot finish reading is
+     no better than no goal */
   pointer-events: none;
 }
 
@@ -692,4 +691,27 @@
   border-top: 2px solid #59617a;
   border-bottom: 2px solid #1b1f27;
   border-radius: 3px;
+}
+
+/* how to move, for the first few seconds of a build */
+.control-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 84px;
+  transform: translateX(-50%);
+  z-index: 5;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(12, 12, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #cdd3e6;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: hint-fade 5s ease-in forwards;
+}
+@keyframes hint-fade {
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; }
 }
