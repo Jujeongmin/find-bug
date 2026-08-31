@@ -1,0 +1,76 @@
+/* animations referenced by Behavior { t: "animate" } */
+.anim-hop {
+  animation: eng-hop 0.5s ease-in-out infinite;
+}
+
+@keyframes eng-hop {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  30% { transform: translateY(0) scale(1.12, 0.86); }
+  60% { transform: translateY(-6px) scale(0.92, 1.12); }
+}
+
+.anim-flicker {
+  animation: eng-flicker 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes eng-flicker {
+  from { opacity: 0.75; }
+  to { opacity: 1; }
+}
+
+.anim-flap {
+  animation: eng-flap 0.3s ease-in-out infinite alternate;
+}
+
+@keyframes eng-flap {
+  from { margin-top: 0; }
+  to { margin-top: -4px; }
+}
+
+/* generic in-field button */
+.engine-btn {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  background: #3568d4;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 13px 22px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.05s;
+  white-space: nowrap;
+}
+
+.engine-btn:active {
+  transform: translate(-50%, -50%) scale(0.92);
+  background: #2a53aa;
+}
+
+.eng-glow {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 210, 120, 0.32),
+    rgba(255, 210, 120, 0) 70%
+  );
+  pointer-events: none;
+}
+
+/* flag-driven visual states */
+.sprite-emoji.lit { filter: brightness(1.6) drop-shadow(0 0 6px #ffdf8a); }
+.sprite-emoji.flowing { animation: eng-flow 0.6s linear infinite; }
+
+@keyframes eng-flow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* wide, flat props (platforms, shelves, pipes) */
+.s3-plat, .s2-shelf-strip, .s6-water-strip {
+  letter-spacing: -2px;
+}

@@ -1,0 +1,412 @@
+import { useRef, useState } from "react";
+import type { BugCategory, BugDef } from "../../core/types";
+import { judge, pickBug } from "../../core/judge";
+import { stage04 } from "./bugs";
+import { useI18n } from "../../i18n";
+import { CategorySelect } from "../../components/CategorySelect";
+import { ResultModal } from "../../components/ResultModal";
+import { FieldScaler, FIELD_W, FIELD_H } from "../../components/FieldScaler";
+import { PlaytestBar } from "../../components/PlaytestBar";
+import { spriteStyle } from "../../engine/sheets";
+import "../../styles/shared.css";
+import "./stage04.css";
+
+type Phase = "intro" | "play" | "picking" | "category" | "result";
+
+const CARD_FACES = [
+  "card_hearts_A",
+  "card_spades_02",
+  "card_diamonds_03",
+  "card_clubs_04",
+  "card_hearts_05",
+  "card_spades_06",
+  "card_diamonds_07",
+  "card_clubs_08",
+];
+const cardUrl = (name: string) => `/assets/cards/${name}.png`;
+const GRID = 4;
+const CARD_W = 76;
+const CARD_H = 76;
+const GAP = 8;
+const GRID_X = 22;
+const GRID_Y = 190;
+
+interface Card {
+  key: number; // stable identity for React
+  emoji: string;
+  flipped: boolean;
+  matched: boolean;
+}
+
+interface Deal {
+  cards: Card[];
+  /** card index affected by E1 (unclickable) / E2 (vertical flip) */
+  bugCardIdx: number;
+  /** pair emoji affected by E3 (color mismatch) / E8 (never matches) */
+  bugPairEmoji: string;
+}
+
+function makeDeal(): Deal {
+  const emojis = [...CARD_FACES, ...CARD_FACES];
+  for (let i = emojis.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [emojis[i], emojis[j]] = [emojis[j], emojis[i]];
+  }
+  return {
+    cards: emojis.map((emoji, i) => ({
+      key: i,
+      emoji,
+      flipped: false,
+      matched: false,
+    })),
+    bugCardIdx: Math.floor(Math.random() * 16),
+    bugPairEmoji: CARD_FACES[Math.floor(Math.random() * CARD_FACES.length)],
+  };
+}
+
+interface Props {
+  onClear: () => void;
+  onExit: () => void;
+  playtest?: boolean;
+  stageNo?: number;
+  title?: string;
+}
+
+export function Stage04({
+  onClear,
+  onExit,
+  playtest = false,
+  stageNo,
+  title,
+}: Props) {
+  const { t } = useI18n();
+  const [phase, setPhase] = useState<Phase>("intro");
+  const [bug, setBug] = useState<BugDef>(() => pickBug(stage04.bugPool));
+  const [pickedObject, setPickedObject] = useState<string | null>(null);
+  const [resultSuccess, setResultSuccess] = useState(false);
+
+  const [deal, setDeal] = useState<Deal>(makeDeal);
+  const [firstPick, setFirstPick] = useState<number | null>(null);
+  const [lock, setLock] = useState(false);
+  const [realAttempts, setRealAttempts] = useState(0);
+  const [pairs, setPairs] = useState(0);
+  const [shuffling, setShuffling] = useState(false);
+
+  const bugRef = useRef<BugDef>(bug);
+  bugRef.current = bug;
+
+  const bugId = bug.id;
+  const picking = phase === "picking";
+
+  // E4: the tries counter only counts every other try
+  const shownAttempts = bugId === "E4" ? Math.floor(realAttempts / 2) : realAttempts;
+
+  const onCardClick = (idx: number) => {
+    if (phase !== "play" || lock || shuffling) return;
+    const c = deal.cards[idx];
+    if (c.flipped || c.matched) return;
+    // E1: one designated card refuses to flip
+    if (bugId === "E1" && idx === deal.bugCardIdx) return;
+
+    const next = deal.cards.map((card, i) =>
+      i === idx ? { ...card, flipped: true } : card
+    );
+    setDeal({ ...deal, cards: next });
+
+    if (firstPick === null) {
+      setFirstPick(idx);
+      return;
+    }
+
+    const a = next[firstPick];
+    const b = next[idx];
+    setLock(true);
+    setRealAttempts((n) => n + 1);
+    const firstIdx = firstPick;
+    setFirstPick(null);
+
+    // E8: the designated pair never passes the match check
+    const isMatch =
+      a.emoji === b.emoji && !(bugId === "E8" && a.emoji === deal.bugPairEmoji);
+
+    setTimeout(() => {
+      setDeal((d) => {
+        const cards = d.cards.map((card, i) => {
+          if (i !== firstIdx && i !== idx) return card;
+          return isMatch
+            ? { ...card, matched: true }
+            : { ...card, flipped: false };
+        });
+        return { ...d, cards };
+      });
+      if (isMatch) {
+        setPairs((p) => {
+          const np = p + 1;
+          if (np >= 8) {
+            // all cleared — deal again after a beat
+            setTimeout(() => {
+              setDeal(makeDeal());
+              setPairs(0);
+            }, 1500);
+          }
+          return np;
+        });
+      }
+      setLock(false);
+    }, 800);
+  };
+
+  const onShuffle = () => {
+    if (phase !== "play" || lock || shuffling) return;
+    setShuffling(true);
+    setTimeout(() => setShuffling(false), 600);
+    // E5: the shuffle motion plays but the cards never actually move
+    if (bugId === "E5") return;
+    setDeal((d) => {
+      const idxs = d.cards.map((_, i) => i).filter((i) => !d.cards[i].matched);
+      const shuffledIdxs = [...idxs];
+      for (let i = shuffledIdxs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledIdxs[i], shuffledIdxs[j]] = [shuffledIdxs[j], shuffledIdxs[i]];
+      }
+      const cards = [...d.cards];
+      idxs.forEach((from, k) => {
+        cards[shuffledIdxs[k]] = {
+          ...d.cards[from],
+          flipped: false,
+        };
+      });
+      // keep the bug card index pointing at a random unmatched card
+      return { ...d, cards, bugCardIdx: Math.floor(Math.random() * 16) };
+    });
+    setFirstPick(null);
+  };
+
+  const onPickObject = (objectId: string) => {
+    setPickedObject(objectId);
+    setPhase("category");
+  };
+
+  const onSubmitCategory = (category: BugCategory) => {
+    setResultSuccess(judge(bug, pickedObject!, category).correct);
+    setPhase("result");
+  };
+
+  const onRetry = () => {
+    setBug(pickBug(stage04.bugPool, bug.id));
+    setDeal(makeDeal());
+    setFirstPick(null);
+    setLock(false);
+    setRealAttempts(0);
+    setPairs(0);
+    setPickedObject(null);
+    setPhase("play");
+  };
+
+  const pickableProps = (objectId: string, baseClass = "") =>
+    picking
+      ? {
+          className: `${baseClass} pickable`.trim(),
+          onClick: (e: React.MouseEvent) => {
+            e.stopPropagation();
+            onPickObject(objectId);
+          },
+          title: t(`object.${objectId}`),
+        }
+      : baseClass
+        ? { className: baseClass }
+        : {};
+
+  // E6: the pot hovers past the table edge; normally it sits on the floor by the table
+  const potLift = bugId === "E6" ? 34 : 0;
+
+  return (
+    <div className="stage-frame">
+      <div className="stage-header">
+        <span className="stage-name">
+          <button className="exit-btn" onClick={onExit} title={t("game.exit")}>
+            ←
+          </button>
+          {stageNo ? stageNo + ". " : ""}
+          {title ?? t("stage.stage04.name")}
+        </span>
+        <div className="challenge-wrap">
+          <button
+            className="challenge-btn"
+            disabled={phase !== "play"}
+            onClick={() => setPhase("picking")}
+          >
+            {t("challenge.button")}
+          </button>
+        </div>
+      </div>
+
+      {playtest && (
+        <PlaytestBar
+          info={{
+            sceneId: "stage04",
+            poolSize: stage04.bugPool.length,
+            bugId: bug.id,
+            answers: bug.objectIds.map((id) => t(`object.${id}`)).join(" / "),
+            category: t(`category.${bug.category}`),
+            desc: t(bug.descKey),
+          }}
+          onReroll={() => {
+            setBug(pickBug(stage04.bugPool, bug.id));
+            setDeal(makeDeal());
+            setFirstPick(null);
+            setLock(false);
+            setRealAttempts(0);
+            setPairs(0);
+          }}
+        />
+      )}
+
+      <FieldScaler>
+        <div
+          className={`field s4-room ${picking ? "picking" : ""}`}
+          style={{ width: FIELD_W, height: FIELD_H }}
+        >
+          {/* HUD */}
+          <div className="hud">
+            <div {...pickableProps("attemptCounter", "score-box")}>
+              {t("hud.attempts")}: {shownAttempts}
+            </div>
+            <div {...pickableProps("pairCounter", "score-box")}>
+              {t("hud.pairs")}: {pairs}/8
+            </div>
+          </div>
+
+          {/* wall decorations */}
+          <div {...pickableProps("curtain", "s4-curtain")} />
+          <div {...pickableProps("frame", "s4-frame")}>
+            <span
+              className={`s4-picture ${bugId === "E7" ? "upside" : ""}`}
+              style={spriteStyle({ sheet: "roguelike", col: 29, row: 10, scale: 2 })}
+            />
+          </div>
+          <div {...pickableProps("lamp", "s4-lamp")}>
+            <div className="s4-lamp-glow" />
+            <span className="s4-bulb" />
+          </div>
+
+          {/* table (behind the cards) */}
+          <div {...pickableProps("table", "s4-table")} />
+
+          {/* cards */}
+          {deal.cards.map((c, i) => {
+            const col = i % GRID;
+            const row = Math.floor(i / GRID);
+            const vertical = bugId === "E2" && i === deal.bugCardIdx;
+            return (
+              <div
+                key={c.key}
+                className={`s4-card ${shuffling ? "shuffling" : ""} ${
+                  c.matched ? "matched" : ""
+                } ${picking ? "pickable" : ""}`}
+                style={{
+                  left: GRID_X + col * (CARD_W + GAP),
+                  top: GRID_Y + row * (CARD_H + GAP),
+                }}
+                onClick={
+                  picking
+                    ? (e) => {
+                        e.stopPropagation();
+                        onPickObject("cards");
+                      }
+                    : () => onCardClick(i)
+                }
+                title={picking ? t("object.cards") : undefined}
+              >
+                <div
+                  className={`s4-card-inner ${vertical ? "vflip" : ""} ${
+                    c.flipped || c.matched ? "open" : ""
+                  }`}
+                >
+                  <div className="s4-card-back" />
+                  <div
+                    className="s4-card-face"
+                    style={{ backgroundImage: `url(${cardUrl(c.emoji)})` }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+
+          {/* floor decorations */}
+          <div
+            className={`s4-pot ${picking ? "pickable" : ""}`}
+            style={{ bottom: 26 + potLift }}
+            onClick={
+              picking
+                ? (e) => {
+                    e.stopPropagation();
+                    onPickObject("pot");
+                  }
+                : undefined
+            }
+            title={picking ? t("object.pot") : undefined}
+          >
+            <span
+              style={spriteStyle({ sheet: "roguelike", col: 24, row: 9, scale: 2 })}
+            />
+          </div>
+          <div {...pickableProps("cat", "s4-cat")}>
+            <span
+              style={spriteStyle({ sheet: "platchars", col: 4, row: 1, scale: 1.5 })}
+            />
+          </div>
+
+          {/* shuffle button */}
+          <button
+            onClickCapture={picking ? undefined : onShuffle}
+            {...pickableProps("shuffleBtn", "s4-shuffle-btn")}
+          >
+            {t("cards.shuffle")}
+          </button>
+
+          {picking && (
+            <div className="picking-banner">
+              {t("challenge.pickObject")}
+              <button className="btn-ghost small" onClick={() => setPhase("play")}>
+                {t("challenge.cancel")}
+              </button>
+            </div>
+          )}
+        </div>
+      </FieldScaler>
+
+      {phase === "intro" && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h2>🐛 {t("intro.stage04.line")}</h2>
+            <p>{t("intro.hint")}</p>
+            <p className="once-warning">{t("challenge.once")}</p>
+            <div className="modal-actions">
+              <button className="btn-primary" onClick={() => setPhase("play")}>
+                {t("intro.go")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {phase === "category" && pickedObject && (
+        <CategorySelect
+          targetObjectId={pickedObject}
+          onSubmit={onSubmitCategory}
+          onCancel={() => setPhase("picking")}
+        />
+      )}
+
+      {phase === "result" && (
+        <ResultModal
+          success={resultSuccess}
+          bug={resultSuccess ? bug : null}
+          onRetry={onRetry}
+          onDone={onClear}
+        />
+      )}
+    </div>
+  );
+}

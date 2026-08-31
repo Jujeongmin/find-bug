@@ -1,0 +1,16 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  background: #14141f;
+  color: #eef;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  touch-action: manipulation;
+}

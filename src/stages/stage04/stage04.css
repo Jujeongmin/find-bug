@@ -1,0 +1,211 @@
+.s4-room {
+  background: linear-gradient(#3a3050 0 150px, #2c2440 150px 580px, #55402e 580px);
+}
+
+/* wall decorations */
+.s4-curtain {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 46px;
+  height: 210px;
+  background: repeating-linear-gradient(
+    90deg,
+    #7a2f45 0 10px,
+    #93405a 10px 20px
+  );
+  border-radius: 0 0 22px 0;
+  animation: sway 2.4s ease-in-out infinite alternate;
+  transform-origin: top center;
+}
+
+@keyframes sway {
+  from { transform: skewX(0deg); }
+  to { transform: skewX(2.5deg); }
+}
+
+.s4-frame {
+  position: absolute;
+  left: 92px;
+  top: 78px;
+  width: 58px;
+  height: 48px;
+  background: #d8c9a3;
+  border: 5px solid #6b4a2b;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.s4-picture {
+  display: block;
+  image-rendering: pixelated;
+}
+
+.s4-picture.upside {
+  transform: rotate(180deg);
+}
+
+.s4-lamp {
+  position: absolute;
+  left: 282px;
+  top: 78px;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.s4-lamp-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 90px;
+  height: 90px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 220, 120, 0.3),
+    rgba(255, 220, 120, 0) 70%
+  );
+  animation: lampflicker 1.6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes lampflicker {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+/* table */
+.s4-table {
+  position: absolute;
+  left: 10px;
+  top: 150px;
+  width: 340px;
+  height: 424px;
+  background: linear-gradient(#6e4f33, #5a3f27);
+  border-radius: 14px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* cards */
+.s4-card {
+  position: absolute;
+  width: 76px;
+  height: 76px;
+  perspective: 500px;
+  cursor: pointer;
+}
+
+.s4-card.matched {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+}
+
+.s4-card.shuffling {
+  animation: cardshake 0.6s ease-in-out;
+}
+
+@keyframes cardshake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  25% { transform: translate(-5px, -4px) rotate(-4deg); }
+  50% { transform: translate(5px, 3px) rotate(3deg); }
+  75% { transform: translate(-3px, 4px) rotate(-2deg); }
+}
+
+.s4-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.35s;
+}
+
+.s4-card-inner.open {
+  transform: rotateY(180deg);
+}
+
+/* E2: the bugged card flips vertically instead */
+.s4-card-inner.vflip.open {
+  transform: rotateX(180deg);
+}
+
+/* the card art already draws its own edge, so no frame around it */
+.s4-card-back,
+.s4-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+
+.s4-card-back {
+  background-image: url("/assets/cards/card_back.png");
+}
+
+/* the face is pre-rotated so it shows once the card flips */
+.s4-card-face {
+  transform: rotateY(180deg);
+}
+
+.s4-card-inner.vflip .s4-card-face {
+  transform: rotateX(180deg);
+}
+
+
+/* floor */
+.s4-pot {
+  position: absolute;
+  right: 18px;
+  image-rendering: pixelated;
+}
+
+.s4-cat {
+  position: absolute;
+  left: 16px;
+  bottom: 18px;
+  image-rendering: pixelated;
+}
+
+
+
+/* shuffle */
+.s4-shuffle-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  background: #3568d4;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 26px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 3;
+  transition: transform 0.05s;
+}
+
+.s4-shuffle-btn:active {
+  transform: translateX(-50%) scale(0.92);
+}
+
+.s4-bulb {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #fff6c9 0 40%, #ffd34a 100%);
+  border: 2px solid #7a6320;
+}
+
+/* sprite spans need to be block-level for their sizing to apply */
+.s4-cat > span,
+.s4-pot > span,
+.s4-frame > span {
+  display: block;
+}
