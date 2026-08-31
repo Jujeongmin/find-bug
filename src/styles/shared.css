@@ -623,3 +623,96 @@
   border: 3px solid #3f4551;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
 }
+
+/* ---- machine room: make the room and its wiring readable ---- */
+.s6-room {
+  background:
+    /* floor */
+    linear-gradient(#1e2028 0 420px, #2b2e38 420px),
+    /* wall panel seams */
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0 2px,
+      transparent 2px 60px
+    );
+}
+
+/* a door is a dark frame; the coloured panel slides out of it when opened */
+.s6-door {
+  background: #0e1014;
+  border: 3px solid #4a4f5e;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.s6-door::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transition: transform 0.35s ease;
+}
+
+.s6-door.red::after { background: linear-gradient(#e0574f, #a8322c); }
+.s6-door.blue::after { background: linear-gradient(#4f8fe0, #2c5aa8); }
+.s6-door.yellow::after { background: linear-gradient(#e0c24f, #a8892c); }
+
+/* open: the panel retracts, showing the dark doorway behind it */
+.s6-door.triggered::after {
+  transform: translateY(-88%);
+}
+
+/* levers kick when pulled so the cause is visible too */
+.s6-lever-red .sprite-emoji,
+.s6-lever-blue .sprite-emoji,
+.s6-lever-yellow .sprite-emoji {
+  transition: transform 0.12s;
+}
+
+/* levers are colour-coded to the door they drive — without this the whole
+   "which lever opens which door" premise is invisible */
+.s6-lever-red,
+.s6-lever-blue,
+.s6-lever-yellow {
+  position: relative;
+}
+
+.s6-lever-red::before,
+.s6-lever-blue::before,
+.s6-lever-yellow::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 42px;
+  height: 12px;
+  margin-left: -21px;
+  border-radius: 3px;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+
+.s6-lever-red::before { background: #d4433f; }
+.s6-lever-blue::before { background: #3f7fd4; }
+.s6-lever-yellow::before { background: #d4b53f; }
+
+/* doors read as doors: frame, handle, and a panel that slides aside */
+.s6-door::before {
+  content: "";
+  position: absolute;
+  right: 7px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 2;
+}
+
+.s6-door.triggered::after {
+  transform: translateX(-92%);
+}
+
+.s6-door.triggered::before {
+  opacity: 0;
+}

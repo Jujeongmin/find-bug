@@ -291,6 +291,8 @@ export function EngineStage({
               // a meter reads a counter: the needle turns with it, and a high
               // reading is flagged so alarms can light up. Computed before the
               // bar branch because gauges are drawn as bars.
+              // anything a link points at shows an open state while fired
+              const triggered = runtime.isTriggered(o.id);
               const meterB = o.behaviors.find((b) => b.t === "meter");
               let needle: number | null = null;
               let high = false;
@@ -309,7 +311,9 @@ export function EngineStage({
                     key={o.id}
                     className={`eng-bar ${o.render.className ?? ""} ${
                       picking ? "pickable" : ""
-                    } ${high ? "meter-high" : ""}`}
+                    } ${high ? "meter-high" : ""} ${
+                      triggered ? "triggered" : ""
+                    }`}
                     style={{
                       left: os.x,
                       top: os.y,
@@ -348,7 +352,9 @@ export function EngineStage({
                   key={o.id}
                   className={`entity ${hurt ? "flash" : ""} ${
                     picking ? "pickable" : ""
-                  } ${high ? "meter-high" : ""}`}
+                  } ${high ? "meter-high" : ""} ${
+                    triggered ? "triggered" : ""
+                  }`}
                   style={{ left: os.x, top: os.y, zIndex: o.z ?? 1 }}
                   onClick={(e) => {
                     e.stopPropagation();
