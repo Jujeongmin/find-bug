@@ -658,11 +658,6 @@
    it. A tester who cannot tell what the game is meant to do cannot tell when
    it is doing the wrong thing. */
 .goal-banner {
-  position: absolute;
-  left: 50%;
-  top: 66px;
-  transform: translateX(-50%);
-  z-index: 5;
   max-width: 92%;
   padding: 5px 12px;
   border-radius: 999px;
@@ -695,11 +690,6 @@
 
 /* how to move, for the first few seconds of a build */
 .control-hint {
-  position: absolute;
-  left: 50%;
-  bottom: 84px;
-  transform: translateX(-50%);
-  z-index: 5;
   padding: 5px 12px;
   border-radius: 999px;
   background: rgba(12, 12, 20, 0.6);
@@ -725,4 +715,21 @@
   border: 2px solid #3a2718;
   border-radius: 3px;
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+/* goal and control hint stack under the HUD, clear of the play area. The hint
+   used to sit near the bottom, where in a side-view build it covered the
+   ground the player was standing on. */
+.scene-top {
+  position: absolute;
+  left: 50%;
+  top: 62px;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 5px;
+  width: 92%;
+  pointer-events: none;
 }

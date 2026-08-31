@@ -415,6 +415,7 @@ export function EngineStage({
           onPointerCancel={stickable ? stickUp : undefined}
           style={{ width: FIELD_W, height: FIELD_H }}
         >
+          <div className="scene-top">
           {hasPlayer && showControls && !picking && (
             <div className="control-hint">
               {t(
@@ -429,6 +430,7 @@ export function EngineStage({
           {live.goalKey && !picking && (
             <div className="goal-banner">{t(live.goalKey)}</div>
           )}
+          </div>
           {/* HUD widgets */}
           <div className="hud">
             {live.objects
@@ -465,7 +467,9 @@ export function EngineStage({
                             })}
                           />
                         ))
-                      : `${t(spec?.nameKey ?? o.nameKey)}: ${value}`}
+                      : `${t(spec?.nameKey ?? o.nameKey)}: ${value}${
+                          spec?.max !== undefined ? ` / ${spec.max}` : ""
+                        }`}
                   </div>
                 );
               })}

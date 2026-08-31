@@ -11,7 +11,7 @@ export const stage03Scene: SceneSpec = {
   sideView: { groundY: GROUND_Y },
   counters: [
     { id: "hp", nameKey: "counter.hp", initial: 5, max: 5, display: "hearts" },
-    { id: "coins", nameKey: "counter.coins", initial: 0, display: "number" },
+    { id: "coins", nameKey: "counter.coins", initial: 0, max: 4, display: "number" },
   ],
   objects: [
     { id: "hpBar", nameKey: "object.hpBar", kind: "hud", x: 0, y: 0, counter: "hp", render: {}, behaviors: [] },
