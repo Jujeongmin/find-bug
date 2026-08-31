@@ -53,6 +53,8 @@ interface Props {
    * runs those instead, which is how the repro lab makes a defect fire only
    * under its trigger conditions; returning null falls through to normal play.
    */
+  /** fired when the player activates a station they are standing next to */
+  onStation?: (objectId: string) => void;
   onAction?: (
     objectId: string,
     ctx: {
@@ -78,12 +80,13 @@ export function EngineStage({
   mode = "judge",
   onObserve,
   onAction,
+  onStation,
   header,
 }: Props) {
   const observing = mode === "observe";
   const bare = mode !== "judge";
   const { t, tp } = useI18n();
-  const [phase, setPhase] = useState<Phase>("intro");
+  const [phase, setPhase] = useState<Phase>(mode === "judge" ? "intro" : "play");
   const [, setFrame] = useState(0);
   const [pickedObject, setPickedObject] = useState<string | null>(null);
   const [resultSuccess, setResultSuccess] = useState(false);
@@ -229,6 +232,22 @@ export function EngineStage({
       o.behaviors.some((b) => b.t === "playerTopDown" || b.t === "platformer")
   );
   const live = runtime.scene;
+  // the one station the player is standing next to, if any
+  const nearStation = (() => {
+    if (!onStation) return null;
+    const p = live.objects.find((o) => o.kind === "player");
+    if (!p) return null;
+    const ps = runtime.state.objects[p.id];
+    for (const o of live.objects) {
+      const b = o.behaviors.find((x) => x.t === "station");
+      if (!b || b.t !== "station") continue;
+      const os = runtime.state.objects[o.id];
+      if (Math.hypot(os.x - ps.x, os.y - ps.y) <= b.radius) {
+        return { id: o.id, labelKey: b.labelKey };
+      }
+    }
+    return null;
+  })();
   const st = runtime.state;
 
   return (
@@ -558,6 +577,17 @@ export function EngineStage({
               </button>
             ))}
 
+          {nearStation && (
+            <button
+              className="eng-station-btn"
+              onPointerDown={() => {
+                sfx.play("click");
+                onStation?.(nearStation.id);
+              }}
+            >
+              {t(nearStation.labelKey)}
+            </button>
+          )}
           {!picking && hasPlayer && (
             <>
               <TouchControls

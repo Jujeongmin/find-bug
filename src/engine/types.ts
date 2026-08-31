@@ -78,6 +78,12 @@ export type Behavior =
   | { t: "flagged"; flag: string; onClass: string; offClass?: string }
   /** needle/bar that reads a counter; `invert` makes it read backwards */
   | { t: "meter"; counter: string; max: number; invert: boolean }
+  /**
+   * Something the player walks up to and activates. Unlike `clickable`, which
+   * fires from anywhere on screen, this only offers itself when the player is
+   * close — so the office floor plan, and the walking, actually matter.
+   */
+  | { t: "station"; radius: number; labelKey: string }
   /** rises while a flag is set, falls otherwise */
   | { t: "pressure"; counter: string; flag: string; rise: number; fall: number };
 

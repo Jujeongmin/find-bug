@@ -11,6 +11,7 @@ import { buildCurriculum } from "./engine/curriculum";
 import { ENGINE_SCENES, SCENE_BY_ID } from "./stages/registry";
 import { Stage04 } from "./stages/stage04/Stage04";
 import { useProgress } from "./net/useProgress";
+import { Office } from "./office/Office";
 import { ReproLab } from "./repro/ReproLab";
 import { Workbench } from "./regression/Workbench";
 import { EndingScreen } from "./components/EndingScreen";
@@ -25,6 +26,8 @@ const PLAYTEST = new URLSearchParams(location.search).has("playtest");
 const LAB = new URLSearchParams(location.search).has("lab");
 /** ?repro=1 opens the reproduction prototype */
 const REPRO = new URLSearchParams(location.search).has("repro");
+/** ?office=1 opens the QA floor prototype */
+const OFFICE = new URLSearchParams(location.search).has("office");
 
 export default function App() {
   const [lang, setLang] = useState<Lang>(detectLang);
@@ -65,7 +68,9 @@ export default function App() {
       <div className="app-root">
         {/* one phone-shaped frame; nothing outside it ever scrolls */}
         <div className="app-frame">
-        {REPRO ? (
+        {OFFICE ? (
+          <Office onExit={() => location.assign(location.pathname)} />
+        ) : REPRO ? (
           <ReproLab onExit={() => location.assign(location.pathname)} />
         ) : LAB ? (
           <Workbench onExit={() => location.assign(location.pathname)} />

@@ -417,3 +417,29 @@
 }
 .rp-cond.on { background: #1d3326; border-color: #4a8f63; }
 .rp-cond em { font-style: normal; color: #6ed48a; font-weight: 800; }
+
+/* ---- QA office ---- */
+.office-floor {
+  background:
+    linear-gradient(#3a2f28 0 190px, transparent 190px),
+    repeating-conic-gradient(#c58f5f 0 25%, #b8834f 0 50%) 0 190px / 48px 48px;
+  image-rendering: pixelated;
+}
+.office-wall {
+  background: linear-gradient(#4a4f63, #383c4c);
+  border: none; border-radius: 0;
+  border-bottom: 4px solid #23262f;
+}
+.office-desk {
+  background: linear-gradient(#8a5f38, #6a4526);
+  border-top: 2px solid #b07f4e;
+  border-radius: 2px;
+}
+.eng-station-btn {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  bottom: 92px; z-index: 8;
+  background: #3568d4; color: #fff; border: none; border-bottom: 3px solid #24499a;
+  border-radius: 10px; padding: 12px 22px; font-size: 15px; font-weight: 800;
+  font-family: inherit; cursor: pointer; white-space: nowrap;
+}
+.eng-station-btn:active { transform: translateX(-50%) translateY(2px); border-bottom-width: 1px; }
