@@ -475,7 +475,7 @@
 .s1-field {
   background:
     linear-gradient(#aee2ff 0 150px, transparent 150px),
-    url("/assets/grass.png") 0 150px / 48px 48px repeat;
+    url("../assets/sheets/grass.png") 0 150px / 48px 48px repeat;
   image-rendering: pixelated;
 }
 

@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
     "report": "tsx scripts/report.ts && tsx scripts/report-html.ts",
-    "verify": "tsx scripts/checkcurriculum.ts && tsx scripts/checkscenes.ts && tsx scripts/checkruntime.ts",
-    "deploy": "npx -y @agent8/deploy"
+    "verify": "tsc -b && tsx scripts/checkcurriculum.ts && tsx scripts/checkscenes.ts && tsx scripts/checkruntime.ts",
+    "deploy": "npx -y @agent8/deploy",
+    "typecheck": "tsc -b"
   },
   "dependencies": {
     "@agent8/gameserver": "^1.10.2",

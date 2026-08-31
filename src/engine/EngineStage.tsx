@@ -6,7 +6,7 @@ import { ResultModal } from "../components/ResultModal";
 import { FieldScaler, FIELD_W, FIELD_H } from "../components/FieldScaler";
 import { TouchControls } from "../components/TouchControls";
 import { PlaytestBar } from "../components/PlaytestBar";
-import { spriteStyle } from "./sheets";
+import { spriteStyle } from "./spriteStyle";
 import type { SceneSpec } from "./types";
 import { SceneRuntime } from "./runtime";
 import {

@@ -7,23 +7,33 @@ import { CategorySelect } from "../../components/CategorySelect";
 import { ResultModal } from "../../components/ResultModal";
 import { FieldScaler, FIELD_W, FIELD_H } from "../../components/FieldScaler";
 import { PlaytestBar } from "../../components/PlaytestBar";
-import { spriteStyle } from "../../engine/sheets";
+import { spriteStyle } from "../../engine/spriteStyle";
+import face0 from "../../assets/cards/card_hearts_A.png";
+import face1 from "../../assets/cards/card_spades_02.png";
+import face2 from "../../assets/cards/card_diamonds_03.png";
+import face3 from "../../assets/cards/card_clubs_04.png";
+import face4 from "../../assets/cards/card_hearts_05.png";
+import face5 from "../../assets/cards/card_spades_06.png";
+import face6 from "../../assets/cards/card_diamonds_07.png";
+import face7 from "../../assets/cards/card_clubs_08.png";
 import "../../styles/shared.css";
 import "./stage04.css";
 
 type Phase = "intro" | "play" | "picking" | "category" | "result";
 
-const CARD_FACES = [
-  "card_hearts_A",
-  "card_spades_02",
-  "card_diamonds_03",
-  "card_clubs_04",
-  "card_hearts_05",
-  "card_spades_06",
-  "card_diamonds_07",
-  "card_clubs_08",
-];
-const cardUrl = (name: string) => `/assets/cards/${name}.png`;
+/** face id -> bundled url, so the path survives whatever base we deploy under */
+const FACE_URLS: Record<string, string> = {
+  card_hearts_A: face0,
+  card_spades_02: face1,
+  card_diamonds_03: face2,
+  card_clubs_04: face3,
+  card_hearts_05: face4,
+  card_spades_06: face5,
+  card_diamonds_07: face6,
+  card_clubs_08: face7,
+};
+const CARD_FACES = Object.keys(FACE_URLS);
+const cardUrl = (name: string) => FACE_URLS[name];
 const GRID = 4;
 const CARD_W = 76;
 const CARD_H = 76;

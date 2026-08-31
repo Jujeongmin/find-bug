@@ -144,7 +144,7 @@
 }
 
 .s4-card-back {
-  background-image: url("/assets/cards/card_back.png");
+  background-image: url("../../assets/cards/card_back.png");
 }
 
 /* the face is pre-rotated so it shows once the card flips */
