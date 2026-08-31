@@ -690,7 +690,7 @@ export function EngineStage({
         />
       )}
 
-      {phase === "result" && (
+      {phase === "result" && mutation && (
         <ResultModal
           success={resultSuccess}
           bugText={
