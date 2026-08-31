@@ -191,8 +191,7 @@
       "stages": [
         16,
         22,
-        25,
-        28
+        27
       ]
     },
     {
@@ -203,14 +202,13 @@
       "category": "logic",
       "categoryLabel": "논리 오류",
       "answers": "점수 표시 / 슬라임 A",
-      "desc": "점수 표시: 표시된 수치보다 실제로는 훨씬 적게 올랐다. (슬라임 A)",
+      "desc": "점수 표시: 표시된 값과 실제로 오르내린 양이 달랐다. (슬라임 A)",
       "score": 2.44,
       "band": 3,
       "stages": [
         16,
         22,
-        25,
-        28
+        27
       ]
     },
     {
@@ -227,8 +225,7 @@
       "stages": [
         16,
         22,
-        25,
-        28
+        27
       ]
     },
     {
@@ -245,8 +242,7 @@
       "stages": [
         16,
         22,
-        25,
-        28
+        27
       ]
     },
     {
@@ -469,6 +465,74 @@
       ]
     },
     {
+      "fullId": "stage02:counterSkew:sword:items",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "인벤토리 / 검",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (검)",
+      "score": 2.32,
+      "band": 3,
+      "stages": [
+        17,
+        23,
+        28
+      ]
+    },
+    {
+      "fullId": "stage02:counterSkew:buyBtn:items",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "인벤토리 / 구매 버튼",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (구매 버튼)",
+      "score": 2.37,
+      "band": 3,
+      "stages": [
+        17,
+        23,
+        28
+      ]
+    },
+    {
+      "fullId": "stage02:counterSkew:potion:items",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "인벤토리 / 버섯",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (버섯)",
+      "score": 2.41,
+      "band": 3,
+      "stages": [
+        17,
+        23,
+        28
+      ]
+    },
+    {
+      "fullId": "stage02:counterSkew:shield:items",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "인벤토리 / 방패",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (방패)",
+      "score": 2.41,
+      "band": 3,
+      "stages": [
+        17,
+        23,
+        28
+      ]
+    },
+    {
       "fullId": "stage02:bounceOnEnd:cat:bounce",
       "scene": "stage02",
       "sceneName": "마법 상점",
@@ -481,7 +545,42 @@
       "band": 3,
       "stages": [
         17,
-        29
+        23,
+        28
+      ]
+    },
+    {
+      "fullId": "stage02:counterSkew:apple:items",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "인벤토리 / 사과",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (사과)",
+      "score": 2.52,
+      "band": 3,
+      "stages": [
+        17,
+        23,
+        28
+      ]
+    },
+    {
+      "fullId": "stage02:counterSkew:gem:items",
+      "scene": "stage02",
+      "sceneName": "마법 상점",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "인벤토리 / 보석",
+      "desc": "인벤토리: 표시된 값과 실제로 오르내린 양이 달랐다. (보석)",
+      "score": 2.52,
+      "band": 3,
+      "stages": [
+        17,
+        23,
+        28
       ]
     },
     {
@@ -496,7 +595,7 @@
       "score": 3.15,
       "band": 4,
       "stages": [
-        29
+        28
       ]
     },
     {
@@ -511,7 +610,7 @@
       "score": 3.17,
       "band": 4,
       "stages": [
-        29
+        28
       ]
     },
     {
@@ -526,7 +625,7 @@
       "score": 3.7,
       "band": 4,
       "stages": [
-        29
+        28
       ]
     },
     {
@@ -659,9 +758,8 @@
       "band": 3,
       "stages": [
         18,
-        23,
-        26,
-        30
+        24,
+        29
       ]
     },
     {
@@ -672,14 +770,13 @@
       "category": "logic",
       "categoryLabel": "논리 오류",
       "answers": "코인 카운터 / 코인",
-      "desc": "코인 카운터: 표시된 수치보다 실제로는 훨씬 적게 올랐다. (코인)",
+      "desc": "코인 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (코인)",
       "score": 2.37,
       "band": 3,
       "stages": [
         18,
-        23,
-        26,
-        30
+        24,
+        29
       ]
     },
     {
@@ -695,9 +792,8 @@
       "band": 3,
       "stages": [
         18,
-        23,
-        26,
-        30
+        24,
+        29
       ]
     },
     {
@@ -712,7 +808,7 @@
       "score": 3.28,
       "band": 4,
       "stages": [
-        30
+        29
       ]
     },
     {
@@ -727,7 +823,7 @@
       "score": 3.33,
       "band": 4,
       "stages": [
-        30
+        29
       ]
     },
     {
@@ -935,6 +1031,57 @@
       ]
     },
     {
+      "fullId": "stage05:counterSkew:mushroom:stock",
+      "scene": "stage05",
+      "sceneName": "밤샘 연구실",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "재고 카운터 / 버섯",
+      "desc": "재고 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (버섯)",
+      "score": 2.44,
+      "band": 3,
+      "stages": [
+        19,
+        25,
+        30
+      ]
+    },
+    {
+      "fullId": "stage05:counterSkew:herb:stock",
+      "scene": "stage05",
+      "sceneName": "밤샘 연구실",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "재고 카운터 / 허브",
+      "desc": "재고 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (허브)",
+      "score": 2.56,
+      "band": 3,
+      "stages": [
+        19,
+        25,
+        30
+      ]
+    },
+    {
+      "fullId": "stage05:counterSkew:crystal:stock",
+      "scene": "stage05",
+      "sceneName": "밤샘 연구실",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "재고 카운터 / 수정",
+      "desc": "재고 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (수정)",
+      "score": 2.56,
+      "band": 3,
+      "stages": [
+        19,
+        25,
+        30
+      ]
+    },
+    {
       "fullId": "stage05:bounceOnEnd:robot:bounce",
       "scene": "stage05",
       "sceneName": "밤샘 연구실",
@@ -946,7 +1093,9 @@
       "score": 2.56,
       "band": 3,
       "stages": [
-        19
+        19,
+        25,
+        30
       ]
     },
     {
@@ -960,7 +1109,9 @@
       "desc": "창문: 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
       "score": 3.32,
       "band": 4,
-      "stages": []
+      "stages": [
+        30
+      ]
     },
     {
       "fullId": "stage05:speedScale:clockHand5",
@@ -973,7 +1124,9 @@
       "desc": "초침: 정상 속도의 절반으로 느리게 움직였다.",
       "score": 3.8,
       "band": 4,
-      "stages": []
+      "stages": [
+        30
+      ]
     },
     {
       "fullId": "stage06:noAction:valve",
@@ -1085,6 +1238,23 @@
       ]
     },
     {
+      "fullId": "stage06:counterSkew:leverB:shipped",
+      "scene": "stage06",
+      "sceneName": "지하 기계실",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "출하 카운터 / 레버 B (파랑)",
+      "desc": "출하 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (레버 B (파랑))",
+      "score": 2.41,
+      "band": 3,
+      "stages": [
+        15,
+        21,
+        26
+      ]
+    },
+    {
       "fullId": "stage06:bounceOnEnd:plumberBot:bounce",
       "scene": "stage06",
       "sceneName": "지하 기계실",
@@ -1098,8 +1268,7 @@
       "stages": [
         15,
         21,
-        24,
-        27
+        26
       ]
     },
     {
@@ -1116,8 +1285,24 @@
       "stages": [
         15,
         21,
-        24,
-        27
+        26
+      ]
+    },
+    {
+      "fullId": "stage06:counterSkew:leverC:shipped",
+      "scene": "stage06",
+      "sceneName": "지하 기계실",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "출하 카운터 / 레버 C (노랑)",
+      "desc": "출하 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (레버 C (노랑))",
+      "score": 2.49,
+      "band": 3,
+      "stages": [
+        15,
+        21,
+        26
       ]
     },
     {
@@ -1134,8 +1319,24 @@
       "stages": [
         15,
         21,
-        24,
-        27
+        26
+      ]
+    },
+    {
+      "fullId": "stage06:counterSkew:leverA:shipped",
+      "scene": "stage06",
+      "sceneName": "지하 기계실",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "출하 카운터 / 레버 A (빨강)",
+      "desc": "출하 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (레버 A (빨강))",
+      "score": 2.53,
+      "band": 3,
+      "stages": [
+        15,
+        21,
+        26
       ]
     },
     {
@@ -1152,8 +1353,7 @@
       "stages": [
         15,
         21,
-        24,
-        27
+        26
       ]
     },
     {
@@ -1170,8 +1370,7 @@
       "stages": [
         15,
         21,
-        24,
-        27
+        26
       ]
     },
     {
@@ -1188,8 +1387,7 @@
       "stages": [
         15,
         21,
-        24,
-        27
+        26
       ]
     },
     {
@@ -1548,8 +1746,8 @@
     {
       "n": 23,
       "nameKey": "stage.build.23",
-      "id": "s23-stage03",
-      "sceneId": "stage03",
+      "id": "s23-stage02",
+      "sceneId": "stage02",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -1557,8 +1755,8 @@
     {
       "n": 24,
       "nameKey": "stage.build.24",
-      "id": "s24-stage06",
-      "sceneId": "stage06",
+      "id": "s24-stage03",
+      "sceneId": "stage03",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -1566,8 +1764,8 @@
     {
       "n": 25,
       "nameKey": "stage.build.25",
-      "id": "s25-stage01",
-      "sceneId": "stage01",
+      "id": "s25-stage05",
+      "sceneId": "stage05",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -1575,8 +1773,8 @@
     {
       "n": 26,
       "nameKey": "stage.build.26",
-      "id": "s26-stage03",
-      "sceneId": "stage03",
+      "id": "s26-stage06",
+      "sceneId": "stage06",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -1584,8 +1782,8 @@
     {
       "n": 27,
       "nameKey": "stage.build.27",
-      "id": "s27-stage06",
-      "sceneId": "stage06",
+      "id": "s27-stage01",
+      "sceneId": "stage01",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -1593,8 +1791,8 @@
     {
       "n": 28,
       "nameKey": "stage.build.28",
-      "id": "s28-stage01",
-      "sceneId": "stage01",
+      "id": "s28-stage02",
+      "sceneId": "stage02",
       "minBand": 3,
       "maxBand": 4,
       "stars": 3
@@ -1602,8 +1800,8 @@
     {
       "n": 29,
       "nameKey": "stage.build.29",
-      "id": "s29-stage02",
-      "sceneId": "stage02",
+      "id": "s29-stage03",
+      "sceneId": "stage03",
       "minBand": 3,
       "maxBand": 4,
       "stars": 3
@@ -1611,8 +1809,8 @@
     {
       "n": 30,
       "nameKey": "stage.build.30",
-      "id": "s30-stage03",
-      "sceneId": "stage03",
+      "id": "s30-stage05",
+      "sceneId": "stage05",
       "minBand": 3,
       "maxBand": 4,
       "stars": 3

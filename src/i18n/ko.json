@@ -150,7 +150,7 @@
   "bug.F8.desc": "끓이기 버튼: 조합을 반복할수록 끓이는 시간이 조금씩 길어졌다.",
   "bug.F9.desc": "창문: 밖의 별 하나만 깜빡이지 않고 계속 켜져 있었다.",
   "stage.stage06.name": "지하 기계실",
-  "intro.stage06.line": "기계실 빌드 검증. 무엇이 무엇을 움직이는지 의심하라.",
+  "intro.stage06.line": "출하 라인 검증. 레버를 당겨 같은 색 문으로 내보내라. 무엇이 무엇을 움직이는지 의심하라.",
   "object.leverA": "레버 A (빨강)",
   "object.leverB": "레버 B (파랑)",
   "object.leverC": "레버 C (노랑)",
@@ -181,7 +181,7 @@
   "bugdesc.freezeAnimation": "{obj}: 움직임 애니메이션 없이 미끄러지듯 이동했다.",
   "bugdesc.reverseDirection": "{obj}: 이동 방향과 반대로 몸이 향해 있었다.",
   "bugdesc.mirrorShadow": "{obj}: 그림자가 광원 반대 방향으로 드리워져 있었다.",
-  "bugdesc.counterSkew": "{counter}: 표시된 수치보다 실제로는 훨씬 적게 올랐다. ({obj})",
+  "bugdesc.counterSkew": "{counter}: 표시된 값과 실제로 오르내린 양이 달랐다. ({obj})",
   "stage.engine01.name": "[엔진] 슬라임 사냥터",
   "counter.pressure": "압력",
   "object.sideLamp": "보조 램프",
@@ -246,5 +246,8 @@
   "ending.replay": "엔딩 다시 보기",
   "sound.on": "소리 켜기",
   "sound.off": "소리 끄기",
-  "bugdesc.invertMeter": "{obj}: 실제 값과 반대로 움직였다."
+  "bugdesc.invertMeter": "{obj}: 실제 값과 반대로 움직였다.",
+  "counter.shipped": "출하",
+  "object.shippedHud": "출하 카운터",
+  "object.pressureHud": "압력 표시"
 }

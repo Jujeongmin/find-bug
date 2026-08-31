@@ -73,7 +73,8 @@ const ok = (label: string, cond: boolean) =>
   r.state.objects.player.y = r.state.objects.slimeA.y;
   r.doAttack(70);
   const popup = r.state.popups.find((p) => p.text.startsWith("+"));
-  ok("B5: score only +1", r.state.counters.score === 1);
+  // counterSkew now doubles the real change while the popup keeps the design value
+  ok("B5: score moves by a different amount than shown", r.state.counters.score === 20);
   ok("B5: popup still claims +10", popup?.text === "+10");
 }
 

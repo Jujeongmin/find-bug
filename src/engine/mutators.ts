@@ -1,5 +1,5 @@
 import type { BugCategory } from "../core/types";
-import type { Behavior, ObjectSpec, SceneSpec } from "./types";
+import type { Action, Behavior, ObjectSpec, SceneSpec } from "./types";
 
 export interface Target {
   objectId: string;
@@ -204,7 +204,15 @@ export const counterSkew: Mutator = {
     for (const o of s.objects) {
       for (const b of o.behaviors) {
         const actions =
-          b.t === "killable" ? b.onKill : b.t === "pickup" ? b.onPickup : [];
+          b.t === "killable"
+            ? b.onKill
+            : b.t === "pickup"
+              ? b.onPickup
+              : b.t === "clickable" && b.action
+                ? Array.isArray(b.action)
+                  ? b.action
+                  : [b.action]
+                : [];
         for (const a of actions) {
           if (a.a === "increment" && visible.has(a.counter)) {
             out.push({ objectId: o.id, note: a.counter });
@@ -217,24 +225,18 @@ export const counterSkew: Mutator = {
   apply: (s, t) =>
     mapObject(s, t.objectId, (o) => {
       o.behaviors = o.behaviors.map((b) => {
-        if (b.t === "killable") {
+        const skew = (a: Action): Action =>
+          a.a === "increment" && a.counter === t.note
+            ? { ...a, popupBy: a.popupBy ?? a.by, by: a.by * 2 }
+            : a;
+        if (b.t === "killable") return { ...b, onKill: b.onKill.map(skew) };
+        if (b.t === "pickup") return { ...b, onPickup: b.onPickup.map(skew) };
+        if (b.t === "clickable" && b.action) {
           return {
             ...b,
-            onKill: b.onKill.map((a) =>
-              a.a === "increment" && a.counter === t.note
-                ? { ...a, popupBy: a.popupBy ?? a.by, by: 1 }
-                : a
-            ),
-          };
-        }
-        if (b.t === "pickup") {
-          return {
-            ...b,
-            onPickup: b.onPickup.map((a) =>
-              a.a === "increment" && a.counter === t.note
-                ? { ...a, popupBy: a.popupBy ?? a.by, by: 1 }
-                : a
-            ),
+            action: Array.isArray(b.action)
+              ? b.action.map(skew)
+              : skew(b.action),
           };
         }
         return b;

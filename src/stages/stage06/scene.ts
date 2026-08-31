@@ -19,10 +19,31 @@ export const stage06Scene: SceneSpec = {
   backgroundClass: "s6-room",
   flags: ["light", "water"],
   counters: [
+    { id: "shipped", nameKey: "counter.shipped", initial: 0, display: "number" },
     { id: "pressure", nameKey: "counter.pressure", initial: 0, max: 100, display: "number" },
   ],
   links: LEVERS.map((l) => ({ id: `link-${l.id}`, from: l.id, to: l.door, duration: 3 })),
   objects: [
+    {
+      id: "shippedHud",
+      nameKey: "object.shippedHud",
+      kind: "hud" as const,
+      x: 0,
+      y: 0,
+      counter: "shipped",
+      render: {},
+      behaviors: [],
+    },
+    {
+      id: "pressureHud",
+      nameKey: "object.pressureHud",
+      kind: "hud" as const,
+      x: 0,
+      y: 0,
+      counter: "pressure",
+      render: {},
+      behaviors: [],
+    },
     ...DOORS.map((d) => ({
       id: d.id,
       nameKey: `object.${d.id}`,
@@ -50,7 +71,14 @@ export const stage06Scene: SceneSpec = {
         orientable: true,
       },
       behaviors: [
-        { t: "clickable" as const, action: { a: "trigger" as const, target: l.id } },
+        {
+          t: "clickable" as const,
+          // opening a line ships one crate down it
+          action: [
+            { a: "trigger" as const, target: l.id },
+            { a: "increment" as const, counter: "shipped", by: 1 },
+          ],
+        },
       ],
     })),
 

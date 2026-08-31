@@ -50,7 +50,7 @@ export type Behavior =
   /** consumed on touch */
   | { t: "pickup"; radius: number; respawn: number; onPickup: Action[]; popup?: string }
   /** responds to a tap; `action: null` means it looks pressable but does nothing */
-  | { t: "clickable"; action: Action | null }
+  | { t: "clickable"; action: Action | Action[] | null }
   /** continuous rotation; dir -1 reverses it */
   | { t: "spin"; rpm: number; dir: 1 | -1 }
   /** figure-eight / sine flight path */

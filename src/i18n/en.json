@@ -150,7 +150,7 @@
   "bug.F8.desc": "Brew button: each brew took slightly longer than the one before.",
   "bug.F9.desc": "Window: one star outside stayed lit instead of twinkling.",
   "stage.stage06.name": "Basement Machine Room",
-  "intro.stage06.line": "Machine room build. Doubt what moves what.",
+  "intro.stage06.line": "Shipping line build. Pull a lever to send a crate out its matching door. Doubt what moves what.",
   "object.leverA": "Lever A (red)",
   "object.leverB": "Lever B (blue)",
   "object.leverC": "Lever C (yellow)",
@@ -181,7 +181,7 @@
   "bugdesc.freezeAnimation": "{obj}: it slid around without any movement animation.",
   "bugdesc.reverseDirection": "{obj}: it faced the opposite way from where it moved.",
   "bugdesc.mirrorShadow": "{obj}: its shadow fell on the wrong side of the light.",
-  "bugdesc.counterSkew": "{counter}: it went up far less than the number it displayed. ({obj})",
+  "bugdesc.counterSkew": "{counter}: it moved by a different amount than it displayed. ({obj})",
   "stage.engine01.name": "[Engine] Slime Hunting Grounds",
   "counter.pressure": "Pressure",
   "object.sideLamp": "Side lamp",
@@ -246,5 +246,8 @@
   "ending.replay": "Replay ending",
   "sound.on": "Sound on",
   "sound.off": "Sound off",
-  "bugdesc.invertMeter": "{obj}: it moved the opposite way from the real value."
+  "bugdesc.invertMeter": "{obj}: it moved the opposite way from the real value.",
+  "counter.shipped": "Shipped",
+  "object.shippedHud": "Shipped counter",
+  "object.pressureHud": "Pressure readout"
 }

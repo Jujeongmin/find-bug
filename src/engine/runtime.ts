@@ -146,7 +146,7 @@ export class SceneRuntime {
           const next = spec?.max !== undefined ? Math.min(spec.max, cur + a.by) : cur + a.by;
           this.state.counters[a.counter] = next;
           const shown = a.popupBy ?? a.by;
-          this.addPopup(at.x, at.y - 26, `+${shown}`);
+          this.addPopup(at.x, at.y - 26, shown >= 0 ? `+${shown}` : `${shown}`);
           break;
         }
         case "heal": {
@@ -210,11 +210,12 @@ export class SceneRuntime {
     if (!c || c.t !== "clickable") return;
     // a null action is the noAction bug: it still looks pressable
     if (c.action === null) return;
-    if (c.action.a === "select") {
+    const actions = Array.isArray(c.action) ? c.action : [c.action];
+    if (actions.some((a) => a.a === "select")) {
       this.state.selected = objectId;
       return;
     }
-    this.runActions([c.action], { x: o.x, y: o.y });
+    this.runActions(actions, { x: o.x, y: o.y });
   }
 
   tick(dt: number) {
