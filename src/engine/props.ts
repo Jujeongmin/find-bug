@@ -24,7 +24,6 @@ export const PROPS = {
   crate: { w: 16, h: 23 },
   barrel: { w: 17, h: 22 },
   rug: { w: 72, h: 50 },
-  windowPane: { w: 32, h: 32 },
 } as const satisfies Record<string, PropSpec>;
 
 export type PropId = keyof typeof PROPS;

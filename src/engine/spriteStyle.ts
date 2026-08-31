@@ -15,7 +15,6 @@ import doorOpenSrc from "../assets/props/doorOpen.png";
 import crateSrc from "../assets/props/crate.png";
 import barrelSrc from "../assets/props/barrel.png";
 import rugSrc from "../assets/props/rug.png";
-import windowSrc from "../assets/props/tile5.png";
 import { PROPS, type PropId, type PropRef } from "./props";
 
 /**
@@ -61,7 +60,6 @@ const PROP_SRC: Record<PropId, string> = {
   crate: crateSrc,
   barrel: barrelSrc,
   rug: rugSrc,
-  windowPane: windowSrc,
 };
 
 /** CSS for a standalone prop image, drawn at its authored aspect ratio */

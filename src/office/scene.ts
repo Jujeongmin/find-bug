@@ -57,13 +57,13 @@ export const officeScene: SceneSpec = {
       render: { className: "office-wall", bar: { width: 360, height: WALL_H } },
       behaviors: [],
     },
-    ...[126, 234].map((x, i) => ({
+    ...[112, 220].map((x, i) => ({
       id: `window${i}`,
       nameKey: "object.window",
       kind: "decor" as const,
       x,
-      y: 74,
-      render: { prop: { id: "windowPane" as const, scale: 1.6 } },
+      y: 26,
+      render: { className: "office-window", bar: { width: 52, height: 44 } },
       behaviors: [],
     })),
 

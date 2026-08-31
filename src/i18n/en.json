@@ -361,7 +361,6 @@
   "office.goHome": "Clock out",
   "office.day": "Day {n}",
   "office.shipIn": "Ship in {n}",
-  "office.queue": "{n} builds left",
   "office.alreadyDone": "This machine is done for today.",
   "office.buildTitle": "{machine} build",
   "office.shipTitle": "Shipped",
@@ -388,5 +387,12 @@
   "office.dev.idle1": "\"Nothing scares me like something that used to work.\"",
   "office.dev.idle2": "\"I do not trust my own code either. That is what you are for.\"",
   "office.dev.idle3": "\"If the build numbers blur, just call them by the machine. A, B, C.\"",
-  "office.dev.idle4": "\"Did I ask about moving the date? I did. They said no.\""
+  "office.dev.idle4": "\"Did I ask about moving the date? I did. They said no.\"",
+  "office.sev.low": "Low",
+  "office.sev.normal": "Normal",
+  "office.sev.critical": "Critical",
+  "office.pending": "{n} undelivered",
+  "office.dev.handoff": "\"{n} filed. They go into the next build.\"",
+  "office.dev.waiting": "\"If you have got something, hand it over now. After you clock out I cannot fix it.\"",
+  "office.tallyDetail": "Delivered {delivered} · undelivered {late} · critical shipped {critical}"
 }

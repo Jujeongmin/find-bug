@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { useI18n } from "../i18n";
 import { EngineStage } from "../engine/EngineStage";
 import { officeScene, MACHINES, type MachineId } from "./scene";
@@ -21,22 +22,71 @@ const MINUTES_PER_SECOND = 2;
 /** things the developer says when there is nothing more pressing */
 const IDLE_LINES = 5;
 
+/**
+ * Sky through the window, from morning to the end of the day. The header
+ * clock is a number; this is the same fact you can feel without reading.
+ */
+const SKY: { at: number; top: string; bottom: string }[] = [
+  { at: 9 * 60, top: "#8fc6ef", bottom: "#d9ecfa" },
+  { at: 12 * 60, top: "#63aee8", bottom: "#bfe0f6" },
+  { at: 15 * 60, top: "#7bb6e0", bottom: "#e6dcc2" },
+  { at: 17 * 60, top: "#d98f52", bottom: "#f2c98a" },
+  { at: 18 * 60, top: "#5b4a72", bottom: "#c07a5c" },
+];
+
+const mix = (a: string, b: string, t: number) => {
+  const hex = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const [r1, g1, b1] = hex(a);
+  const [r2, g2, b2] = hex(b);
+  const c = (x: number, y: number) => Math.round(x + (y - x) * t);
+  return `rgb(${c(r1, r2)}, ${c(g1, g2)}, ${c(b1, b2)})`;
+};
+
+function skyAt(minutes: number) {
+  let i = 0;
+  while (i < SKY.length - 2 && minutes > SKY[i + 1].at) i++;
+  const a = SKY[i];
+  const b = SKY[i + 1];
+  const t = Math.max(0, Math.min(1, (minutes - a.at) / (b.at - a.at)));
+  return { top: mix(a.top, b.top, t), bottom: mix(a.bottom, b.bottom, t) };
+}
+
 const clock = (m: number) =>
   `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(Math.floor(m % 60)).padStart(2, "0")}`;
+
+/** how much a defect in this build costs if it ships */
+type Severity = "low" | "normal" | "critical";
+
+const SEVERITY_COST: Record<Severity, number> = {
+  low: 0.25,
+  normal: 0.5,
+  critical: 1,
+};
+
+/** a defect caught but never walked over to the developer is never fixed */
+const LATE_COST = 0.2;
 
 interface Assignment {
   machine: MachineId;
   sceneId: string;
+  severity: Severity;
   /** null until the player has verified it */
   result: null | "caught" | "missed";
 }
 
-/** three builds a day, one per machine, never the same scene twice in a day */
+/**
+ * Three builds a day, one per machine. Each day holds exactly one of each
+ * severity, and which machine carries the critical one rotates — so there is
+ * always a build worth reaching first, and it is never the same walk twice.
+ */
+const SEVERITIES: Severity[] = ["normal", "low", "critical"];
+
 function assignDay(day: number): Assignment[] {
   const pool = [...ENGINE_SCENES];
   return MACHINES.map((machine, i) => ({
     machine,
     sceneId: pool[(day * 3 + i) % pool.length].id,
+    severity: SEVERITIES[(i + day) % SEVERITIES.length],
     result: null,
   }));
 }
@@ -63,6 +113,12 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [talks, setTalks] = useState(0);
   /** the last build signed off, so the developer can react to it once */
   const [lastResult, setLastResult] = useState<null | "caught" | "missed">(null);
+  /** caught today but not yet handed to the developer */
+  const [pending, setPending] = useState<Assignment[]>([]);
+  const [delivered, setDelivered] = useState(0);
+  /** caught, but the day ended before it reached the developer */
+  const [late, setLate] = useState(0);
+  const [shipped_, setShipped_] = useState<Severity[]>([]);
 
   // one clock for the whole day, ticking through the office and the builds
   // alike; goHomeRef keeps the timer from closing over a stale day
@@ -99,8 +155,12 @@ export function Office({ onExit }: { onExit: () => void }) {
   const goHome = () => {
     setMinutes(DAY_START);
     // anything still unverified ships as-is
-    const left = assignments.filter((a) => a.result === null).length;
-    setMissed((n) => n + left);
+    const unseen = assignments.filter((a) => a.result === null);
+    setMissed((n) => n + unseen.length);
+    setShipped_((v) => [...v, ...unseen.map((a) => a.severity)]);
+    // a defect the developer never heard about does not get fixed
+    setLate((n) => n + pending.length);
+    setPending([]);
     if (day >= DAYS) {
       setShipped(true);
       return;
@@ -121,6 +181,7 @@ export function Office({ onExit }: { onExit: () => void }) {
   const devLine = () => {
     const left = assignments.filter((a) => a.result === null).length;
     if (day === 1 && talks === 0) return "office.dev.intro";
+    if (pending.length) return "office.dev.waiting";
     if (lastResult === "caught") return "office.dev.caught";
     if (lastResult === "missed") return "office.dev.missed";
     if (left === 0) return "office.dev.allDone";
@@ -134,6 +195,14 @@ export function Office({ onExit }: { onExit: () => void }) {
       return;
     }
     if (id === "dev") {
+      if (pending.length) {
+        setDelivered((n) => n + pending.length);
+        setPending([]);
+        setNote(tp("office.dev.handoff", { n: String(pending.length) }));
+        setTalks((n) => n + 1);
+        setLastResult(null);
+        return;
+      }
       setNote(t(devLine()));
       setTalks((n) => n + 1);
       setLastResult(null);
@@ -150,7 +219,9 @@ export function Office({ onExit }: { onExit: () => void }) {
 
   if (shipped) {
     const total = caught + missed;
-    const rating = Math.max(1, Math.round((5 - missed * 0.4) * 10) / 10);
+    const cost =
+      shipped_.reduce((sum, sv) => sum + SEVERITY_COST[sv], 0) + late * LATE_COST;
+    const rating = Math.max(1, Math.round((5 - cost) * 10) / 10);
     return (
       <div className="wb-root wb-ship">
         <h1>{t("office.shipTitle")}</h1>
@@ -163,6 +234,12 @@ export function Office({ onExit }: { onExit: () => void }) {
         </div>
         <p className="wb-tally">
           {tp("office.tally", { caught: String(caught), total: String(total) })}
+          <br />
+          {tp("office.tallyDetail", {
+            delivered: String(delivered),
+            late: String(late),
+            critical: String(shipped_.filter((s2) => s2 === "critical").length),
+          })}
         </p>
         <button className="btn-primary" onClick={onExit}>
           {t("wb.backToTitle")}
@@ -186,9 +263,18 @@ export function Office({ onExit }: { onExit: () => void }) {
   }
 
   const left = assignments.filter((a) => a.result === null).length;
+  const sky = skyAt(minutes);
 
   return (
-    <div className="wb-root">
+    <div
+      className="wb-root"
+      style={
+        {
+          "--sky-top": sky.top,
+          "--sky-bottom": sky.bottom,
+        } as CSSProperties
+      }
+    >
       <EngineStage
         key={`office-${day}`}
         scene={officeScene}
@@ -203,7 +289,20 @@ export function Office({ onExit }: { onExit: () => void }) {
             <span className="wb-deadline">
               {tp("office.shipIn", { n: String(DAYS - day) })}
             </span>
-            <span className="wb-budget">{tp("office.queue", { n: String(left) })}</span>
+            <span className="office-queue">
+              {assignments.map((a) => (
+                <b
+                  key={a.machine}
+                  className={`q-${a.severity} ${a.result ? "done" : ""}`}
+                  title={`${t(`object.${a.machine}`)} · ${t(`office.sev.${a.severity}`)}`}
+                >
+                  {a.machine.slice(-1)}
+                </b>
+              ))}
+              {pending.length > 0 && (
+                <em className="q-pending">{tp("office.pending", { n: String(pending.length) })}</em>
+              )}
+            </span>
           </div>
         }
         onStation={onStation}
