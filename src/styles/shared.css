@@ -498,11 +498,10 @@
 .s6-door.blue { background: linear-gradient(#4f8fe0, #2c5aa8); }
 .s6-door.yellow { background: linear-gradient(#e0c24f, #a8892c); }
 .s6-gear {
-  background:
-    repeating-conic-gradient(#8e97a6 0deg 22deg, #5b6472 22deg 45deg);
-  border-radius: 50%;
-  border: 3px solid #3c434f;
-  box-shadow: inset 0 0 0 6px #2f3540;
+  background: url("../assets/gear.svg") center / contain no-repeat;
+  border: none;
+  box-shadow: none;
+  image-rendering: pixelated;
 }
 .s6-bulb {
   background: radial-gradient(circle at 40% 35%, #fff6c9 0 40%, #ffd34a 100%);
@@ -605,17 +604,6 @@
 }
 
 /* ---- machine room props ---- */
-.s6-gear {
-  background:
-    repeating-conic-gradient(
-      from 0deg,
-      #9aa3b2 0deg 14deg,
-      #5b6472 14deg 30deg
-    );
-  border-radius: 50%;
-  border: 2px solid #333a45;
-  box-shadow: inset 0 0 0 7px #444c59, inset 0 0 0 9px #2b313a;
-}
 
 .s6-gauge {
   background: radial-gradient(circle at 50% 60%, #f6f0e2 0 62%, #cabfa8 100%);
@@ -716,3 +704,16 @@
 .s6-door.triggered::before {
   opacity: 0;
 }
+
+/* water only reads as flowing when the valve is open */
+.s6-water-strip { opacity: 0.35; filter: grayscale(0.7); }
+.s6-water-strip.flowing {
+  opacity: 1;
+  filter: none;
+  animation: eng-flow 0.6s linear infinite;
+}
+
+/* the ceiling bulb lights the whole room, so the switch has a visible effect */
+.s6-bulb:not(.small) { filter: brightness(0.45); }
+.s6-bulb.lit { filter: brightness(1.25) drop-shadow(0 0 6px #ffd34a); }
+.field:has(.s6-bulb.lit) { filter: brightness(1.35); }

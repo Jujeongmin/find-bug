@@ -293,6 +293,14 @@ export function EngineStage({
               // bar branch because gauges are drawn as bars.
               // anything a link points at shows an open state while fired
               const triggered = runtime.isTriggered(o.id);
+              // flag-driven visuals apply to sprites and bars alike
+              const flaggedB = o.behaviors.find((b) => b.t === "flagged");
+              const flagClass =
+                flaggedB && flaggedB.t === "flagged"
+                  ? st.flags[flaggedB.flag]
+                    ? flaggedB.onClass
+                    : (flaggedB.offClass ?? "")
+                  : "";
               const meterB = o.behaviors.find((b) => b.t === "meter");
               let needle: number | null = null;
               let high = false;
@@ -313,7 +321,7 @@ export function EngineStage({
                       picking ? "pickable" : ""
                     } ${high ? "meter-high" : ""} ${
                       triggered ? "triggered" : ""
-                    }`}
+                    } ${flagClass}`}
                     style={{
                       left: os.x,
                       top: os.y,
