@@ -898,7 +898,7 @@
       "categoryLabel": "물리 오류",
       "answers": "화로",
       "desc": "화로: 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.2,
+      "score": 1.18,
       "band": 1,
       "stages": [
         4
@@ -1012,7 +1012,7 @@
       "categoryLabel": "물리 오류",
       "answers": "조수 로봇",
       "desc": "조수 로봇: 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.56,
+      "score": 1.57,
       "band": 2,
       "stages": [
         4,
@@ -1030,7 +1030,7 @@
       "categoryLabel": "이상한 움직임",
       "answers": "조수 로봇",
       "desc": "조수 로봇: 끝에 닿으면 반대편으로 순간이동해서 되돌아갔다.",
-      "score": 1.56,
+      "score": 1.57,
       "band": 2,
       "stages": [
         4,
@@ -1109,6 +1109,23 @@
       ]
     },
     {
+      "fullId": "stage05:counterSkew:mushroom:loaded",
+      "scene": "stage05",
+      "sceneName": "밤샘 연구실",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "투입량 / 버섯",
+      "desc": "투입량: 표시된 값과 실제로 오르내린 양이 달랐다. (버섯)",
+      "score": 2.44,
+      "band": 3,
+      "stages": [
+        15,
+        21,
+        26
+      ]
+    },
+    {
       "fullId": "stage05:counterSkew:herb:stock",
       "scene": "stage05",
       "sceneName": "밤샘 연구실",
@@ -1117,6 +1134,23 @@
       "categoryLabel": "논리 오류",
       "answers": "재고 카운터 / 허브",
       "desc": "재고 카운터: 표시된 값과 실제로 오르내린 양이 달랐다. (허브)",
+      "score": 2.56,
+      "band": 3,
+      "stages": [
+        15,
+        21,
+        26
+      ]
+    },
+    {
+      "fullId": "stage05:counterSkew:herb:loaded",
+      "scene": "stage05",
+      "sceneName": "밤샘 연구실",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "투입량 / 허브",
+      "desc": "투입량: 표시된 값과 실제로 오르내린 양이 달랐다. (허브)",
       "score": 2.56,
       "band": 3,
       "stages": [
@@ -1143,6 +1177,23 @@
       ]
     },
     {
+      "fullId": "stage05:counterSkew:crystal:loaded",
+      "scene": "stage05",
+      "sceneName": "밤샘 연구실",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "투입량 / 수정",
+      "desc": "투입량: 표시된 값과 실제로 오르내린 양이 달랐다. (수정)",
+      "score": 2.56,
+      "band": 3,
+      "stages": [
+        15,
+        21,
+        26
+      ]
+    },
+    {
       "fullId": "stage05:bounceOnEnd:robot:bounce",
       "scene": "stage05",
       "sceneName": "밤샘 연구실",
@@ -1151,7 +1202,7 @@
       "categoryLabel": "이상한 움직임",
       "answers": "조수 로봇",
       "desc": "조수 로봇: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
-      "score": 2.56,
+      "score": 2.57,
       "band": 3,
       "stages": [
         15,

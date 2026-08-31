@@ -19,8 +19,17 @@ export type Action =
   | { a: "trigger"; target: string }
   /** flips a boolean flag (light switch, valve) */
   | { a: "toggle"; flag: string }
-  /** starts a timed process that runs `onDone` when it finishes */
-  | { a: "startTimer"; timer: string }
+  /**
+   * Starts a timed process that runs `onDone` when it finishes. `requires`
+   * gates it on a counter, so a machine can refuse to run with nothing in it —
+   * without that the button worked on an empty hearth and the ingredients had
+   * no visible part in the loop.
+   */
+  | {
+      a: "startTimer";
+      timer: string;
+      requires?: { counter: string; min: number };
+    }
   /** selects this object (shop item, card) */
   | { a: "select" }
   /** consumes the current selection */

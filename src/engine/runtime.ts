@@ -181,11 +181,14 @@ export class SceneRuntime {
         case "toggle":
           this.state.flags[a.flag] = !this.state.flags[a.flag];
           break;
-        case "startTimer":
+        case "startTimer": {
+          const req = a.requires;
+          if (req && (this.state.counters[req.counter] ?? 0) < req.min) break;
           if (this.state.timerStart[a.timer] == null) {
             this.state.timerStart[a.timer] = this.state.now;
           }
           break;
+        }
         case "select":
           break;
         case "commit":

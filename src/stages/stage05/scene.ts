@@ -17,16 +17,21 @@ export const stage05Scene: SceneSpec = {
     {
       id: "brew",
       duration: 5,
-      onDone: [{ a: "increment", counter: "products", by: 1 }],
+      onDone: [
+        { a: "increment", counter: "products", by: 1 },
+        { a: "increment", counter: "loaded", by: -1 },
+      ],
     },
   ],
   counters: [
     { id: "stock", nameKey: "counter.stock", initial: 30, display: "number" },
     { id: "products", nameKey: "counter.products", initial: 0, display: "number" },
+    { id: "loaded", nameKey: "counter.loaded", initial: 0, display: "number" },
   ],
   objects: [
     { id: "stockCounter", nameKey: "object.stockCounter", kind: "hud", x: 0, y: 0, counter: "stock", render: {}, behaviors: [] },
     { id: "shelf5", nameKey: "object.shelf5", kind: "hud", x: 0, y: 0, counter: "products", render: {}, behaviors: [] },
+    { id: "loadedHud", nameKey: "object.loadedHud", kind: "hud", x: 0, y: 0, counter: "loaded", render: {}, behaviors: [] },
 
     /* ingredients — peers */
     ...INGREDIENTS.map((ing) => ({
@@ -43,7 +48,10 @@ export const stage05Scene: SceneSpec = {
       behaviors: [
         {
           t: "clickable" as const,
-          action: { a: "increment" as const, counter: "stock", by: -1 },
+          action: [
+            { a: "increment" as const, counter: "stock", by: -1 },
+            { a: "increment" as const, counter: "loaded", by: 1 },
+          ],
         },
       ],
     })),
@@ -56,7 +64,7 @@ export const stage05Scene: SceneSpec = {
       x: 180,
       y: 402,
       z: 2,
-      render: { sprite: { sheet: "roguelike" as const, col: 54, row: 9, scale: 3.4 }, shadow: { offsetX: 10, width: 34 }, timer: "brew" },
+      render: { sprite: { sheet: "furniture" as const, col: 5, row: 10, spanY: 2, scale: 1.5 }, shadow: { offsetX: 10, width: 34 }, timer: "brew" },
       behaviors: [],
     },
     {
@@ -102,13 +110,29 @@ export const stage05Scene: SceneSpec = {
       behaviors: [{ t: "animate", name: "flicker", period: 1.8 }],
     },
 
-    /* assistant robot */
+    /**
+     * The delivery robot and the belt it runs on. It used to patrol the bare
+     * floor with nothing to explain it, which reads as a thing you are
+     * supposed to interact with. On a belt it is plainly part of the machinery
+     * — and it keeps a moving object in the scene for the movement faults to
+     * attach to.
+     */
+    {
+      id: "belt",
+      nameKey: "object.belt",
+      kind: "decor" as const,
+      x: 30,
+      y: 566,
+      z: 0,
+      render: { className: "s5-belt", bar: { width: 300, height: 16 } },
+      behaviors: [],
+    },
     {
       id: "robot",
       nameKey: "object.robot",
       kind: "sprite",
       x: 60,
-      y: 560,
+      y: 572,
       render: { sprite: { sheet: "platchars" as const, col: 8, row: 0, scale: 1.6 }, shadow: { offsetX: 10, width: 26 } },
       behaviors: [
         { t: "patrol", axis: "x", min: 40, max: 300, speed: 42, flipSprite: true },
@@ -145,7 +169,16 @@ export const stage05Scene: SceneSpec = {
       x: 180,
       y: 600,
       render: { emoji: "🔥", labelKey: "lab.brew" },
-      behaviors: [{ t: "clickable", action: { a: "startTimer", timer: "brew" } }],
+      behaviors: [
+        {
+          t: "clickable",
+          action: {
+            a: "startTimer",
+            timer: "brew",
+            requires: { counter: "loaded", min: 1 },
+          },
+        },
+      ],
     },
   ],
 };

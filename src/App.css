@@ -678,3 +678,18 @@
   text-overflow: ellipsis;
   pointer-events: none;
 }
+
+/* the belt the delivery robot runs on, so it reads as machinery rather than
+   something the player is meant to poke at */
+.s5-belt {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #3c4250 0 10px,
+      #2d323d 10px 20px
+    );
+  border: none;
+  border-top: 2px solid #59617a;
+  border-bottom: 2px solid #1b1f27;
+  border-radius: 3px;
+}

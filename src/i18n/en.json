@@ -422,6 +422,9 @@
   "goal.stage01": "Attack the jelly monsters for points",
   "goal.stage02": "Tap shelf items to add them to the basket",
   "goal.stage03": "Collect the coins. Avoid the spikes and bats.",
-  "goal.stage05": "Gather ingredients and fire the hearth to finish a batch",
-  "goal.stage06": "Tap the targets riding the rails"
+  "goal.stage05": "Tap ingredients into the hearth, then fire it to finish a batch",
+  "goal.stage06": "Tap the targets riding the rails",
+  "counter.loaded": "Loaded",
+  "object.loadedHud": "Loaded count",
+  "object.belt": "Conveyor"
 }
