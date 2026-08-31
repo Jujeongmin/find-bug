@@ -1,4 +1,4 @@
-import type { SceneSpec } from "../engine/types";
+import type { ActorSpec, SceneSpec } from "../engine/types";
 
 /** the three machines today's builds are queued on */
 export const MACHINES = ["machineA", "machineB", "machineC"] as const;
@@ -11,15 +11,14 @@ export const OFFICE_H = 900;
 /** the wall band along the top; everything below it is walkable floor */
 const WALL_H = 140;
 
-const actor = (sheet: "worker" | "worker2") =>
-  ({
+const actor = (sheet: "worker" | "worker2"): ActorSpec => ({
     sheet,
     rows: { down: 0, right: 2, up: 4, left: 6 },
     idle: 0,
     walk: [1, 2, 3, 4],
     fps: 8,
     scale: 1.5,
-  }) as const;
+});
 
 /**
  * The QA floor. A scene like any other, which is the point: the same engine
