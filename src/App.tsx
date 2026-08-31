@@ -11,6 +11,7 @@ import { buildCurriculum } from "./engine/curriculum";
 import { ENGINE_SCENES, SCENE_BY_ID } from "./stages/registry";
 import { Stage04 } from "./stages/stage04/Stage04";
 import { useProgress } from "./net/useProgress";
+import { ReproLab } from "./repro/ReproLab";
 import { Workbench } from "./regression/Workbench";
 import { EndingScreen } from "./components/EndingScreen";
 import { MuteToggle } from "./components/MuteToggle";
@@ -22,6 +23,8 @@ const CURRICULUM = buildCurriculum(ENGINE_SCENES, 30);
 const PLAYTEST = new URLSearchParams(location.search).has("playtest");
 /** ?lab=1 opens the regression prototype instead of the stage list */
 const LAB = new URLSearchParams(location.search).has("lab");
+/** ?repro=1 opens the reproduction prototype */
+const REPRO = new URLSearchParams(location.search).has("repro");
 
 export default function App() {
   const [lang, setLang] = useState<Lang>(detectLang);
@@ -62,7 +65,9 @@ export default function App() {
       <div className="app-root">
         {/* one phone-shaped frame; nothing outside it ever scrolls */}
         <div className="app-frame">
-        {LAB ? (
+        {REPRO ? (
+          <ReproLab onExit={() => location.assign(location.pathname)} />
+        ) : LAB ? (
           <Workbench onExit={() => location.assign(location.pathname)} />
         ) : (
         <>

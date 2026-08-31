@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { BugCategory } from "../core/types";
+import type { Action } from "./types";
 import { useI18n } from "../i18n";
 import { CategorySelect } from "../components/CategorySelect";
 import { ResultModal } from "../components/ResultModal";
@@ -40,12 +41,26 @@ interface Props {
   /** dev overlay that reveals the live answer */
   playtest?: boolean;
   /**
-   * "observe" drops the judging flow entirely and routes every tap to
-   * onObserve. The regression prototype drives the scene this way: the player
-   * is measuring the world, not accusing it.
+   * "observe" drops the judging flow and routes every tap to onObserve — the
+   * player is measuring the world, not accusing it. "play" also drops the
+   * judging chrome but leaves taps working normally, which is what the repro
+   * lab needs: the scene has to be playable for a fault to be reproduced.
    */
-  mode?: "judge" | "observe";
+  mode?: "judge" | "observe" | "play";
   onObserve?: (objectId: string) => void;
+  /**
+   * Intercepts a tap before the object's own actions run. Returning actions
+   * runs those instead, which is how the repro lab makes a defect fire only
+   * under its trigger conditions; returning null falls through to normal play.
+   */
+  onAction?: (
+    objectId: string,
+    ctx: {
+      counters: Record<string, number>;
+      objects: Record<string, { x: number; y: number }>;
+      now: number;
+    }
+  ) => Action[] | null;
   /** replaces the stage header in observe mode */
   header?: ReactNode;
 }
@@ -62,9 +77,11 @@ export function EngineStage({
   playtest = false,
   mode = "judge",
   onObserve,
+  onAction,
   header,
 }: Props) {
   const observing = mode === "observe";
+  const bare = mode !== "judge";
   const { t, tp } = useI18n();
   const [phase, setPhase] = useState<Phase>("intro");
   const [, setFrame] = useState(0);
@@ -94,7 +111,7 @@ export function EngineStage({
   const runtime = runtimeRef.current;
   const picking = phase === "picking";
   // in observe mode every object is tappable, the same affordance picking uses
-  const tappable = picking || mode === "observe";
+  const tappable = picking || bare;
   /** TouchControls writes into the same key set the keyboard uses */
   const keysRef = useRef(runtime.keys);
 
@@ -159,10 +176,25 @@ export function EngineStage({
         setPhase("category");
         return;
       }
+      const rt = runtimeRef.current;
+      if (onAction) {
+        const o = rt.scene.objects.find((x) => x.id === objectId);
+        const os = rt.state.objects[objectId];
+        const acts = onAction(objectId, {
+          counters: rt.state.counters,
+          objects: rt.state.objects,
+          now: rt.state.now,
+        });
+        if (acts && o) {
+          sfx.play("click");
+          rt.runActions(acts, { x: os?.x ?? o.x, y: os?.y ?? o.y });
+          return;
+        }
+      }
       sfx.play("click");
-      runtimeRef.current.click(objectId);
+      rt.click(objectId);
     },
-    [picking, observing, onObserve]
+    [picking, observing, onObserve, onAction]
   );
 
   const onSubmitCategory = (category: BugCategory) => {
@@ -201,7 +233,7 @@ export function EngineStage({
 
   return (
     <div className="stage-frame">
-      {mode === "observe" ? (
+      {bare ? (
         header
       ) : (
         <>
@@ -557,7 +589,7 @@ export function EngineStage({
         </div>
       </FieldScaler>
 
-      {phase === "intro" && mode === "judge" && (
+      {phase === "intro" && !bare && (
         <div className="modal-backdrop">
           <div className="modal">
             <h2>🐛 {t(scene.introKey)}</h2>

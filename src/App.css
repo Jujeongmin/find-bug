@@ -383,3 +383,37 @@
 }
 .wb-review.good { color: #6ed48a; }
 .wb-review small { display: block; color: #6b7488; font-size: 10px; margin-top: 4px; }
+
+/* ---- repro lab (prototype) ---- */
+.rp-header .wb-build { margin-right: auto; }
+.rp-log {
+  flex: none; width: 100%; max-height: 34%; overflow-y: auto;
+  overscroll-behavior: contain; margin-top: 6px;
+}
+.rp-hint { color: #8a94a8; font-size: 12px; text-align: center; margin: 8px 0; }
+.rp-row {
+  display: flex; align-items: center; gap: 8px; font-size: 12px;
+  padding: 5px 8px; border-radius: 6px; background: #1a1d27;
+  border-left: 3px solid #2c3242; margin-bottom: 4px;
+}
+.rp-row.bad { border-left-color: #d4423f; background: #2a1c1f; }
+.rp-n { color: #6b7488; font-variant-numeric: tabular-nums; min-width: 18px; }
+.rp-obj { min-width: 74px; }
+.rp-row em { color: #ff8a87; font-style: normal; font-weight: 700; }
+
+.rp-ticket {
+  background: #22283a; border: 1px solid #3b4568; border-radius: 8px;
+  padding: 10px 12px; margin-bottom: 10px;
+}
+.rp-ticket b { font-size: 11px; color: #8fa4c8; letter-spacing: 0.04em; }
+.rp-ticket p { margin: 6px 0 0; font-size: 14px; line-height: 1.55; }
+.rp-instruct { font-size: 12px; color: #9aa6bb; line-height: 1.6; margin: 0 0 10px; }
+
+.rp-cond {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  width: 100%; text-align: left; font-size: 13px; line-height: 1.45;
+  background: #1a1d27; color: #e6e9f2; border: 1px solid #2c3242;
+  border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; cursor: pointer;
+}
+.rp-cond.on { background: #1d3326; border-color: #4a8f63; }
+.rp-cond em { font-style: normal; color: #6ed48a; font-weight: 800; }
