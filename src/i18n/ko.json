@@ -378,5 +378,6 @@
   "object.crate": "나무 상자",
   "object.barrel": "통",
   "object.rug": "러그",
-  "object.chair": "의자"
+  "object.chair": "의자",
+  "object.devCrt": "개발자 모니터"
 }

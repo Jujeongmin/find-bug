@@ -53,6 +53,11 @@ export class SceneRuntime {
   scene: SceneSpec;
   state: RuntimeState;
   keys = new Set<string>();
+  /**
+   * Analogue movement from the touch stick, -1..1 on each axis. It takes
+   * precedence over the keys when set, so a finger and a keyboard never fight.
+   */
+  stick: { x: number; y: number } | null = null;
   private popupSeq = 0;
 
   constructor(scene: SceneSpec) {
@@ -256,6 +261,10 @@ export class SceneRuntime {
             if (this.keys.has("arrowright") || this.keys.has("d")) dx += 1;
             if (this.keys.has("arrowup") || this.keys.has("w")) dy -= 1;
             if (this.keys.has("arrowdown") || this.keys.has("s")) dy += 1;
+            if (this.stick) {
+              dx = this.stick.x;
+              dy = this.stick.y;
+            }
             if (dx === 0 && dy === 0) {
               os.moving = false;
               break;
@@ -272,9 +281,13 @@ export class SceneRuntime {
                   ? "left"
                   : "right";
             const len = Math.hypot(dx, dy);
+            // the horizontal bound follows the room, not the viewport. It was
+            // hardcoded to 340 from when every scene was exactly one screen
+            // wide, which walled off the right half of the office.
+            const maxX = (this.scene.world?.w ?? 360) - 20;
             const nx = Math.max(
               20,
-              Math.min(340, os.x + (dx / len) * b.speed * dt)
+              Math.min(maxX, os.x + (dx / len) * b.speed * dt)
             );
             const ny = Math.max(
               b.minY,

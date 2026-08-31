@@ -122,6 +122,54 @@ export function EngineStage({
   const tappable = picking || bare;
   /** TouchControls writes into the same key set the keyboard uses */
   const keysRef = useRef(runtime.keys);
+  const fieldRef = useRef<HTMLDivElement>(null);
+  /** where the finger went down and how far it has been dragged, in field units */
+  const [stick, setStick] = useState<{ ox: number; oy: number; dx: number; dy: number } | null>(
+    null
+  );
+  const stickId = useRef<number | null>(null);
+
+  /** drag distance, in field units, that means "full speed" */
+  const STICK_R = 46;
+
+  const fieldPoint = (e: { clientX: number; clientY: number }) => {
+    const el = fieldRef.current;
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    const k = r.width / FIELD_W;
+    return { x: (e.clientX - r.left) / k, y: (e.clientY - r.top) / k };
+  };
+
+  const stickDown = (e: React.PointerEvent) => {
+    if (stickId.current !== null) return;
+    const p = fieldPoint(e);
+    if (!p) return;
+    stickId.current = e.pointerId;
+    setStick({ ox: p.x, oy: p.y, dx: 0, dy: 0 });
+  };
+
+  const stickMove = (e: React.PointerEvent) => {
+    if (stickId.current !== e.pointerId) return;
+    const p = fieldPoint(e);
+    setStick((s) => {
+      if (!s || !p) return s;
+      const dx = p.x - s.ox;
+      const dy = p.y - s.oy;
+      const len = Math.hypot(dx, dy);
+      // a small dead zone, so tapping an object does not also nudge the player
+      const k = len < 6 ? 0 : Math.min(1, len / STICK_R) / (len || 1);
+      runtimeRef.current.stick = k ? { x: dx * k, y: dy * k } : null;
+      const clamp = len > STICK_R ? STICK_R / len : 1;
+      return { ...s, dx: dx * clamp, dy: dy * clamp };
+    });
+  };
+
+  const stickUp = (e: React.PointerEvent) => {
+    if (stickId.current !== e.pointerId) return;
+    stickId.current = null;
+    runtimeRef.current.stick = null;
+    setStick(null);
+  };
 
   /* keyboard */
   useEffect(() => {
@@ -256,6 +304,9 @@ export function EngineStage({
     return null;
   })();
   const st = runtime.state;
+  // drag-to-move, for top-down scenes only: side view needs a jump button and
+  // reads better with left/right keys
+  const stickable = hasPlayer && !picking && !scene.sideView;
 
   // camera: centred on the player, clamped so the room never shows past its
   // own edges. Scenes without a world are exactly the viewport, so it is 0,0.
@@ -335,7 +386,12 @@ export function EngineStage({
       )}
       <FieldScaler>
         <div
+          ref={fieldRef}
           className={`field ${tappable ? "picking" : ""}`}
+          onPointerDown={stickable ? stickDown : undefined}
+          onPointerMove={stickable ? stickMove : undefined}
+          onPointerUp={stickable ? stickUp : undefined}
+          onPointerCancel={stickable ? stickUp : undefined}
           style={{ width: FIELD_W, height: FIELD_H }}
         >
           {/* HUD widgets */}
@@ -640,10 +696,7 @@ export function EngineStage({
           )}
           {!picking && hasPlayer && (
             <>
-              <TouchControls
-                keys={keysRef}
-                mode={scene.sideView ? "lr" : "dpad"}
-              />
+              {scene.sideView && <TouchControls keys={keysRef} mode="lr" />}
               {scene.sideView && (
                 <button
                   className="s3-jump-btn"
@@ -656,6 +709,18 @@ export function EngineStage({
                 </button>
               )}
             </>
+          )}
+
+          {stick && (
+            <div
+              className="stick-base"
+              style={{ left: stick.ox, top: stick.oy }}
+            >
+              <div
+                className="stick-knob"
+                style={{ transform: `translate(${stick.dx}px, ${stick.dy}px)` }}
+              />
+            </div>
           )}
 
           {picking && (

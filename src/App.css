@@ -471,3 +471,29 @@
   will-change: transform;
   backface-visibility: hidden;
 }
+
+/* drag-to-move stick: it appears where the finger lands, so there is no pad to
+   aim for and the player never covers the part of the room they are heading to */
+.stick-base {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  margin: -48px 0 0 -48px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+  z-index: 7;
+}
+.stick-knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 42px;
+  height: 42px;
+  margin: -21px 0 0 -21px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+.field { touch-action: none; }

@@ -378,5 +378,6 @@
   "object.crate": "Crate",
   "object.barrel": "Barrel",
   "object.rug": "Rug",
-  "object.chair": "Chair"
+  "object.chair": "Chair",
+  "object.devCrt": "Developer's monitor"
 }
