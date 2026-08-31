@@ -62,10 +62,12 @@ export const homeScene: SceneSpec = {
       id: "bed",
       nameKey: "object.bed",
       kind: "sprite",
-      x: 54,
-      y: WALL_H + 16,
+      x: 88,
+      y: WALL_H + 132,
       z: 1,
-      render: { className: "home-bed", bar: { width: 74, height: 108 } },
+      render: {
+        sprite: { sheet: "furniture", col: 8, row: 2, spanY: 2, scale: 1.7 },
+      },
       behaviors: [
         { t: "blocker", radius: 46 },
         { t: "station", radius: 74, labelKey: "home.sleep" },
@@ -77,10 +79,12 @@ export const homeScene: SceneSpec = {
       id: "sofa",
       nameKey: "object.sofa",
       kind: "sprite",
-      x: 214,
-      y: 350,
+      x: 246,
+      y: 388,
       z: 1,
-      render: { className: "home-sofa", bar: { width: 96, height: 44 } },
+      render: {
+        sprite: { sheet: "furniture", col: 0, row: 0, spanX: 2, spanY: 2, scale: 1.5 },
+      },
       behaviors: [
         { t: "blocker", radius: 40 },
         { t: "station", radius: 66, labelKey: "home.rest" },

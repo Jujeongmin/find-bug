@@ -122,3 +122,19 @@ builds under test stay on Kenney (16px, heavy outlines). Mixing those two
 within one screen is what made stage 1 trees read as holes, but the office and
 a build never share a screen — and the player is meant to be looking at
 somebody else's game when a build is running.
+
+## Messy Furniture (free, not CC0)
+
+https://0-mem0ry.itch.io/messy-furniture-set-free
+
+`src/assets/sheets/furniture.png` is the pack's 32x32 sheet, 13x14 cells.
+Pieces span more than one cell — a bed is one column by two rows, a sofa two
+by two — so they are drawn through spanX/spanY rather than as single tiles.
+Only the home uses it, for the bed and the sofa, which no CC0 pack we could
+find had at this scale and view.
+
+Licence: free forever, commercial and non-commercial use allowed, may be
+modified. May NOT be resold or redistributed, and may not be used to train AI
+models. Shipping it inside the game is normal use; note that committing the
+raw sheet to a public repository is closer to redistribution than the rest of
+our assets are, since every other pack here is CC0.

@@ -27,6 +27,9 @@ export const SHEETS = {
   // counter-clockwise order from down, columns are idle then the walk cycle
   worker: { tile: 32, margin: 0, cols: 24, rows: 8 },
   worker2: { tile: 32, margin: 0, cols: 24, rows: 8 },
+  // Messy Furniture (32px grid). Pieces span more than one cell — a bed is one
+  // column by two rows, a sofa two by two — so they are drawn with spanX/spanY.
+  furniture: { tile: 32, margin: 0, cols: 13, rows: 14 },
 } as const satisfies Record<string, SheetSpec>;
 
 export type SheetId = keyof typeof SHEETS;

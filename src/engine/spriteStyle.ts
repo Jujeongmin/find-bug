@@ -6,6 +6,7 @@ import roguelikeSrc from "../assets/sheets/roguelike.png";
 import dungeonSrc from "../assets/sheets/dungeon.png";
 import workerSrc from "../assets/sheets/worker.png";
 import worker2Src from "../assets/sheets/worker2.png";
+import furnitureSrc from "../assets/sheets/furniture.png";
 import deskSrc from "../assets/props/desk.png";
 import bookshelfSrc from "../assets/props/bookshelf.png";
 import chairSrc from "../assets/props/chair.png";
@@ -30,6 +31,7 @@ const SHEET_SRC: Record<SheetId, string> = {
   dungeon: dungeonSrc,
   worker: workerSrc,
   worker2: worker2Src,
+  furniture: furnitureSrc,
 };
 
 /** CSS needed to show one sprite, scaled and pixel-crisp */
