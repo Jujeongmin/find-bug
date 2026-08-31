@@ -135,6 +135,10 @@ find had at this scale and view.
 
 Licence: free forever, commercial and non-commercial use allowed, may be
 modified. May NOT be resold or redistributed, and may not be used to train AI
-models. Shipping it inside the game is normal use; note that committing the
-raw sheet to a public repository is closer to redistribution than the rest of
-our assets are, since every other pack here is CC0.
+models.
+
+Decided: the repository is private, so keeping the raw sheet in it is not
+redistribution and the pack ships with the game as normal use. If this
+repository is ever made public, that decision has to be revisited — either
+keep the sheet out of source control and inject it at build time, or go back
+to drawing the bed and sofa in CSS.
