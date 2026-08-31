@@ -257,6 +257,19 @@ export function EngineStage({
   })();
   const st = runtime.state;
 
+  // camera: centred on the player, clamped so the room never shows past its
+  // own edges. Scenes without a world are exactly the viewport, so it is 0,0.
+  const world = live.world ?? { w: FIELD_W, h: FIELD_H };
+  const cam = (() => {
+    const p = live.objects.find((o) => o.kind === "player");
+    if (!p || !live.world) return { x: 0, y: 0 };
+    const ps = st.objects[p.id];
+    return {
+      x: Math.max(0, Math.min(world.w - FIELD_W, ps.x - FIELD_W / 2)),
+      y: Math.max(0, Math.min(world.h - FIELD_H, ps.y - FIELD_H / 2)),
+    };
+  })();
+
   return (
     <div className="stage-frame">
       {bare ? (
@@ -322,7 +335,7 @@ export function EngineStage({
       )}
       <FieldScaler>
         <div
-          className={`field ${live.backgroundClass} ${tappable ? "picking" : ""}`}
+          className={`field ${tappable ? "picking" : ""}`}
           style={{ width: FIELD_W, height: FIELD_H }}
         >
           {/* HUD widgets */}
@@ -367,6 +380,14 @@ export function EngineStage({
               })}
           </div>
 
+          <div
+            className={`world-layer ${live.backgroundClass}`}
+            style={{
+              width: world.w,
+              height: world.h,
+              transform: `translate3d(${-cam.x}px, ${-cam.y}px, 0)`,
+            }}
+          >
           {/* world objects */}
           {live.objects
             .filter((o) => o.kind !== "hud" && o.kind !== "button")
@@ -603,6 +624,8 @@ export function EngineStage({
                 {o.render.emoji} {t(o.render.labelKey ?? o.nameKey)}
               </button>
             ))}
+          </div>
+
 
           {nearStation && (
             <button

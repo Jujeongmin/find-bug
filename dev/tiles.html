@@ -1,0 +1,14 @@
+<!doctype html><meta charset="utf-8"><title>interior tiles</title>
+<style>
+body{background:#1a1a24;color:#ddd;font:12px monospace;margin:0;padding:12px}
+.g{display:grid;grid-template-columns:repeat(9,110px);gap:6px}
+.c{background:#2a2a36;border-radius:6px;padding:6px;text-align:center}
+img{width:96px;height:96px;image-rendering:pixelated;display:block}
+</style>
+<div class="g" id="g"></div>
+<script>
+const g=document.getElementById('g');
+let h='';
+for(let n=1;n<=26;n++) h+=`<div class="c"><img src="/src/assets/props/tile${n}.png"><div>${n}</div></div>`;
+g.innerHTML=h;
+</script>

@@ -420,15 +420,20 @@
 
 /* ---- QA office ---- */
 .office-floor {
-  background:
-    linear-gradient(#3a2f28 0 190px, transparent 190px),
-    repeating-conic-gradient(#c58f5f 0 25%, #b8834f 0 50%) 0 190px / 48px 48px;
+  background: url("./assets/props/tile2.png") 0 0 / 32px 32px repeat;
   image-rendering: pixelated;
 }
 .office-wall {
-  background: linear-gradient(#4a4f63, #383c4c);
-  border: none; border-radius: 0;
-  border-bottom: 4px solid #23262f;
+  /* tile4 is one wall course: plaster above, wood moulding along its foot. It
+     repeats sideways only and sits at the bottom of the band, with plain
+     plaster filling the height above it — repeating it vertically put a second
+     moulding halfway up the wall. */
+  background:
+    url("./assets/props/tile4.png") 0 100% / 64px 64px repeat-x,
+    linear-gradient(#c9cac6, #bcbdb8);
+  border: none;
+  border-radius: 0;
+  image-rendering: pixelated;
 }
 .office-desk {
   background: linear-gradient(#8a5f38, #6a4526);
@@ -455,4 +460,14 @@
   border: 3px solid #4a4438;
   border-radius: 4px 4px 2px 2px;
   box-shadow: inset 0 0 0 2px #2a2620, 0 2px 0 rgba(0,0,0,0.35);
+}
+.world-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  /* the camera writes a new transform every frame; without its own compositing
+     layer the browser re-rasterises the whole tiled floor each time, which cost
+     about 55 of 60 frames a second */
+  will-change: transform;
+  backface-visibility: hidden;
 }

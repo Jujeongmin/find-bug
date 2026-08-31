@@ -374,5 +374,9 @@
   "object.cabinet": "서류함",
   "object.desk": "책상",
   "object.wall": "벽",
-  "object.exitDoor": "출입문"
+  "object.exitDoor": "출입문",
+  "object.crate": "나무 상자",
+  "object.barrel": "통",
+  "object.rug": "러그",
+  "object.chair": "의자"
 }

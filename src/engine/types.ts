@@ -206,6 +206,12 @@ export interface SceneSpec {
    * to scenes that declare one — a room lit from two sides has no right answer.
    */
   light?: { objectId: string; x: number };
+  /**
+   * A play area larger than the 360x640 viewport. The camera follows the
+   * player inside it, clamped to the edges. Without it the world is exactly
+   * the viewport and nothing scrolls.
+   */
+  world?: { w: number; h: number };
   /** side-view scenes get gravity and a ground line */
   sideView?: { groundY: number };
 }

@@ -374,5 +374,9 @@
   "object.cabinet": "Filing cabinet",
   "object.desk": "Desk",
   "object.wall": "Wall",
-  "object.exitDoor": "Door"
+  "object.exitDoor": "Door",
+  "object.crate": "Crate",
+  "object.barrel": "Barrel",
+  "object.rug": "Rug",
+  "object.chair": "Chair"
 }
