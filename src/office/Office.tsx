@@ -39,8 +39,14 @@ const WORK_DAYS = Array.from({ length: DAYS }, (_, i) => i + 1).filter(
  * the spot would be worse than useless: at six o'clock with nothing left, the
  * half hour buys time to look at a build the player no longer has the
  * condition to open.
+ *
+ * Two, not one, because the sofa settles a night for free: at one the evening
+ * cancelled the whole price and the half hour was a gift rather than a loan.
+ * At two, a borrowed night costs a build tomorrow — the sofa takes back half
+ * of it and the morning's coffee the rest, and paying both is what the half
+ * hour actually costs.
  */
-const BORROW_COST = 1;
+const BORROW_COST = 2;
 const HOBBY_PAY = 30;
 
 /** the working day, 09:00 to 18:00 */
@@ -162,10 +168,17 @@ const MAX_CONDITION = 3;
 const INSPECT_COST = 1;
 
 /**
- * What a night gives back — two of the three a full day costs, so the sofa
- * makes up the difference and an evening skipped is a build lost tomorrow.
+ * What a night gives back: all of it.
+ *
+ * It gave back two, and the sofa made up the third — which made lying on the
+ * sofa free, always right, and worth eight builds over twelve days if you
+ * forgot. That is not a decision, it is a chore with a penalty attached, and
+ * it also meant a night borrowed by overtime was absorbed for nothing.
+ *
+ * An ordinary night now costs nothing and returns everything. What the sofa
+ * is for is the nights that were borrowed against.
  */
-const SLEEP_RECOVERY = 2;
+const SLEEP_RECOVERY = MAX_CONDITION;
 /**
  * Nine to six is the job. Leaving at any point up to six costs nothing —
  * there used to be a threshold at half four, which read as the game telling
@@ -309,6 +322,8 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [condition, setCondition] = useState(MAX_CONDITION);
   /** points owed to tonight, from overtime or a weekend shift */
   const [borrowed, setBorrowed] = useState(0);
+  /** a weekend spent on something else, cashed in on the next morning */
+  const [earlyTomorrow, setEarlyTomorrow] = useState(false);
   /** one restful thing per evening */
   const [restedTonight, setRestedTonight] = useState(false);
   /** pay, earned by handing defects over, spent on equipment */
@@ -471,7 +486,12 @@ export function Office({ onExit }: { onExit: () => void }) {
       Math.min(MAX_CONDITION, c + Math.max(0, SLEEP_RECOVERY - borrowed))
     );
     setBorrowed(0);
-    setMinutes(DAY_START - (owned.includes("alarm") ? ALARM_MINUTES : 0));
+    setMinutes(
+      DAY_START -
+        (owned.includes("alarm") ? ALARM_MINUTES : 0) -
+        (earlyTomorrow ? ALARM_MINUTES : 0)
+    );
+    setEarlyTomorrow(false);
     setRestedTonight(false);
     setHadCoffee(false);
     setOvertime(0);
@@ -598,10 +618,12 @@ export function Office({ onExit }: { onExit: () => void }) {
       return sleep();
     }
     if (id === "sofa") {
-      if (condition >= MAX_CONDITION) return setNote(t("common.alreadyFine"));
+      // an evening in front of the television does not add anything to a day
+      // that was not overdrawn — it settles one that was
+      if (!borrowed) return setNote(t("home.nothingOwed"));
       if (restedTonight) return setNote(t("home.alreadyRested"));
       setRestedTonight(true);
-      setCondition((c) => Math.min(MAX_CONDITION, c + 1));
+      setBorrowed((b) => Math.max(0, b - 1));
       sfx.play("pick");
       return setNote(t("home.rested"));
     }
@@ -609,14 +631,16 @@ export function Office({ onExit }: { onExit: () => void }) {
       // pay turned into a mood: the only thing money buys that the shop does
       // not, and the reason a quiet Saturday is worth something
       if (hobbyDone) return setNote(t("home.hobbyDone"));
-      if (condition >= MAX_CONDITION) return setNote(t("common.alreadyFine"));
       if (pay < HOBBY_PAY) return setNote(tp("home.hobbyBroke", { n: String(HOBBY_PAY) }));
       setHobbyDone(true);
       setPay((p) => p - HOBBY_PAY);
-      // all the way back, which is what makes it worth paying for. At a
-      // point a night the sofa is free and does the same thing, and a paid
-      // copy of a free thing is not a choice.
+      // The sofa settles one borrowed night for nothing, so clearing the debt
+      // cannot be all this buys or it is a paid copy of a free thing. What it
+      // buys that nothing else does is the half hour off Monday morning — the
+      // one part of a weekend that is still there on the Monday.
       setCondition(MAX_CONDITION);
+      setBorrowed(0);
+      setEarlyTomorrow(true);
       sfx.play("pick");
       return setNote(tp("home.hobbyDid", { n: String(HOBBY_PAY) }));
     }

@@ -376,7 +376,7 @@
   "home.rest": "소파에서 쉬기",
   "home.journal": "개발 일지 보기",
   "home.goWork": "출근하기",
-  "home.rested": "좀 나아졌다. 내일 빌드 하나는 더 볼 수 있겠다.",
+  "home.rested": "소파에 좀 누워 있었다. 어젯밤 무리한 건 이걸로 없던 일이다.",
   "home.alreadyRested": "오늘은 충분히 쉬었다.",
   "home.notYet": "지금 나가봐야 사무실은 잠겨 있다. 자고 가자.",
   "home.journalLine": "{n}일차까지 왔다. 출시까지 {left}일. 지금까지 흘려보낸 결함 {shipped}건.",
@@ -473,7 +473,7 @@
   "week.d6": "일",
   "object.hobby": "집 컴퓨터",
   "home.hobby": "게임 한 판",
-  "home.hobbyDid": "한나절 남이 만든 걸 하고 나니 사람이 됐다. ({n}원)",
+  "home.hobbyDid": "한나절 남이 만든 걸 하고 나니 사람이 됐다. 월요일은 30분 일찍 나설 수 있겠다. ({n}원)",
   "home.hobbyDone": "오늘은 충분히 했다.",
   "home.hobbyBroke": "{n}원이 없다. 이번 주에 벌어야 한다.",
   "home.wentInAnyway": "핫픽스 하나 잡으러 간다. 개발자한테 넘겨야 나간 것 중 제일 나쁜 게 회수된다.",
@@ -483,5 +483,6 @@
   "object.homeScreen": "집 컴퓨터",
   "office.tooTired": "눈이 시리다. 이 상태로는 화면에 뭘 띄워도 안 들어온다. 커피라도 마시든가, 집에 가든가.",
   "result.fail.bodyFinal": "보고 기각. 이 빌드는 이대로 나간다.",
-  "result.retryFinal": "사무실로"
+  "result.retryFinal": "사무실로",
+  "home.nothingOwed": "오늘은 딱히 무리한 게 없다. 그냥 자도 된다."
 }
