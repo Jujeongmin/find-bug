@@ -168,8 +168,10 @@ export const stage05Scene: SceneSpec = {
       x: t.x,
       y: t.y,
       peerGroup: "tree",
+      // (4,1) looks like the better tree in the sheet, but its canopy is drawn
+      // past the top of its cell and comes out flat-topped. This one fits.
       render: {
-        sprite: { sheet: "tinytown" as const, col: 4, row: 1, scale: 2.6 },
+        sprite: { sheet: "tinytown" as const, col: 4, row: 2, scale: 3.2 },
         shadow: { offsetX: 10, width: 30 },
       },
       behaviors: [{ t: "blocker" as const, radius: 28 }],

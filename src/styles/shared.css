@@ -437,6 +437,10 @@
 .s3-field { background: linear-gradient(#2b2438 0 555px, #4a3a2c 555px); }
 .s5-forest {
   background:
+    /* the crowns of the trees you are standing under, so the dark band above
+       the field reads as forest rather than as a cut-off screen */
+    radial-gradient(circle at 50% 100%, #16210f 0 15px, transparent 15px) 0 120px / 36px 30px repeat-x,
+    radial-gradient(circle at 50% 100%, #22331b 0 13px, transparent 13px) 18px 108px / 36px 30px repeat-x,
     linear-gradient(#1d2a1c 0 150px, transparent 150px),
     radial-gradient(circle at 26% 34%, #4c7340 0 3px, transparent 3px) 0 150px / 52px 44px repeat,
     radial-gradient(circle at 72% 70%, #57804a 0 2px, transparent 2px) 13px 150px / 61px 57px repeat,
