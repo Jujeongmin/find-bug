@@ -10,6 +10,8 @@ export interface Target {
 export interface Mutator {
   id: string;
   category: BugCategory;
+  /** other readings of the same observation the report should accept */
+  alsoCategories?: BugCategory[];
   descKey: string;
   /** base difficulty: 1 easy … 4 hardest */
   subtlety: 1 | 2 | 3 | 4;
@@ -402,6 +404,7 @@ export const wiringSwap: Mutator = {
 export const noBounce: Mutator = {
   id: "noBounce",
   category: "no-action",
+  alsoCategories: ["physics"],
   descKey: "bugdesc.noBounce",
   subtlety: 2,
   requiresPeer: true,
@@ -418,6 +421,7 @@ export const noBounce: Mutator = {
 export const noPlatform: Mutator = {
   id: "noPlatform",
   category: "physics",
+  alsoCategories: ["no-action"],
   descKey: "bugdesc.noPlatform",
   subtlety: 2,
   requiresPeer: true,
@@ -528,6 +532,7 @@ export const noRespawn: Mutator = {
 export const noDamage: Mutator = {
   id: "noDamage",
   category: "no-action",
+  alsoCategories: ["physics"],
   descKey: "bugdesc.noDamage",
   subtlety: 3,
   requiresPeer: true,

@@ -11,7 +11,9 @@ export function judge(
   pickedCategory: BugCategory
 ): Verdict {
   const objectCorrect = activeBug.objectIds.includes(pickedObjectId);
-  const categoryCorrect = activeBug.category === pickedCategory;
+  const categoryCorrect =
+    activeBug.category === pickedCategory ||
+    !!activeBug.alsoCategories?.includes(pickedCategory);
   return {
     correct: objectCorrect && categoryCorrect,
     objectCorrect,

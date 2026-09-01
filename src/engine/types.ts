@@ -277,6 +277,8 @@ export interface GeneratedBug {
   /** any of these picks counts as correct */
   objectIds: string[];
   category: BugCategory;
+  /** other readings of the same observation the report accepts */
+  alsoCategories?: BugCategory[];
   /** i18n template key, e.g. "bugdesc.noAction" */
   descKey: string;
   /** substituted into the template; `obj` is filled in automatically */

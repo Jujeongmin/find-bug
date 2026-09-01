@@ -48,6 +48,7 @@ export function generateMutations(
           id: bugId,
           objectIds: answerIds,
           category: m.category,
+          alsoCategories: m.alsoCategories,
           descKey: m.descKey,
           descParams: {
             obj: obj.nameKey,

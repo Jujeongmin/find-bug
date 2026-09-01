@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { BugCategory } from "../core/types";
 import type { Action, Facing, RenderSpec } from "./types";
+import { judge } from "../core/judge";
 import { useI18n } from "../i18n";
 import { CategorySelect } from "../components/CategorySelect";
 import { ResultModal } from "../components/ResultModal";
@@ -353,9 +354,7 @@ export function EngineStage({
 
   const onSubmitCategory = (category: BugCategory) => {
     if (!mutation) return;
-    const correct =
-      mutation.bug.objectIds.includes(pickedObject!) &&
-      mutation.bug.category === category;
+    const correct = judge(mutation.bug, pickedObject!, category).correct;
     sfx.play(correct ? "success" : "fail");
     setResultSuccess(correct);
     setPhase("result");
