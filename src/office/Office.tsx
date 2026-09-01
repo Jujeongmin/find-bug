@@ -7,6 +7,7 @@ import { homeScene } from "../home/scene";
 import { streetScene } from "../street/scene";
 import { ENGINE_SCENES } from "../stages/registry";
 import { sfx } from "../audio/sfx";
+import { shipRating, totalStake, type Severity } from "./rating";
 import { HAS_KEYBOARD } from "../components/useSpaceCloses";
 
 /**
@@ -61,17 +62,6 @@ function skyAt(minutes: number) {
 const clock = (m: number) =>
   `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(Math.floor(m % 60)).padStart(2, "0")}`;
 
-/** how much a defect in this build costs if it ships */
-type Severity = "low" | "normal" | "critical";
-
-const SEVERITY_COST: Record<Severity, number> = {
-  low: 0.25,
-  normal: 0.5,
-  critical: 1,
-};
-
-/** a defect caught but never walked over to the developer is never fixed */
-const LATE_COST = 0.2;
 
 /**
  * Condition, 0 to 3, and higher is better.
@@ -168,7 +158,7 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [pending, setPending] = useState<Assignment[]>([]);
   const [delivered, setDelivered] = useState(0);
   /** caught, but the day ended before it reached the developer */
-  const [late, setLate] = useState(0);
+  const [late, setLate] = useState<Severity[]>([]);
   const [shipped_, setShipped_] = useState<Severity[]>([]);
   const [place, setPlace] = useState<"office" | "home" | "street">("street");
   /** one coffee per commute */
@@ -219,7 +209,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     setMissed((n) => n + unseen.length);
     setShipped_((v) => [...v, ...unseen.map((a) => a.severity)]);
     // a defect the developer never heard about does not get fixed
-    setLate((n) => n + pending.length);
+    setLate((v) => [...v, ...pending.map((a) => a.severity)]);
     setPending([]);
     // a long day costs a night of sleep, whether or not it was productive
     const lateFrom = LATE_FINISH + (owned.includes("chair") ? CHAIR_GRACE : 0);
@@ -357,16 +347,16 @@ export function Office({ onExit }: { onExit: () => void }) {
 
   if (shipped) {
     const total = caught + missed;
-    const cost =
-      shipped_.reduce((sum, sv) => sum + SEVERITY_COST[sv], 0) + late * LATE_COST;
-    const rating = Math.max(1, Math.round((5 - cost) * 10) / 10);
+    const rating = shipRating(shipped_, late, totalStake(DAYS, SEVERITIES));
     return (
       <div className="wb-root wb-ship">
         <h1>{t("office.shipTitle")}</h1>
         <div className="wb-rating">
           <span className="wb-stars">
-            {"★".repeat(Math.round(rating))}
-            {"☆".repeat(5 - Math.round(rating))}
+            {/* floored, so five stars means the build shipped clean and
+                nothing rounds its way up to a perfect score */}
+            {"★".repeat(Math.floor(rating))}
+            {"☆".repeat(5 - Math.floor(rating))}
           </span>
           <b>{rating.toFixed(1)}</b>
         </div>
@@ -375,7 +365,7 @@ export function Office({ onExit }: { onExit: () => void }) {
           <br />
           {tp("office.tallyDetail", {
             delivered: String(delivered),
-            late: String(late),
+            late: String(late.length),
             critical: String(shipped_.filter((s2) => s2 === "critical").length),
           })}
         </p>

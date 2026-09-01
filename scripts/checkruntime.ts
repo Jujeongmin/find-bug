@@ -143,3 +143,43 @@ const ok = (label: string, cond: boolean) =>
   if (still.state.objects.player.moving) throw new Error("standing still but marked moving");
   console.log("PASS  eight facings, and standing still is not moving");
 }
+
+/* the ship rating spreads across the play, instead of pinning to the floor */
+{
+  const { shipRating, totalStake } = await import("../src/office/rating");
+  type Sev = "low" | "normal" | "critical";
+  const stake = totalStake(10, ["low", "normal", "critical"]);
+  const fill = (n: number, sv: Sev): Sev[] => Array.from({ length: n }, () => sv);
+
+  const clean = shipRating([], [], stake);
+  if (clean !== 5) throw new Error(`a clean ship should be 5.0, got ${clean}`);
+
+  const everything = shipRating(
+    [...fill(10, "low"), ...fill(10, "normal"), ...fill(10, "critical")],
+    [],
+    stake
+  );
+  if (everything !== 1) throw new Error(`shipping every defect should be 1.0, got ${everything}`);
+
+  // one critical out of thirty builds is one star, and a low one is not
+  const oneCritical = shipRating(["critical"], [], stake);
+  const oneLow = shipRating(["low"], [], stake);
+  if (!(oneCritical > 3.7 && oneCritical < 4.3))
+    throw new Error(`one critical shipped should cost about a star, got ${oneCritical}`);
+  if (!(oneLow > oneCritical))
+    throw new Error("a low defect should cost less than a critical one");
+
+  // the middle of the range is where a rating earns its keep: these used to
+  // collapse onto 1.0 together
+  const third = shipRating(fill(10, "normal"), [], stake);
+  const half = shipRating([...fill(5, "critical"), ...fill(5, "normal")], [], stake);
+  if (!(third > 2 && third < 3.5)) throw new Error(`ten normal defects out: ${third}`);
+  if (!(half < third)) throw new Error("losing more should never score higher");
+
+  // undelivered counts, but for less than never having looked
+  const found = shipRating([], ["critical"], stake);
+  if (!(found > oneCritical)) throw new Error("finding it should beat missing it");
+  if (!(found < 5)) throw new Error("finding it and sitting on it is not a clean ship");
+
+  console.log("PASS  ship rating: clean 5.0, all out 1.0, and the middle spreads");
+}
