@@ -471,7 +471,80 @@ export const noHit: Mutator = {
   answerIds: (_s, t) => [t.objectId],
 };
 
+/**
+ * A collectible that will not be collected.
+ *
+ * Walking onto it is the whole verb of a forage stage, so this is the first
+ * thing anyone would report — and it needs a peer, because "nothing happened"
+ * only means something when the identical shoot beside it did work.
+ */
+export const noPickup: Mutator = {
+  id: "noPickup",
+  category: "no-action",
+  descKey: "bugdesc.noPickup",
+  subtlety: 2,
+  requiresPeer: true,
+  comparative: false,
+  candidates: (s) =>
+    withPeers(s, byBehavior(s, "pickup")).map((o) => ({ objectId: o.id })),
+  apply: (s, t) =>
+    mapObject(s, t.objectId, (o) => {
+      o.behaviors = o.behaviors.filter((b) => b.t !== "pickup");
+    }),
+  answerIds: (_s, t) => [t.objectId],
+};
+
+/**
+ * Taken once and never seen again.
+ *
+ * Slower to notice than a dead pickup — you have to have taken it, kept
+ * playing, and come back — which is why it is rated a step subtler.
+ */
+export const noRespawn: Mutator = {
+  id: "noRespawn",
+  category: "logic",
+  descKey: "bugdesc.noRespawn",
+  subtlety: 3,
+  requiresPeer: true,
+  comparative: true,
+  candidates: (s) =>
+    withPeers(
+      s,
+      byBehavior(s, "pickup").filter((o) =>
+        o.behaviors.some((b) => b.t === "pickup" && b.respawn > 0)
+      )
+    ).map((o) => ({ objectId: o.id })),
+  apply: (s, t) =>
+    mapObject(s, t.objectId, (o) => {
+      o.behaviors = o.behaviors.map((b) =>
+        // far beyond any run, so it is gone for good without a special case
+        b.t === "pickup" ? { ...b, respawn: 9999 } : b
+      );
+    }),
+  answerIds: (_s, t) => [t.objectId],
+};
+
+/** a hazard that turns out to be harmless — found by walking into it */
+export const noDamage: Mutator = {
+  id: "noDamage",
+  category: "no-action",
+  descKey: "bugdesc.noDamage",
+  subtlety: 3,
+  requiresPeer: true,
+  comparative: true,
+  candidates: (s) =>
+    withPeers(s, byBehavior(s, "damage")).map((o) => ({ objectId: o.id })),
+  apply: (s, t) =>
+    mapObject(s, t.objectId, (o) => {
+      o.behaviors = o.behaviors.filter((b) => b.t !== "damage");
+    }),
+  answerIds: (_s, t) => [t.objectId],
+};
+
 export const MUTATORS: Mutator[] = [
+  noPickup,
+  noRespawn,
+  noDamage,
   noHit,
   invertMeter,
   noBounce,

@@ -435,7 +435,13 @@
 /* ---- scene backgrounds (engine-driven scenes) ---- */
 .s2-room { background: linear-gradient(#5d4a66 0 500px, #8a6f4d 500px); }
 .s3-field { background: linear-gradient(#2b2438 0 555px, #4a3a2c 555px); }
-.s5-lab { background: linear-gradient(#241f33 0 430px, #3a2f28 430px); }
+.s5-forest {
+  background:
+    linear-gradient(#1d2a1c 0 150px, transparent 150px),
+    radial-gradient(circle at 26% 34%, #4c7340 0 3px, transparent 3px) 0 150px / 52px 44px repeat,
+    radial-gradient(circle at 72% 70%, #57804a 0 2px, transparent 2px) 13px 150px / 61px 57px repeat,
+    linear-gradient(transparent 0 150px, #3f6337 150px);
+}
 /* Behaviour-driven sprite animation. These animate the standalone `scale`,
    `translate`, `opacity` and `filter` properties rather than `transform`,
    because the renderer already puts facing/flip/rotation in `transform` and a
@@ -498,22 +504,6 @@
 /* ---- CSS-drawn props (no pixel-art match in the packs) ----
    Lost in 4b88f5a, which removed the wiring-bench rules and took these with
    it; scenes 2 and 5 silently fell back to the plain bar. */
-.s5-flame {
-  background: radial-gradient(ellipse at 50% 85%, #ffe066 0 28%, #ff8c1a 62%, #d43b0c 100%);
-  border: none;
-  border-radius: 50%;
-  clip-path: polygon(
-    50% 0%, 70% 28%, 66% 44%, 82% 38%,
-    100% 72%, 86% 96%, 14% 96%, 0% 72%,
-    18% 38%, 34% 44%, 30% 28%
-  );
-  animation: eng-flicker 0.5s ease-in-out infinite alternate;
-}
-.s5-moon {
-  background: radial-gradient(circle at 38% 34%, #fffbe8 0 45%, #ffe9a8 100%);
-  border-radius: 50%;
-  border: none;
-}
 .s2-candle {
   background: linear-gradient(#f6efdc, #cdc2a6);
   border: none;
@@ -624,8 +614,7 @@
 .attack-btn,
 .s3-jump-btn,
 .s4-shuffle-btn,
-.s2-buy-btn,
-.s5-brew-btn {
+.s2-buy-btn {
   border-radius: 4px;
   border: 2px solid rgba(0, 0, 0, 0.55);
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.45);
@@ -639,8 +628,7 @@
 .attack-btn:active,
 .s3-jump-btn:active,
 .s4-shuffle-btn:active,
-.s2-buy-btn:active:not(:disabled),
-.s5-brew-btn:active:not(:disabled) {
+.s2-buy-btn:active:not(:disabled) {
   transform: translateY(3px);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
 }

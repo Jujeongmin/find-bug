@@ -325,6 +325,22 @@ export function EngineStage({
    * Draw the scene the runtime is actually simulating. The `scene` prop is the
    * clean original; render-level mutations only exist on this mutated copy.
    */
+  /**
+   * Whether the scene has a button that attacks. The hint used to promise one
+   * in every top-down scene, which read as a missing control in the ones that
+   * have nothing to attack.
+   */
+  const hasAttackButton = scene.objects.some((o) =>
+    o.behaviors.some(
+      (b) =>
+        b.t === "clickable" &&
+        b.action !== null &&
+        (Array.isArray(b.action) ? b.action : [b.action]).some(
+          (x) => x.a === "attack"
+        )
+    )
+  );
+
   /** scenes without a controllable actor get no movement pad */
   const hasPlayer = scene.objects.some(
     (o) =>
@@ -469,7 +485,9 @@ export function EngineStage({
                   ? "hint.sideView"
                   : matchMedia("(pointer: coarse)").matches
                     ? "hint.drag"
-                    : "hint.keys"
+                    : hasAttackButton
+                      ? "hint.keysAttack"
+                      : "hint.keys"
               )}
             </div>
           )}
