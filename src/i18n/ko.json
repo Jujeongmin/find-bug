@@ -451,5 +451,6 @@
   "street.passer3": "출근이 힘든 게 아니에요. 그 다음이 힘들지.",
   "street.passer4": "커피요? 저 오늘 네 잔째입니다.",
   "street.passer5": "저 건물, 이번 주에 뭐 하나 낸대요. 밤마다 불이 켜져 있더라고요.",
-  "object.sign": "간판"
+  "object.sign": "간판",
+  "common.alreadyFine": "지금은 멀쩡하다. 아껴두자."
 }

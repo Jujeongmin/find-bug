@@ -292,8 +292,15 @@ export function Office({ onExit }: { onExit: () => void }) {
   const finish = (result: "caught" | "missed") => {
     if (!running) return;
     setLastResult(result);
-    if (result === "caught") setCaught((n) => n + 1);
-    else setMissed((n) => n + 1);
+    if (result === "caught") {
+      setCaught((n) => n + 1);
+      // and it goes in the pile waiting to be walked over to the developer.
+      // Nothing ever went into that pile: a confirmed defect was counted and
+      // then dropped, so the handoff never had anything to hand over, the
+      // bounty was never paid, and with no pay the equipment could never be
+      // bought. The whole economy was decorative.
+      setPending((v) => [...v, { ...running, result }]);
+    } else setMissed((n) => n + 1);
     setAssignments((as) =>
       as.map((a) => (a.machine === running.machine ? { ...a, result } : a))
     );
@@ -394,6 +401,8 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (id === "coffee") {
       if (dayOver) return setNote(t("street.shut"));
       if (hadCoffee) return setNote(t("street.hadCoffee"));
+      // fifteen minutes for nothing is a trap, not a decision
+      if (condition >= MAX_CONDITION) return setNote(t("common.alreadyFine"));
       setHadCoffee(true);
       setCondition((c) => Math.min(MAX_CONDITION, c + 1));
       setMinutes((m) => Math.min(DAY_END, m + COFFEE_MINUTES));
@@ -408,6 +417,7 @@ export function Office({ onExit }: { onExit: () => void }) {
       return sleep();
     }
     if (id === "sofa") {
+      if (condition >= MAX_CONDITION) return setNote(t("common.alreadyFine"));
       if (restedTonight) return setNote(t("home.alreadyRested"));
       setRestedTonight(true);
       setCondition((c) => Math.min(MAX_CONDITION, c + 1));

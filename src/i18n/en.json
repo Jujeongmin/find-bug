@@ -451,5 +451,6 @@
   "street.passer3": "It is not the getting in that is hard. It is the rest of it.",
   "street.passer4": "Coffee? This is my fourth.",
   "street.passer5": "That building is shipping something this week. Lights on every night.",
-  "object.sign": "Sign"
+  "object.sign": "Sign",
+  "common.alreadyFine": "You are fine as you are. Save it."
 }
