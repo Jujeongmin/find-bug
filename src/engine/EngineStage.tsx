@@ -63,6 +63,8 @@ interface Props {
       now: number;
     }
   ) => Action[] | null;
+  /** the magnifier is owned, so the build offers a hold-to-zoom button */
+  canZoom?: boolean;
   /** replaces the stage header in observe mode */
   header?: ReactNode;
 }
@@ -81,6 +83,7 @@ export function EngineStage({
   onObserve,
   onAction,
   onStation,
+  canZoom = false,
   header,
 }: Props) {
   const observing = mode === "observe";
@@ -136,6 +139,8 @@ export function EngineStage({
    * was replaced by drag-to-move, which leaves nothing on screen saying so.
    */
   const [showControls, setShowControls] = useState(true);
+  /** held while the magnifier button is pressed */
+  const [zoomed, setZoomed] = useState(false);
   useEffect(() => {
     const id = setTimeout(() => setShowControls(false), 5000);
     return () => clearTimeout(id);
@@ -332,13 +337,19 @@ export function EngineStage({
   // camera: centred on the player, clamped so the room never shows past its
   // own edges. Scenes without a world are exactly the viewport, so it is 0,0.
   const world = live.world ?? { w: FIELD_W, h: FIELD_H };
+  // The magnifier scales the world layer and keeps the point of interest
+  // centred, clamped so the view never runs past the room. At zoom 1 this is
+  // the plain camera the larger scenes already used.
+  const zoomLevel = zoomed ? 2 : 1;
   const cam = (() => {
     const p = live.objects.find((o) => o.kind === "player");
-    if (!p || !live.world) return { x: 0, y: 0 };
-    const ps = st.objects[p.id];
+    if (!p || (!live.world && !zoomed)) return { x: 0, y: 0 };
+    const ps = p ? st.objects[p.id] : { x: world.w / 2, y: world.h / 2 };
+    const viewW = FIELD_W / zoomLevel;
+    const viewH = FIELD_H / zoomLevel;
     return {
-      x: Math.max(0, Math.min(world.w - FIELD_W, ps.x - FIELD_W / 2)),
-      y: Math.max(0, Math.min(world.h - FIELD_H, ps.y - FIELD_H / 2)),
+      x: Math.max(0, Math.min(world.w - viewW, ps.x - viewW / 2)),
+      y: Math.max(0, Math.min(world.h - viewH, ps.y - viewH / 2)),
     };
   })();
 
@@ -416,7 +427,7 @@ export function EngineStage({
           style={{ width: FIELD_W, height: FIELD_H }}
         >
           <div className="scene-top">
-          {hasPlayer && showControls && !picking && (
+          {hasPlayer && showControls && !picking && !bare && (
             <div className="control-hint">
               {t(
                 scene.sideView
@@ -483,7 +494,8 @@ export function EngineStage({
             style={{
               width: world.w,
               height: world.h,
-              transform: `translate3d(${-cam.x}px, ${-cam.y}px, 0)`,
+              transform: `scale(${zoomLevel}) translate3d(${-cam.x}px, ${-cam.y}px, 0)`,
+              transformOrigin: "0 0",
             }}
           >
           {/* world objects */}
@@ -724,6 +736,22 @@ export function EngineStage({
             ))}
           </div>
 
+
+          {canZoom && !picking && (
+            <button
+              className={`eng-zoom-btn ${zoomed ? "on" : ""}`}
+              onPointerDown={(e) => {
+                e.preventDefault();
+                setZoomed(true);
+              }}
+              onPointerUp={() => setZoomed(false)}
+              onPointerLeave={() => setZoomed(false)}
+              onPointerCancel={() => setZoomed(false)}
+              title={t("item.magnifier")}
+            >
+              🔍
+            </button>
+          )}
 
           {nearStation && (
             <button

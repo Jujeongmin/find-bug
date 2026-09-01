@@ -139,6 +139,21 @@ export const officeScene: SceneSpec = {
       behaviors: [],
     },
 
+    /* the supply form on the wall: where pay turns into equipment */
+    {
+      id: "supplyForm",
+      nameKey: "object.supplyForm",
+      kind: "sprite" as const,
+      x: 42,
+      y: 214,
+      z: 2,
+      render: { className: "office-form", bar: { width: 26, height: 32 } },
+      behaviors: [
+        { t: "blocker" as const, radius: 20 },
+        { t: "station" as const, radius: 52, labelKey: "office.supply" },
+      ],
+    },
+
     /* dressing, and something to walk around */
     {
       id: "bookshelf",

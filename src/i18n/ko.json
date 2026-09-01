@@ -391,7 +391,7 @@
   "office.sev.normal": "보통",
   "office.sev.critical": "치명적",
   "office.pending": "미전달 {n}",
-  "office.dev.handoff": "\"{n}건 접수. 다음 빌드에 반영할게.\"",
+  "office.dev.handoff": "\"{n}건 접수. 다음 빌드에 반영할게.\" (+{pay}원)",
   "office.dev.waiting": "\"뭐 잡은 거 있으면 지금 넘겨. 퇴근하고 나면 못 고쳐.\"",
   "office.tallyDetail": "전달 {delivered} · 미전달 {late} · 치명적 유출 {critical}",
   "home.name": "내 방",
@@ -429,5 +429,12 @@
   "hint.keys": "방향키로 이동 · 스페이스로 공격",
   "hint.sideView": "좌우 버튼으로 이동 · ⤒ 로 점프",
   "object.counter": "가판 카운터",
-  "home.condition": "컨디션"
+  "home.condition": "컨디션",
+  "office.supply": "비품 신청하기",
+  "object.supplyForm": "비품 신청서",
+  "office.pay": "{n}원",
+  "shop.owned": "이미 신청해서 받았다.",
+  "shop.tooPoor": "돋보기는 120원. {n}원이 모자란다.",
+  "shop.boughtMagnifier": "돋보기를 받았다. 빌드 화면에서 🔍 버튼을 누르고 있으면 확대된다.",
+  "item.magnifier": "돋보기 (누르고 있는 동안 확대)"
 }

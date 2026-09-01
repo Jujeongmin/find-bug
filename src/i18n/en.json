@@ -391,7 +391,7 @@
   "office.sev.normal": "Normal",
   "office.sev.critical": "Critical",
   "office.pending": "{n} undelivered",
-  "office.dev.handoff": "\"{n} filed. They go into the next build.\"",
+  "office.dev.handoff": "\"{n} filed. They go into the next build.\" (+{pay} won)",
   "office.dev.waiting": "\"If you have got something, hand it over now. After you clock out I cannot fix it.\"",
   "office.tallyDetail": "Delivered {delivered} · undelivered {late} · critical shipped {critical}",
   "home.name": "My room",
@@ -429,5 +429,12 @@
   "hint.keys": "Arrow keys to move · space to attack",
   "hint.sideView": "Left and right to move · ⤒ to jump",
   "object.counter": "Stall counter",
-  "home.condition": "Condition"
+  "home.condition": "Condition",
+  "office.supply": "File a supply request",
+  "object.supplyForm": "Supply form",
+  "office.pay": "{n} won",
+  "shop.owned": "Already requested and received.",
+  "shop.tooPoor": "The magnifier is 120. You are {n} short.",
+  "shop.boughtMagnifier": "A magnifier arrives. Hold the 🔍 button in a build to zoom in.",
+  "item.magnifier": "Magnifier — hold to zoom"
 }

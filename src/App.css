@@ -733,3 +733,44 @@
   width: 92%;
   pointer-events: none;
 }
+
+/* the supply form pinned to the wall */
+.office-form {
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 5px,
+      rgba(60, 70, 90, 0.35) 5px 6px
+    ),
+    linear-gradient(#f2efe4, #ddd8c6);
+  border: 2px solid #6a6250;
+  border-radius: 2px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+}
+.office-pay {
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffe08a;
+  font-variant-numeric: tabular-nums;
+}
+
+/* hold to magnify, in builds where the magnifier has been issued */
+.eng-zoom-btn {
+  position: absolute;
+  right: 12px;
+  top: 96px;
+  z-index: 6;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(12, 12, 20, 0.6);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  touch-action: none;
+}
+.eng-zoom-btn.on {
+  background: #3568d4;
+  border-color: #6f9bff;
+}

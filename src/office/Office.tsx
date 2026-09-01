@@ -86,6 +86,12 @@ const LATE_FINISH = 16 * 60 + 30;
 /** what a coffee on the way in costs, and what it is worth */
 const COFFEE_MINUTES = 15;
 
+/** what a confirmed defect is worth once the developer has it */
+const BOUNTY: Record<Severity, number> = { low: 20, normal: 40, critical: 80 };
+
+/** the one thing the supply form sells so far */
+const MAGNIFIER_COST = 120;
+
 interface Assignment {
   machine: MachineId;
   sceneId: string;
@@ -145,6 +151,9 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [condition, setCondition] = useState(MAX_CONDITION);
   /** one restful thing per evening */
   const [restedTonight, setRestedTonight] = useState(false);
+  /** pay, earned by handing defects over, spent on equipment */
+  const [pay, setPay] = useState(0);
+  const [hasMagnifier, setHasMagnifier] = useState(false);
 
   // one clock for the whole day, ticking through the office and the builds
   // alike; goHomeRef keeps the timer from closing over a stale day
@@ -268,11 +277,27 @@ export function Office({ onExit }: { onExit: () => void }) {
       goHome();
       return;
     }
+    if (id === "supplyForm") {
+      if (hasMagnifier) return setNote(t("shop.owned"));
+      if (pay < MAGNIFIER_COST)
+        return setNote(tp("shop.tooPoor", { n: String(MAGNIFIER_COST - pay) }));
+      setPay((p) => p - MAGNIFIER_COST);
+      setHasMagnifier(true);
+      sfx.play("success");
+      return setNote(t("shop.boughtMagnifier"));
+    }
     if (id === "dev") {
       if (pending.length) {
+        const earned = pending.reduce((sum, a) => sum + BOUNTY[a.severity], 0);
+        setPay((p) => p + earned);
         setDelivered((n) => n + pending.length);
         setPending([]);
-        setNote(tp("office.dev.handoff", { n: String(pending.length) }));
+        setNote(
+          tp("office.dev.handoff", {
+            n: String(pending.length),
+            pay: String(earned),
+          })
+        );
         setTalks((n) => n + 1);
         setLastResult(null);
         return;
@@ -330,6 +355,7 @@ export function Office({ onExit }: { onExit: () => void }) {
         scene={scene}
         stageNo={day}
         title={`${tp("office.buildTitle", { machine: t(`object.${running.machine}`) })} · ${clock(minutes)}`}
+        canZoom={hasMagnifier}
         onClear={() => finish("caught")}
         onExit={() => finish("missed")}
       />
@@ -407,6 +433,7 @@ export function Office({ onExit }: { onExit: () => void }) {
             <span className="wb-deadline">
               {tp("office.shipIn", { n: String(DAYS - day) })}
             </span>
+            <span className="office-pay">{tp("office.pay", { n: String(pay) })}</span>
             <span className="office-queue">
               {assignments.map((a) => (
                 <b
