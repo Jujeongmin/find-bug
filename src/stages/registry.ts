@@ -4,6 +4,7 @@ import { stage02Scene } from "./stage02/scene";
 import { stage03Scene } from "./stage03/scene";
 import { stage05Scene } from "./stage05/scene";
 import { stage06Scene } from "./stage06/scene";
+import { stage07Scene } from "./stage07/scene";
 
 /**
  * Scenes the engine drives. Stage 4 (card matching) stays a bespoke component —
@@ -15,6 +16,7 @@ export const ENGINE_SCENES: SceneSpec[] = [
   stage03Scene,
   stage05Scene,
   stage06Scene,
+  stage07Scene,
 ];
 
 export const SCENE_BY_ID: Record<string, SceneSpec> = Object.fromEntries(

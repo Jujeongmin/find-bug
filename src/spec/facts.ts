@@ -124,13 +124,6 @@ export function factsFor(scene: SceneSpec, o: ObjectSpec): Fact[] {
       value: o.render.upsideDown ? "flipped" : "upright",
     });
   }
-  if (o.overlaps) {
-    f.push({
-      key: "depth",
-      labelKey: "fact.depth",
-      value: (o.z ?? 1) > 1 ? "front" : "behind",
-    });
-  }
 
   return f;
 }

@@ -161,7 +161,6 @@
   "bugdesc.bounceOnEnd": "{obj}: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
   "bugdesc.offsetGlow": "{obj}: 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
   "bugdesc.flipSprite": "{obj}: 위아래가 뒤집힌 채로 있었다.",
-  "bugdesc.zSwap": "{obj}: 다른 물체 위에 겹쳐 그려졌다.",
   "bugdesc.wiringSwap": "{obj}: 연결이 서로 뒤바뀌어 엉뚱한 대상을 작동시켰다.",
   "bugdesc.noBounce": "{obj}: 밟아도 튕겨주지 않았다.",
   "bugdesc.noPlatform": "{obj}: 발판인데 그대로 통과해 떨어졌다.",
@@ -490,5 +489,19 @@
   "office.dayShip": "{n}일차 · D-{left}",
   "offer.overtime.free": "광고 보고 밤값 없이",
   "office.stayedLate": "{n}분 더. 내일 아침에 값을 치른다.",
-  "offer.coffee.free": "광고 보고 공짜로"
+  "offer.coffee.free": "광고 보고 공짜로",
+  "stage.stage07.name": "자판기",
+  "intro.stage07.line": "자판기 빌드 검증. 마시고 싶은 걸 눌러라. 하나가 이상하다.",
+  "goal.stage07": "버튼을 눌러라. 누른 그 음료가 아래로 떨어진다.",
+  "counter.served": "뽑은 개수",
+  "object.servedHud": "뽑은 개수",
+  "object.vendBody": "자판기",
+  "object.vendWindow": "진열창",
+  "object.vendTray": "배출구",
+  "object.drinkCola": "콜라",
+  "object.drinkSoda": "사이다",
+  "object.drinkJuice": "주스",
+  "object.btnCola": "콜라 버튼",
+  "object.btnSoda": "사이다 버튼",
+  "object.btnJuice": "주스 버튼"
 }

@@ -161,7 +161,6 @@
   "bugdesc.bounceOnEnd": "{obj}: it recoiled backwards every time it hit the end.",
   "bugdesc.offsetGlow": "{obj}: its light glowed in the wrong spot, away from the object.",
   "bugdesc.flipSprite": "{obj}: it was upside down.",
-  "bugdesc.zSwap": "{obj}: it was drawn on top of things it should be behind.",
   "bugdesc.wiringSwap": "{obj}: its wiring was swapped, so it operated the wrong target.",
   "bugdesc.noBounce": "{obj}: stepping on it did not bounce you.",
   "bugdesc.noPlatform": "{obj}: you fell straight through it.",
@@ -490,5 +489,19 @@
   "office.dayShip": "Day {n} · {left} to ship",
   "offer.overtime.free": "Watch an ad — the night is free",
   "office.stayedLate": "{n} minutes more. Tomorrow morning pays for it.",
-  "offer.coffee.free": "Watch an ad — free"
+  "offer.coffee.free": "Watch an ad — free",
+  "stage.stage07.name": "The drinks machine",
+  "intro.stage07.line": "Drinks machine build. Press what you want to drink. One thing is wrong.",
+  "goal.stage07": "Press a button. That drink is the one that drops.",
+  "counter.served": "Dispensed",
+  "object.servedHud": "dispensed count",
+  "object.vendBody": "the machine",
+  "object.vendWindow": "the window",
+  "object.vendTray": "the tray",
+  "object.drinkCola": "the cola",
+  "object.drinkSoda": "the lemonade",
+  "object.drinkJuice": "the juice",
+  "object.btnCola": "the cola button",
+  "object.btnSoda": "the lemonade button",
+  "object.btnJuice": "the juice button"
 }

@@ -353,24 +353,6 @@ export const flipSprite: Mutator = {
   answerIds: (_s, t) => [t.objectId],
 };
 
-export const zSwap: Mutator = {
-  id: "zSwap",
-  category: "graphic",
-  descKey: "bugdesc.zSwap",
-  subtlety: 3,
-  requiresPeer: false,
-  comparative: false,
-  candidates: (s) =>
-    s.objects
-      .filter((o) => o.overlaps !== undefined)
-      .map((o) => ({ objectId: o.id, note: o.overlaps })),
-  apply: (s, t) =>
-    mapObject(s, t.objectId, (o) => {
-      const other = s.objects.find((x) => x.id === t.note);
-      o.z = (other?.z ?? 1) + 5;
-    }),
-  answerIds: (_s, t) => [t.objectId],
-};
 
 
 export const wiringSwap: Mutator = {
@@ -565,7 +547,6 @@ export const MUTATORS: Mutator[] = [
   mirrorShadow,
   offsetGlow,
   flipSprite,
-  zSwap,
   counterSkew,
   wiringSwap,
 ];

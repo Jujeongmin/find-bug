@@ -210,8 +210,6 @@ export interface ObjectSpec {
    * beside them.
    */
   facing?: Facing;
-  /** id of an object this one visually overlaps — enables the zSwap mutator */
-  overlaps?: string;
 }
 
 export interface CounterSpec {
