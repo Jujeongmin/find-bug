@@ -113,6 +113,12 @@ interface Assignment {
   severity: Severity;
   /** null until the player has verified it */
   result: null | "caught" | "missed";
+  /**
+   * Which defect is in this build. Decided the first time the machine is
+   * opened and kept from then on, so stepping away and coming back finds the
+   * same build rather than a freshly rolled one.
+   */
+  bugId: string | null;
 }
 
 /**
@@ -129,6 +135,7 @@ function assignDay(day: number): Assignment[] {
     sceneId: pool[(day * 3 + i) % pool.length].id,
     severity: SEVERITIES[(i + day) % SEVERITIES.length],
     result: null,
+    bugId: null,
   }));
 }
 
@@ -170,8 +177,8 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [pay, setPay] = useState(0);
   const [owned, setOwned] = useState<ItemId[]>([]);
   const [shop, setShop] = useState<null | "office" | "home">(null);
-  /** the back arrow inside a build, which gives the build up */
-  const [leaving, setLeaving] = useState(false);
+  /** where the player was standing on the office floor, across a build */
+  const [officeAt, setOfficeAt] = useState<{ x: number; y: number } | null>(null);
 
   // one clock for the whole day, ticking through the office and the builds
   // alike; goHomeRef keeps the timer from closing over a stale day
@@ -188,6 +195,24 @@ export function Office({ onExit }: { onExit: () => void }) {
     }, 250);
     return () => clearInterval(id);
   }, [shipped]);
+
+  /**
+   * The office floor, with the player put back where they were standing.
+   * Walking to a machine and stepping out of the build used to drop them in
+   * the middle of the room, so a second look cost the whole walk again.
+   */
+  const officeHere = useMemo(
+    () =>
+      officeAt
+        ? {
+            ...officeScene,
+            objects: officeScene.objects.map((o) =>
+              o.id === "player" ? { ...o, x: officeAt.x, y: officeAt.y } : o
+            ),
+          }
+        : officeScene,
+    [officeAt]
+  );
 
   const scenesById = useMemo(
     () => Object.fromEntries(ENGINE_SCENES.map((s) => [s.id, s])),
@@ -219,6 +244,8 @@ export function Office({ onExit }: { onExit: () => void }) {
     sfx.play("click");
     setRunning(null);
     setNote(null);
+    // tomorrow starts at the door, not at yesterday's desk
+    setOfficeAt(null);
     setPlace("home");
   };
 
@@ -386,47 +413,28 @@ export function Office({ onExit }: { onExit: () => void }) {
   if (running) {
     const scene = scenesById[running.sceneId];
     return (
-      <>
       <EngineStage
         key={`${day}-${running.machine}`}
         scene={scene}
         stageNo={day}
         title={`${tp("office.buildTitle", { machine: t(`object.${running.machine}`) })} · ${clock(minutes)}`}
         canZoom={owned.includes("magnifier")}
+        bugId={running.bugId}
+        onBugPicked={(id) =>
+          setAssignments((as) =>
+            as.map((a) =>
+              a.machine === running.machine ? { ...a, bugId: id } : a
+            )
+          )
+        }
         onClear={() => finish("caught")}
         // a wrong report stands, exactly as the briefing says it will
         onFail={() => finish("missed")}
-        // the arrow used to sign the build off as missed on one silent click,
-        // which is the same gesture that means "go back" everywhere else
-        onExit={() => setLeaving(true)}
+        // stepping away from a machine is not signing the build off. The build
+        // keeps its defect and the clock keeps running, which is the only
+        // price of walking back and forth.
+        onExit={() => setRunning(null)}
       />
-      {leaving && (
-        <div className="modal-backdrop" onClick={() => setLeaving(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>{t("office.giveUp")}</h2>
-            <p>{t("office.giveUpBody")}</p>
-            <div className="modal-actions">
-              <button
-                className="btn-ghost"
-                onClick={() => {
-                  setLeaving(false);
-                  finish("missed");
-                }}
-              >
-                {t("office.giveUpYes")}
-              </button>
-              <button
-                data-space
-                className="btn-primary"
-                onClick={() => setLeaving(false)}
-              >
-                {t("office.giveUpNo")}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      </>
     );
   }
 
@@ -489,8 +497,9 @@ export function Office({ onExit }: { onExit: () => void }) {
       ) : (
       <EngineStage
         key={`office-${day}`}
-        scene={officeScene}
+        scene={officeHere}
         mode="play"
+        onPlayerRest={setOfficeAt}
         header={
           <div className="wb-header">
             <button className="exit-btn" onClick={onExit} title={t("game.exit")}>

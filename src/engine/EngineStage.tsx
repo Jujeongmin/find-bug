@@ -55,6 +55,14 @@ interface Props {
    * under its trigger conditions; returning null falls through to normal play.
    */
   /**
+   * The defect to plant, if it has already been decided. A build queued on a
+   * machine is one build: the player can walk away from it and come back, and
+   * it has to be the same fault waiting there. Left out, one is picked at
+   * random and reported back through onBugPicked.
+   */
+  bugId?: string | null;
+  onBugPicked?: (bugId: string) => void;
+  /**
    * What a wrong report means. The stage grid lets the player try again with a
    * fresh defect, which is right for practice. A build on the office floor is
    * told "보고는 빌드당 한 번뿐이다" in its own briefing, so it passes this and
@@ -63,6 +71,12 @@ interface Props {
   onFail?: () => void;
   /** fired when the player activates a station they are standing next to */
   onStation?: (objectId: string) => void;
+  /**
+   * Where the player was standing when this scene came down. A room the player
+   * walks in and out of should still have them where they left off — stepping
+   * away from a machine and back used to put them in the middle of the floor.
+   */
+  onPlayerRest?: (at: { x: number; y: number }) => void;
   onAction?: (
     objectId: string,
     ctx: {
@@ -90,7 +104,10 @@ export function EngineStage({
   mode = "judge",
   onObserve,
   onAction,
+  bugId,
+  onBugPicked,
   onFail,
+  onPlayerRest,
   onStation,
   canZoom = false,
   header,
@@ -98,7 +115,10 @@ export function EngineStage({
   const observing = mode === "observe";
   const bare = mode !== "judge";
   const { t, tp } = useI18n();
-  const [phase, setPhase] = useState<Phase>(mode === "judge" ? "intro" : "play");
+  const [phase, setPhase] = useState<Phase>(
+    // a build you have already opened does not read you its briefing again
+    mode === "judge" && !bugId ? "intro" : "play"
+  );
   const [, setFrame] = useState(0);
   const [pickedObject, setPickedObject] = useState<string | null>(null);
   const [resultSuccess, setResultSuccess] = useState(false);
@@ -116,9 +136,16 @@ export function EngineStage({
     // never leave a stage with nothing to show
     return banded.length >= 1 ? banded : generateMutations(scene);
   }, [scene, minBand, maxBand]);
-  const [mutation, setMutation] = useState<Mutation | null>(() =>
-    mutations.length ? pickMutation(mutations) : null
-  );
+  const [mutation, setMutation] = useState<Mutation | null>(() => {
+    if (!mutations.length) return null;
+    return mutations.find((m) => m.bug.id === bugId) ?? pickMutation(mutations);
+  });
+  // tell the caller which one it got, so the same build is waiting on the same
+  // machine when the player comes back to it
+  useEffect(() => {
+    if (mutation && !bugId) onBugPicked?.(mutation.bug.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const runtimeRef = useRef<SceneRuntime>(
     new SceneRuntime(mutation ? applyMutation(scene, mutation) : scene)
@@ -148,6 +175,15 @@ export function EngineStage({
   const nearStationRef = useRef<{ id: string; labelKey: string } | null>(null);
   const onStationRef = useRef(onStation);
   onStationRef.current = onStation;
+  const onPlayerRestRef = useRef(onPlayerRest);
+  onPlayerRestRef.current = onPlayerRest;
+  useEffect(
+    () => () => {
+      const at = runtimeRef.current.state.objects.player;
+      if (at) onPlayerRestRef.current?.({ x: at.x, y: at.y });
+    },
+    []
+  );
   /**
    * The two lines that only matter at the start: how to move, and what the
    * build is for. Both sit over the field, and the goal line was covering the

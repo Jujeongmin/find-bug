@@ -103,13 +103,21 @@ export const officeScene: SceneSpec = {
       render: { prop: { id: "desk" as const, scale: 1.4 } },
       behaviors: [],
     })),
+    /*
+     * Chairs, pulled round to the right of each desk.
+     *
+     * The front-facing chair art put the backrest between the seat and the
+     * desk: anyone sitting on it would have had their back to the machine they
+     * were meant to be watching. The side view has no such argument with the
+     * room — it faces left, so on the desk's right it faces the desk.
+     */
     ...[62, 180, 298].map((x, i) => ({
       id: `chair${i}`,
       nameKey: "object.chair",
       kind: "decor" as const,
-      x,
-      y: WALL_H + 46,
-      render: { prop: { id: "chair" as const, scale: 1.3 } },
+      x: x + 26,
+      y: WALL_H + 42,
+      render: { prop: { id: "chairSide" as const, scale: 1.3 } },
       behaviors: [],
     })),
 
