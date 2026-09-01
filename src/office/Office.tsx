@@ -157,6 +157,9 @@ const CONDITION_START_COST = 20;
  * is for. The good chair is what makes that hour bearable.
  */
 
+/** what a night takes out of you, whatever kind of day it was */
+const NIGHT_COST = 1;
+
 /** what a coffee on the way in costs, and what it is worth */
 const COFFEE_MINUTES = 15;
 
@@ -438,9 +441,21 @@ export function Office({ onExit }: { onExit: () => void }) {
     setAssignments(isWeekend(next) ? [] : assignDay(next));
     setWorkedWeekend(false);
     setHobbyDone(false);
+    /*
+     * A night takes a point out of you whatever kind of day it was.
+     *
+     * Condition used to move only when the player borrowed from tomorrow, so
+     * anyone who never borrowed never touched it — the coffee, the sofa and the
+     * weekend all sat there for a stat that never moved. Now the evening has
+     * something in it every day, and the two ways of paying it back cost
+     * different things: the sofa costs a walk across the front room, the coffee
+     * costs a quarter of an hour of the morning.
+     */
+    const woke = Math.max(0, condition - NIGHT_COST);
+    setCondition(woke);
     setMinutes(
       DAY_START +
-        (MAX_CONDITION - condition) * CONDITION_START_COST -
+        (MAX_CONDITION - woke) * CONDITION_START_COST -
         (owned.includes("alarm") ? ALARM_MINUTES : 0)
     );
     setRestedTonight(false);
