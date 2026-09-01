@@ -39,9 +39,25 @@
   justify-content: center;
 }
 
+/*
+ * A landscape, drawn here rather than lifted off a sheet.
+ *
+ * The defect on this frame is that the picture hangs upside down, and the only
+ * way a player can call that is if the picture has an up. Sky over ground, with
+ * a sun in it, has one from across the room; the sprite that used to hang here
+ * did not, so the fault was invisible and the report was a coin toss.
+ *
+ * Flat bands and one hard-edged circle, so it sits with the pixel art instead
+ * of going soft next to it.
+ */
 .s4-picture {
   display: block;
-  image-rendering: pixelated;
+  width: 44px;
+  height: 34px;
+  background:
+    radial-gradient(circle at 32px 8px, #f7d774 0 5px, transparent 5px),
+    radial-gradient(circle at 12px 40px, #2f6b3a 0 16px, transparent 16px),
+    linear-gradient(#7ec8ee 0 60%, #6aa84f 60% 100%);
 }
 
 .s4-picture.upside {

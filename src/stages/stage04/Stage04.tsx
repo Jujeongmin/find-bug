@@ -313,11 +313,16 @@ export function Stage04({
 
           {/* wall decorations */}
           <div {...pickableProps("curtain", "s4-curtain")} />
+          {/*
+            The picture is drawn in the stylesheet rather than taken from a
+            sheet. What hung here was roguelike (28,9) — fifty opaque pixels,
+            all of them in the bottom half of their tile, which is an object and
+            not a picture. Turned upside down it moved to the top half of the
+            frame and stayed unreadable, so the one thing the defect claims was
+            the one thing the player could not see. A landscape has an up.
+          */}
           <div {...pickableProps("frame", "s4-frame")}>
-            <span
-              className={`s4-picture ${planted === "E7" ? "upside" : ""}`}
-              style={spriteStyle({ sheet: "roguelike", col: 28, row: 9, scale: 2 })}
-            />
+            <span className={`s4-picture ${planted === "E7" ? "upside" : ""}`} />
           </div>
           <div {...pickableProps("lamp", "s4-lamp")}>
             <div className="s4-lamp-glow" />
