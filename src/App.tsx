@@ -11,6 +11,7 @@ import { ReproLab } from "./repro/ReproLab";
 import { Workbench } from "./regression/Workbench";
 import { DebugLab } from "./debug/DebugLab";
 import { useSpaceCloses } from "./components/useSpaceCloses";
+import { devFlag } from "./dev";
 import "./App.css";
 
 /**
@@ -29,12 +30,9 @@ import "./App.css";
  * hundred and twenty, which is fine to play and useless to check against — the
  * defects worth checking are the ones too quiet to come round often.
  */
-const LAB =
-  import.meta.env.DEV && new URLSearchParams(location.search).has("lab");
-const REPRO =
-  import.meta.env.DEV && new URLSearchParams(location.search).has("repro");
-const DEBUG =
-  import.meta.env.DEV && new URLSearchParams(location.search).has("debug");
+const LAB = devFlag("lab");
+const REPRO = devFlag("repro");
+const DEBUG = devFlag("debug");
 
 export default function App() {
   useSpaceCloses();

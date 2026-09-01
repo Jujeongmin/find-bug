@@ -1,3 +1,4 @@
+import { devParam, devFlag } from "../dev";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { useI18n } from "../i18n";
@@ -79,8 +80,15 @@ const PASSER_LINES = 6;
  * from bed every time — three minutes of held arrow keys to check whether a
  * chair had moved four pixels.
  */
-/** ?playtest=1 reveals the planted defect inside a build, as it does elsewhere */
-const PLAYTEST = new URLSearchParams(location.search).has("playtest");
+/**
+ * ?playtest=1 reveals the planted defect inside a build.
+ *
+ * This one was never gated at all, which meant the answers were a query
+ * parameter away in the shipped game while the tools for finding a build to
+ * try them on were the ones locked to the dev server — backwards on both
+ * counts. It goes behind the same flag as the rest.
+ */
+const PLAYTEST = devFlag("playtest");
 
 /**
  * ?day=6 opens on that day of the fortnight.
@@ -96,11 +104,6 @@ const PLAYTEST = new URLSearchParams(location.search).has("playtest");
  * built game that is not a shortcut, it is the answers in the address bar, so
  * they exist on the dev server and nowhere else.
  */
-const devParam = (name: string) =>
-  import.meta.env.DEV
-    ? new URLSearchParams(location.search).get(name)
-    : null;
-
 const START_DAY = (() => {
   const asked = Number(devParam("day"));
   return Number.isInteger(asked) && asked >= 1 && asked <= DAYS ? asked : 1;
