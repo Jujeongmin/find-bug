@@ -142,3 +142,29 @@ redistribution and the pack ships with the game as normal use. If this
 repository is ever made public, that decision has to be revisited — either
 keep the sheet out of source control and inject it at build time, or go back
 to drawing the bed and sofa in CSS.
+
+## What none of these packs draws: furniture turned side-on
+
+Searched every sheet in here — tinytown, platformer, platchars, dungeon,
+roguelike, furniture — plus the standalone props, for a desk or a chair seen
+from the side or from behind. There is none. Every one of these packs draws
+interior furniture facing the camera, on the assumption that it stands against
+the top wall of a room. The only piece drawn along the other axis is a bed
+(roguelike 24–27, rows 3–4), because beds always are.
+
+That decides two things about the office, and both were learned the long way:
+
+- The machines go against the top wall, where the desk art is drawn to be. A
+  row down the left wall has to be drawn by hand rather than found.
+- A seat next to a desk can only be the side view. The front view puts the
+  backrest between the seat and the desk; the one chair drawn from behind is
+  roguelike (38,8), which is pale, thin-lined, and reads as a ladder at the
+  size we draw it.
+
+If a proper set is ever wanted, two office packs do cover several
+orientations, both around $2, both allowing commercial use and editing while
+forbidding resale and AI training — the same terms as the furniture pack
+above:
+
+- Office Interior Tileset (16x16) by Donarg — https://donarg.itch.io/officetileset
+- Modern Office by LimeZu — https://limezu.itch.io/modernoffice

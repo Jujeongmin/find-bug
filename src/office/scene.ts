@@ -8,29 +8,24 @@ export type MachineId = (typeof MACHINES)[number];
 const WALL_H = 110;
 
 /**
- * The three machines stand in a row down the left-hand wall.
+ * A workstation reads left to right: screen, desk, seat.
  *
- * A station reads left to right: screen, desk, seat. Against the top wall
- * that put the worker below the desk with their back to us, which needs a
- * chair drawn from behind — the one view the packs here do not have. Along
- * the left wall the whole row turns side-on instead: you see the flank of
- * each monitor, the seat is pulled up on its right, and the person in it
- * faces left into the screen.
+ * The row is back against the top wall, where the desk art is drawn to be —
+ * every interior pack in here draws furniture facing the camera, and the one
+ * that ran down the left wall had to be drawn by hand rather than found.
+ *
+ * The seat still sits on the right of its desk, so whoever uses it faces left
+ * into the screen rather than away from it.
  */
-/** the bench runs down the left wall; x is its left edge, not a centre */
-const BENCH_X = 12;
-const BENCH_W = 42;
-const BENCH_TOP = 196;
-const BENCH_H = 330;
-/** where each machine stands along it, and where its seat is pulled up */
-const STATION_Y = [252, 362, 472];
-const SCREEN_X = BENCH_X + 8;
-const SEAT_X = BENCH_X + BENCH_W + 10;
+const DESKS = [52, 170, 288];
+const SCREEN_DX = -24;
+const SEAT_DX = 34;
+/** the desk slab ends this far above the desk's foot; the screen stands on it */
+const SLAB = 16;
 
-const DEV_X = 266;
-const DEV_TOP = 448;
-const DEV_H = 104;
-const DEV_Y = 512;
+/** the developer, across the room, at a desk laid out the same way */
+const DEV_X = 282;
+const DEV_Y = 520;
 
 const actor = (sheet: "worker" | "worker2"): ActorSpec => ({
   sheet,
@@ -103,41 +98,41 @@ export const officeScene: SceneSpec = {
       behaviors: [],
     })),
 
-    /* one bench for the three of them, running the length of the wall */
-    {
-      id: "bench",
-      nameKey: "object.desk",
-      kind: "decor",
-      x: BENCH_X,
-      y: BENCH_TOP,
-      render: { className: "office-bench", bar: { width: BENCH_W, height: BENCH_H } },
-      behaviors: [],
-    },
+    /* three test machines, each on its own desk against the wall */
     ...[
-      { id: "machineA", y: STATION_Y[0], labelKey: "office.runA" },
-      { id: "machineB", y: STATION_Y[1], labelKey: "office.runB" },
-      { id: "machineC", y: STATION_Y[2], labelKey: "office.runC" },
+      { id: "machineA", x: DESKS[0], labelKey: "office.runA" },
+      { id: "machineB", x: DESKS[1], labelKey: "office.runB" },
+      { id: "machineC", x: DESKS[2], labelKey: "office.runC" },
     ].map((m) => ({
       id: m.id,
       nameKey: `object.${m.id}`,
       kind: "sprite" as const,
-      x: SCREEN_X,
-      // standing on the bench top, foot on the line the seat is level with
-      y: m.y - 26,
+      x: m.x + SCREEN_DX,
+      // standing on the slab, not among the legs below it
+      y: WALL_H + 12 - SLAB - 26,
       z: 2,
-      render: { className: "office-crt-side", bar: { width: 22, height: 26 } },
+      render: { className: "office-crt", bar: { width: 30, height: 26 } },
       behaviors: [
-        { t: "blocker" as const, radius: 24 },
+        { t: "blocker" as const, radius: 26 },
         { t: "station" as const, radius: 54, labelKey: m.labelKey },
       ],
     })),
-    /* the seats, pulled up on the room side of the bench, facing the screens */
-    ...STATION_Y.map((y, i) => ({
+    ...DESKS.map((x, i) => ({
+      id: `desk${i}`,
+      nameKey: "object.desk",
+      kind: "decor" as const,
+      x,
+      y: WALL_H + 12,
+      render: { prop: { id: "desk" as const, scale: 1.4 } },
+      behaviors: [],
+    })),
+    /* the seat, pulled up on the right of the desk and facing the screen */
+    ...DESKS.map((x, i) => ({
       id: `chair${i}`,
       nameKey: "object.chair",
       kind: "decor" as const,
-      x: SEAT_X,
-      y: y + 12,
+      x: x + SEAT_DX,
+      y: WALL_H + 18,
       render: { prop: { id: "chairSide" as const, scale: 1.4 } },
       behaviors: [],
     })),
@@ -153,8 +148,8 @@ export const officeScene: SceneSpec = {
       nameKey: "object.desk",
       kind: "decor",
       x: DEV_X,
-      y: DEV_TOP,
-      render: { className: "office-bench", bar: { width: BENCH_W, height: DEV_H } },
+      y: DEV_Y,
+      render: { prop: { id: "desk" as const, scale: 1.4 } },
       behaviors: [],
     },
     {
@@ -162,18 +157,18 @@ export const officeScene: SceneSpec = {
       id: "devCrt",
       nameKey: "object.devCrt",
       kind: "decor",
-      x: DEV_X + 8,
-      y: DEV_Y - 26,
+      x: DEV_X + SCREEN_DX,
+      y: DEV_Y - SLAB - 26,
       z: 3,
-      render: { className: "office-crt-side", bar: { width: 22, height: 26 } },
+      render: { className: "office-crt-back", bar: { width: 30, height: 26 } },
       behaviors: [],
     },
     {
       id: "dev",
       nameKey: "object.dev",
       kind: "sprite",
-      x: DEV_X + BENCH_W + 10,
-      y: DEV_Y + 12,
+      x: DEV_X + SEAT_DX,
+      y: DEV_Y - 8,
       z: 1,
       facing: "left",
       render: { actor: actor("worker2") },
@@ -187,8 +182,8 @@ export const officeScene: SceneSpec = {
       id: "supplyForm",
       nameKey: "object.supplyForm",
       kind: "sprite" as const,
-      x: 150,
-      y: 158,
+      x: 36,
+      y: 250,
       z: 2,
       render: { className: "office-form", bar: { width: 26, height: 32 } },
       behaviors: [
@@ -202,8 +197,8 @@ export const officeScene: SceneSpec = {
       id: "bookshelf",
       nameKey: "object.cabinet",
       kind: "decor",
-      x: 238,
-      y: 182,
+      x: 36,
+      y: 340,
       render: { prop: { id: "bookshelf" as const, scale: 1.4 } },
       behaviors: [{ t: "blocker", radius: 24 }],
     },
@@ -211,8 +206,8 @@ export const officeScene: SceneSpec = {
       id: "crate",
       nameKey: "object.crate",
       kind: "decor",
-      x: 300,
-      y: 300,
+      x: 322,
+      y: 250,
       render: { prop: { id: "crate" as const, scale: 1.3 } },
       behaviors: [{ t: "blocker", radius: 18 }],
     },
@@ -220,8 +215,8 @@ export const officeScene: SceneSpec = {
       id: "barrel",
       nameKey: "object.barrel",
       kind: "decor",
-      x: 300,
-      y: 352,
+      x: 322,
+      y: 300,
       render: { prop: { id: "barrel" as const, scale: 1.3 } },
       behaviors: [{ t: "blocker", radius: 18 }],
     },
@@ -229,8 +224,8 @@ export const officeScene: SceneSpec = {
       id: "rug",
       nameKey: "object.rug",
       kind: "decor",
-      x: 210,
-      y: 392,
+      x: 180,
+      y: 420,
       z: 0,
       render: { prop: { id: "rug" as const, scale: 1.2 } },
       behaviors: [],
