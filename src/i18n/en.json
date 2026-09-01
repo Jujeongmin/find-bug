@@ -458,9 +458,9 @@
   "offer.overtime.yes": "Stay half an hour",
   "offer.overtime.no": "Knock off",
   "offer.coffee.title": "Vending machine",
-  "offer.coffee.body": "A coffee. Fifteen minutes, or an ad.",
-  "offer.coffee.yes": "Watch an ad, keep the time",
-  "offer.coffee.no": "Pay the fifteen minutes",
+  "offer.coffee.body": "A cup of coffee. A quarter of an hour buys one more build today.",
+  "offer.coffee.yes": "Pay the fifteen minutes",
+  "offer.coffee.no": "Walk on",
   "offer.watching": "Playing…",
   "street.freeCoffee": "A coffee for the price of an ad. The time is still yours.",
   "week.d0": "Mon",
@@ -489,5 +489,6 @@
   "office.whatChipDone": "{machine} — {sev}. This one has been looked at.",
   "office.dayShip": "Day {n} · {left} to ship",
   "offer.overtime.free": "Watch an ad — the night is free",
-  "office.stayedLate": "{n} minutes more. Tomorrow morning pays for it."
+  "office.stayedLate": "{n} minutes more. Tomorrow morning pays for it.",
+  "offer.coffee.free": "Watch an ad — free"
 }

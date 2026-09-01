@@ -605,8 +605,10 @@ export function Office({ onExit }: { onExit: () => void }) {
     setWatching(false);
     setOffer(null);
     if (!done) {
-      // a dismissed ad earns nothing, and at six o'clock the day still ends
-      if (kind === "overtime") clockOff();
+      // A dismissed advert earns nothing and decides nothing. It used to send
+      // the player home, from a prompt whose whole point is that going home is
+      // one of three answers — so the prompt comes back instead.
+      setOffer(kind);
       return;
     }
     if (kind === "overtime") {
@@ -669,8 +671,13 @@ export function Office({ onExit }: { onExit: () => void }) {
       if (hadCoffee) return setNote(t("street.hadCoffee"));
       // fifteen minutes for nothing is a trap, not a decision
       if (condition >= MAX_CONDITION) return setNote(t("common.alreadyFine"));
-      if (!tookFreeCoffee && adsAvailable()) return setOffer("coffee");
-      return payForCoffee();
+      /*
+       * Always ask. Where the adverts were reachable the machine put up a
+       * prompt; where they were not it took the quarter of an hour on the press,
+       * so walking into the vending machine on the way past cost a sixth of the
+       * morning with nothing asked and nothing to undo.
+       */
+      return setOffer("coffee");
     }
   };
 
@@ -1055,27 +1062,27 @@ export function Office({ onExit }: { onExit: () => void }) {
             <p>{t(`offer.${offer}.body`)}</p>
             <div className="modal-actions">
               <button
-                {...(offer === "overtime" ? { "data-space": true } : {})}
+                data-space
                 className="btn-ghost"
                 disabled={watching}
                 onClick={() => {
                   const kind = offer;
                   setOffer(null);
-                  // at six o'clock, saying no is knocking off; at the machine
-                  // it is buying the coffee the way it has always been bought
+                  // saying no at six o'clock is knocking off; at the machine it
+                  // is walking past it
                   if (kind === "overtime") clockOff();
-                  else payForCoffee();
                 }}
               >
                 {t(`offer.${offer}.no`)}
               </button>
               <button
-                {...(offer === "overtime" ? {} : { "data-space": true })}
                 className="btn-primary"
                 disabled={watching}
-                onClick={() =>
-                  offer === "overtime" ? stayLate() : takeOffer(offer)
-                }
+                onClick={() => {
+                  if (offer === "overtime") return stayLate();
+                  setOffer(null);
+                  payForCoffee();
+                }}
               >
                 {watching ? t("offer.watching") : t(`offer.${offer}.yes`)}
               </button>
@@ -1085,15 +1092,16 @@ export function Office({ onExit }: { onExit: () => void }) {
               and staying late are both there without it. Space goes home,
               because that is the answer that costs nothing.
             */}
-            {offer === "overtime" && adsAvailable() && (
-              <button
-                className="offer-free"
-                disabled={watching}
-                onClick={() => takeOffer("overtime")}
-              >
-                {watching ? t("offer.watching") : t("offer.overtime.free")}
-              </button>
-            )}
+            {adsAvailable() &&
+              (offer === "overtime" || !tookFreeCoffee) && (
+                <button
+                  className="offer-free"
+                  disabled={watching}
+                  onClick={() => takeOffer(offer)}
+                >
+                  {watching ? t("offer.watching") : t(`offer.${offer}.free`)}
+                </button>
+              )}
           </div>
         </div>
       )}
