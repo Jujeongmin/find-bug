@@ -104,23 +104,25 @@ export const officeScene: SceneSpec = {
       behaviors: [],
     })),
     /*
-     * Chairs, tucked in under their own desk.
+     * Chairs, seen from behind, tucked in at their own desk.
      *
-     * The screen is on the wall, so whoever uses it sits below the desk facing
-     * away from us — and a chair seen from behind is the one view none of the
-     * packs here draw. The front view was worse than useless: its backrest
-     * lands between the seat and the desk, sitting the worker down with their
-     * back to the machine. The side view makes no claim about which way the
-     * chair faces, and pushed in under the desk edge it reads as belonging to
-     * that station rather than as a spare stool parked beside it.
+     * The screen is on the wall, so whoever uses it sits with their back to
+     * us — which means the back of the chair is what should be facing us. The
+     * front-facing art put the backrest between the seat and the desk and sat
+     * the worker down looking away from the machine; the side view dodged the
+     * question without answering it. This one answers it.
      */
     ...[62, 180, 298].map((x, i) => ({
       id: `chair${i}`,
       nameKey: "object.chair",
       kind: "decor" as const,
       x,
-      y: WALL_H + 36,
-      render: { prop: { id: "chairSide" as const, scale: 1.3 } },
+      // pushed up under the desk edge: the pale wood of this chair has little
+      // to say against an orange floor, and plenty against the desk above it
+      y: WALL_H + 34,
+      render: {
+        sprite: { sheet: "roguelike" as const, col: 38, row: 8, scale: 1.9 },
+      },
       behaviors: [],
     })),
 
