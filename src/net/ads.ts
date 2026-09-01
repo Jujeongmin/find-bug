@@ -28,7 +28,8 @@ const sdk = (): Verse8Ads | undefined =>
   (globalThis as { Verse8Ads?: Verse8Ads }).Verse8Ads;
 
 /** dev stand-in, so the offer can be played before the SDK is installed */
-const STUB = new URLSearchParams(location.search).has("playtest");
+const STUB =
+  import.meta.env.DEV && new URLSearchParams(location.search).has("playtest");
 
 export function available(): boolean {
   return Boolean(sdk()) || STUB;

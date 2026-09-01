@@ -89,14 +89,37 @@ const PLAYTEST = new URLSearchParams(location.search).has("playtest");
  * day six, and reaching it by playing five days through is not a way to check
  * whether the weekend works.
  */
+/**
+ * Every one of these reads a query string, and every one of them is a way to
+ * skip work the player is meant to do — start on the day you want to look at,
+ * in the room you want to look at, at the hour you want to look at. On a
+ * built game that is not a shortcut, it is the answers in the address bar, so
+ * they exist on the dev server and nowhere else.
+ */
+const devParam = (name: string) =>
+  import.meta.env.DEV
+    ? new URLSearchParams(location.search).get(name)
+    : null;
+
 const START_DAY = (() => {
-  const asked = Number(new URLSearchParams(location.search).get("day"));
+  const asked = Number(devParam("day"));
   return Number.isInteger(asked) && asked >= 1 && asked <= DAYS ? asked : 1;
 })();
 
 const START_PLACE = (() => {
-  const asked = new URLSearchParams(location.search).get("place");
+  const asked = devParam("place");
   return asked === "office" || asked === "street" ? asked : "home";
+})();
+
+/** the clock to open on, as HHMM — the only way to reach six without waiting */
+const START_AT = (() => {
+  const asked = devParam("at");
+  const hhmm = Number(asked);
+  if (!asked || !Number.isInteger(hhmm) || hhmm < 0) return null;
+  const h = Math.floor(hhmm / 100);
+  const m = hhmm % 100;
+  if (h > 23 || m > 59) return null;
+  return Math.min(DAY_END, Math.max(DAY_START, h * 60 + m));
 })();
 
 /**
@@ -287,7 +310,7 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [shipped, setShipped] = useState(false);
   const [caught, setCaught] = useState(0);
   const [missed, setMissed] = useState(0);
-  const [minutes, setMinutes] = useState(DAY_START);
+  const [minutes, setMinutes] = useState(START_AT ?? DAY_START);
   /** how many times the developer has been spoken to, so idle lines rotate */
   const [talks, setTalks] = useState(0);
   /** the last build signed off, so the developer can react to it once */
@@ -461,9 +484,6 @@ export function Office({ onExit }: { onExit: () => void }) {
     // a defect the developer never heard about does not get fixed
     setLate((v) => [...v, ...pending.map((a) => a.severity)]);
     setPending([]);
-    // staying past six is what costs a night of sleep, and a good chair is
-    // what takes half of it back
-    if (minutes > DAY_END) setBorrowed((b) => b + borrowCost());
     sfx.play("click");
     setRunning(null);
     setNote(null);
@@ -486,12 +506,17 @@ export function Office({ onExit }: { onExit: () => void }) {
     setWorkedWeekend(false);
     setHobbyDone(false);
     /*
-     * An ordinary night gives everything back. What it cannot give back is
-     * what was borrowed against it, which is the whole cost of overtime and of
-     * a weekend shift.
+     * An ordinary night gives everything back. A borrowed one caps how rested
+     * it is possible to wake up.
+     *
+     * Taking it off the recovery instead let the ceiling swallow it: end a day
+     * with points to spare, stay late anyway, and three plus one is still three
+     * — the half hour was free for anyone who had not used the day it extended.
+     * A night that was borrowed against is a worse night whatever was left in
+     * the player when they started it.
      */
     setCondition((c) =>
-      Math.min(MAX_CONDITION, c + Math.max(0, SLEEP_RECOVERY - borrowed))
+      Math.max(0, Math.min(MAX_CONDITION - borrowed, c + SLEEP_RECOVERY))
     );
     setBorrowed(0);
     /*
@@ -533,10 +558,20 @@ export function Office({ onExit }: { onExit: () => void }) {
    */
   const endOfDay = () => {
     const left = assignments.filter((a) => a.result === null).length;
-    // half an hour is worth nothing without the condition left to open a
-    // machine with, so the offer does not come up in the one state where it
-    // could not be used
-    if (left > 0 && condition >= INSPECT_COST && !tookOvertime && adsAvailable()) {
+    /*
+     * Six o'clock, and the choice is the player's either way.
+     *
+     * The half hour used to exist only where an advert could be watched, so a
+     * build without them had no overtime, nothing that ever borrowed against a
+     * night, and a condition meter that read three every single morning. The
+     * decision — is this build worth tomorrow — is the interesting part, and it
+     * should not be gated on an ad network being reachable. What the advert
+     * buys is the half hour for nothing, which is what a reward is.
+     *
+     * It is still worth nothing without the condition left to open a machine
+     * with, so that one state does not raise it.
+     */
+    if (left > 0 && condition >= INSPECT_COST && !tookOvertime) {
       setOffer("overtime");
       return;
     }
@@ -551,6 +586,16 @@ export function Office({ onExit }: { onExit: () => void }) {
     setMinutes((m) => Math.min(DAY_END + overtime, m + COFFEE_MINUTES));
     sfx.play("pick");
     setNote(tp("street.gotCoffee", { n: String(COFFEE_MINUTES) }));
+  };
+
+  /** the half hour as it is bought without an advert: against tonight */
+  const stayLate = () => {
+    setOffer(null);
+    setTookOvertime(true);
+    setOvertime((o) => o + OVERTIME_MINUTES);
+    setBorrowed((b) => b + borrowCost());
+    sfx.play("click");
+    setNote(tp("office.stayedLate", { n: String(OVERTIME_MINUTES) }));
   };
 
   /** the reward, once the ad has actually run to the end */
@@ -1010,6 +1055,7 @@ export function Office({ onExit }: { onExit: () => void }) {
             <p>{t(`offer.${offer}.body`)}</p>
             <div className="modal-actions">
               <button
+                {...(offer === "overtime" ? { "data-space": true } : {})}
                 className="btn-ghost"
                 disabled={watching}
                 onClick={() => {
@@ -1024,14 +1070,30 @@ export function Office({ onExit }: { onExit: () => void }) {
                 {t(`offer.${offer}.no`)}
               </button>
               <button
-                data-space
+                {...(offer === "overtime" ? {} : { "data-space": true })}
                 className="btn-primary"
                 disabled={watching}
-                onClick={() => takeOffer(offer)}
+                onClick={() =>
+                  offer === "overtime" ? stayLate() : takeOffer(offer)
+                }
               >
                 {watching ? t("offer.watching") : t(`offer.${offer}.yes`)}
               </button>
             </div>
+            {/*
+              The advert is the third way out, not the door itself: going home
+              and staying late are both there without it. Space goes home,
+              because that is the answer that costs nothing.
+            */}
+            {offer === "overtime" && adsAvailable() && (
+              <button
+                className="offer-free"
+                disabled={watching}
+                onClick={() => takeOffer("overtime")}
+              >
+                {watching ? t("offer.watching") : t("offer.overtime.free")}
+              </button>
+            )}
           </div>
         </div>
       )}

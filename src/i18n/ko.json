@@ -454,8 +454,8 @@
   "common.alreadyFine": "지금은 멀쩡하다. 아껴두자.",
   "goal.stage04": "카드를 뒤집어 같은 그림끼리 짝을 맞춰라",
   "offer.overtime.title": "여섯 시다",
-  "offer.overtime.body": "여섯 시다. 안 본 빌드가 남았다. 30분 더 볼 수 있지만, 야근한 밤값은 내일이 치른다.",
-  "offer.overtime.yes": "광고 보고 30분 더",
+  "offer.overtime.body": "여섯 시다. 안 본 빌드가 남았다. 30분 더 볼 수는 있는데, 그 밤값은 내일 아침이 치른다.",
+  "offer.overtime.yes": "30분 더 본다",
   "offer.overtime.no": "퇴근한다",
   "offer.coffee.title": "자판기",
   "offer.coffee.body": "커피 한 잔. 15분을 내거나, 광고를 보거나.",
@@ -487,5 +487,7 @@
   "office.whatCondition": "오늘 남은 검수 횟수 {n}번. 빌드를 하나 볼 때마다 하나 줄고, 자고 나면 다 돌아온다.",
   "office.whatChip": "{machine} — 심각도 {sev}. 점이 많을수록 그냥 나갔을 때 출시 등급이 크게 깎인다.",
   "office.whatChipDone": "{machine} — 심각도 {sev}. 이건 이미 봤다.",
-  "office.dayShip": "{n}일차 · D-{left}"
+  "office.dayShip": "{n}일차 · D-{left}",
+  "offer.overtime.free": "광고 보고 밤값 없이",
+  "office.stayedLate": "{n}분 더. 내일 아침에 값을 치른다."
 }

@@ -23,8 +23,10 @@ import "./App.css";
  * ?lab=1 and ?repro=1 still open the two prototypes that were tried and set
  * aside, because they are worth reading before anyone tries either idea again.
  */
-const LAB = new URLSearchParams(location.search).has("lab");
-const REPRO = new URLSearchParams(location.search).has("repro");
+const LAB =
+  import.meta.env.DEV && new URLSearchParams(location.search).has("lab");
+const REPRO =
+  import.meta.env.DEV && new URLSearchParams(location.search).has("repro");
 
 export default function App() {
   useSpaceCloses();

@@ -454,8 +454,8 @@
   "common.alreadyFine": "You are fine as you are. Save it.",
   "goal.stage04": "Turn the cards over and match the pairs",
   "offer.overtime.title": "Six o'clock",
-  "offer.overtime.body": "Six o’clock, and a build you have not looked at. Half an hour more is yours — tomorrow pays for the night.",
-  "offer.overtime.yes": "Watch an ad for 30 minutes",
+  "offer.overtime.body": "Six o’clock, and a build you have not looked at. Half an hour more is yours — tomorrow morning pays for the night.",
+  "offer.overtime.yes": "Stay half an hour",
   "offer.overtime.no": "Knock off",
   "offer.coffee.title": "Vending machine",
   "offer.coffee.body": "A coffee. Fifteen minutes, or an ad.",
@@ -487,5 +487,7 @@
   "office.whatCondition": "{n} builds left in you today. One goes on each build you sign off, and a night gives them all back.",
   "office.whatChip": "{machine} — {sev}. The more pips, the further the rating falls if it ships unlooked-at.",
   "office.whatChipDone": "{machine} — {sev}. This one has been looked at.",
-  "office.dayShip": "Day {n} · {left} to ship"
+  "office.dayShip": "Day {n} · {left} to ship",
+  "offer.overtime.free": "Watch an ad — the night is free",
+  "office.stayedLate": "{n} minutes more. Tomorrow morning pays for it."
 }
