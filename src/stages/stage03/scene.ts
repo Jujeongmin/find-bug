@@ -24,7 +24,7 @@ export const stage03Scene: SceneSpec = {
       x: 250,
       y: GROUND_Y,
       z: 3,
-      render: { sprite: { sheet: "platchars" as const, col: 0, row: 1, scale: 1.8 }, shadow: { offsetX: 12, width: 28 } },
+      render: { facesLeft: true, sprite: { sheet: "platchars" as const, col: 0, row: 1, scale: 1.8 }, shadow: { offsetX: 12, width: 28 } },
       behaviors: [
         { t: "platformer", speed: 140, gravity: 1500, jumpV: -560, fallScale: 1 },
       ],

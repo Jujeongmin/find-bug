@@ -806,7 +806,9 @@ export function EngineStage({
                       fontSize: o.render.fontSize,
                       bottom: o.render.liftY ?? 0,
                       transform: `scaleX(${
-                        o.render.actor ? 1 : os.facing
+                        o.render.actor
+                          ? 1
+                          : os.facing * (o.render.facesLeft ? -1 : 1)
                       }) scaleY(${
                         o.render.upsideDown ? -1 : 1
                       }) rotate(${os.angle}deg)`,

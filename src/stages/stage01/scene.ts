@@ -30,6 +30,7 @@ export const stage01Scene: SceneSpec = {
       z: 3,
       peerGroup: "actor",
       render: {
+        facesLeft: true,
         sprite: { sheet: "platchars" as const, col: 0, row: 1, scale: 1.9 },
         shadow: { offsetX: 14, width: 30 },
       },

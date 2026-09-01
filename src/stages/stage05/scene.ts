@@ -55,6 +55,7 @@ export const stage05Scene: SceneSpec = {
       y: 552,
       z: 3,
       render: {
+        facesLeft: true,
         sprite: { sheet: "platchars" as const, col: 0, row: 1, scale: 1.9 },
         shadow: { offsetX: 14, width: 30 },
       },

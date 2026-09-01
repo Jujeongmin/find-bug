@@ -177,6 +177,13 @@ export interface RenderSpec {
   /** sprite has a visible left/right facing — gates the reverseDirection mutator */
   directional?: boolean;
   /**
+   * The art is drawn looking left, so the facing has to be read backwards.
+   * Without it a character walking right keeps its eyes on where it came from
+   * — which is what the platformer characters were doing, their visor sitting
+   * a pixel left of centre in every frame.
+   */
+  facesLeft?: boolean;
+  /**
    * id of a timer whose progress is drawn as a bar over this object. Without
    * it a timed process is invisible: the player presses a button, nothing
    * happens for seconds, and a counter ticks up with no cause on screen.
