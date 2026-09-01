@@ -376,7 +376,7 @@
   "home.rest": "Rest on the sofa",
   "home.journal": "Read the journal",
   "home.goWork": "Leave for work",
-  "home.rested": "That helped. Tomorrow can start a little earlier.",
+  "home.rested": "Better. That is one more build you can look at tomorrow.",
   "home.alreadyRested": "You have rested enough for tonight.",
   "home.notYet": "The office is locked at this hour. Sleep first.",
   "home.journalLine": "Day {n} done. {left} to ship. {shipped} defects have gone out so far.",
@@ -481,5 +481,7 @@
   "street.weekend": "The office is locked at the weekend. Going in is something you decide at home.",
   "home.nothingToFix": "Nothing has gone out yet. No reason to go in.",
   "object.homeScreen": "The computer at home",
-  "office.tooTired": "Your eyes have gone. Nothing lands on the screen in this state — coffee, or the door."
+  "office.tooTired": "Your eyes have gone. Nothing lands on the screen in this state — coffee, or the door.",
+  "result.fail.bodyFinal": "Report rejected. This build ships as it is.",
+  "result.retryFinal": "Back to the office"
 }

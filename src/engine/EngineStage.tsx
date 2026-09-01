@@ -990,6 +990,7 @@ export function EngineStage({
               : null
           }
           onRetry={onFail ?? nextRound}
+          final={!!onFail}
           onDone={onClear}
         />
       )}

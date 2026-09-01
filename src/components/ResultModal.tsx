@@ -8,10 +8,12 @@ interface Props {
   /** engine-generated description, already translated */
   bugText?: string | null;
   onRetry: () => void;
+  /** a build gets one report, so its fail screen must not promise a re-run */
+  final?: boolean;
   onDone: () => void;
 }
 
-export function ResultModal({ success, bug, bugText, onRetry, onDone }: Props) {
+export function ResultModal({ success, bug, bugText, onRetry, onDone, final }: Props) {
   const { t } = useI18n();
   const desc = bugText ?? (bug ? t(bug.descKey) : null);
 
@@ -20,7 +22,9 @@ export function ResultModal({ success, bug, bugText, onRetry, onDone }: Props) {
       <div className={`modal result ${success ? "success" : "fail"}`}>
         <div className="result-emoji">{success ? "🎉" : "❌"}</div>
         <h2>{success ? t("result.success.title") : t("result.fail.title")}</h2>
-        <p>{success ? t("result.success.body") : t("result.fail.body")}</p>
+        <p>{success
+            ? t("result.success.body")
+            : t(final ? "result.fail.bodyFinal" : "result.fail.body")}</p>
         {success && desc && <p className="bug-desc">🐛 {desc}</p>}
         <div className="modal-actions">
           {success ? (
@@ -29,7 +33,7 @@ export function ResultModal({ success, bug, bugText, onRetry, onDone }: Props) {
             </button>
           ) : (
             <button data-space className="btn-primary" onClick={onRetry}>
-              {t("result.retry")}
+              {t(final ? "result.retryFinal" : "result.retry")}
             </button>
           )}
         </div>

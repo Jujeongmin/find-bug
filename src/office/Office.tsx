@@ -880,6 +880,12 @@ export function Office({ onExit }: { onExit: () => void }) {
             </button>
             <span className="wb-build">{tp("office.day", { n: String(day) })}</span>
             <span className="office-clock">{clock(minutes)}</span>
+            {/* the one number the day is actually rationed by, and it was
+                only ever drawn at home — where none of it gets spent */}
+            <span className="office-condition" title={t("home.condition")}>
+              {"●".repeat(condition)}
+              {"○".repeat(MAX_CONDITION - condition)}
+            </span>
             <span className="wb-deadline">
               {tp("office.shipIn", { n: String(DAYS - day) })}
             </span>

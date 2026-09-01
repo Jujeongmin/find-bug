@@ -688,6 +688,12 @@
   color: #ffd98a;
   letter-spacing: 2px;
 }
+/* the home screens hang it off the right-hand end; the office bar has four
+   more things after it and has to keep them in reading order */
+.wb-header .office-condition {
+  margin-left: 0;
+  letter-spacing: 1px;
+}
 
 /* ---- the walk to work ---- */
 /* A walk to work, not a carriageway. The player used to trudge up the centre

@@ -376,7 +376,7 @@
   "home.rest": "소파에서 쉬기",
   "home.journal": "개발 일지 보기",
   "home.goWork": "출근하기",
-  "home.rested": "좀 나아졌다. 내일은 조금 일찍 나갈 수 있겠다.",
+  "home.rested": "좀 나아졌다. 내일 빌드 하나는 더 볼 수 있겠다.",
   "home.alreadyRested": "오늘은 충분히 쉬었다.",
   "home.notYet": "지금 나가봐야 사무실은 잠겨 있다. 자고 가자.",
   "home.journalLine": "{n}일차까지 왔다. 출시까지 {left}일. 지금까지 흘려보낸 결함 {shipped}건.",
@@ -481,5 +481,7 @@
   "street.weekend": "주말이라 사무실은 잠겨 있다. 굳이 가겠다면 집에서 마음을 먹고 나와야 한다.",
   "home.nothingToFix": "아직 나간 결함이 없다. 주말에 나갈 이유도 없다.",
   "object.homeScreen": "집 컴퓨터",
-  "office.tooTired": "눈이 시리다. 이 상태로는 화면에 뭘 띄워도 안 들어온다. 커피라도 마시든가, 집에 가든가."
+  "office.tooTired": "눈이 시리다. 이 상태로는 화면에 뭘 띄워도 안 들어온다. 커피라도 마시든가, 집에 가든가.",
+  "result.fail.bodyFinal": "보고 기각. 이 빌드는 이대로 나간다.",
+  "result.retryFinal": "사무실로"
 }
