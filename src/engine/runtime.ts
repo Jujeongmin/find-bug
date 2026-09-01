@@ -1,4 +1,4 @@
-import type { Action, ObjectSpec, SceneSpec } from "./types";
+import type { Action, Facing, ObjectSpec, SceneSpec } from "./types";
 
 export interface ObjectState {
   id: string;
@@ -8,7 +8,7 @@ export interface ObjectState {
   vy: number;
   facing: 1 | -1;
   /** which way the object is pointed, for directional sheets */
-  dir4: "down" | "up" | "left" | "right";
+  dir4: Facing;
   /** true while it actually travelled this frame */
   moving: boolean;
   dir: 1 | -1;
@@ -288,16 +288,20 @@ export class SceneRuntime {
               break;
             }
             os.moving = true;
-            // vertical wins ties, which reads better than flickering between
-            // two facings while walking diagonally
-            os.dir4 =
-              Math.abs(dy) >= Math.abs(dx)
-                ? dy < 0
-                  ? "up"
-                  : "down"
-                : dx < 0
-                  ? "left"
-                  : "right";
+            // eight facings, one per 45 degrees, so walking diagonally shows
+            // the diagonal art rather than snapping to a cardinal
+            const OCTANTS: Facing[] = [
+              "right",
+              "downRight",
+              "down",
+              "downLeft",
+              "left",
+              "upLeft",
+              "up",
+              "upRight",
+            ];
+            const oct = Math.round(Math.atan2(dy, dx) / (Math.PI / 4));
+            os.dir4 = OCTANTS[((oct % 8) + 8) % 8];
             const len = Math.hypot(dx, dy);
             // the horizontal bound follows the room, not the viewport. It was
             // hardcoded to 340 from when every scene was exactly one screen

@@ -104,9 +104,26 @@ export type Behavior =
  * Facing comes from the direction of travel, so the sprite turns instead of
  * being mirrored — the old scaleX flip could only ever show two of the four.
  */
+export type Facing =
+  | "down"
+  | "downRight"
+  | "right"
+  | "upRight"
+  | "up"
+  | "upLeft"
+  | "left"
+  | "downLeft";
+
 export interface ActorSpec {
   sheet: SheetId;
-  rows: { down: number; up: number; left: number; right: number };
+  /**
+   * Row per facing. The four diagonals are optional: a sheet that only draws
+   * the cardinals falls back to the nearer of the two it has, so an eight-way
+   * sheet gains nothing it has to declare and a four-way one still works.
+   */
+  rows: { down: number; up: number; left: number; right: number } & Partial<
+    Record<Facing, number>
+  >;
   /** column shown while standing still */
   idle: number;
   /** columns cycled while moving */

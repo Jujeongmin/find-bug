@@ -1,6 +1,7 @@
 import { stage01Scene } from "../src/stages/stage01/scene";
 import { generateMutations, applyMutation } from "../src/engine/generate";
 import { SceneRuntime } from "../src/engine/runtime";
+import { streetScene } from "../src/street/scene";
 
 const muts = generateMutations(stage01Scene);
 const find = (id: string) => {
@@ -111,4 +112,34 @@ const ok = (label: string, cond: boolean) =>
   r2.state.counters.hp = 2;
   tick(r2, 0.1);
   ok("runtime: potion heals", r2.state.counters.hp === 4);
+}
+
+/**
+ * Eight-way facing. The browser pane this project is developed in suspends
+ * requestAnimationFrame, so the game loop cannot be observed there — driving
+ * the runtime directly is the only way to see which way a walk points.
+ */
+{
+  const CASES: [string, number, number][] = [
+    ["right", 1, 0],
+    ["downRight", 1, 1],
+    ["down", 0, 1],
+    ["downLeft", -1, 1],
+    ["left", -1, 0],
+    ["upLeft", -1, -1],
+    ["up", 0, -1],
+    ["upRight", 1, -1],
+  ];
+  for (const [want, dx, dy] of CASES) {
+    const rt = new SceneRuntime(streetScene);
+    rt.stick = { x: dx, y: dy };
+    rt.tick(0.05);
+    const got = rt.state.objects.player.dir4;
+    if (got !== want) throw new Error(`facing (${dx},${dy}) gave ${got}, want ${want}`);
+    if (!rt.state.objects.player.moving) throw new Error("walking but not marked moving");
+  }
+  const still = new SceneRuntime(streetScene);
+  still.tick(0.05);
+  if (still.state.objects.player.moving) throw new Error("standing still but marked moving");
+  console.log("PASS  eight facings, and standing still is not moving");
 }

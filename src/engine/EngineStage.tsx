@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { BugCategory } from "../core/types";
-import type { Action } from "./types";
+import type { Action, Facing, RenderSpec } from "./types";
 import { useI18n } from "../i18n";
 import { CategorySelect } from "../components/CategorySelect";
 import { ResultModal } from "../components/ResultModal";
@@ -134,6 +134,7 @@ export function EngineStage({
     null
   );
   const stickId = useRef<number | null>(null);
+  const stickOrigin = useRef<{ x: number; y: number } | null>(null);
   /**
    * How to move, shown for a few seconds when a build starts. The touch pad
    * was replaced by drag-to-move, which leaves nothing on screen saying so.
@@ -169,6 +170,7 @@ export function EngineStage({
     const p = fieldPoint(e);
     if (!p) return;
     stickId.current = e.pointerId;
+    stickOrigin.current = p;
     setStick({ ox: p.x, oy: p.y, dx: 0, dy: 0 });
   };
 
@@ -176,23 +178,26 @@ export function EngineStage({
     if (!isTouch(e)) return;
     if (stickId.current !== e.pointerId) return;
     const p = fieldPoint(e);
-    setStick((s) => {
-      if (!s || !p) return s;
-      const dx = p.x - s.ox;
-      const dy = p.y - s.oy;
-      const len = Math.hypot(dx, dy);
-      // a small dead zone, so tapping an object does not also nudge the player
-      const k = len < 6 ? 0 : Math.min(1, len / STICK_R) / (len || 1);
-      runtimeRef.current.stick = k ? { x: dx * k, y: dy * k } : null;
-      const clamp = len > STICK_R ? STICK_R / len : 1;
-      return { ...s, dx: dx * clamp, dy: dy * clamp };
-    });
+    const o = stickOrigin.current;
+    if (!p || !o) return;
+    const dx = p.x - o.x;
+    const dy = p.y - o.y;
+    const len = Math.hypot(dx, dy);
+    // a small dead zone, so tapping an object does not also nudge the player
+    const k = len < 6 ? 0 : Math.min(1, len / STICK_R) / (len || 1);
+    // outside the state updater: React treats updaters as pure and may run or
+    // discard them freely, which quietly dropped the vector on its way to the
+    // runtime and left the player standing still
+    runtimeRef.current.stick = k ? { x: dx * k, y: dy * k } : null;
+    const clamp = len > STICK_R ? STICK_R / len : 1;
+    setStick({ ox: o.x, oy: o.y, dx: dx * clamp, dy: dy * clamp });
   };
 
   const stickUp = (e: React.PointerEvent) => {
     if (!isTouch(e)) return;
     if (stickId.current !== e.pointerId) return;
     stickId.current = null;
+    stickOrigin.current = null;
     runtimeRef.current.stick = null;
     setStick(null);
   };
@@ -330,6 +335,21 @@ export function EngineStage({
     return null;
   })();
   const st = runtime.state;
+
+  /** the row for a facing, falling back to a cardinal the sheet does have */
+  const actorRow = (a: NonNullable<RenderSpec["actor"]>, dir: Facing) => {
+    const FALLBACK: Record<Facing, Facing> = {
+      down: "down",
+      up: "up",
+      left: "left",
+      right: "right",
+      downRight: "right",
+      upRight: "right",
+      downLeft: "left",
+      upLeft: "left",
+    };
+    return a.rows[dir] ?? a.rows[FALLBACK[dir]] ?? a.rows.down;
+  };
   // drag-to-move, for top-down scenes only: side view needs a jump button and
   // reads better with left/right keys
   const stickable = hasPlayer && !picking && !scene.sideView;
@@ -668,7 +688,7 @@ export function EngineStage({
                       ...(o.render.actor
                         ? spriteStyle({
                             sheet: o.render.actor.sheet,
-                            row: o.render.actor.rows[os.dir4],
+                            row: actorRow(o.render.actor, os.dir4),
                             col: os.moving
                               ? o.render.actor.walk[
                                   Math.floor(st.now * o.render.actor.fps) %

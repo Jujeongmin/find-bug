@@ -9,7 +9,16 @@ const WALL_H = 110;
 
 const actor = (sheet: "worker" | "worker2"): ActorSpec => ({
   sheet,
-  rows: { down: 0, right: 2, up: 4, left: 6 },
+  rows: {
+    down: 0,
+    downRight: 1,
+    right: 2,
+    upRight: 3,
+    up: 4,
+    upLeft: 5,
+    left: 6,
+    downLeft: 7,
+  },
   idle: 0,
   walk: [1, 2, 3, 4],
   fps: 8,
