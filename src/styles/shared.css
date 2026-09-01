@@ -333,6 +333,17 @@
   padding: 8px;
 }
 
+/* what the build is for, said once where nothing is drawn behind it */
+.intro-goal {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border-left: 3px solid #6aa9ff;
+  background: rgba(106, 169, 255, 0.1);
+  border-radius: 0 4px 4px 0;
+  text-align: left;
+  line-height: 1.5;
+}
+
 .once-warning {
   color: #e33;
   font-weight: 700;

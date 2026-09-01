@@ -141,16 +141,25 @@ export function EngineStage({
   const onStationRef = useRef(onStation);
   onStationRef.current = onStation;
   /**
-   * How to move, shown for a few seconds when a build starts. The touch pad
-   * was replaced by drag-to-move, which leaves nothing on screen saying so.
+   * The two lines that only matter at the start: how to move, and what the
+   * build is for. Both sit over the field, and the goal line was covering the
+   * wall clock in the shop and the sun in the meadow — objects that carry
+   * bugs, hidden behind the text telling you to go find bugs. They step aside
+   * after a few seconds; the goal is repeated in the briefing that opens the
+   * build, where nothing is behind it.
    */
   const [showControls, setShowControls] = useState(true);
   /** held while the magnifier button is pressed */
   const [zoomed, setZoomed] = useState(false);
+  useEffect(() => setShowControls(true), [scene]);
   useEffect(() => {
+    // count from the moment play starts, not from mount: the briefing sits in
+    // front of the field, and the seconds spent reading it are not seconds
+    // spent looking at the two lines behind it
+    if (phase !== "play") return;
     const id = setTimeout(() => setShowControls(false), 5000);
     return () => clearTimeout(id);
-  }, [scene]);
+  }, [scene, phase]);
 
   /** drag distance, in field units, that means "full speed" */
   const STICK_R = 46;
@@ -491,7 +500,7 @@ export function EngineStage({
               )}
             </div>
           )}
-          {live.goalKey && !picking && (
+          {live.goalKey && !picking && showControls && (
             <div className="goal-banner">{t(live.goalKey)}</div>
           )}
           </div>
@@ -864,6 +873,9 @@ export function EngineStage({
         <div className="modal-backdrop">
           <div className="modal">
             <h2>🐛 {t(scene.introKey)}</h2>
+            {scene.goalKey && (
+              <p className="intro-goal">{t(scene.goalKey)}</p>
+            )}
             <p>{t("intro.hint")}</p>
             <p className="once-warning">{t("challenge.once")}</p>
             <div className="modal-actions">
