@@ -18,7 +18,23 @@ import { available as adsAvailable, showRewarded } from "../net/ads";
  * Days to ship. Five left no room to earn: the three things on sale come to
  * 380 and a perfect day pays 140, so equipment arrived just as the run ended.
  */
-const DAYS = 10;
+/**
+ * Twelve days to ship, Monday to Friday and round again. Ten of them are
+ * working days and two are not: one weekend, in the middle, with the deadline
+ * carrying on across it — which is the whole point of having one. The last day
+ * is a Friday, so the sprint ends on a working day rather than trailing off.
+ */
+const DAYS = 12;
+const WEEK = 7;
+/** Saturday and Sunday: the office is shut unless you decide otherwise */
+const isWeekend = (day: number) => (day - 1) % WEEK >= 5;
+/** how many of the fourteen carry a queue, which is what the rating is out of */
+const WORK_DAYS = Array.from({ length: DAYS }, (_, i) => i + 1).filter(
+  (d) => !isWeekend(d)
+).length;
+/** what a Saturday at the desk costs, and what a weekend off the desk gives */
+const WEEKEND_SHIFT_COST = 1;
+const HOBBY_PAY = 30;
 
 /** the working day, 09:00 to 18:00 */
 const DAY_START = 9 * 60;
@@ -100,6 +116,9 @@ function withPlayerAt(scene: SceneSpec, x: number, y: number): SceneSpec {
     objects: scene.objects.map((o) => (o.id === "player" ? { ...o, x, y } : o)),
   };
 }
+
+/** 월 화 수 목 금 토 일 — the calendar the ship date does not care about */
+const dayName = (day: number) => `week.d${(day - 1) % WEEK}`;
 
 const clock = (m: number) =>
   `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(Math.floor(m % 60)).padStart(2, "0")}`;
@@ -183,8 +202,8 @@ const SEVERITIES: Severity[] = ["normal", "low", "critical"];
  */
 const BUILD_IDS = [...ENGINE_SCENES.map((s) => s.id), "stage04"];
 
-function assignDay(day: number): Assignment[] {
-  return MACHINES.map((machine, i) => ({
+function assignDay(day: number, machines: readonly MachineId[] = MACHINES): Assignment[] {
+  return machines.map((machine, i) => ({
     machine,
     // a stride that is coprime with the list, so the day's three slide along
     // it instead of alternating between the same two sets
@@ -206,7 +225,9 @@ function assignDay(day: number): Assignment[] {
 export function Office({ onExit }: { onExit: () => void }) {
   const { t, tp, lang, setLang } = useI18n();
   const [day, setDay] = useState(1);
-  const [assignments, setAssignments] = useState<Assignment[]>(() => assignDay(1));
+  const [assignments, setAssignments] = useState<Assignment[]>(() =>
+    isWeekend(1) ? [] : assignDay(1)
+  );
   const [running, setRunning] = useState<Assignment | null>(null);
   const [note, setNote] = useState<string | null>(null);
   const [shipped, setShipped] = useState(false);
@@ -238,6 +259,9 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [overtime, setOvertime] = useState(0);
   const [tookOvertime, setTookOvertime] = useState(false);
   const [tookFreeCoffee, setTookFreeCoffee] = useState(false);
+  /** what the weekend was spent on, one thing per weekend day */
+  const [workedWeekend, setWorkedWeekend] = useState(false);
+  const [hobbyDone, setHobbyDone] = useState(false);
   /** an offer waiting on the player, drawn as a two-way prompt */
   const [offer, setOffer] = useState<null | "overtime" | "coffee">(null);
   const [watching, setWatching] = useState(false);
@@ -287,10 +311,28 @@ export function Office({ onExit }: { onExit: () => void }) {
    * back from the street puts you inside your own front door, and the street
    * puts you at whichever end you stepped out of.
    */
-  const homeHere = useMemo(
-    () => withPlayerAt(homeScene, dayOver ? 272 : 132, dayOver ? 545 : 258),
-    [dayOver]
-  );
+  const homeHere = useMemo(() => {
+    const at = withPlayerAt(homeScene, dayOver ? 272 : 132, dayOver ? 545 : 258);
+    if (!isWeekend(day)) return at;
+    // the same desk, doing the other thing it would obviously be doing
+    return {
+      ...at,
+      objects: at.objects.map((o) =>
+        o.id === "journal"
+          ? {
+              ...o,
+              id: "hobby",
+              nameKey: "object.hobby",
+              behaviors: o.behaviors.map((b) =>
+                b.t === "station"
+                  ? { ...b, labelKey: "home.hobby" }
+                  : b
+              ),
+            }
+          : o
+      ),
+    };
+  }, [dayOver, day]);
   const streetHere = useMemo(
     () => withPlayerAt(streetScene, 180, dayOver ? 250 : 540),
     [dayOver]
@@ -316,6 +358,19 @@ export function Office({ onExit }: { onExit: () => void }) {
     setLastResult(result);
     if (result === "caught") {
       setCaught((n) => n + 1);
+      if (isWeekend(day)) {
+        // a Saturday build is a hotfix, so catching it takes back the worst
+        // thing that already went out rather than adding to the pile
+        setShipped_((v) => {
+          if (!v.length) return v;
+          const worst = v.reduce(
+            (best, sv, i) =>
+              SEVERITY_PIPS[sv] > SEVERITY_PIPS[v[best]] ? i : best,
+            0
+          );
+          return v.filter((_, i) => i !== worst);
+        });
+      }
       // and it goes in the pile waiting to be walked over to the developer.
       // Nothing ever went into that pile: a confirmed defect was counted and
       // then dropped, so the handoff never had anything to hand over, the
@@ -335,10 +390,13 @@ export function Office({ onExit }: { onExit: () => void }) {
    * because the way home is the way you came.
    */
   const clockOff = () => {
-    // anything still unverified ships as-is
+    // anything still unverified ships as-is — except on a weekend, when the
+    // build was never on the release train in the first place
     const unseen = assignments.filter((a) => a.result === null);
     setMissed((n) => n + unseen.length);
-    setShipped_((v) => [...v, ...unseen.map((a) => a.severity)]);
+    if (!isWeekend(day)) {
+      setShipped_((v) => [...v, ...unseen.map((a) => a.severity)]);
+    }
     // a defect the developer never heard about does not get fixed
     setLate((v) => [...v, ...pending.map((a) => a.severity)]);
     setPending([]);
@@ -361,8 +419,11 @@ export function Office({ onExit }: { onExit: () => void }) {
       return;
     }
     sfx.play("click");
-    setDay((d) => d + 1);
-    setAssignments(assignDay(day + 1));
+    const next = day + 1;
+    setDay(next);
+    setAssignments(isWeekend(next) ? [] : assignDay(next));
+    setWorkedWeekend(false);
+    setHobbyDone(false);
     setMinutes(
       DAY_START +
         (MAX_CONDITION - condition) * CONDITION_START_COST -
@@ -378,7 +439,11 @@ export function Office({ onExit }: { onExit: () => void }) {
     // the walk in is where the coffee is, and the fifteen minutes it costs is
     // the morning's one real decision — so the player has to make it, every
     // morning, by walking out of their own front door
-    setNote(tp("home.morning", { n: String(day + 1) }));
+    setNote(
+      isWeekend(next)
+        ? t("home.morningWeekend")
+        : tp("home.morning", { n: String(next) })
+    );
   };
   /**
    * Six o'clock. If there are builds left unverified and the half hour has
@@ -454,6 +519,7 @@ export function Office({ onExit }: { onExit: () => void }) {
   const onStreetStation = (id: string) => {
     if (id === "officeDoor") {
       if (dayOver) return setNote(t("street.shut"));
+      if (isWeekend(day) && !workedWeekend) return setNote(t("street.weekend"));
       sfx.play("click");
       setPlace("office");
       setNote(null);
@@ -493,6 +559,18 @@ export function Office({ onExit }: { onExit: () => void }) {
       sfx.play("pick");
       return setNote(t("home.rested"));
     }
+    if (id === "hobby") {
+      // pay turned into a mood: the only thing money buys that the shop does
+      // not, and the reason a quiet Saturday is worth something
+      if (hobbyDone) return setNote(t("home.hobbyDone"));
+      if (condition >= MAX_CONDITION) return setNote(t("common.alreadyFine"));
+      if (pay < HOBBY_PAY) return setNote(tp("home.hobbyBroke", { n: String(HOBBY_PAY) }));
+      setHobbyDone(true);
+      setPay((p) => p - HOBBY_PAY);
+      setCondition((c) => Math.min(MAX_CONDITION, c + 1));
+      sfx.play("pick");
+      return setNote(tp("home.hobbyDid", { n: String(HOBBY_PAY) }));
+    }
     if (id === "journal") {
       return setNote(
         tp("home.journalLine", {
@@ -509,6 +587,16 @@ export function Office({ onExit }: { onExit: () => void }) {
     }
     if (id === "frontDoor") {
       if (dayOver) return setNote(t("home.notYet"));
+      if (isWeekend(day) && !workedWeekend) {
+        // nothing has gone out yet, so there is nothing to come in for
+        if (!shipped_.length) return setNote(t("home.nothingToFix"));
+        // one machine, and a point of condition for the week you are borrowing
+        // it from. Catching up this week is what breaks the next one.
+        setWorkedWeekend(true);
+        setAssignments(assignDay(day, [MACHINES[0]]));
+        setCondition((c) => Math.max(0, c - WEEKEND_SHIFT_COST));
+        setNote(t("home.wentInAnyway"));
+      }
       sfx.play("click");
       setNote(null);
       setPlace("street");
@@ -558,7 +646,7 @@ export function Office({ onExit }: { onExit: () => void }) {
 
   if (shipped) {
     const total = caught + missed;
-    const rating = shipRating(shipped_, late, totalStake(DAYS, SEVERITIES));
+    const rating = shipRating(shipped_, late, totalStake(WORK_DAYS, SEVERITIES));
     return (
       <div className="wb-root wb-ship">
         <h1>{t("office.shipTitle")}</h1>
@@ -666,7 +754,9 @@ export function Office({ onExit }: { onExit: () => void }) {
               <button className="exit-btn" onClick={onExit} title={t("game.exit")}>
                 ←
               </button>
-              <span className="wb-build">{tp("office.day", { n: String(day) })}</span>
+              <span className="wb-build">
+              {tp("office.day", { n: String(day) })} {t(dayName(day))}
+            </span>
               <span className="office-clock">{clock(minutes)}</span>
               <span className="office-condition">
                 {t("home.condition")} {"●".repeat(condition)}
@@ -691,7 +781,8 @@ export function Office({ onExit }: { onExit: () => void }) {
               <span className="wb-build">
                 {tp(dayOver ? "home.evening" : "home.morningHeader", {
                   n: String(day),
-                })}
+                })}{" "}
+                {t(dayName(day))}
               </span>
               <span className="office-condition">
                 {t("home.condition")} {"●".repeat(condition)}
