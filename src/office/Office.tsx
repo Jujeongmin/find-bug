@@ -8,7 +8,11 @@ import { streetScene } from "../street/scene";
 import { ENGINE_SCENES } from "../stages/registry";
 import { sfx } from "../audio/sfx";
 
-const DAYS = 5;
+/**
+ * Days to ship. Five left no room to earn: the three things on sale come to
+ * 380 and a perfect day pays 140, so equipment arrived just as the run ended.
+ */
+const DAYS = 10;
 
 /** the working day, 09:00 to 18:00 */
 const DAY_START = 9 * 60;
