@@ -413,7 +413,7 @@
   "object.parcel": "택배 상자",
   "item.magnifier.desc": "빌드에서 🔍를 누르고 있으면 2배로 확대된다",
   "item.chair": "좋은 의자",
-  "item.chair.desc": "야근해도 컨디션이 깎이지 않는다",
+  "item.chair.desc": "야근해도 그날 밤을 빌리지 않는다",
   "item.alarm": "알람시계",
   "item.alarm.desc": "매일 아침 30분 일찍 시작한다",
   "counter.herbs": "약초",
@@ -480,5 +480,6 @@
   "home.morningWeekend": "주말이다. 오늘은 아무도 기다리지 않는다.",
   "street.weekend": "주말이라 사무실은 잠겨 있다. 굳이 가겠다면 집에서 마음을 먹고 나와야 한다.",
   "home.nothingToFix": "아직 나간 결함이 없다. 주말에 나갈 이유도 없다.",
-  "object.homeScreen": "집 컴퓨터"
+  "object.homeScreen": "집 컴퓨터",
+  "office.tooTired": "눈이 시리다. 이 상태로는 화면에 뭘 띄워도 안 들어온다. 커피라도 마시든가, 집에 가든가."
 }

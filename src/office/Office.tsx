@@ -33,7 +33,14 @@ const WORK_DAYS = Array.from({ length: DAYS }, (_, i) => i + 1).filter(
   (d) => !isWeekend(d)
 ).length;
 /** what a Saturday at the desk costs, and what a weekend off the desk gives */
-const WEEKEND_SHIFT_COST = 1;
+/**
+ * Overtime and a weekend shift do not take a point on the spot — they take it
+ * out of the night that follows, which is where borrowing actually lands. On
+ * the spot would be worse than useless: at six o'clock with nothing left, the
+ * half hour buys time to look at a build the player no longer has the
+ * condition to open.
+ */
+const BORROW_COST = 1;
 const HOBBY_PAY = 30;
 
 /** the working day, 09:00 to 18:00 */
@@ -143,11 +150,22 @@ const clock = (m: number) =>
  * "fatigue -1", which looks like a penalty on the thing you just paid for. A
  * stat you want to raise is one the player can act on without translating.
  *
- * Every missing point pushes tomorrow's start later, so finishing late is a
- * loan against the next day rather than free extra time.
+ * It is the day's capacity, not a tax on the next morning. A point used to
+ * mean twenty minutes off tomorrow's start, which meant the player felt it
+ * once, the following day, as a clock that had already moved before they
+ * could do anything about it. Now it is what a build costs to look at, so it
+ * is spent in front of them, on the thing they chose to spend it on.
  */
 const MAX_CONDITION = 3;
-const CONDITION_START_COST = 20;
+
+/** what one build takes out of you to look at properly */
+const INSPECT_COST = 1;
+
+/**
+ * What a night gives back — two of the three a full day costs, so the sofa
+ * makes up the difference and an evening skipped is a build lost tomorrow.
+ */
+const SLEEP_RECOVERY = 2;
 /**
  * Nine to six is the job. Leaving at any point up to six costs nothing —
  * there used to be a threshold at half four, which read as the game telling
@@ -156,9 +174,6 @@ const CONDITION_START_COST = 20;
  * What tires you out is staying past six, which is the only thing overtime
  * is for. The good chair is what makes that hour bearable.
  */
-
-/** what a night takes out of you, whatever kind of day it was */
-const NIGHT_COST = 1;
 
 /** what a coffee on the way in costs, and what it is worth */
 const COFFEE_MINUTES = 15;
@@ -292,6 +307,8 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [offer, setOffer] = useState<null | "overtime" | "coffee">(null);
   const [watching, setWatching] = useState(false);
   const [condition, setCondition] = useState(MAX_CONDITION);
+  /** points owed to tonight, from overtime or a weekend shift */
+  const [borrowed, setBorrowed] = useState(0);
   /** one restful thing per evening */
   const [restedTonight, setRestedTonight] = useState(false);
   /** pay, earned by handing defects over, spent on equipment */
@@ -393,6 +410,9 @@ export function Office({ onExit }: { onExit: () => void }) {
       // bought. The whole economy was decorative.
       setPending((v) => [...v, { ...running, result }]);
     } else setMissed((n) => n + 1);
+    // charged here rather than on opening the machine, so backing out of a
+    // build still costs nothing
+    setCondition((c) => Math.max(0, c - INSPECT_COST));
     setAssignments((as) =>
       as.map((a) => (a.machine === running.machine ? { ...a, result } : a))
     );
@@ -418,7 +438,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     // staying past six is what costs a night of sleep, and a good chair is
     // what stops it costing one
     if (minutes > DAY_END && !owned.includes("chair")) {
-      setCondition((c) => Math.max(0, c - 1));
+      setBorrowed((b) => b + BORROW_COST);
     }
     sfx.play("click");
     setRunning(null);
@@ -442,22 +462,16 @@ export function Office({ onExit }: { onExit: () => void }) {
     setWorkedWeekend(false);
     setHobbyDone(false);
     /*
-     * A night takes a point out of you whatever kind of day it was.
-     *
-     * Condition used to move only when the player borrowed from tomorrow, so
-     * anyone who never borrowed never touched it — the coffee, the sofa and the
-     * weekend all sat there for a stat that never moved. Now the evening has
-     * something in it every day, and the two ways of paying it back cost
-     * different things: the sofa costs a walk across the front room, the coffee
-     * costs a quarter of an hour of the morning.
+     * A night gives back two of the three a full day costs. The sofa is the
+     * third, so an evening spent on it is the difference between three builds
+     * tomorrow and two — and anything borrowed comes out of the night before
+     * it comes out of the morning.
      */
-    const woke = Math.max(0, condition - NIGHT_COST);
-    setCondition(woke);
-    setMinutes(
-      DAY_START +
-        (MAX_CONDITION - woke) * CONDITION_START_COST -
-        (owned.includes("alarm") ? ALARM_MINUTES : 0)
+    setCondition((c) =>
+      Math.min(MAX_CONDITION, c + Math.max(0, SLEEP_RECOVERY - borrowed))
     );
+    setBorrowed(0);
+    setMinutes(DAY_START - (owned.includes("alarm") ? ALARM_MINUTES : 0));
     setRestedTonight(false);
     setHadCoffee(false);
     setOvertime(0);
@@ -482,7 +496,10 @@ export function Office({ onExit }: { onExit: () => void }) {
    */
   const endOfDay = () => {
     const left = assignments.filter((a) => a.result === null).length;
-    if (left > 0 && !tookOvertime && adsAvailable()) {
+    // half an hour is worth nothing without the condition left to open a
+    // machine with, so the offer does not come up in the one state where it
+    // could not be used
+    if (left > 0 && condition >= INSPECT_COST && !tookOvertime && adsAvailable()) {
       setOffer("overtime");
       return;
     }
@@ -622,13 +639,13 @@ export function Office({ onExit }: { onExit: () => void }) {
       if (isWeekend(day) && !workedWeekend) {
         // nothing has gone out yet, so there is nothing to come in for
         if (!shipped_.length) return setNote(t("home.nothingToFix"));
-        // one machine, and a point of condition for the week you are borrowing
-        // it from. Catching up this week is what breaks the next one.
+        // one machine, and a night of the week you are borrowing it from.
+        // Catching up this week is what breaks the next one.
         setWorkedWeekend(true);
         setAssignments(
           assignDay(day, [MACHINES[0]]).map((a) => ({ ...a, hotfix: true }))
         );
-        setCondition((c) => Math.max(0, c - WEEKEND_SHIFT_COST));
+        setBorrowed((b) => b + BORROW_COST);
         // and stop here. Walking straight out wiped the line explaining what
         // the point of condition had just been spent on; the door opens on
         // the next press, once it has been read.
@@ -694,6 +711,9 @@ export function Office({ onExit }: { onExit: () => void }) {
       setNote(t("office.alreadyDone"));
       return;
     }
+    // nothing left to look with. The coffee is the way back in, and after
+    // that the door is.
+    if (condition < INSPECT_COST) return setNote(t("office.tooTired"));
     setRunning(a);
   };
 

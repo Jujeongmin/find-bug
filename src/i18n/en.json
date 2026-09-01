@@ -413,7 +413,7 @@
   "object.parcel": "Parcel box",
   "item.magnifier.desc": "Hold 🔍 in a build to zoom to twice size",
   "item.chair": "Good chair",
-  "item.chair.desc": "Staying past six no longer costs you the night",
+  "item.chair.desc": "Overtime no longer borrows against the night",
   "item.alarm": "Alarm clock",
   "item.alarm.desc": "Every morning starts 30 minutes earlier",
   "counter.herbs": "Herbs",
@@ -480,5 +480,6 @@
   "home.morningWeekend": "It is the weekend. Nobody is waiting today.",
   "street.weekend": "The office is locked at the weekend. Going in is something you decide at home.",
   "home.nothingToFix": "Nothing has gone out yet. No reason to go in.",
-  "object.homeScreen": "The computer at home"
+  "object.homeScreen": "The computer at home",
+  "office.tooTired": "Your eyes have gone. Nothing lands on the screen in this state — coffee, or the door."
 }
