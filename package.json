@@ -12,7 +12,7 @@
     "verify": "tsc -b && tsx scripts/checkcurriculum.ts && tsx scripts/checkscenes.ts && tsx scripts/checkruntime.ts",
     "deploy": "npx -y @agent8/deploy",
     "typecheck": "tsc -b",
-    "sprites": "tsx scripts/spritesheet.ts"
+    "sprites": "tsx scripts/spritesheet.ts && tsx scripts/spritelist.ts"
   },
   "dependencies": {
     "@agent8/gameserver": "^1.10.2",

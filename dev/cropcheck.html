@@ -1,0 +1,79 @@
+<!doctype html><meta charset="utf-8"><title>crop check</title>
+<!--
+  Dev-only. Every sheet tile the scenes use, measured for art that runs off the
+  edge of its own cell — the fault that made stage 5's trees flat-topped and its
+  first crawler a sliced mushroom, and that no amount of squinting at a 40px
+  sprite reveals.
+
+  Run `npm run sprites` first (it writes used-sprites.json), then open
+  http://localhost:5173/dev/cropcheck.html
+
+  A high `top` is the one that matters: art is drawn standing on the bottom of
+  its cell, so bottom contact is normal and top contact means the drawing was
+  cut. Sides matter for anything meant to be free-standing. Some tiles are
+  opaque on every edge on purpose — a door set into a wall — so read the
+  picture beside the number rather than the number alone.
+-->
+<style>
+body{background:#15151a;color:#e6e6ea;font:13px system-ui,sans-serif;margin:0;padding:16px}
+h1{font-size:15px;color:#9ad;margin:0 0 4px}
+p{color:#8a8a99;margin:0 0 14px;max-width:70ch;line-height:1.5}
+table{border-collapse:collapse}
+td,th{padding:5px 9px;border-bottom:1px solid #2a2a33;text-align:left;font-size:12px}
+th{color:#8a8a99;font-weight:600}
+.s{image-rendering:pixelated;background:#0d0d11;border-radius:3px}
+.n{font-family:monospace;text-align:right}
+tr.bad td{background:#3a1e1e}
+tr.warn td{background:#3a331e}
+.cell{color:#8a8a99;font-family:monospace}
+</style>
+<h1>스프라이트 잘림 검사</h1>
+<p>타일 밖으로 그려져 잘린 스프라이트를 찾는다. <b>top</b> 이 높으면 위가 잘린 것 —
+스프라이트는 칸 바닥에 서 있게 그리므로 bot 은 원래 닿는다. 벽에 박힌 문처럼
+사방이 다 채워진 타일은 의도된 것이니 숫자만 보지 말고 그림을 같이 봐라.</p>
+<table id="t"><thead><tr>
+<th>그림</th><th>이름</th><th>씬 · id</th><th>칸</th>
+<th class="n">top</th><th class="n">left</th><th class="n">right</th><th class="n">bot</th>
+</tr></thead><tbody></tbody></table>
+<script type="module">
+const cells = await (await fetch("/dev/used-sprites.json")).json();
+const imgs = {};
+const cv = document.createElement("canvas");
+const g = cv.getContext("2d");
+const rows = [];
+for (const c of cells) {
+  if (!imgs[c.sheet]) {
+    const i = new Image();
+    i.src = `/src/assets/sheets/${c.sheet}.png`;
+    await i.decode();
+    imgs[c.sheet] = i;
+  }
+  const w = c.tile * c.spanX, h = c.tile * c.spanY, step = c.tile + c.margin;
+  cv.width = w; cv.height = h;
+  g.clearRect(0, 0, w, h);
+  g.drawImage(imgs[c.sheet], c.col * step, c.row * step, w, h, 0, 0, w, h);
+  const d = g.getImageData(0, 0, w, h).data;
+  const on = (x, y) => d[(y * w + x) * 4 + 3] > 0;
+  let top = 0, bot = 0, lf = 0, rt = 0;
+  for (let x = 0; x < w; x++) { if (on(x, 0)) top++; if (on(x, h - 1)) bot++; }
+  for (let y = 0; y < h; y++) { if (on(0, y)) lf++; if (on(w - 1, y)) rt++; }
+  rows.push({ ...c, w, h, step, top: top / w, bot: bot / w, lf: lf / h, rt: rt / h });
+}
+rows.sort((a, b) => b.top - a.top);
+const K = 4;
+document.querySelector("tbody").innerHTML = rows.map((r) => {
+  const cls = r.top >= 0.5 ? "bad" : r.top >= 0.2 ? "warn" : "";
+  const px = (n) => n.toFixed(2);
+  return `<tr class="${cls}">
+  <td><div class="s" style="width:${r.w * K}px;height:${r.h * K}px;
+    background-image:url(/src/assets/sheets/${r.sheet}.png);
+    background-position:${-r.col * r.step * K}px ${-r.row * r.step * K}px;
+    background-size:auto;
+    background-size:${imgs[r.sheet].naturalWidth * K}px ${imgs[r.sheet].naturalHeight * K}px"></div></td>
+  <td>${r.name}</td><td class="cell">${r.scene} · ${r.id}</td>
+  <td class="cell">${r.sheet} ${r.col},${r.row}</td>
+  <td class="n">${px(r.top)}</td><td class="n">${px(r.lf)}</td>
+  <td class="n">${px(r.rt)}</td><td class="n">${px(r.bot)}</td>
+</tr>`;
+}).join("");
+</script>

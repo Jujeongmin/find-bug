@@ -98,7 +98,9 @@ export const stage05Scene: SceneSpec = {
       behaviors: [{ t: "damage" as const, counter: "hp", amount: 1, radius: 26 }],
     })),
 
-    /* the two that move, so the field is never safe to cross on memory alone */
+    /* the two that move, so the field is never safe to cross on memory alone.
+       Not the sheet's mushroom creature, tempting as it was: its cap is drawn
+       past the top of its tile and comes out sliced. */
     {
       id: "bug1",
       nameKey: "object.bug1",
@@ -107,7 +109,7 @@ export const stage05Scene: SceneSpec = {
       y: 318,
       peerGroup: "critter",
       render: {
-        sprite: { sheet: "dungeon" as const, col: 2, row: 9, scale: 1.9 },
+        sprite: { sheet: "platchars" as const, col: 4, row: 1, scale: 2.1 },
         shadow: { offsetX: 8, width: 22 },
       },
       behaviors: [
@@ -124,7 +126,7 @@ export const stage05Scene: SceneSpec = {
       y: 512,
       peerGroup: "critter",
       render: {
-        sprite: { sheet: "dungeon" as const, col: 2, row: 9, scale: 1.9 },
+        sprite: { sheet: "platchars" as const, col: 4, row: 1, scale: 2.1 },
         shadow: { offsetX: 8, width: 22 },
       },
       behaviors: [
