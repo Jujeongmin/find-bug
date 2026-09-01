@@ -148,8 +148,14 @@ const clock = (m: number) =>
  */
 const MAX_CONDITION = 3;
 const CONDITION_START_COST = 20;
-/** finishing after this costs a point of condition */
-const LATE_FINISH = 16 * 60 + 30;
+/**
+ * Nine to six is the job. Leaving at any point up to six costs nothing —
+ * there used to be a threshold at half four, which read as the game telling
+ * the player to knock off an hour and a half early every day.
+ *
+ * What tires you out is staying past six, which is the only thing overtime
+ * is for. The good chair is what makes that hour bearable.
+ */
 
 /** what a coffee on the way in costs, and what it is worth */
 const COFFEE_MINUTES = 15;
@@ -181,8 +187,6 @@ const CATALOGUE: {
   { id: "alarm", cost: 100, where: "home" },
 ];
 
-/** the good chair buys this much slack before a late finish costs anything */
-const CHAIR_GRACE = 60;
 /** the alarm clock starts the day this much earlier */
 const ALARM_MINUTES = 30;
 
@@ -408,9 +412,11 @@ export function Office({ onExit }: { onExit: () => void }) {
     // a defect the developer never heard about does not get fixed
     setLate((v) => [...v, ...pending.map((a) => a.severity)]);
     setPending([]);
-    // a long day costs a night of sleep, whether or not it was productive
-    const lateFrom = LATE_FINISH + (owned.includes("chair") ? CHAIR_GRACE : 0);
-    if (minutes >= lateFrom) setCondition((c) => Math.max(0, c - 1));
+    // staying past six is what costs a night of sleep, and a good chair is
+    // what stops it costing one
+    if (minutes > DAY_END && !owned.includes("chair")) {
+      setCondition((c) => Math.max(0, c - 1));
+    }
     sfx.play("click");
     setRunning(null);
     setNote(null);
