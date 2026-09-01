@@ -694,6 +694,25 @@
   margin-left: 0;
   letter-spacing: 1px;
 }
+/* Anything in the bar that answers a question when pressed.
+   It has to look pressable without becoming a button in a row of readouts, so
+   it keeps the bar's own type and takes a dotted underline instead. */
+.hud-ask {
+  background: none;
+  border: 0;
+  padding: 0 2px;
+  font: inherit;
+  color: inherit;
+  cursor: help;
+  border-bottom: 1px dotted currentColor;
+}
+.hud-ask:hover,
+.hud-ask:focus-visible {
+  border-bottom-style: solid;
+}
+.office-queue b.hud-ask {
+  border-bottom: 0;
+}
 
 /* ---- the walk to work ---- */
 /* A walk to work, not a carriageway. The player used to trudge up the centre

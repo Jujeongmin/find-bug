@@ -434,7 +434,7 @@
   "bugdesc.noRespawn": "{obj}: once taken it never grew back, while the others of its kind did.",
   "bugdesc.noDamage": "{obj}: touching it did no harm at all, while the others of its kind hurt.",
   "hint.keysAttack": "Arrow keys to move · button to attack",
-  "home.morningFirst": "Two weeks to ship, and three builds queued for today. Time to get in.",
+  "home.morningFirst": "Two weeks to ship, and three builds waiting. A, B and C along the top are those three — the more pips, the worse it is if one gets out. The eye is how many you have left in you today. Time to go.",
   "home.morning": "Day {n}. Today’s builds are waiting. Time to get in.",
   "home.tooEarly": "It is still morning. Lie down now and today’s builds go out as they are.",
   "home.morningHeader": "Day {n}, morning",
@@ -484,5 +484,8 @@
   "office.tooTired": "Your eyes have gone. Nothing lands on the screen in this state — coffee, or the door.",
   "result.fail.bodyFinal": "Report rejected. This build ships as it is.",
   "result.retryFinal": "Back to the office",
-  "home.nothingOwed": "Nothing was overdrawn today. Bed will do."
+  "home.nothingOwed": "Nothing was overdrawn today. Bed will do.",
+  "office.whatCondition": "{n} builds left in you today. One goes on each build you sign off, and a night gives them all back.",
+  "office.whatChip": "{machine} — {sev}. The more pips, the further the rating falls if it ships unlooked-at.",
+  "office.whatChipDone": "{machine} — {sev}. This one has been looked at."
 }

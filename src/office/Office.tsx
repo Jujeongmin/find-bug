@@ -904,12 +904,23 @@ export function Office({ onExit }: { onExit: () => void }) {
             </button>
             <span className="wb-build">{tp("office.day", { n: String(day) })}</span>
             <span className="office-clock">{clock(minutes)}</span>
-            {/* the one number the day is actually rationed by, and it was
-                only ever drawn at home — where none of it gets spent */}
-            <span className="office-condition" title={t("home.condition")}>
-              {"●".repeat(condition)}
+            {/*
+              The one number the day is actually rationed by. It was drawn only
+              at home, where none of it gets spent — and then, once it was up
+              here, three dots with nothing to say what they counted. Both this
+              and the queue answer when pressed, because a phone has no tooltip
+              and the bar has no room for a legend.
+            */}
+            <button
+              type="button"
+              className="office-condition hud-ask"
+              onClick={() =>
+                setNote(tp("office.whatCondition", { n: String(condition) }))
+              }
+            >
+              👁{"●".repeat(condition)}
               {"○".repeat(MAX_CONDITION - condition)}
-            </span>
+            </button>
             <span className="wb-deadline">
               {tp("office.shipIn", { n: String(DAYS - day) })}
             </span>
@@ -918,8 +929,16 @@ export function Office({ onExit }: { onExit: () => void }) {
               {assignments.map((a) => (
                 <b
                   key={a.machine}
-                  className={`q-${a.severity} ${a.result ? "done" : ""}`}
+                  className={`q-${a.severity} ${a.result ? "done" : ""} hud-ask`}
                   title={`${t(`object.${a.machine}`)} · ${t(`office.sev.${a.severity}`)}`}
+                  onClick={() =>
+                    setNote(
+                      tp(a.result ? "office.whatChipDone" : "office.whatChip", {
+                        machine: t(`object.${a.machine}`),
+                        sev: t(`office.sev.${a.severity}`),
+                      })
+                    )
+                  }
                 >
                   {a.machine.slice(-1)}
                   {/* how bad this one would be, in pips. The colour said it

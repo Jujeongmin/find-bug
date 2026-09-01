@@ -434,7 +434,7 @@
   "bugdesc.noRespawn": "{obj}: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
   "bugdesc.noDamage": "{obj}: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
   "hint.keysAttack": "방향키로 이동 · 공격 버튼으로 공격",
-  "home.morningFirst": "출시까지 2주. 오늘 검증할 빌드가 세 개 쌓여 있다. 출근해야지.",
+  "home.morningFirst": "출시까지 2주. 오늘 검증할 빌드가 세 개 쌓여 있다. 위쪽 A·B·C가 그 세 개고, 점이 많을수록 그냥 나가면 큰일 난다. 👁는 오늘 볼 수 있는 횟수다. 출근해야지.",
   "home.morning": "{n}일차. 오늘 몫의 빌드가 기다린다. 출근해야지.",
   "home.tooEarly": "아직 아침이다. 지금 누우면 오늘 빌드는 그대로 나간다.",
   "home.morningHeader": "{n}일차 아침",
@@ -484,5 +484,8 @@
   "office.tooTired": "눈이 시리다. 이 상태로는 화면에 뭘 띄워도 안 들어온다. 커피라도 마시든가, 집에 가든가.",
   "result.fail.bodyFinal": "보고 기각. 이 빌드는 이대로 나간다.",
   "result.retryFinal": "사무실로",
-  "home.nothingOwed": "오늘은 딱히 무리한 게 없다. 그냥 자도 된다."
+  "home.nothingOwed": "오늘은 딱히 무리한 게 없다. 그냥 자도 된다.",
+  "office.whatCondition": "오늘 남은 검수 횟수 {n}번. 빌드를 하나 볼 때마다 하나 줄고, 자고 나면 다 돌아온다.",
+  "office.whatChip": "{machine} — 심각도 {sev}. 점이 많을수록 그냥 나갔을 때 출시 등급이 크게 깎인다.",
+  "office.whatChipDone": "{machine} — 심각도 {sev}. 이건 이미 봤다."
 }
