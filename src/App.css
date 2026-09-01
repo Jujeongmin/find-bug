@@ -503,6 +503,47 @@
    Drawing the lit screen there would mean it faces the room, not them. */
 
 
+/* A chair seen from behind, drawn rather than found: no pack in here has one,
+   and the one that comes closest reads as a ladder. What faces us at a desk
+   against the wall is the back of the chair, so that is the piece with the
+   detail — a panel with a rail across it, the seat edge below, two legs. */
+.office-chair-back {
+  background:
+    linear-gradient(#6b4526, #4a3320) 4px 22px / 3px 8px no-repeat,
+    linear-gradient(#6b4526, #4a3320) 15px 22px / 3px 8px no-repeat;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+/* the seat, seen edge on and mostly behind the back */
+.office-chair-back::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 13px;
+  width: 22px;
+  height: 10px;
+  box-sizing: border-box;
+  background: linear-gradient(#c98d55, #a06c3c);
+  border: 2px solid #4a3320;
+  border-radius: 3px;
+}
+/* the back itself, which is the whole point of the piece */
+.office-chair-back::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0;
+  width: 18px;
+  height: 17px;
+  box-sizing: border-box;
+  background:
+    linear-gradient(#8a5c33, #6b4526) 0 6px / 100% 4px no-repeat,
+    linear-gradient(#b5763f, #9a6234);
+  border: 2px solid #4a3320;
+  border-radius: 4px 4px 2px 2px;
+}
+
 .office-crt-back {
   background:
     repeating-linear-gradient(

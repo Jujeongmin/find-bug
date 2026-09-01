@@ -18,8 +18,10 @@ const WALL_H = 110;
  * into the screen rather than away from it.
  */
 const DESKS = [52, 170, 288];
-const SCREEN_DX = -24;
-const SEAT_DX = 34;
+/** the screen stands in the middle of the slab */
+const SCREEN_DX = -15;
+/** the seat is tucked in at the front of the desk, its back to us */
+const SEAT_DY = 2;
 /** the desk slab ends this far above the desk's foot; the screen stands on it */
 const SLAB = 16;
 
@@ -126,14 +128,27 @@ export const officeScene: SceneSpec = {
       render: { prop: { id: "desk" as const, scale: 1.4 } },
       behaviors: [],
     })),
-    /* the seat, pulled up on the right of the desk and facing the screen */
+    /*
+     * The seats, pushed in at the front of each desk.
+     *
+ * Drawn for this, because no sheet in here has one: what faces the camera
+     * at a desk against the wall is the back of the chair. The backrest laps
+     * over the desk edge, the seat and legs stand below it.
+     *
+     * The front view puts the backrest between the seat and the desk, sitting
+     * the worker down looking away from the screen. The one chair drawn from
+     * behind in any pack here, roguelike (38,8), reads as a ladder at this size
+     * — posts and rungs are all it has to show.
+     */
     ...DESKS.map((x, i) => ({
       id: `chair${i}`,
       nameKey: "object.chair",
       kind: "decor" as const,
-      x: x + SEAT_DX,
-      y: WALL_H + 18,
-      render: { prop: { id: "chairSide" as const, scale: 1.4 } },
+      // a bar, so it is anchored top-left: x is shifted half its width to
+      // centre it on the desk
+      x: x - 11,
+      y: WALL_H + SEAT_DY,
+      render: { className: "office-chair-back", bar: { width: 22, height: 30 } },
       behaviors: [],
     })),
 
@@ -167,10 +182,10 @@ export const officeScene: SceneSpec = {
       id: "dev",
       nameKey: "object.dev",
       kind: "sprite",
-      x: DEV_X + SEAT_DX,
-      y: DEV_Y - 8,
+      x: DEV_X,
+      y: DEV_Y + 20,
       z: 1,
-      facing: "left",
+      facing: "up",
       render: { actor: actor("worker2") },
       behaviors: [
         { t: "blocker", radius: 22 },
