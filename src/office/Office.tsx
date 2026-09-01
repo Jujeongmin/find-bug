@@ -31,6 +31,18 @@ const MINUTES_PER_SECOND = 2;
 const IDLE_LINES = 5;
 
 /**
+ * ?place=office (or home, street) opens the day in that room.
+ *
+ * Dev only, and it exists because looking at the office meant walking there
+ * from bed every time — three minutes of held arrow keys to check whether a
+ * chair had moved four pixels.
+ */
+const START_PLACE = (() => {
+  const asked = new URLSearchParams(location.search).get("place");
+  return asked === "office" || asked === "street" ? asked : "home";
+})();
+
+/**
  * Sky through the window, from morning to the end of the day. The header
  * clock is a number; this is the same fact you can feel without reading.
  */
@@ -171,7 +183,7 @@ export function Office({ onExit }: { onExit: () => void }) {
    * The day opens at home, so leaving for work is something the player does
    * rather than something that has already happened when they arrive.
    */
-  const [place, setPlace] = useState<"office" | "home" | "street">("home");
+  const [place, setPlace] = useState<"office" | "home" | "street">(START_PLACE);
   /** true once the day has been signed off, which is what makes the bed work */
   const [dayOver, setDayOver] = useState(false);
   /** one coffee per commute */

@@ -94,8 +94,11 @@ export const officeScene: SceneSpec = {
       id: m.id,
       nameKey: `object.${m.id}`,
       kind: "sprite" as const,
-      x: m.x - 27,
-      y: WALL_H - 22,
+      // the desk slab runs from y 81 to about 105 and its legs below that, so
+      // the screen sits with its foot on 105 — any lower and it reads as a set
+      // pushed off the desk onto the floor beside it
+      x: m.x - 24,
+      y: WALL_H - 31,
       z: 2,
       render: { className: "office-crt", bar: { width: 30, height: 26 } },
       behaviors: [
@@ -117,8 +120,8 @@ export const officeScene: SceneSpec = {
       id: `chair${i}`,
       nameKey: "object.chair",
       kind: "decor" as const,
-      x: x + 30,
-      y: WALL_H + 30,
+      x: x + 34,
+      y: WALL_H + 18,
       render: { prop: { id: "chairSide" as const, scale: 1.4 } },
       behaviors: [],
     })),
