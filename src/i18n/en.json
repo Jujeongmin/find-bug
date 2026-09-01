@@ -433,5 +433,9 @@
   "bugdesc.noPickup": "{obj}: walking over it picked up nothing, while the others of its kind worked.",
   "bugdesc.noRespawn": "{obj}: once taken it never grew back, while the others of its kind did.",
   "bugdesc.noDamage": "{obj}: touching it did no harm at all, while the others of its kind hurt.",
-  "hint.keysAttack": "Arrow keys to move · button to attack"
+  "hint.keysAttack": "Arrow keys to move · button to attack",
+  "office.giveUp": "Give up on this build?",
+  "office.giveUpBody": "Leaving now signs it off unverified, and its defect ships.",
+  "office.giveUpYes": "Give up",
+  "office.giveUpNo": "Keep looking"
 }

@@ -54,6 +54,13 @@ interface Props {
    * runs those instead, which is how the repro lab makes a defect fire only
    * under its trigger conditions; returning null falls through to normal play.
    */
+  /**
+   * What a wrong report means. The stage grid lets the player try again with a
+   * fresh defect, which is right for practice. A build on the office floor is
+   * told "보고는 빌드당 한 번뿐이다" in its own briefing, so it passes this and
+   * the report stands.
+   */
+  onFail?: () => void;
   /** fired when the player activates a station they are standing next to */
   onStation?: (objectId: string) => void;
   onAction?: (
@@ -83,6 +90,7 @@ export function EngineStage({
   mode = "judge",
   onObserve,
   onAction,
+  onFail,
   onStation,
   canZoom = false,
   header,
@@ -318,14 +326,26 @@ export function EngineStage({
   };
 
   /**
-   * Start a fresh round with a different bug. Used by a failed report, by
-   * dying, and by the playtest re-roll — in every case the answer stays hidden.
+   * Start a fresh round with a different bug. Used by a failed report in the
+   * stage grid and by the playtest re-roll; the answer stays hidden either way.
    */
   const nextRound = () => {
     if (!mutation) return;
     const next = pickMutation(mutations, mutation.bug.id);
     setMutation(next);
     runtimeRef.current.reset(applyMutation(scene, next));
+    setPickedObject(null);
+    setPhase("play");
+  };
+
+  /**
+   * Run the same build again from the top. Dying is not a wrong answer — the
+   * defect under test is still the one that was planted — so the fault stays
+   * put and only the run restarts.
+   */
+  const restartRound = () => {
+    if (!mutation) return;
+    runtimeRef.current.reset(applyMutation(scene, mutation));
     setPickedObject(null);
     setPhase("play");
   };
@@ -898,7 +918,7 @@ export function EngineStage({
               <button className="btn-ghost" onClick={onExit}>
                 {t("game.exit")}
               </button>
-              <button data-space className="btn-primary" onClick={nextRound}>
+              <button data-space className="btn-primary" onClick={restartRound}>
                 {t("result.dead.retry")}
               </button>
             </div>
@@ -931,7 +951,7 @@ export function EngineStage({
                 })
               : null
           }
-          onRetry={nextRound}
+          onRetry={onFail ?? nextRound}
           onDone={onClear}
         />
       )}

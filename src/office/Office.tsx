@@ -170,6 +170,8 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [pay, setPay] = useState(0);
   const [owned, setOwned] = useState<ItemId[]>([]);
   const [shop, setShop] = useState<null | "office" | "home">(null);
+  /** the back arrow inside a build, which gives the build up */
+  const [leaving, setLeaving] = useState(false);
 
   // one clock for the whole day, ticking through the office and the builds
   // alike; goHomeRef keeps the timer from closing over a stale day
@@ -235,7 +237,12 @@ export function Office({ onExit }: { onExit: () => void }) {
         (owned.includes("alarm") ? ALARM_MINUTES : 0)
     );
     setRestedTonight(false);
-    setPlace("office");
+    setHadCoffee(false);
+    // out the front door, not straight to your desk: the walk in is where the
+    // coffee is, and the fifteen minutes it costs is the morning's one real
+    // decision. Waking up already at the office skipped it every day after the
+    // first, which left the commute and the machine on it as scenery.
+    setPlace("street");
     setNote(null);
   };
   goHomeRef.current = goHome;
@@ -379,6 +386,7 @@ export function Office({ onExit }: { onExit: () => void }) {
   if (running) {
     const scene = scenesById[running.sceneId];
     return (
+      <>
       <EngineStage
         key={`${day}-${running.machine}`}
         scene={scene}
@@ -386,8 +394,39 @@ export function Office({ onExit }: { onExit: () => void }) {
         title={`${tp("office.buildTitle", { machine: t(`object.${running.machine}`) })} · ${clock(minutes)}`}
         canZoom={owned.includes("magnifier")}
         onClear={() => finish("caught")}
-        onExit={() => finish("missed")}
+        // a wrong report stands, exactly as the briefing says it will
+        onFail={() => finish("missed")}
+        // the arrow used to sign the build off as missed on one silent click,
+        // which is the same gesture that means "go back" everywhere else
+        onExit={() => setLeaving(true)}
       />
+      {leaving && (
+        <div className="modal-backdrop" onClick={() => setLeaving(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h2>{t("office.giveUp")}</h2>
+            <p>{t("office.giveUpBody")}</p>
+            <div className="modal-actions">
+              <button
+                className="btn-ghost"
+                onClick={() => {
+                  setLeaving(false);
+                  finish("missed");
+                }}
+              >
+                {t("office.giveUpYes")}
+              </button>
+              <button
+                data-space
+                className="btn-primary"
+                onClick={() => setLeaving(false)}
+              >
+                {t("office.giveUpNo")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      </>
     );
   }
 
