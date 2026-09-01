@@ -41,7 +41,7 @@
   "result.fail.title": "False positive",
   "result.fail.body": "Report rejected. Rebuilding — a different defect will hide this time.",
   "result.retry": "Rebuild",
-  "result.next": "Next build",
+  "result.next": "Back to the floor",
   "object.player": "Player",
   "object.slimeA": "Jelly monster A",
   "object.slimeB": "Jelly monster B",

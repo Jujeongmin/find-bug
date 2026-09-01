@@ -41,7 +41,7 @@
   "result.fail.title": "오탐이다",
   "result.fail.body": "보고 기각. 빌드를 다시 돌린다 — 이번엔 다른 결함이 숨는다.",
   "result.retry": "빌드 재실행",
-  "result.next": "다음 빌드",
+  "result.next": "사무실로 돌아가기",
   "object.player": "플레이어",
   "object.slimeA": "젤리 몬스터 A",
   "object.slimeB": "젤리 몬스터 B",

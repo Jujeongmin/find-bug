@@ -40,6 +40,9 @@ const PASSER_LINES = 6;
  * from bed every time — three minutes of held arrow keys to check whether a
  * chair had moved four pixels.
  */
+/** ?playtest=1 reveals the planted defect inside a build, as it does elsewhere */
+const PLAYTEST = new URLSearchParams(location.search).has("playtest");
+
 const START_PLACE = (() => {
   const asked = new URLSearchParams(location.search).get("place");
   return asked === "office" || asked === "street" ? asked : "home";
@@ -504,6 +507,7 @@ export function Office({ onExit }: { onExit: () => void }) {
         stageNo={day}
         title={`${tp("office.buildTitle", { machine: t(`object.${running.machine}`) })} · ${clock(minutes)}`}
         canZoom={owned.includes("magnifier")}
+        playtest={PLAYTEST}
         bugId={running.bugId}
         onBugPicked={(id) =>
           setAssignments((as) =>
