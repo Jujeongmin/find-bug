@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { useI18n } from "../i18n";
 import { EngineStage } from "../engine/EngineStage";
+import type { SceneSpec } from "../engine/types";
 import { officeScene, MACHINES, type MachineId } from "./scene";
 import { homeScene } from "../home/scene";
 import { streetScene } from "../street/scene";
@@ -69,6 +70,20 @@ function skyAt(minutes: number) {
   const b = SKY[i + 1];
   const t = Math.max(0, Math.min(1, (minutes - a.at) / (b.at - a.at)));
   return { top: mix(a.top, b.top, t), bottom: mix(a.bottom, b.bottom, t) };
+}
+
+/**
+ * How lit the street lamps are: nothing in daylight, full once the light has
+ * gone. They used to burn at nine in the morning.
+ */
+const lampAt = (m: number) => Math.max(0, Math.min(1, (m - 16 * 60) / 120));
+
+/** the same scene with the player put somewhere else to start */
+function withPlayerAt(scene: SceneSpec, x: number, y: number): SceneSpec {
+  return {
+    ...scene,
+    objects: scene.objects.map((o) => (o.id === "player" ? { ...o, x, y } : o)),
+  };
 }
 
 const clock = (m: number) =>
@@ -202,7 +217,7 @@ export function Office({ onExit }: { onExit: () => void }) {
   // alike; goHomeRef keeps the timer from closing over a stale day
   const goHomeRef = useRef<() => void>(() => {});
   useEffect(() => {
-    if (shipped || place === "home") return;
+    if (shipped || dayOver || place === "home") return;
     const id = setInterval(() => {
       setMinutes((m) => {
         if (m >= DAY_END) return m;
@@ -216,7 +231,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     // again, so the clock ran on whatever the game had opened with. Starting the
     // day at home turned that from "time passes while you sleep" into "time
     // never passes at all".
-  }, [shipped, place]);
+  }, [shipped, place, dayOver]);
 
   /**
    * The office floor, with the player put back where they were standing.
@@ -224,16 +239,22 @@ export function Office({ onExit }: { onExit: () => void }) {
    * the middle of the room, so a second look cost the whole walk again.
    */
   const officeHere = useMemo(
-    () =>
-      officeAt
-        ? {
-            ...officeScene,
-            objects: officeScene.objects.map((o) =>
-              o.id === "player" ? { ...o, x: officeAt.x, y: officeAt.y } : o
-            ),
-          }
-        : officeScene,
+    () => (officeAt ? withPlayerAt(officeScene, officeAt.x, officeAt.y) : officeScene),
     [officeAt]
+  );
+
+  /**
+   * You arrive where you came in. Waking up puts you beside the bed; coming
+   * back from the street puts you inside your own front door, and the street
+   * puts you at whichever end you stepped out of.
+   */
+  const homeHere = useMemo(
+    () => withPlayerAt(homeScene, dayOver ? 272 : 132, dayOver ? 545 : 258),
+    [dayOver]
+  );
+  const streetHere = useMemo(
+    () => withPlayerAt(streetScene, 180, dayOver ? 250 : 540),
+    [dayOver]
   );
 
   const morningLine = () =>
@@ -262,7 +283,12 @@ export function Office({ onExit }: { onExit: () => void }) {
     setRunning(null);
   };
 
-  const goHome = () => {
+  /**
+   * Knocking off. Everything the day was going to cost is settled here — the
+   * office is shut behind you — and then you are on the pavement outside it,
+   * because the way home is the way you came.
+   */
+  const clockOff = () => {
     // anything still unverified ships as-is
     const unseen = assignments.filter((a) => a.result === null);
     setMissed((n) => n + unseen.length);
@@ -279,7 +305,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     // tomorrow starts at the door, not at yesterday's desk
     setOfficeAt(null);
     setDayOver(true);
-    setPlace("home");
+    setPlace("street");
   };
 
   /** the bed, and the only way into tomorrow */
@@ -305,7 +331,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     // morning, by walking out of their own front door
     setNote(tp("home.morning", { n: String(day + 1) }));
   };
-  goHomeRef.current = goHome;
+  goHomeRef.current = clockOff;
 
   /**
    * What the developer says, most pressing first. Reacting to the build you
@@ -331,12 +357,20 @@ export function Office({ onExit }: { onExit: () => void }) {
 
   const onStreetStation = (id: string) => {
     if (id === "officeDoor") {
+      if (dayOver) return setNote(t("street.shut"));
       sfx.play("click");
       setPlace("office");
       setNote(null);
       return;
     }
+    if (id === "homeDoor") {
+      sfx.play("click");
+      setNote(null);
+      setPlace("home");
+      return;
+    }
     if (id === "coffee") {
+      if (dayOver) return setNote(t("street.shut"));
       if (hadCoffee) return setNote(t("street.hadCoffee"));
       setHadCoffee(true);
       setCondition((c) => Math.min(MAX_CONDITION, c + 1));
@@ -383,7 +417,7 @@ export function Office({ onExit }: { onExit: () => void }) {
 
   const onStation = (id: string) => {
     if (id === "exitDoor") {
-      goHome();
+      clockOff();
       return;
     }
     if (id === "supplyForm") {
@@ -488,6 +522,7 @@ export function Office({ onExit }: { onExit: () => void }) {
       className="wb-root"
       style={
         {
+          "--lamp": String(lampAt(minutes)),
           "--sky-top": sky.top,
           "--sky-bottom": sky.bottom,
         } as CSSProperties
@@ -496,7 +531,7 @@ export function Office({ onExit }: { onExit: () => void }) {
       {place === "street" ? (
         <EngineStage
           key={`street-${day}`}
-          scene={streetScene}
+          scene={streetHere}
           mode="play"
           header={
             <div className="wb-header">
@@ -518,7 +553,7 @@ export function Office({ onExit }: { onExit: () => void }) {
       ) : place === "home" ? (
         <EngineStage
           key={`home-${day}`}
-          scene={homeScene}
+          scene={homeHere}
           mode="play"
           header={
             <div className="wb-header">

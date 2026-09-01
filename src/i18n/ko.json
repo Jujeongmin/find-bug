@@ -437,5 +437,8 @@
   "home.morningFirst": "출시까지 10일. 오늘 검증할 빌드가 세 개 쌓여 있다. 출근해야지.",
   "home.morning": "{n}일차. 오늘 몫의 빌드가 기다린다. 출근해야지.",
   "home.tooEarly": "아직 아침이다. 지금 누우면 오늘 빌드는 그대로 나간다.",
-  "home.morningHeader": "{n}일차 아침"
+  "home.morningHeader": "{n}일차 아침",
+  "street.home": "집으로 들어가기",
+  "object.frontDoor": "집 현관",
+  "street.shut": "오늘 일은 끝났다. 집으로 가자."
 }

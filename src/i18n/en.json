@@ -437,5 +437,8 @@
   "home.morningFirst": "Ten days to ship, and three builds queued for today. Time to get in.",
   "home.morning": "Day {n}. Today’s builds are waiting. Time to get in.",
   "home.tooEarly": "It is still morning. Lie down now and today’s builds go out as they are.",
-  "home.morningHeader": "Day {n}, morning"
+  "home.morningHeader": "Day {n}, morning",
+  "street.home": "Go inside",
+  "object.frontDoor": "Front door",
+  "street.shut": "The day is done. Go home."
 }

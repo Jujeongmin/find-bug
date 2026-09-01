@@ -37,10 +37,10 @@ export const streetScene: SceneSpec = {
       nameKey: "object.player",
       kind: "player",
       x: 180,
-      y: 600,
+      y: 540,
       z: 3,
       render: { actor: actor() },
-      behaviors: [{ t: "playerTopDown", speed: 115, minY: 190, maxY: 616 }],
+      behaviors: [{ t: "playerTopDown", speed: 115, minY: 186, maxY: 566 }],
     },
 
     /* the office block across the top, with the way in */
@@ -78,8 +78,8 @@ export const streetScene: SceneSpec = {
       id: "coffee",
       nameKey: "object.coffeeStand",
       kind: "sprite",
-      x: 44,
-      y: 330,
+      x: 6,
+      y: 300,
       z: 1,
       render: {
         className: "street-vending",
@@ -92,13 +92,34 @@ export const streetScene: SceneSpec = {
       ],
     },
 
+    /* home at the other end, so the street runs between two doors */
+    {
+      id: "homeBlock",
+      nameKey: "object.block",
+      kind: "decor",
+      x: 0,
+      y: 578,
+      render: { className: "street-home", bar: { width: 360, height: 62 } },
+      behaviors: [],
+    },
+    {
+      id: "homeDoor",
+      nameKey: "object.frontDoor",
+      kind: "sprite",
+      x: 180,
+      y: 600,
+      z: 1,
+      render: { prop: { id: "door", scale: 1.6 } },
+      behaviors: [{ t: "station", radius: 58, labelKey: "street.home" }],
+    },
+
     /* street furniture, so the walk has something in it */
-    ...[110, 250].map((x, i) => ({
+    ...[24, 326].map((x, i) => ({
       id: `lamp${i}`,
       nameKey: "object.lamp",
       kind: "decor" as const,
       x,
-      y: 260 + i * 150,
+      y: i === 0 ? 470 : 300,
       render: {
         className: "street-lamp",
         bar: { width: 8, height: 46 },
@@ -110,8 +131,8 @@ export const streetScene: SceneSpec = {
       id: "crateStreet",
       nameKey: "object.crate",
       kind: "decor",
-      x: 306,
-      y: 470,
+      x: 332,
+      y: 440,
       render: { prop: { id: "crate", scale: 1.3 } },
       behaviors: [{ t: "blocker", radius: 18 }],
     },
@@ -119,8 +140,8 @@ export const streetScene: SceneSpec = {
       id: "barrelStreet",
       nameKey: "object.barrel",
       kind: "decor",
-      x: 306,
-      y: 516,
+      x: 332,
+      y: 486,
       render: { prop: { id: "barrel", scale: 1.3 } },
       behaviors: [{ t: "blocker", radius: 18 }],
     },

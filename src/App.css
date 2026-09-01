@@ -645,22 +645,31 @@
 }
 
 /* ---- the walk to work ---- */
+/* A street between two buildings: the office at the top, home at the bottom,
+   pavement down both sides and along each frontage, road in the middle. The
+   player used to walk up the centre line of a carriageway. */
 .street-ground {
   background:
-    /* pavement edge under the building */
-    linear-gradient(#9a948a 150px 196px, transparent 196px),
-    /* road markings down the middle */
+    linear-gradient(#9a948a, #8e887e) 0 150px / 100% 46px no-repeat,
+    linear-gradient(#9a948a, #8e887e) 0 546px / 100% 32px no-repeat,
+    linear-gradient(#9a948a, #8e887e) 0 196px / 56px 350px no-repeat,
+    linear-gradient(#9a948a, #8e887e) 304px 196px / 56px 350px no-repeat,
     repeating-linear-gradient(
       180deg,
       transparent 0 26px,
       rgba(255, 240, 190, 0.5) 26px 52px
-    ) 176px 196px / 8px 78px no-repeat,
-    repeating-linear-gradient(
-      180deg,
-      transparent 0 26px,
-      rgba(255, 240, 190, 0.5) 26px 52px
-    ) 176px 274px / 8px 340px no-repeat,
-    linear-gradient(#4a4740 196px, #3f3d37 196px);
+    ) 176px 196px / 8px 350px no-repeat,
+    linear-gradient(#4a4740, #3f3d37);
+}
+/* the house at the bottom of the street, and the door home in it */
+.street-home {
+  background:
+    url("./assets/props/tile1.png") 0 0 / 48px 48px repeat,
+    linear-gradient(#5d4436, #452f25);
+  border: none;
+  border-radius: 0;
+  border-top: 5px solid #2a1f19;
+  image-rendering: pixelated;
 }
 .street-block {
   background:
@@ -675,6 +684,13 @@
   background: linear-gradient(#6f6a5c, #4a463c);
   border: none;
   border-radius: 2px;
+}
+/* lit by the clock, not always: --lamp runs from 0 in daylight to 1 at dusk */
+.street-lamp .eng-glow {
+  opacity: var(--lamp, 1);
+}
+.street-lamp::before {
+  filter: brightness(calc(0.72 + 0.28 * var(--lamp, 1)));
 }
 .street-lamp::before {
   content: "";
