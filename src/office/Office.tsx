@@ -7,9 +7,11 @@ import { officeScene, MACHINES, type MachineId } from "./scene";
 import { homeScene } from "../home/scene";
 import { streetScene } from "../street/scene";
 import { ENGINE_SCENES } from "../stages/registry";
+import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { shipRating, totalStake, type Severity } from "./rating";
 import { HAS_KEYBOARD } from "../components/useSpaceCloses";
+import { MuteToggle } from "../components/MuteToggle";
 
 /**
  * Days to ship. Five left no room to earn: the three things on sale come to
@@ -160,11 +162,19 @@ interface Assignment {
  */
 const SEVERITIES: Severity[] = ["normal", "low", "critical"];
 
+/**
+ * Every build the game can queue. The card game is not a scene the engine
+ * drives — it is its own component — but it is a build like any other from
+ * the floor, so it belongs in the rotation rather than behind a URL flag.
+ */
+const BUILD_IDS = [...ENGINE_SCENES.map((s) => s.id), "stage04"];
+
 function assignDay(day: number): Assignment[] {
-  const pool = [...ENGINE_SCENES];
   return MACHINES.map((machine, i) => ({
     machine,
-    sceneId: pool[(day * 3 + i) % pool.length].id,
+    // a stride that is coprime with the list, so the day's three slide along
+    // it instead of alternating between the same two sets
+    sceneId: BUILD_IDS[(day * 5 + i) % BUILD_IDS.length],
     severity: SEVERITIES[(i + day) % SEVERITIES.length],
     result: null,
     bugId: null,
@@ -180,7 +190,7 @@ function assignDay(day: number): Assignment[] {
  * arrives whether or not the queue is clear.
  */
 export function Office({ onExit }: { onExit: () => void }) {
-  const { t, tp } = useI18n();
+  const { t, tp, lang, setLang } = useI18n();
   const [day, setDay] = useState(1);
   const [assignments, setAssignments] = useState<Assignment[]>(() => assignDay(1));
   const [running, setRunning] = useState<Assignment | null>(null);
@@ -499,30 +509,56 @@ export function Office({ onExit }: { onExit: () => void }) {
   }
 
   if (running) {
+    /*
+     * What every build is handed, whichever component draws it: it keeps the
+     * defect it was given so walking away and back finds the same one, a wrong
+     * report stands exactly as the briefing says it will, and the arrow means
+     * "step away" rather than "sign this off" — the clock running while you
+     * walk is the only price of a second look.
+     */
+    const build = {
+      key: `${day}-${running.machine}`,
+      title: `${tp("office.buildTitle", { machine: t(`object.${running.machine}`) })} · ${clock(minutes)}`,
+      bugId: running.bugId,
+      onBugPicked: (id: string) =>
+        setAssignments((as) =>
+          as.map((a) =>
+            a.machine === running.machine ? { ...a, bugId: id } : a
+          )
+        ),
+      onClear: () => finish("caught"),
+      onFail: () => finish("missed"),
+      onExit: () => setRunning(null),
+    };
+    if (running.sceneId === "stage04") {
+      return (
+        <Stage04
+          key={build.key}
+          stageNo={day}
+          title={build.title}
+          playtest={PLAYTEST}
+          bugId={build.bugId}
+          onBugPicked={build.onBugPicked}
+          onClear={build.onClear}
+          onFail={build.onFail}
+          onExit={build.onExit}
+        />
+      );
+    }
     const scene = scenesById[running.sceneId];
     return (
       <EngineStage
-        key={`${day}-${running.machine}`}
+        key={build.key}
         scene={scene}
         stageNo={day}
-        title={`${tp("office.buildTitle", { machine: t(`object.${running.machine}`) })} · ${clock(minutes)}`}
+        title={build.title}
         canZoom={owned.includes("magnifier")}
         playtest={PLAYTEST}
-        bugId={running.bugId}
-        onBugPicked={(id) =>
-          setAssignments((as) =>
-            as.map((a) =>
-              a.machine === running.machine ? { ...a, bugId: id } : a
-            )
-          )
-        }
-        onClear={() => finish("caught")}
-        // a wrong report stands, exactly as the briefing says it will
-        onFail={() => finish("missed")}
-        // stepping away from a machine is not signing the build off. The build
-        // keeps its defect and the clock keeps running, which is the only
-        // price of walking back and forth.
-        onExit={() => setRunning(null)}
+        bugId={build.bugId}
+        onBugPicked={build.onBugPicked}
+        onClear={build.onClear}
+        onFail={build.onFail}
+        onExit={build.onExit}
       />
     );
   }
@@ -626,6 +662,27 @@ export function Office({ onExit }: { onExit: () => void }) {
         onExit={onExit}
       />
       )}
+
+      {/*
+        * Language and sound. They used to live on the title screen, which no
+        * longer exists — so they sit in the corner of the floor instead,
+        * small enough to ignore and gone while a build is running.
+        */}
+      <div className="floor-controls">
+        <button
+          className={lang === "ko" ? "on" : ""}
+          onClick={() => setLang("ko")}
+        >
+          한국어
+        </button>
+        <button
+          className={lang === "en" ? "on" : ""}
+          onClick={() => setLang("en")}
+        >
+          EN
+        </button>
+        <MuteToggle />
+      </div>
 
       {shop && (
         <div className="modal-backdrop" onClick={() => setShop(null)}>

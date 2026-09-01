@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { BugCategory, BugDef } from "../../core/types";
 import { judge, pickBug } from "../../core/judge";
 import { stage04 } from "./bugs";
@@ -82,6 +82,11 @@ interface Props {
   playtest?: boolean;
   stageNo?: number;
   title?: string;
+  /** the defect this build already has, if it has been opened before */
+  bugId?: string | null;
+  onBugPicked?: (bugId: string) => void;
+  /** what a wrong report means; without it the player gets another go */
+  onFail?: () => void;
 }
 
 export function Stage04({
@@ -90,10 +95,22 @@ export function Stage04({
   playtest = false,
   stageNo,
   title,
+  bugId,
+  onBugPicked,
+  onFail,
 }: Props) {
   const { t } = useI18n();
-  const [phase, setPhase] = useState<Phase>("intro");
-  const [bug, setBug] = useState<BugDef>(() => pickBug(stage04.bugPool));
+  // a build already opened does not read you its briefing again
+  const [phase, setPhase] = useState<Phase>(bugId ? "play" : "intro");
+  const [bug, setBug] = useState<BugDef>(
+    () => stage04.bugPool.find((b) => b.id === bugId) ?? pickBug(stage04.bugPool)
+  );
+  // tell the caller which defect it got, so the same one is waiting on the
+  // machine when the player comes back to it
+  useEffect(() => {
+    if (!bugId) onBugPicked?.(bug.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [pickedObject, setPickedObject] = useState<string | null>(null);
   const [resultSuccess, setResultSuccess] = useState(false);
 
@@ -107,18 +124,19 @@ export function Stage04({
   const bugRef = useRef<BugDef>(bug);
   bugRef.current = bug;
 
-  const bugId = bug.id;
+  /** the planted defect, not the prop that asked for it */
+  const planted = bug.id;
   const picking = phase === "picking";
 
   // E4: the tries counter only counts every other try
-  const shownAttempts = bugId === "E4" ? Math.floor(realAttempts / 2) : realAttempts;
+  const shownAttempts = planted === "E4" ? Math.floor(realAttempts / 2) : realAttempts;
 
   const onCardClick = (idx: number) => {
     if (phase !== "play" || lock || shuffling) return;
     const c = deal.cards[idx];
     if (c.flipped || c.matched) return;
     // E1: one designated card refuses to flip
-    if (bugId === "E1" && idx === deal.bugCardIdx) return;
+    if (planted === "E1" && idx === deal.bugCardIdx) return;
     sfx.play("click");
 
     const next = deal.cards.map((card, i) =>
@@ -140,7 +158,7 @@ export function Stage04({
 
     // E8: the designated pair never passes the match check
     const isMatch =
-      a.emoji === b.emoji && !(bugId === "E8" && a.emoji === deal.bugPairEmoji);
+      a.emoji === b.emoji && !(planted === "E8" && a.emoji === deal.bugPairEmoji);
 
     setTimeout(() => {
       setDeal((d) => {
@@ -174,7 +192,7 @@ export function Stage04({
     setShuffling(true);
     setTimeout(() => setShuffling(false), 600);
     // E5: the shuffle motion plays but the cards never actually move
-    if (bugId === "E5") return;
+    if (planted === "E5") return;
     setDeal((d) => {
       const idxs = d.cards.map((_, i) => i).filter((i) => !d.cards[i].matched);
       const shuffledIdxs = [...idxs];
@@ -234,7 +252,7 @@ export function Stage04({
         : {};
 
   // E6: the pot hovers past the table edge; normally it sits on the floor by the table
-  const potLift = bugId === "E6" ? 34 : 0;
+  const potLift = planted === "E6" ? 34 : 0;
 
   return (
     <div className="stage-frame">
@@ -297,7 +315,7 @@ export function Stage04({
           <div {...pickableProps("curtain", "s4-curtain")} />
           <div {...pickableProps("frame", "s4-frame")}>
             <span
-              className={`s4-picture ${bugId === "E7" ? "upside" : ""}`}
+              className={`s4-picture ${planted === "E7" ? "upside" : ""}`}
               style={spriteStyle({ sheet: "roguelike", col: 28, row: 9, scale: 2 })}
             />
           </div>
@@ -313,7 +331,7 @@ export function Stage04({
           {deal.cards.map((c, i) => {
             const col = i % GRID;
             const row = Math.floor(i / GRID);
-            const vertical = bugId === "E2" && i === deal.bugCardIdx;
+            const vertical = planted === "E2" && i === deal.bugCardIdx;
             return (
               <div
                 key={c.key}
@@ -420,7 +438,7 @@ export function Stage04({
         <ResultModal
           success={resultSuccess}
           bug={resultSuccess ? bug : null}
-          onRetry={onRetry}
+          onRetry={onFail ?? onRetry}
           onDone={onClear}
         />
       )}

@@ -1,5 +1,5 @@
 {
-  "game.title": "Final QA Before Ship",
+  "game.title": "Find bug",
   "game.start": "Start QA",
   "game.exit": "Exit",
   "game.subtitle": "You are the developer. Only the bug pass stands between you and release. Find the one defect in each build and ship it.",
