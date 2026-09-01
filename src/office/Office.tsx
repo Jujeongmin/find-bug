@@ -28,7 +28,14 @@ const DAY_END = 18 * 60;
  * nothing has to be charged for explicitly: crossing the room costs what
  * crossing the room takes, and a build costs what it takes to inspect.
  */
-const MINUTES_PER_SECOND = 2;
+/**
+ * How fast the working day runs. Playing a day through, the walking was
+ * costing more of it than the looking: a commute, three machines and a trip
+ * to the developer left barely any clock for the thing the game is about.
+ * The day is longer and the walk is faster; the pressure is meant to come
+ * from choosing what to inspect, not from the distance between desks.
+ */
+const MINUTES_PER_SECOND = 1.5;
 
 /** things the developer says when there is nothing more pressing */
 const IDLE_LINES = 5;
@@ -117,6 +124,9 @@ const COFFEE_MINUTES = 15;
 
 /** what a confirmed defect is worth once the developer has it */
 const BOUNTY: Record<Severity, number> = { low: 20, normal: 40, critical: 80 };
+
+/** how many pips a severity draws on its machine chip */
+const SEVERITY_PIPS: Record<Severity, number> = { low: 1, normal: 2, critical: 3 };
 
 /**
  * Things you can buy, and where. Each one changes a number the player has
@@ -659,6 +669,11 @@ export function Office({ onExit }: { onExit: () => void }) {
                   title={`${t(`object.${a.machine}`)} · ${t(`office.sev.${a.severity}`)}`}
                 >
                   {a.machine.slice(-1)}
+                  {/* how bad this one would be, in pips. The colour said it
+                      and the tooltip said it, and a phone has no tooltip and
+                      no legend for the colour — so the one decision the day
+                      turns on, which machine to reach first, was unreadable */}
+                  <i>{"·".repeat(SEVERITY_PIPS[a.severity])}</i>
                 </b>
               ))}
               {pending.length > 0 && (

@@ -40,7 +40,7 @@ export const streetScene: SceneSpec = {
       y: 540,
       z: 3,
       render: { actor: actor() },
-      behaviors: [{ t: "playerTopDown", speed: 115, minY: 186, maxY: 566 }],
+      behaviors: [{ t: "playerTopDown", speed: 150, minY: 186, maxY: 566 }],
     },
 
     /* the office block across the top, with the way in */

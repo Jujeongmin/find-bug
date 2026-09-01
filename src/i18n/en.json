@@ -367,7 +367,7 @@
   "office.sev.critical": "Critical",
   "office.pending": "{n} undelivered",
   "office.dev.handoff": "\"{n} filed. They go into the next build.\" (+{pay} won)",
-  "office.dev.waiting": "\"If you have got something, hand it over now. After you clock out I cannot fix it.\"",
+  "office.dev.waiting": "\"Bring them all at once if you like. Just get here before you knock off.\"",
   "office.tallyDetail": "Delivered {delivered} · undelivered {late} · critical shipped {critical}",
   "home.name": "My room",
   "home.intro": "The day is over.",
@@ -452,5 +452,6 @@
   "street.passer4": "Coffee? This is my fourth.",
   "street.passer5": "That building is shipping something this week. Lights on every night.",
   "object.sign": "Sign",
-  "common.alreadyFine": "You are fine as you are. Save it."
+  "common.alreadyFine": "You are fine as you are. Save it.",
+  "goal.stage04": "Turn the cards over and match the pairs"
 }

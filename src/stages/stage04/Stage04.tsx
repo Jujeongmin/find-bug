@@ -414,6 +414,7 @@ export function Stage04({
         <div className="modal-backdrop">
           <div className="modal">
             <h2>🐛 {t("intro.stage04.line")}</h2>
+            <p className="intro-goal">{t("goal.stage04")}</p>
             <p>{t("intro.hint")}</p>
             <p className="once-warning">{t("challenge.once")}</p>
             <div className="modal-actions">

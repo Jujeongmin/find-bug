@@ -630,6 +630,21 @@
 .office-queue b.q-low { background: #7fb3d5; }
 .office-queue b.q-normal { background: #e0c24f; }
 .office-queue b.q-critical { background: #e0574f; color: #fff; }
+/* the pips under the letter: severity you can read in one look, on a phone,
+   without a tooltip and without knowing what the colours mean */
+.office-queue b {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+.office-queue b i {
+  font-style: normal;
+  font-size: 9px;
+  letter-spacing: 1px;
+  margin-top: -1px;
+  opacity: 0.85;
+}
 .office-queue b.done { opacity: 0.28; }
 .q-pending {
   font-style: normal; font-size: 10px; font-weight: 700;

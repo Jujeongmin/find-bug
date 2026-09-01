@@ -367,7 +367,7 @@
   "office.sev.critical": "치명적",
   "office.pending": "미전달 {n}",
   "office.dev.handoff": "\"{n}건 접수. 다음 빌드에 반영할게.\" (+{pay}원)",
-  "office.dev.waiting": "\"뭐 잡은 거 있으면 지금 넘겨. 퇴근하고 나면 못 고쳐.\"",
+  "office.dev.waiting": "\"쌓아뒀다 한 번에 줘도 돼. 퇴근 전까지만 오면 된다.\"",
   "office.tallyDetail": "전달 {delivered} · 미전달 {late} · 치명적 유출 {critical}",
   "home.name": "내 방",
   "home.intro": "하루가 끝났다.",
@@ -452,5 +452,6 @@
   "street.passer4": "커피요? 저 오늘 네 잔째입니다.",
   "street.passer5": "저 건물, 이번 주에 뭐 하나 낸대요. 밤마다 불이 켜져 있더라고요.",
   "object.sign": "간판",
-  "common.alreadyFine": "지금은 멀쩡하다. 아껴두자."
+  "common.alreadyFine": "지금은 멀쩡하다. 아껴두자.",
+  "goal.stage04": "카드를 뒤집어 같은 그림끼리 짝을 맞춰라"
 }

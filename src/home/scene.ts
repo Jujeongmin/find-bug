@@ -43,7 +43,7 @@ export const homeScene: SceneSpec = {
       z: 3,
       render: { actor: actor("worker") },
       behaviors: [
-        { t: "playerTopDown", speed: 115, minY: WALL_H + 26, maxY: 610 },
+        { t: "playerTopDown", speed: 150, minY: WALL_H + 26, maxY: 610 },
       ],
     },
 
