@@ -645,14 +645,6 @@
   background: radial-gradient(circle at 50% 70%, #fff3c4 0 45%, #e0b23f 100%);
   border: 2px solid #4a463c;
 }
-.street-coffee {
-  background:
-    linear-gradient(#c9552f 0 14px, transparent 14px),
-    linear-gradient(#e8dcc0, #c6b696);
-  border: 3px solid #4a3a2c;
-  border-radius: 4px;
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
-}
 
 /* What the build is for, kept on screen instead of only in the modal before
    it. A tester who cannot tell what the game is meant to do cannot tell when
@@ -814,4 +806,33 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
+}
+
+/* The drinks machine on the way in. It was a plain box that only the prompt
+   identified; now the lit window, the cans behind it and the tray at the
+   bottom say what it is before you reach it. */
+.street-vending {
+  background:
+    linear-gradient(#15171d, #23262f) 7px 50px / 34px 9px no-repeat,
+    linear-gradient(#e0574f, #b8353f) 10px 16px / 6px 9px repeat-x,
+    linear-gradient(#f2c14e, #d9a52f) 10px 30px / 6px 9px repeat-x,
+    linear-gradient(#3c4c63, #2a3547) 7px 10px / 26px 30px no-repeat,
+    linear-gradient(#b8353f, #7d2028);
+  border: 3px solid #3a1418;
+  border-radius: 4px 4px 3px 3px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.18), 0 3px 0 rgba(0, 0, 0, 0.4);
+}
+/* the cup sign on top, so it reads as drinks and not a ticket machine */
+.street-vending::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 26px;
+  height: 14px;
+  margin-left: -13px;
+  border-radius: 3px 3px 1px 1px;
+  background: linear-gradient(#f2efe4, #d8d2bf);
+  border: 2px solid #3a1418;
+  box-shadow: inset 0 0 0 2px #b8353f;
 }

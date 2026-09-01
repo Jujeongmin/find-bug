@@ -11,7 +11,7 @@ import { PlaytestBar } from "../components/PlaytestBar";
 import { propStyle, spriteStyle } from "./spriteStyle";
 import { sfx } from "../audio/sfx";
 import type { SceneSpec } from "./types";
-import { SceneRuntime } from "./runtime";
+import { SceneRuntime, hitCentre } from "./runtime";
 import {
   applyMutation,
   generateMutations,
@@ -340,8 +340,8 @@ export function EngineStage({
     for (const o of live.objects) {
       const b = o.behaviors.find((x) => x.t === "station");
       if (!b || b.t !== "station") continue;
-      const os = runtime.state.objects[o.id];
-      if (Math.hypot(os.x - ps.x, os.y - ps.y) <= b.radius) {
+      const c = hitCentre(o, runtime.state.objects[o.id]);
+      if (Math.hypot(c.x - ps.x, c.y - ps.y) <= b.radius) {
         return { id: o.id, labelKey: b.labelKey };
       }
     }

@@ -49,6 +49,23 @@ export interface RuntimeState {
 const ATTACK_ANIM = 0.25;
 const INVULN = 1.2;
 
+/**
+ * Where an object actually sits, for collision and for standing next to it.
+ *
+ * Sprites are drawn from their bottom centre, so their position is already the
+ * middle of their footprint. Bars are drawn from their top-left corner, so
+ * taking their position as a centre put the circle up and to the left of the
+ * thing on screen — an invisible wall above the supply form, and a machine you
+ * could activate from empty floor beside it.
+ */
+export function hitCentre(
+  o: ObjectSpec,
+  s: { x: number; y: number }
+): { x: number; y: number } {
+  const bar = o.render.bar;
+  return bar ? { x: s.x + bar.width / 2, y: s.y + bar.height / 2 } : s;
+}
+
 export class SceneRuntime {
   scene: SceneSpec;
   state: RuntimeState;
@@ -319,8 +336,8 @@ export class SceneRuntime {
             for (const other of this.scene.objects) {
               const bl = other.behaviors.find((x) => x.t === "blocker");
               if (!bl || bl.t !== "blocker") continue;
-              const bs = st.objects[other.id];
-              if (Math.hypot(nx - bs.x, ny - bs.y) < bl.radius) {
+              const bc = hitCentre(other, st.objects[other.id]);
+              if (Math.hypot(nx - bc.x, ny - bc.y) < bl.radius) {
                 blocked = true;
                 break;
               }

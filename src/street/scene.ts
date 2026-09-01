@@ -73,15 +73,19 @@ export const streetScene: SceneSpec = {
       behaviors: [{ t: "station", radius: 58, labelKey: "street.enter" }],
     },
 
-    /* coffee: alertness, paid for in minutes */
+    /* the vending machine: alertness, paid for in minutes */
     {
       id: "coffee",
       nameKey: "object.coffeeStand",
       kind: "sprite",
-      x: 62,
-      y: 360,
+      x: 44,
+      y: 330,
       z: 1,
-      render: { className: "street-coffee", bar: { width: 58, height: 44 } },
+      render: {
+        className: "street-vending",
+        bar: { width: 48, height: 68 },
+        glow: { radius: 74, offsetX: 24, offsetY: 30 },
+      },
       behaviors: [
         { t: "blocker", radius: 34 },
         { t: "station", radius: 62, labelKey: "street.coffee" },
