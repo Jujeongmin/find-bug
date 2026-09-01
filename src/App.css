@@ -813,14 +813,25 @@
    bottom say what it is before you reach it. */
 .street-vending {
   background:
-    linear-gradient(#15171d, #23262f) 7px 50px / 34px 9px no-repeat,
-    linear-gradient(#e0574f, #b8353f) 10px 16px / 6px 9px repeat-x,
-    linear-gradient(#f2c14e, #d9a52f) 10px 30px / 6px 9px repeat-x,
-    linear-gradient(#3c4c63, #2a3547) 7px 10px / 26px 30px no-repeat,
+    /* dispenser opening, dark so it reads as a hole in the front */
+    linear-gradient(#0d0f13, #1b1e26) 8px 52px / 24px 8px no-repeat,
+    /* keypad down the right of the glass */
+    linear-gradient(#2a2d36, #1b1e26) 34px 14px / 8px 26px no-repeat,
+    /* three cans standing on the shelf, seen through the glass */
+    linear-gradient(#e0574f, #a8322c) 10px 30px / 5px 12px no-repeat,
+    linear-gradient(#f2c14e, #c99a2c) 17px 30px / 5px 12px no-repeat,
+    linear-gradient(#5fae6e, #3d7d4a) 24px 30px / 5px 12px no-repeat,
+    /* the lit glass: bright, because a dark panel reads as the back of a box */
+    linear-gradient(#cfe4f2, #9dc2dd) 7px 14px / 24px 30px no-repeat,
+    /* the top surface, seen from above in this view */
+    linear-gradient(#d4525c, #a52c36) 0 0 / 100% 9px no-repeat,
+    /* body */
     linear-gradient(#b8353f, #7d2028);
   border: 3px solid #3a1418;
   border-radius: 4px 4px 3px 3px;
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.18), 0 3px 0 rgba(0, 0, 0, 0.4);
+  box-shadow:
+    inset 0 -4px 0 rgba(0, 0, 0, 0.28),
+    0 3px 0 rgba(0, 0, 0, 0.4);
 }
 /* the cup sign on top, so it reads as drinks and not a ticket machine */
 .street-vending::before {
