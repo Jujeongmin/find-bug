@@ -473,11 +473,12 @@
   "week.d6": "일",
   "object.hobby": "집 컴퓨터",
   "home.hobby": "게임 한 판",
-  "home.hobbyDid": "남이 만든 걸 하니까 좀 낫다. ({n}원)",
+  "home.hobbyDid": "한나절 남이 만든 걸 하고 나니 사람이 됐다. ({n}원)",
   "home.hobbyDone": "오늘은 충분히 했다.",
   "home.hobbyBroke": "{n}원이 없다. 이번 주에 벌어야 한다.",
-  "home.wentInAnyway": "핫픽스 하나 잡으러 간다. 잡으면 나간 것 중 제일 나쁜 게 회수된다.",
+  "home.wentInAnyway": "핫픽스 하나 잡으러 간다. 개발자한테 넘겨야 나간 것 중 제일 나쁜 게 회수된다.",
   "home.morningWeekend": "주말이다. 오늘은 아무도 기다리지 않는다.",
   "street.weekend": "주말이라 사무실은 잠겨 있다. 굳이 가겠다면 집에서 마음을 먹고 나와야 한다.",
-  "home.nothingToFix": "아직 나간 결함이 없다. 주말에 나갈 이유도 없다."
+  "home.nothingToFix": "아직 나간 결함이 없다. 주말에 나갈 이유도 없다.",
+  "object.homeScreen": "집 컴퓨터"
 }

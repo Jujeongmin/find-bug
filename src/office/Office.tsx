@@ -69,6 +69,18 @@ const PASSER_LINES = 6;
 /** ?playtest=1 reveals the planted defect inside a build, as it does elsewhere */
 const PLAYTEST = new URLSearchParams(location.search).has("playtest");
 
+/**
+ * ?day=6 opens on that day of the fortnight.
+ *
+ * Dev only, and it exists for the same reason ?place does: the weekend is on
+ * day six, and reaching it by playing five days through is not a way to check
+ * whether the weekend works.
+ */
+const START_DAY = (() => {
+  const asked = Number(new URLSearchParams(location.search).get("day"));
+  return Number.isInteger(asked) && asked >= 1 && asked <= DAYS ? asked : 1;
+})();
+
 const START_PLACE = (() => {
   const asked = new URLSearchParams(location.search).get("place");
   return asked === "office" || asked === "street" ? asked : "home";
@@ -181,6 +193,13 @@ interface Assignment {
   /** null until the player has verified it */
   result: null | "caught" | "missed";
   /**
+   * A weekend build. Catching one takes back the worst thing that already
+   * shipped — but only once the developer has it, because a fix nobody was
+   * told about is not a fix. Half a star for twenty minutes of lie-in was
+   * the wrong price.
+   */
+  hotfix?: boolean;
+  /**
    * Which defect is in this build. Decided the first time the machine is
    * opened and kept from then on, so stepping away and coming back finds the
    * same build rather than a freshly rolled one.
@@ -224,9 +243,9 @@ function assignDay(day: number, machines: readonly MachineId[] = MACHINES): Assi
  */
 export function Office({ onExit }: { onExit: () => void }) {
   const { t, tp, lang, setLang } = useI18n();
-  const [day, setDay] = useState(1);
+  const [day, setDay] = useState(START_DAY);
   const [assignments, setAssignments] = useState<Assignment[]>(() =>
-    isWeekend(1) ? [] : assignDay(1)
+    isWeekend(START_DAY) ? [] : assignDay(START_DAY)
   );
   const [running, setRunning] = useState<Assignment | null>(null);
   const [note, setNote] = useState<string | null>(null);
@@ -318,16 +337,17 @@ export function Office({ onExit }: { onExit: () => void }) {
     return {
       ...at,
       objects: at.objects.map((o) =>
-        o.id === "journal"
+        o.id === "homeScreen"
           ? {
               ...o,
               id: "hobby",
               nameKey: "object.hobby",
-              behaviors: o.behaviors.map((b) =>
-                b.t === "station"
-                  ? { ...b, labelKey: "home.hobby" }
-                  : b
-              ),
+              // the screen is dressing on a working day and has no station of
+              // its own; the weekend gives it one
+              behaviors: [
+                ...o.behaviors,
+                { t: "station" as const, radius: 56, labelKey: "home.hobby" },
+              ],
             }
           : o
       ),
@@ -358,19 +378,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     setLastResult(result);
     if (result === "caught") {
       setCaught((n) => n + 1);
-      if (isWeekend(day)) {
-        // a Saturday build is a hotfix, so catching it takes back the worst
-        // thing that already went out rather than adding to the pile
-        setShipped_((v) => {
-          if (!v.length) return v;
-          const worst = v.reduce(
-            (best, sv, i) =>
-              SEVERITY_PIPS[sv] > SEVERITY_PIPS[v[best]] ? i : best,
-            0
-          );
-          return v.filter((_, i) => i !== worst);
-        });
-      }
+
       // and it goes in the pile waiting to be walked over to the developer.
       // Nothing ever went into that pile: a confirmed defect was counted and
       // then dropped, so the handoff never had anything to hand over, the
@@ -567,7 +575,10 @@ export function Office({ onExit }: { onExit: () => void }) {
       if (pay < HOBBY_PAY) return setNote(tp("home.hobbyBroke", { n: String(HOBBY_PAY) }));
       setHobbyDone(true);
       setPay((p) => p - HOBBY_PAY);
-      setCondition((c) => Math.min(MAX_CONDITION, c + 1));
+      // all the way back, which is what makes it worth paying for. At a
+      // point a night the sofa is free and does the same thing, and a paid
+      // copy of a free thing is not a choice.
+      setCondition(MAX_CONDITION);
       sfx.play("pick");
       return setNote(tp("home.hobbyDid", { n: String(HOBBY_PAY) }));
     }
@@ -593,9 +604,14 @@ export function Office({ onExit }: { onExit: () => void }) {
         // one machine, and a point of condition for the week you are borrowing
         // it from. Catching up this week is what breaks the next one.
         setWorkedWeekend(true);
-        setAssignments(assignDay(day, [MACHINES[0]]));
+        setAssignments(
+          assignDay(day, [MACHINES[0]]).map((a) => ({ ...a, hotfix: true }))
+        );
         setCondition((c) => Math.max(0, c - WEEKEND_SHIFT_COST));
-        setNote(t("home.wentInAnyway"));
+        // and stop here. Walking straight out wiped the line explaining what
+        // the point of condition had just been spent on; the door opens on
+        // the next press, once it has been read.
+        return setNote(t("home.wentInAnyway"));
       }
       sfx.play("click");
       setNote(null);
@@ -617,6 +633,22 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (id === "dev") {
       if (pending.length) {
         const earned = pending.reduce((sum, a) => sum + BOUNTY[a.severity], 0);
+        // every hotfix handed over pulls back the worst thing that got out
+        const fixes = pending.filter((a) => a.hotfix).length;
+        if (fixes) {
+          setShipped_((v) => {
+            const left = [...v];
+            for (let i = 0; i < fixes && left.length; i++) {
+              const worst = left.reduce(
+                (best, sv, k) =>
+                  SEVERITY_PIPS[sv] > SEVERITY_PIPS[left[best]] ? k : best,
+                0
+              );
+              left.splice(worst, 1);
+            }
+            return left;
+          });
+        }
         setPay((p) => p + earned);
         setDelivered((n) => n + pending.length);
         setPending([]);

@@ -473,11 +473,12 @@
   "week.d6": "Sun",
   "object.hobby": "The computer at home",
   "home.hobby": "Play something",
-  "home.hobbyDid": "Playing something somebody else made helps. ({n})",
+  "home.hobbyDid": "An afternoon inside somebody else’s game, and you feel human. ({n})",
   "home.hobbyDone": "That is enough for one day.",
   "home.hobbyBroke": "You do not have {n}. Earn it this week.",
-  "home.wentInAnyway": "Going in for a hotfix. Catch it and the worst thing that shipped comes back.",
+  "home.wentInAnyway": "Going in for a hotfix. Hand it over and the worst thing that shipped comes back.",
   "home.morningWeekend": "It is the weekend. Nobody is waiting today.",
   "street.weekend": "The office is locked at the weekend. Going in is something you decide at home.",
-  "home.nothingToFix": "Nothing has gone out yet. No reason to go in."
+  "home.nothingToFix": "Nothing has gone out yet. No reason to go in.",
+  "object.homeScreen": "The computer at home"
 }

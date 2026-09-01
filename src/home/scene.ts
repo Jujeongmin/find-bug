@@ -111,8 +111,8 @@ export const homeScene: SceneSpec = {
       behaviors: [],
     },
     {
-      id: "journal",
-      nameKey: "object.journal",
+      id: "homeScreen",
+      nameKey: "object.homeScreen",
       kind: "sprite",
       x: 285,
       y: 128,
@@ -120,7 +120,6 @@ export const homeScene: SceneSpec = {
       render: { className: "office-crt-back", bar: { width: 30, height: 26 } },
       behaviors: [
         { t: "blocker", radius: 24 },
-        { t: "station", radius: 56, labelKey: "home.journal" },
       ],
     },
 
@@ -135,13 +134,17 @@ export const homeScene: SceneSpec = {
       behaviors: [],
     },
     {
-      id: "homeShelf",
-      nameKey: "object.cabinet",
-      kind: "decor",
+      /* the journal lives on the shelf, where a journal would */
+      id: "journal",
+      nameKey: "object.journal",
+      kind: "sprite" as const,
       x: 44,
       y: 400,
       render: { prop: { id: "bookshelf", scale: 1.4 } },
-      behaviors: [{ t: "blocker", radius: 24 }],
+      behaviors: [
+        { t: "blocker" as const, radius: 24 },
+        { t: "station" as const, radius: 56, labelKey: "home.journal" },
+      ],
     },
     {
       id: "homeRug",
