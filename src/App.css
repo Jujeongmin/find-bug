@@ -720,11 +720,12 @@
     linear-gradient(#a9e58f, #6cbb5c);
   box-shadow: 0 0 0 2px #241a12;
 }
-/* the name. Real letters rather than the two abstract bars that stood in for
-   them — the board is DOM, so the text stays crisp at whatever the field is
-   scaled to. */
+/* The studio's name. Not the game's — Find bug is the title of the thing we
+   are making, and hanging it over the door of the office inside it would put
+   the player in two worlds at once. The board is DOM, so the letters stay
+   crisp at whatever the field is scaled to. */
 .street-sign::after {
-  content: "Find bug";
+  content: "Company";
   position: absolute;
   left: 26px;
   right: 4px;
