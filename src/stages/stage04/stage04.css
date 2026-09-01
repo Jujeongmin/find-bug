@@ -93,6 +93,9 @@
 /* cards */
 .s4-card {
   position: absolute;
+  /* the table sets z-index 1, so without one of their own the cards are laid
+     out correctly and then painted underneath it */
+  z-index: 2;
   width: 76px;
   height: 76px;
   perspective: 500px;

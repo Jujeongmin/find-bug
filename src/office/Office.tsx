@@ -69,13 +69,18 @@ const SEVERITY_COST: Record<Severity, number> = {
 const LATE_COST = 0.2;
 
 /**
- * Tiredness, 0 to 3. A late finish costs a night of it, and every point pushes
- * tomorrow's start later — so working past the evening is a loan against the
- * next day rather than free extra time.
+ * Condition, 0 to 3, and higher is better.
+ *
+ * It was tiredness, where lower was better — so buying a coffee read as
+ * "fatigue -1", which looks like a penalty on the thing you just paid for. A
+ * stat you want to raise is one the player can act on without translating.
+ *
+ * Every missing point pushes tomorrow's start later, so finishing late is a
+ * loan against the next day rather than free extra time.
  */
-const MAX_FATIGUE = 3;
-const FATIGUE_START_COST = 20;
-/** finishing after this leaves you tired */
+const MAX_CONDITION = 3;
+const CONDITION_START_COST = 20;
+/** finishing after this costs a point of condition */
 const LATE_FINISH = 16 * 60 + 30;
 
 /** what a coffee on the way in costs, and what it is worth */
@@ -137,7 +142,7 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [place, setPlace] = useState<"office" | "home" | "street">("street");
   /** one coffee per commute */
   const [hadCoffee, setHadCoffee] = useState(false);
-  const [fatigue, setFatigue] = useState(0);
+  const [condition, setCondition] = useState(MAX_CONDITION);
   /** one restful thing per evening */
   const [restedTonight, setRestedTonight] = useState(false);
 
@@ -182,7 +187,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     setLate((n) => n + pending.length);
     setPending([]);
     // a long day costs a night of sleep, whether or not it was productive
-    if (minutes >= LATE_FINISH) setFatigue((f) => Math.min(MAX_FATIGUE, f + 1));
+    if (minutes >= LATE_FINISH) setCondition((c) => Math.max(0, c - 1));
     sfx.play("click");
     setRunning(null);
     setNote(null);
@@ -198,7 +203,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     sfx.play("click");
     setDay((d) => d + 1);
     setAssignments(assignDay(day + 1));
-    setMinutes(DAY_START + fatigue * FATIGUE_START_COST);
+    setMinutes(DAY_START + (MAX_CONDITION - condition) * CONDITION_START_COST);
     setRestedTonight(false);
     setPlace("office");
     setNote(null);
@@ -230,7 +235,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (id === "coffee") {
       if (hadCoffee) return setNote(t("street.hadCoffee"));
       setHadCoffee(true);
-      setFatigue((f) => Math.max(0, f - 1));
+      setCondition((c) => Math.min(MAX_CONDITION, c + 1));
       setMinutes((m) => Math.min(DAY_END, m + COFFEE_MINUTES));
       sfx.play("pick");
       return setNote(tp("street.gotCoffee", { n: String(COFFEE_MINUTES) }));
@@ -242,7 +247,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (id === "sofa") {
       if (restedTonight) return setNote(t("home.alreadyRested"));
       setRestedTonight(true);
-      setFatigue((f) => Math.max(0, f - 1));
+      setCondition((c) => Math.min(MAX_CONDITION, c + 1));
       sfx.play("pick");
       return setNote(t("home.rested"));
     }
@@ -356,9 +361,9 @@ export function Office({ onExit }: { onExit: () => void }) {
               </button>
               <span className="wb-build">{tp("office.day", { n: String(day) })}</span>
               <span className="office-clock">{clock(minutes)}</span>
-              <span className="office-fatigue">
-                {t("home.fatigue")} {"●".repeat(fatigue)}
-                {"○".repeat(MAX_FATIGUE - fatigue)}
+              <span className="office-condition">
+                {t("home.condition")} {"●".repeat(condition)}
+                {"○".repeat(MAX_CONDITION - condition)}
               </span>
             </div>
           }
@@ -377,9 +382,9 @@ export function Office({ onExit }: { onExit: () => void }) {
                 ←
               </button>
               <span className="wb-build">{tp("home.evening", { n: String(day) })}</span>
-              <span className="office-fatigue">
-                {t("home.fatigue")} {"●".repeat(fatigue)}
-                {"○".repeat(MAX_FATIGUE - fatigue)}
+              <span className="office-condition">
+                {t("home.condition")} {"●".repeat(condition)}
+                {"○".repeat(MAX_CONDITION - condition)}
               </span>
             </div>
           }

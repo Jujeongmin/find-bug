@@ -397,7 +397,6 @@
   "home.name": "My room",
   "home.intro": "The day is over.",
   "home.evening": "Evening, day {n}",
-  "home.fatigue": "Tired",
   "home.sleep": "Sleep",
   "home.rest": "Rest on the sofa",
   "home.journal": "Read the journal",
@@ -413,7 +412,7 @@
   "street.intro": "You walk to the office.",
   "street.enter": "Go inside",
   "street.coffee": "Buy a coffee",
-  "street.gotCoffee": "Coffee bought. That helps. ({n} min)",
+  "street.gotCoffee": "Coffee bought. Condition up. ({n} min)",
   "street.hadCoffee": "You already had one today.",
   "object.officeDoor": "Office entrance",
   "object.coffeeStand": "Coffee stand",
@@ -429,5 +428,6 @@
   "hint.drag": "Drag anywhere to move",
   "hint.keys": "Arrow keys to move · space to attack",
   "hint.sideView": "Left and right to move · ⤒ to jump",
-  "object.counter": "Stall counter"
+  "object.counter": "Stall counter",
+  "home.condition": "Condition"
 }
