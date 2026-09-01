@@ -135,6 +135,21 @@ export const homeScene: SceneSpec = {
       behaviors: [],
     },
 
+    /* the parcel box: home things are ordered, not requisitioned */
+    {
+      id: "parcel",
+      nameKey: "object.parcel",
+      kind: "sprite" as const,
+      x: 86,
+      y: 600,
+      z: 1,
+      render: { prop: { id: "crate", scale: 1.5 } },
+      behaviors: [
+        { t: "blocker" as const, radius: 22 },
+        { t: "station" as const, radius: 52, labelKey: "home.order" },
+      ],
+    },
+
     /* out to work */
     {
       id: "frontDoor",

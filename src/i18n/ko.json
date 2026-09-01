@@ -433,8 +433,15 @@
   "office.supply": "비품 신청하기",
   "object.supplyForm": "비품 신청서",
   "office.pay": "{n}원",
-  "shop.owned": "이미 신청해서 받았다.",
-  "shop.tooPoor": "돋보기는 120원. {n}원이 모자란다.",
-  "shop.boughtMagnifier": "돋보기를 받았다. 빌드 화면에서 🔍 버튼을 누르고 있으면 확대된다.",
-  "item.magnifier": "돋보기 (누르고 있는 동안 확대)"
+  "item.magnifier": "돋보기",
+  "shop.title.office": "비품 신청",
+  "shop.title.home": "온라인 주문",
+  "shop.have": "보유 중",
+  "home.order": "온라인 주문하기",
+  "object.parcel": "택배 상자",
+  "item.magnifier.desc": "빌드에서 🔍를 누르고 있으면 2배로 확대된다",
+  "item.chair": "좋은 의자",
+  "item.chair.desc": "컨디션이 깎이는 퇴근 시각이 한 시간 늦어진다",
+  "item.alarm": "알람시계",
+  "item.alarm.desc": "매일 아침 30분 일찍 시작한다"
 }

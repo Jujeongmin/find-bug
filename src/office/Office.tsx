@@ -89,8 +89,28 @@ const COFFEE_MINUTES = 15;
 /** what a confirmed defect is worth once the developer has it */
 const BOUNTY: Record<Severity, number> = { low: 20, normal: 40, critical: 80 };
 
-/** the one thing the supply form sells so far */
-const MAGNIFIER_COST = 120;
+/**
+ * Things you can buy, and where. Each one changes a number the player has
+ * already felt go against them: the magnifier makes small faults visible, the
+ * chair buys an hour before a late finish costs condition, and the alarm
+ * hands back half of what a bad night took.
+ */
+type ItemId = "magnifier" | "chair" | "alarm";
+
+const CATALOGUE: {
+  id: ItemId;
+  cost: number;
+  where: "office" | "home";
+}[] = [
+  { id: "magnifier", cost: 120, where: "office" },
+  { id: "chair", cost: 160, where: "office" },
+  { id: "alarm", cost: 100, where: "home" },
+];
+
+/** the good chair buys this much slack before a late finish costs anything */
+const CHAIR_GRACE = 60;
+/** the alarm clock starts the day this much earlier */
+const ALARM_MINUTES = 30;
 
 interface Assignment {
   machine: MachineId;
@@ -153,7 +173,8 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [restedTonight, setRestedTonight] = useState(false);
   /** pay, earned by handing defects over, spent on equipment */
   const [pay, setPay] = useState(0);
-  const [hasMagnifier, setHasMagnifier] = useState(false);
+  const [owned, setOwned] = useState<ItemId[]>([]);
+  const [shop, setShop] = useState<null | "office" | "home">(null);
 
   // one clock for the whole day, ticking through the office and the builds
   // alike; goHomeRef keeps the timer from closing over a stale day
@@ -196,7 +217,8 @@ export function Office({ onExit }: { onExit: () => void }) {
     setLate((n) => n + pending.length);
     setPending([]);
     // a long day costs a night of sleep, whether or not it was productive
-    if (minutes >= LATE_FINISH) setCondition((c) => Math.max(0, c - 1));
+    const lateFrom = LATE_FINISH + (owned.includes("chair") ? CHAIR_GRACE : 0);
+    if (minutes >= lateFrom) setCondition((c) => Math.max(0, c - 1));
     sfx.play("click");
     setRunning(null);
     setNote(null);
@@ -212,7 +234,11 @@ export function Office({ onExit }: { onExit: () => void }) {
     sfx.play("click");
     setDay((d) => d + 1);
     setAssignments(assignDay(day + 1));
-    setMinutes(DAY_START + (MAX_CONDITION - condition) * CONDITION_START_COST);
+    setMinutes(
+      DAY_START +
+        (MAX_CONDITION - condition) * CONDITION_START_COST -
+        (owned.includes("alarm") ? ALARM_MINUTES : 0)
+    );
     setRestedTonight(false);
     setPlace("office");
     setNote(null);
@@ -232,6 +258,13 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (left === 0) return "office.dev.allDone";
     if (day >= DAYS) return "office.dev.lastDay";
     return `office.dev.idle${talks % IDLE_LINES}`;
+  };
+
+  const buy = (item: ItemId, cost: number) => {
+    if (owned.includes(item) || pay < cost) return;
+    setPay((p) => p - cost);
+    setOwned((o) => [...o, item]);
+    sfx.play("success");
   };
 
   const onStreetStation = (id: string) => {
@@ -269,6 +302,11 @@ export function Office({ onExit }: { onExit: () => void }) {
         })
       );
     }
+    if (id === "parcel") {
+      sfx.play("click");
+      setShop("home");
+      return;
+    }
     if (id === "frontDoor") return setNote(t("home.notYet"));
   };
 
@@ -278,13 +316,9 @@ export function Office({ onExit }: { onExit: () => void }) {
       return;
     }
     if (id === "supplyForm") {
-      if (hasMagnifier) return setNote(t("shop.owned"));
-      if (pay < MAGNIFIER_COST)
-        return setNote(tp("shop.tooPoor", { n: String(MAGNIFIER_COST - pay) }));
-      setPay((p) => p - MAGNIFIER_COST);
-      setHasMagnifier(true);
-      sfx.play("success");
-      return setNote(t("shop.boughtMagnifier"));
+      sfx.play("click");
+      setShop("office");
+      return;
     }
     if (id === "dev") {
       if (pending.length) {
@@ -355,7 +389,7 @@ export function Office({ onExit }: { onExit: () => void }) {
         scene={scene}
         stageNo={day}
         title={`${tp("office.buildTitle", { machine: t(`object.${running.machine}`) })} · ${clock(minutes)}`}
-        canZoom={hasMagnifier}
+        canZoom={owned.includes("magnifier")}
         onClear={() => finish("caught")}
         onExit={() => finish("missed")}
       />
@@ -454,6 +488,36 @@ export function Office({ onExit }: { onExit: () => void }) {
         onClear={() => {}}
         onExit={onExit}
       />
+      )}
+
+      {shop && (
+        <div className="modal-backdrop" onClick={() => setShop(null)}>
+          <div className="modal shop" onClick={(e) => e.stopPropagation()}>
+            <h2>{t(`shop.title.${shop}`)}</h2>
+            <p className="shop-pay">{tp("office.pay", { n: String(pay) })}</p>
+            <div className="shop-list">
+              {CATALOGUE.filter((c) => c.where === shop).map((c) => {
+                const have = owned.includes(c.id);
+                const canAfford = pay >= c.cost;
+                return (
+                  <button
+                    key={c.id}
+                    className={`shop-item ${have ? "have" : ""}`}
+                    disabled={have || !canAfford}
+                    onClick={() => buy(c.id, c.cost)}
+                  >
+                    <span className="shop-name">{t(`item.${c.id}`)}</span>
+                    <span className="shop-desc">{t(`item.${c.id}.desc`)}</span>
+                    <em>{have ? t("shop.have") : tp("office.pay", { n: String(c.cost) })}</em>
+                  </button>
+                );
+              })}
+            </div>
+            <button className="btn-primary" onClick={() => setShop(null)}>
+              {t("wb.close")}
+            </button>
+          </div>
+        </div>
       )}
 
       {note && (
