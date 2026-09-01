@@ -334,7 +334,6 @@
   "office.talkDev": "개발자와 대화",
   "office.goHome": "퇴근하기",
   "office.day": "{n}일차",
-  "office.shipIn": "출시 D-{n}",
   "office.alreadyDone": "이 기기는 오늘 검증이 끝났다.",
   "office.buildTitle": "{machine} 빌드",
   "office.shipTitle": "출시했다",
@@ -487,5 +486,6 @@
   "home.nothingOwed": "오늘은 딱히 무리한 게 없다. 그냥 자도 된다.",
   "office.whatCondition": "오늘 남은 검수 횟수 {n}번. 빌드를 하나 볼 때마다 하나 줄고, 자고 나면 다 돌아온다.",
   "office.whatChip": "{machine} — 심각도 {sev}. 점이 많을수록 그냥 나갔을 때 출시 등급이 크게 깎인다.",
-  "office.whatChipDone": "{machine} — 심각도 {sev}. 이건 이미 봤다."
+  "office.whatChipDone": "{machine} — 심각도 {sev}. 이건 이미 봤다.",
+  "office.dayShip": "{n}일차 · D-{left}"
 }

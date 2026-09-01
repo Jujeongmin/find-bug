@@ -902,7 +902,15 @@ export function Office({ onExit }: { onExit: () => void }) {
             <button className="exit-btn" onClick={onExit} title={t("game.exit")}>
               ←
             </button>
-            <span className="wb-build">{tp("office.day", { n: String(day) })}</span>
+            {/* one date, not two: which day this is and how many are left are
+                the same fact read from opposite ends, and each was taking its
+                own slot on a bar 360 wide */}
+            <span className="wb-deadline">
+              {tp("office.dayShip", {
+                n: String(day),
+                left: String(DAYS - day),
+              })}
+            </span>
             <span className="office-clock">{clock(minutes)}</span>
             {/*
               The one number the day is actually rationed by. It was drawn only
@@ -921,9 +929,6 @@ export function Office({ onExit }: { onExit: () => void }) {
               👁{"●".repeat(condition)}
               {"○".repeat(MAX_CONDITION - condition)}
             </button>
-            <span className="wb-deadline">
-              {tp("office.shipIn", { n: String(DAYS - day) })}
-            </span>
             <span className="office-pay">{tp("office.pay", { n: String(pay) })}</span>
             <span className="office-queue">
               {assignments.map((a) => (

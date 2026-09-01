@@ -400,6 +400,9 @@
   font-size: 11px; color: #e0a03f; border: 1px solid #6b5426;
   border-radius: 4px; padding: 1px 6px; font-variant-numeric: tabular-nums;
 }
+/* in the office it carries the day as well as the deadline, so it is the bar's
+   first label and not a footnote hung off the end of one */
+.wb-header .wb-deadline { font-weight: 700; }
 .wb-ship { align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 16px; }
 .wb-ship h1 { font-size: 28px; margin: 0; }
 .wb-rating { display: flex; align-items: baseline; gap: 10px; }

@@ -334,7 +334,6 @@
   "office.talkDev": "Talk to the developer",
   "office.goHome": "Clock out",
   "office.day": "Day {n}",
-  "office.shipIn": "Ship in {n}",
   "office.alreadyDone": "This machine is done for today.",
   "office.buildTitle": "{machine} build",
   "office.shipTitle": "Shipped",
@@ -487,5 +486,6 @@
   "home.nothingOwed": "Nothing was overdrawn today. Bed will do.",
   "office.whatCondition": "{n} builds left in you today. One goes on each build you sign off, and a night gives them all back.",
   "office.whatChip": "{machine} — {sev}. The more pips, the further the rating falls if it ships unlooked-at.",
-  "office.whatChipDone": "{machine} — {sev}. This one has been looked at."
+  "office.whatChipDone": "{machine} — {sev}. This one has been looked at.",
+  "office.dayShip": "Day {n} · {left} to ship"
 }
