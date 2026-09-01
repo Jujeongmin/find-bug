@@ -375,7 +375,7 @@
   "home.sleep": "Sleep",
   "home.rest": "Rest on the sofa",
   "home.journal": "Read the journal",
-  "home.goWork": "It is night",
+  "home.goWork": "Leave for work",
   "home.rested": "That helped. Tomorrow can start a little earlier.",
   "home.alreadyRested": "You have rested enough for tonight.",
   "home.notYet": "The office is locked at this hour. Sleep first.",
@@ -433,5 +433,9 @@
   "bugdesc.noPickup": "{obj}: walking over it picked up nothing, while the others of its kind worked.",
   "bugdesc.noRespawn": "{obj}: once taken it never grew back, while the others of its kind did.",
   "bugdesc.noDamage": "{obj}: touching it did no harm at all, while the others of its kind hurt.",
-  "hint.keysAttack": "Arrow keys to move · button to attack"
+  "hint.keysAttack": "Arrow keys to move · button to attack",
+  "home.morningFirst": "Ten days to ship, and three builds queued for today. Time to get in.",
+  "home.morning": "Day {n}. Today’s builds are waiting. Time to get in.",
+  "home.tooEarly": "It is still morning. Lie down now and today’s builds go out as they are.",
+  "home.morningHeader": "Day {n}, morning"
 }

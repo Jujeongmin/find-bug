@@ -375,7 +375,7 @@
   "home.sleep": "잠자기",
   "home.rest": "소파에서 쉬기",
   "home.journal": "개발 일지 보기",
-  "home.goWork": "아직 밤이다",
+  "home.goWork": "출근하기",
   "home.rested": "좀 나아졌다. 내일은 조금 일찍 나갈 수 있겠다.",
   "home.alreadyRested": "오늘은 충분히 쉬었다.",
   "home.notYet": "지금 나가봐야 사무실은 잠겨 있다. 자고 가자.",
@@ -433,5 +433,9 @@
   "bugdesc.noPickup": "{obj}: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
   "bugdesc.noRespawn": "{obj}: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
   "bugdesc.noDamage": "{obj}: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
-  "hint.keysAttack": "방향키로 이동 · 공격 버튼으로 공격"
+  "hint.keysAttack": "방향키로 이동 · 공격 버튼으로 공격",
+  "home.morningFirst": "출시까지 10일. 오늘 검증할 빌드가 세 개 쌓여 있다. 출근해야지.",
+  "home.morning": "{n}일차. 오늘 몫의 빌드가 기다린다. 출근해야지.",
+  "home.tooEarly": "아직 아침이다. 지금 누우면 오늘 빌드는 그대로 나간다.",
+  "home.morningHeader": "{n}일차 아침"
 }

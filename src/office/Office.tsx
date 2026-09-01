@@ -167,7 +167,13 @@ export function Office({ onExit }: { onExit: () => void }) {
   /** caught, but the day ended before it reached the developer */
   const [late, setLate] = useState<Severity[]>([]);
   const [shipped_, setShipped_] = useState<Severity[]>([]);
-  const [place, setPlace] = useState<"office" | "home" | "street">("street");
+  /**
+   * The day opens at home, so leaving for work is something the player does
+   * rather than something that has already happened when they arrive.
+   */
+  const [place, setPlace] = useState<"office" | "home" | "street">("home");
+  /** true once the day has been signed off, which is what makes the bed work */
+  const [dayOver, setDayOver] = useState(false);
   /** one coffee per commute */
   const [hadCoffee, setHadCoffee] = useState(false);
   const [condition, setCondition] = useState(MAX_CONDITION);
@@ -194,7 +200,11 @@ export function Office({ onExit }: { onExit: () => void }) {
       });
     }, 250);
     return () => clearInterval(id);
-  }, [shipped]);
+    // `place` belongs in here: the effect read it once at mount and then never
+    // again, so the clock ran on whatever the game had opened with. Starting the
+    // day at home turned that from "time passes while you sleep" into "time
+    // never passes at all".
+  }, [shipped, place]);
 
   /**
    * The office floor, with the player put back where they were standing.
@@ -213,6 +223,16 @@ export function Office({ onExit }: { onExit: () => void }) {
         : officeScene,
     [officeAt]
   );
+
+  const morningLine = () =>
+    day === 1
+      ? t("home.morningFirst")
+      : tp("home.morning", { n: String(day) });
+  // said once on the first morning too, not only on the ones you wake up to
+  useEffect(() => {
+    setNote(morningLine());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const scenesById = useMemo(
     () => Object.fromEntries(ENGINE_SCENES.map((s) => [s.id, s])),
@@ -246,6 +266,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     setNote(null);
     // tomorrow starts at the door, not at yesterday's desk
     setOfficeAt(null);
+    setDayOver(true);
     setPlace("home");
   };
 
@@ -265,12 +286,12 @@ export function Office({ onExit }: { onExit: () => void }) {
     );
     setRestedTonight(false);
     setHadCoffee(false);
-    // out the front door, not straight to your desk: the walk in is where the
-    // coffee is, and the fifteen minutes it costs is the morning's one real
-    // decision. Waking up already at the office skipped it every day after the
-    // first, which left the commute and the machine on it as scenery.
-    setPlace("street");
-    setNote(null);
+    setDayOver(false);
+    setPlace("home");
+    // the walk in is where the coffee is, and the fifteen minutes it costs is
+    // the morning's one real decision — so the player has to make it, every
+    // morning, by walking out of their own front door
+    setNote(tp("home.morning", { n: String(day + 1) }));
   };
   goHomeRef.current = goHome;
 
@@ -314,7 +335,10 @@ export function Office({ onExit }: { onExit: () => void }) {
   };
 
   const onHomeStation = (id: string) => {
-    if (id === "bed") return sleep();
+    if (id === "bed") {
+      if (!dayOver) return setNote(t("home.tooEarly"));
+      return sleep();
+    }
     if (id === "sofa") {
       if (restedTonight) return setNote(t("home.alreadyRested"));
       setRestedTonight(true);
@@ -336,7 +360,13 @@ export function Office({ onExit }: { onExit: () => void }) {
       setShop("home");
       return;
     }
-    if (id === "frontDoor") return setNote(t("home.notYet"));
+    if (id === "frontDoor") {
+      if (dayOver) return setNote(t("home.notYet"));
+      sfx.play("click");
+      setNote(null);
+      setPlace("street");
+      return;
+    }
   };
 
   const onStation = (id: string) => {
@@ -483,7 +513,11 @@ export function Office({ onExit }: { onExit: () => void }) {
               <button className="exit-btn" onClick={onExit} title={t("game.exit")}>
                 ←
               </button>
-              <span className="wb-build">{tp("home.evening", { n: String(day) })}</span>
+              <span className="wb-build">
+                {tp(dayOver ? "home.evening" : "home.morningHeader", {
+                  n: String(day),
+                })}
+              </span>
               <span className="office-condition">
                 {t("home.condition")} {"●".repeat(condition)}
                 {"○".repeat(MAX_CONDITION - condition)}
