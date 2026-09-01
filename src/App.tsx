@@ -11,7 +11,7 @@ import { ReproLab } from "./repro/ReproLab";
 import { Workbench } from "./regression/Workbench";
 import { DebugLab } from "./debug/DebugLab";
 import { useSpaceCloses } from "./components/useSpaceCloses";
-import { devFlag } from "./dev";
+import { DEV_TOOLS, devFlag } from "./dev";
 import "./App.css";
 
 /**
@@ -65,6 +65,13 @@ export default function App() {
           ) : (
             <Office onExit={back} />
           )}
+          {/*
+            A built game with the testing surfaces still in it looks exactly
+            like the real one, which is how a debug build gets released. It
+            does not look like it any more. The dev server is not tagged: there
+            it is the expected state and the tag would be noise.
+          */}
+          {DEV_TOOLS && !import.meta.env.DEV && <span className="debug-tag">DEBUG</span>}
         </div>
       </div>
     </I18nContext.Provider>

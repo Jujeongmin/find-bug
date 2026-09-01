@@ -7,13 +7,14 @@
  * clock jump were all gone. Checking the thing you are about to release is not
  * the same as handing the answers to whoever finds the address bar.
  *
- * So it is a flag, on by default on the dev server and turned on for a build
- * with `npm run build:debug`. An ordinary build folds it to false and every
- * surface behind it becomes unreachable — checked by loading the built game
- * and asking for ?debug, which gives the ordinary morning. The code itself is
- * still in the bundle, since the constant does not propagate across modules
- * far enough for Rollup to drop the components; nothing routes to it, and no
- * answer is in there to read, because every defect is generated at runtime.
+ * So it is a flag, and while the game is still being built it is on — in .env,
+ * which means an ordinary build and an ordinary deploy both carry the tools.
+ * That is deliberate: the copy on the server is the one worth checking, and a
+ * flag you have to remember to turn on is one you forget.
+ *
+ * `npm run build:release` turns it off, and that is the build that ships.
+ * Until then the game wears a DEBUG tag in the corner of every screen, because
+ * the failure this arrangement invites is shipping without noticing.
  */
 export const DEV_TOOLS =
   import.meta.env.DEV || import.meta.env.VITE_DEV_TOOLS === "1";
