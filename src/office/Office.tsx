@@ -203,8 +203,8 @@ const SEVERITY_PIPS: Record<Severity, number> = { low: 1, normal: 2, critical: 3
 /**
  * Things you can buy, and where. Each one changes a number the player has
  * already felt go against them: the magnifier makes small faults visible, the
- * chair buys an hour before a late finish costs condition, and the alarm
- * hands back half of what a bad night took.
+ * chair keeps overtime from borrowing against the night, and the alarm hands
+ * back half an hour of every morning.
  */
 type ItemId = "magnifier" | "chair" | "alarm";
 
@@ -322,6 +322,17 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [condition, setCondition] = useState(MAX_CONDITION);
   /** points owed to tonight, from overtime or a weekend shift */
   const [borrowed, setBorrowed] = useState(0);
+  /**
+   * What one long stint takes out of the night, halved by a decent chair.
+   *
+   * The chair used to cancel the price of overtime outright, and overtime is
+   * the reward for an advert — so in any build where the adverts are not there
+   * to be watched, nothing ever borrowed, and a hundred and sixty won bought
+   * an item that could not do anything. Half of any long stint is something it
+   * can always be doing.
+   */
+  const borrowCost = () =>
+    owned.includes("chair") ? BORROW_COST / 2 : BORROW_COST;
   /** a weekend spent on something else, cashed in on the next morning */
   const [earlyTomorrow, setEarlyTomorrow] = useState(false);
   /** one restful thing per evening */
@@ -451,10 +462,8 @@ export function Office({ onExit }: { onExit: () => void }) {
     setLate((v) => [...v, ...pending.map((a) => a.severity)]);
     setPending([]);
     // staying past six is what costs a night of sleep, and a good chair is
-    // what stops it costing one
-    if (minutes > DAY_END && !owned.includes("chair")) {
-      setBorrowed((b) => b + BORROW_COST);
-    }
+    // what takes half of it back
+    if (minutes > DAY_END) setBorrowed((b) => b + borrowCost());
     sfx.play("click");
     setRunning(null);
     setNote(null);
@@ -477,21 +486,29 @@ export function Office({ onExit }: { onExit: () => void }) {
     setWorkedWeekend(false);
     setHobbyDone(false);
     /*
-     * A night gives back two of the three a full day costs. The sofa is the
-     * third, so an evening spent on it is the difference between three builds
-     * tomorrow and two — and anything borrowed comes out of the night before
-     * it comes out of the morning.
+     * An ordinary night gives everything back. What it cannot give back is
+     * what was borrowed against it, which is the whole cost of overtime and of
+     * a weekend shift.
      */
     setCondition((c) =>
       Math.min(MAX_CONDITION, c + Math.max(0, SLEEP_RECOVERY - borrowed))
     );
     setBorrowed(0);
+    /*
+     * The half hour a hobby buys waits for a morning that has work in it.
+     *
+     * It was spent on whatever morning came next, and the hobby is a weekend
+     * thing — so a Saturday afternoon off bought a Sunday that started early,
+     * on a day with no builds and no clock worth beating. What it says it buys
+     * is Monday.
+     */
+    const toWork = !isWeekend(next);
     setMinutes(
       DAY_START -
         (owned.includes("alarm") ? ALARM_MINUTES : 0) -
-        (earlyTomorrow ? ALARM_MINUTES : 0)
+        (earlyTomorrow && toWork ? ALARM_MINUTES : 0)
     );
-    setEarlyTomorrow(false);
+    if (toWork) setEarlyTomorrow(false);
     setRestedTonight(false);
     setHadCoffee(false);
     setOvertime(0);
@@ -669,7 +686,7 @@ export function Office({ onExit }: { onExit: () => void }) {
         setAssignments(
           assignDay(day, [MACHINES[0]]).map((a) => ({ ...a, hotfix: true }))
         );
-        setBorrowed((b) => b + BORROW_COST);
+        setBorrowed((b) => b + borrowCost());
         // and stop here. Walking straight out wiped the line explaining what
         // the point of condition had just been spent on; the door opens on
         // the next press, once it has been read.
