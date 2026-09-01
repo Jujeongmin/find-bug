@@ -802,7 +802,8 @@
 .shop-item.have em { color: #2f7a4a; }
 
 /* the key that does the same thing as the prompt, for players on a keyboard */
-.eng-station-btn .key-hint {
+.eng-station-btn .key-hint,
+.btn-primary .key-hint {
   display: inline-block;
   margin-left: 8px;
   padding: 1px 6px;
