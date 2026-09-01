@@ -9,6 +9,7 @@ import {
 import { Office } from "./office/Office";
 import { ReproLab } from "./repro/ReproLab";
 import { Workbench } from "./regression/Workbench";
+import { DebugLab } from "./debug/DebugLab";
 import { useSpaceCloses } from "./components/useSpaceCloses";
 import "./App.css";
 
@@ -22,11 +23,18 @@ import "./App.css";
  *
  * ?lab=1 and ?repro=1 still open the two prototypes that were tried and set
  * aside, because they are worth reading before anyone tries either idea again.
+ *
+ * ?debug lists every build and every defect in it, and opens any one of them
+ * with the answer showing. The office deals one fault at random out of a
+ * hundred and twenty, which is fine to play and useless to check against — the
+ * defects worth checking are the ones too quiet to come round often.
  */
 const LAB =
   import.meta.env.DEV && new URLSearchParams(location.search).has("lab");
 const REPRO =
   import.meta.env.DEV && new URLSearchParams(location.search).has("repro");
+const DEBUG =
+  import.meta.env.DEV && new URLSearchParams(location.search).has("debug");
 
 export default function App() {
   useSpaceCloses();
@@ -50,7 +58,9 @@ export default function App() {
       <div className="app-root">
         {/* one phone-shaped frame; nothing outside it ever scrolls */}
         <div className="app-frame">
-          {REPRO ? (
+          {DEBUG ? (
+            <DebugLab onExit={back} />
+          ) : REPRO ? (
             <ReproLab onExit={back} />
           ) : LAB ? (
             <Workbench onExit={back} />
