@@ -334,15 +334,17 @@ export class SceneRuntime {
               b.minY,
               Math.min(b.maxY, os.y + (dy / len) * b.speed * dt)
             );
-            const free = (x: number, y: number) => {
+            /** the blocker this point is inside, if any */
+            const blocking = (x: number, y: number) => {
               for (const other of this.scene.objects) {
                 const bl = other.behaviors.find((b2) => b2.t === "blocker");
                 if (!bl || bl.t !== "blocker") continue;
                 const bc = hitCentre(other, st.objects[other.id]);
-                if (Math.hypot(x - bc.x, y - bc.y) < bl.radius) return false;
+                if (Math.hypot(x - bc.x, y - bc.y) < bl.radius) return bc;
               }
-              return true;
+              return null;
             };
+            const free = (x: number, y: number) => !blocking(x, y);
             /*
              * Slide along what you are pressed against.
              *
@@ -351,6 +353,17 @@ export class SceneRuntime {
              * the pavement and walking away at an angle held you still, with no
              * sign of what was holding you. Each axis is offered on its own
              * before the move is refused.
+             *
+             * Neither axis is enough against a circle. Walk up and to the left
+             * into one sitting up and to the left of you and all three tests
+             * fail at once — the diagonal, and each half of it — so the player
+             * stops dead on open floor with a barrel a body's width away. It
+             * reads as the furniture grabbing you, and it happens around every
+             * round blocker in the game, not any one bad piece of scenery.
+             *
+             * So the last thing tried is the tangent: drop the part of the
+             * movement pointing into the obstacle and keep the part going past
+             * it, which is what walking around something is.
              */
             if (free(nx, ny)) {
               os.x = nx;
@@ -359,6 +372,25 @@ export class SceneRuntime {
               os.x = nx;
             } else if (free(os.x, ny)) {
               os.y = ny;
+            } else {
+              const bc = blocking(nx, ny);
+              if (bc) {
+                const ox = os.x - bc.x;
+                const oy = os.y - bc.y;
+                const olen = Math.hypot(ox, oy) || 1;
+                const ux = ox / olen;
+                const uy = oy / olen;
+                const mx = nx - os.x;
+                const my = ny - os.y;
+                // the component of the step heading straight at the centre
+                const into = mx * ux + my * uy;
+                const tx = os.x + mx - into * ux;
+                const ty = os.y + my - into * uy;
+                if (free(tx, ty)) {
+                  os.x = Math.max(20, Math.min(maxX, tx));
+                  os.y = Math.max(b.minY, Math.min(b.maxY, ty));
+                }
+              }
             }
             if (dx !== 0) os.facing = dx > 0 ? 1 : -1;
             break;
