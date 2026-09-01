@@ -63,11 +63,23 @@ export const streetScene: SceneSpec = {
       behaviors: [],
     })),
     {
+      /* the sign over the door: a grub and a name, which is all a small studio
+         ever has on the front of its building */
+      id: "sign",
+      nameKey: "object.sign",
+      kind: "decor",
+      x: 134,
+      y: 56,
+      z: 1,
+      render: { className: "street-sign", bar: { width: 92, height: 26 } },
+      behaviors: [],
+    },
+    {
       id: "officeDoor",
       nameKey: "object.officeDoor",
       kind: "sprite",
       x: 180,
-      y: 176,
+      y: 148,
       z: 1,
       render: { prop: { id: "door", scale: 1.6 } },
       behaviors: [{ t: "station", radius: 58, labelKey: "street.enter" }],

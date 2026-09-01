@@ -664,6 +664,48 @@
 .street-passer.p0 .sprite-emoji { filter: hue-rotate(205deg) saturate(0.9) brightness(0.98); }
 .street-passer.p1 .sprite-emoji { filter: hue-rotate(295deg) saturate(0.8) brightness(0.95); }
 .street-passer.p2 .sprite-emoji { filter: hue-rotate(38deg) saturate(0.95) brightness(1.02); }
+/* The sign over the office door. A studio this size has a grub and a name on
+   a board, and the board hangs off a bracket rather than being painted on the
+   brick — it reads at this size, which lettering would not. */
+.street-sign {
+  background: linear-gradient(#6b4a2f, #4a3320);
+  border: 3px solid #241a12;
+  border-radius: 3px;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.12),
+    0 3px 0 rgba(0, 0, 0, 0.35);
+}
+/* the grub, the same one the game is named after */
+.street-sign::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  width: 21px;
+  height: 9px;
+  border-radius: 5px;
+  background:
+    radial-gradient(circle at 82% 40%, #1d2a16 0 1.5px, transparent 1.5px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 5px),
+    linear-gradient(#a9e58f, #6cbb5c);
+  box-shadow: 0 0 0 2px #241a12;
+}
+/* the name. Real letters rather than the two abstract bars that stood in for
+   them — the board is DOM, so the text stays crisp at whatever the field is
+   scaled to. */
+.street-sign::after {
+  content: "Company";
+  position: absolute;
+  left: 26px;
+  right: 4px;
+  top: 4px;
+  height: 14px;
+  font: 700 9px/14px system-ui, sans-serif;
+  letter-spacing: 0.2px;
+  text-align: center;
+  color: #ecdfc3;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);
+}
 /* the house at the bottom of the street, and the door home in it */
 .street-home {
   background:

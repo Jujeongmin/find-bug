@@ -450,5 +450,6 @@
   "street.passer2": "Everyone on this street at this hour has the same face.",
   "street.passer3": "It is not the getting in that is hard. It is the rest of it.",
   "street.passer4": "Coffee? This is my fourth.",
-  "street.passer5": "That building is shipping something this week. Lights on every night."
+  "street.passer5": "That building is shipping something this week. Lights on every night.",
+  "object.sign": "Sign"
 }
