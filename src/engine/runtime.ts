@@ -91,7 +91,7 @@ export class SceneRuntime {
         y: o.y,
         vy: 0,
         facing: 1,
-        dir4: "down",
+        dir4: o.facing ?? "down",
         moving: false,
         dir: 1,
         alive: true,

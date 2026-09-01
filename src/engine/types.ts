@@ -197,6 +197,12 @@ export interface ObjectSpec {
   peerGroup?: string;
   /** HUD widgets read this counter */
   counter?: string;
+  /**
+   * Which way an actor is turned before anything moves it. Standing figures
+   * default to facing the camera, which is wrong for anyone working at a desk
+   * beside them.
+   */
+  facing?: Facing;
   /** id of an object this one visually overlaps — enables the zSwap mutator */
   overlaps?: string;
 }

@@ -7,6 +7,23 @@ export type MachineId = (typeof MACHINES)[number];
 /** the wall band along the top; everything below it is walkable floor */
 const WALL_H = 110;
 
+/**
+ * A workstation is read left to right: screen, desk, seat. The desk centre is
+ * the anchor, and everything else is an offset from it — the screen's foot
+ * lands on the desk slab rather than among its legs, and the seat comes up to
+ * the right-hand edge instead of standing off it.
+ *
+ * The three of them sit left of centre in their own third of the room, because
+ * the seat hangs off the right and the pair has to look centred, not the desk.
+ */
+const DESKS = [52, 170, 288];
+const SCREEN_DX = -24;
+const SEAT_DX = 34;
+
+/** the developer's desk, a tile lower than it used to sit */
+const DEV_X = 280;
+const DEV_Y = 520;
+
 const actor = (sheet: "worker" | "worker2"): ActorSpec => ({
   sheet,
   rows: {
@@ -44,11 +61,13 @@ export const officeScene: SceneSpec = {
   counters: [],
   objects: [
     {
+      // a step in from the door, because that is the way in — and far enough
+      // off it that the first thing the room offers is not "go home again"
       id: "player",
       nameKey: "object.player",
       kind: "player",
-      x: 180,
-      y: 400,
+      x: 200,
+      y: 556,
       z: 3,
       render: { actor: actor("worker") },
       behaviors: [
@@ -87,9 +106,9 @@ export const officeScene: SceneSpec = {
      * one this pack draws well.
      */
     ...[
-      { id: "machineA", x: 62, labelKey: "office.runA" },
-      { id: "machineB", x: 180, labelKey: "office.runB" },
-      { id: "machineC", x: 298, labelKey: "office.runC" },
+      { id: "machineA", x: DESKS[0], labelKey: "office.runA" },
+      { id: "machineB", x: DESKS[1], labelKey: "office.runB" },
+      { id: "machineC", x: DESKS[2], labelKey: "office.runC" },
     ].map((m) => ({
       id: m.id,
       nameKey: `object.${m.id}`,
@@ -97,7 +116,7 @@ export const officeScene: SceneSpec = {
       // the desk slab runs from y 81 to about 105 and its legs below that, so
       // the screen sits with its foot on 105 — any lower and it reads as a set
       // pushed off the desk onto the floor beside it
-      x: m.x - 24,
+      x: m.x + SCREEN_DX,
       y: WALL_H - 31,
       z: 2,
       render: { className: "office-crt", bar: { width: 30, height: 26 } },
@@ -106,7 +125,7 @@ export const officeScene: SceneSpec = {
         { t: "station" as const, radius: 54, labelKey: m.labelKey },
       ],
     })),
-    ...[62, 180, 298].map((x, i) => ({
+    ...DESKS.map((x, i) => ({
       id: `desk${i}`,
       nameKey: "object.desk",
       kind: "decor" as const,
@@ -116,24 +135,30 @@ export const officeScene: SceneSpec = {
       behaviors: [],
     })),
     /* the seat, pulled up on the right of the desk and facing the screen */
-    ...[62, 180, 298].map((x, i) => ({
+    ...DESKS.map((x, i) => ({
       id: `chair${i}`,
       nameKey: "object.chair",
       kind: "decor" as const,
-      x: x + 34,
+      x: x + SEAT_DX,
       y: WALL_H + 18,
       render: { prop: { id: "chairSide" as const, scale: 1.4 } },
       behaviors: [],
     })),
 
-    /* the developer you hand confirmed defects to */
+    /*
+     * The developer, at a station laid out like the other three: screen on the
+     * left of the desk, and the person in the seat's place on the right,
+     * turned towards it. Standing above their own monitor facing the camera
+     * made them the one person in the room not looking at any work.
+     */
     {
       id: "dev",
       nameKey: "object.dev",
       kind: "sprite",
-      x: 300,
-      y: 424,
+      x: DEV_X + SEAT_DX,
+      y: DEV_Y - 8,
       z: 1,
+      facing: "left",
       render: { actor: actor("worker2") },
       behaviors: [
         { t: "blocker", radius: 22 },
@@ -145,8 +170,8 @@ export const officeScene: SceneSpec = {
       id: "devCrt",
       nameKey: "object.devCrt",
       kind: "decor",
-      x: 285,
-      y: 432,
+      x: DEV_X + SCREEN_DX,
+      y: DEV_Y - 41 + 25 - 26,
       z: 3,
       render: { className: "office-crt-back", bar: { width: 30, height: 26 } },
       behaviors: [],
@@ -155,8 +180,8 @@ export const officeScene: SceneSpec = {
       id: "devDesk",
       nameKey: "object.desk",
       kind: "decor",
-      x: 300,
-      y: 480,
+      x: DEV_X,
+      y: DEV_Y,
       render: { prop: { id: "desk" as const, scale: 1.4 } },
       behaviors: [],
     },
@@ -166,8 +191,8 @@ export const officeScene: SceneSpec = {
       id: "supplyForm",
       nameKey: "object.supplyForm",
       kind: "sprite" as const,
-      x: 42,
-      y: 214,
+      x: 36,
+      y: 250,
       z: 2,
       render: { className: "office-form", bar: { width: 26, height: 32 } },
       behaviors: [
@@ -181,8 +206,8 @@ export const officeScene: SceneSpec = {
       id: "bookshelf",
       nameKey: "object.cabinet",
       kind: "decor",
-      x: 42,
-      y: 300,
+      x: 36,
+      y: 330,
       render: { prop: { id: "bookshelf" as const, scale: 1.4 } },
       behaviors: [{ t: "blocker", radius: 24 }],
     },
@@ -190,8 +215,8 @@ export const officeScene: SceneSpec = {
       id: "crate",
       nameKey: "object.crate",
       kind: "decor",
-      x: 322,
-      y: 268,
+      x: 44,
+      y: 566,
       render: { prop: { id: "crate" as const, scale: 1.3 } },
       behaviors: [{ t: "blocker", radius: 18 }],
     },
@@ -199,8 +224,8 @@ export const officeScene: SceneSpec = {
       id: "barrel",
       nameKey: "object.barrel",
       kind: "decor",
-      x: 322,
-      y: 316,
+      x: 84,
+      y: 572,
       render: { prop: { id: "barrel" as const, scale: 1.3 } },
       behaviors: [{ t: "blocker", radius: 18 }],
     },
@@ -208,8 +233,8 @@ export const officeScene: SceneSpec = {
       id: "rug",
       nameKey: "object.rug",
       kind: "decor",
-      x: 168,
-      y: 400,
+      x: 180,
+      y: 430,
       z: 0,
       render: { prop: { id: "rug" as const, scale: 1.2 } },
       behaviors: [],
