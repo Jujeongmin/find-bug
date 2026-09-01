@@ -426,7 +426,7 @@
   "object.loadedHud": "Loaded count",
   "object.belt": "Conveyor",
   "hint.drag": "Drag anywhere to move",
-  "hint.keys": "Arrow keys to move · space to attack",
+  "hint.keys": "Arrow keys to move · use the attack button",
   "hint.sideView": "Left and right to move · ⤒ to jump",
   "object.counter": "Stall counter",
   "home.condition": "Condition",

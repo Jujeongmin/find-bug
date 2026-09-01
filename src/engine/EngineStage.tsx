@@ -135,6 +135,10 @@ export function EngineStage({
   );
   const stickId = useRef<number | null>(null);
   const stickOrigin = useRef<{ x: number; y: number } | null>(null);
+  /** the station the player is standing next to, for the space bar */
+  const nearStationRef = useRef<{ id: string; labelKey: string } | null>(null);
+  const onStationRef = useRef(onStation);
+  onStationRef.current = onStation;
   /**
    * How to move, shown for a few seconds when a build starts. The touch pad
    * was replaced by drag-to-move, which leaves nothing on screen saying so.
@@ -207,12 +211,21 @@ export function EngineStage({
     const down = (e: KeyboardEvent) => {
       if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key))
         e.preventDefault();
-      if (e.key === " " || e.key === "ArrowUp" || e.key.toLowerCase() === "w") {
+      // space is "use what you are standing next to". It used to swing the
+      // attack, which meant the one key a player reaches for first did
+      // nothing in the three rooms that are mostly walking up to things.
+      if (e.key === " ") {
+        const ns = nearStationRef.current;
+        if (ns && onStationRef.current) {
+          sfx.play("click");
+          onStationRef.current(ns.id);
+        }
+        return;
+      }
+      if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") {
         if (phaseRef.current !== "play") return;
         if (sceneRef.current.sideView) {
           if (!e.repeat) runtimeRef.current.jump();
-        } else if (e.key === " ") {
-          runtimeRef.current.doAttack(70);
         } else {
           runtimeRef.current.keys.add(e.key.toLowerCase());
         }
@@ -334,6 +347,7 @@ export function EngineStage({
     }
     return null;
   })();
+  nearStationRef.current = nearStation;
   const st = runtime.state;
 
   /** the row for a facing, falling back to a cardinal the sheet does have */
@@ -782,6 +796,9 @@ export function EngineStage({
               }}
             >
               {t(nearStation.labelKey)}
+              {matchMedia("(pointer: fine)").matches && (
+                <em className="key-hint">space</em>
+              )}
             </button>
           )}
           {!picking && hasPlayer && (
