@@ -354,6 +354,18 @@ export class SceneRuntime {
 
           case "patrol": {
             if (!os.alive) break;
+            // a patrolling actor is walking, and walking has a direction —
+            // without this an eight-facing character slid down the street
+            // frozen on its idle frame, facing whichever way it was placed
+            os.moving = true;
+            os.dir4 =
+              b.axis === "x"
+                ? os.dir > 0
+                  ? "right"
+                  : "left"
+                : os.dir > 0
+                  ? "down"
+                  : "up";
             const v = b.speed * os.dir * dt;
             if (b.axis === "x") os.x += v;
             else os.y += v;

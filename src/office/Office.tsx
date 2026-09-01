@@ -30,6 +30,8 @@ const MINUTES_PER_SECOND = 2;
 
 /** things the developer says when there is nothing more pressing */
 const IDLE_LINES = 5;
+/** tired things the people on the commute say, in rotation */
+const PASSER_LINES = 6;
 
 /**
  * ?place=office (or home, street) opens the day in that room.
@@ -203,6 +205,8 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [dayOver, setDayOver] = useState(false);
   /** one coffee per commute */
   const [hadCoffee, setHadCoffee] = useState(false);
+  /** how many people on the walk have been spoken to, so their lines rotate */
+  const [greeted, setGreeted] = useState(0);
   const [condition, setCondition] = useState(MAX_CONDITION);
   /** one restful thing per evening */
   const [restedTonight, setRestedTonight] = useState(false);
@@ -361,6 +365,11 @@ export function Office({ onExit }: { onExit: () => void }) {
       sfx.play("click");
       setPlace("office");
       setNote(null);
+      return;
+    }
+    if (id.startsWith("passer")) {
+      setNote(t(`street.passer${greeted % PASSER_LINES}`));
+      setGreeted((n) => n + 1);
       return;
     }
     if (id === "homeDoor") {

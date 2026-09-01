@@ -725,7 +725,7 @@ export function EngineStage({
                     tappable ? "pickable" : ""
                   } ${high ? "meter-high" : ""} ${
                     triggered ? "triggered" : ""
-                  }`}
+                  } ${o.render.className ?? ""}`}
                   style={{ left: os.x, top: os.y, zIndex: o.z ?? 1 }}
                   onClick={(e) => {
                     e.stopPropagation();

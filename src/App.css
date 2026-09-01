@@ -645,22 +645,25 @@
 }
 
 /* ---- the walk to work ---- */
-/* A street between two buildings: the office at the top, home at the bottom,
-   pavement down both sides and along each frontage, road in the middle. The
-   player used to walk up the centre line of a carriageway. */
+/* A walk to work, not a carriageway. The player used to trudge up the centre
+   line of a road; it is paving now, from one doorway to the other, with the
+   middle worn a shade darker by everyone who takes the same line every
+   morning. */
 .street-ground {
   background:
-    linear-gradient(#9a948a, #8e887e) 0 150px / 100% 46px no-repeat,
-    linear-gradient(#9a948a, #8e887e) 0 546px / 100% 32px no-repeat,
-    linear-gradient(#9a948a, #8e887e) 0 196px / 56px 350px no-repeat,
-    linear-gradient(#9a948a, #8e887e) 304px 196px / 56px 350px no-repeat,
-    repeating-linear-gradient(
-      180deg,
-      transparent 0 26px,
-      rgba(255, 240, 190, 0.5) 26px 52px
-    ) 176px 196px / 8px 350px no-repeat,
-    linear-gradient(#4a4740, #3f3d37);
+    repeating-linear-gradient(90deg, transparent 0 38px, rgba(0, 0, 0, 0.09) 38px 40px),
+    repeating-linear-gradient(180deg, transparent 0 38px, rgba(0, 0, 0, 0.09) 38px 40px),
+    linear-gradient(90deg, transparent 116px, rgba(0, 0, 0, 0.05) 116px 244px, transparent 244px),
+    linear-gradient(#9a948a, #8c867c);
 }
+/* Everyone else on the walk. The pack has two characters in it and both are
+   spoken for — one is the player, the other is the developer — so the people
+   going the other way are those same sprites with the colour turned round.
+   Blue, olive and violet coats: not you, and not him. */
+.street-passer .sprite-emoji { filter: saturate(0.85) brightness(0.96); }
+.street-passer.p0 .sprite-emoji { filter: hue-rotate(205deg) saturate(0.9) brightness(0.98); }
+.street-passer.p1 .sprite-emoji { filter: hue-rotate(295deg) saturate(0.8) brightness(0.95); }
+.street-passer.p2 .sprite-emoji { filter: hue-rotate(38deg) saturate(0.95) brightness(1.02); }
 /* the house at the bottom of the street, and the door home in it */
 .street-home {
   background:

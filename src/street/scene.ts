@@ -1,7 +1,7 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
 
-const actor = (): ActorSpec => ({
-  sheet: "worker",
+const actor = (sheet: "worker" | "worker2" = "worker"): ActorSpec => ({
+  sheet,
   rows: {
     down: 0,
     downRight: 1,
@@ -72,6 +72,34 @@ export const streetScene: SceneSpec = {
       render: { prop: { id: "door", scale: 1.6 } },
       behaviors: [{ t: "station", radius: 58, labelKey: "street.enter" }],
     },
+
+    /*
+     * Other people on the same walk, standing where they stopped.
+     *
+     * The pack has two characters in it and both are spoken for — one is the
+     * player, the other is the developer — so these are the same sprites with
+     * the colour turned round on each. A stranger in a blue coat is not you
+     * and is not him, which is all a passer-by has to say for itself before
+     * it opens its mouth.
+     */
+    ...[
+      { id: "passer0", sheet: "worker2" as const, x: 98, y: 330, facing: "left" as const, tint: "p0" },
+      { id: "passer1", sheet: "worker" as const, x: 262, y: 300, facing: "down" as const, tint: "p1" },
+      { id: "passer2", sheet: "worker2" as const, x: 140, y: 482, facing: "up" as const, tint: "p2" },
+    ].map((c) => ({
+      id: c.id,
+      nameKey: `object.${c.id}`,
+      kind: "sprite" as const,
+      x: c.x,
+      y: c.y,
+      z: 2,
+      facing: c.facing,
+      render: { actor: actor(c.sheet), className: `street-passer ${c.tint}` },
+      behaviors: [
+        { t: "blocker" as const, radius: 16 },
+        { t: "station" as const, radius: 46, labelKey: "street.talk" },
+      ],
+    })),
 
     /* the vending machine: alertness, paid for in minutes */
     {
