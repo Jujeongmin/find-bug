@@ -188,8 +188,10 @@ export class SceneRuntime {
           const spec = this.scene.counters.find((c) => c.id === a.counter);
           const next = spec?.max !== undefined ? Math.min(spec.max, cur + a.by) : cur + a.by;
           this.state.counters[a.counter] = next;
-          const shown = a.popupBy ?? a.by;
-          this.addPopup(at.x, at.y - 26, shown >= 0 ? `+${shown}` : `${shown}`);
+          if (!a.quiet) {
+            const shown = a.popupBy ?? a.by;
+            this.addPopup(at.x, at.y - 26, shown >= 0 ? `+${shown}` : `${shown}`);
+          }
           break;
         }
         case "heal": {

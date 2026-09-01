@@ -315,7 +315,7 @@ export function Workbench({ onExit }: { onExit: () => void }) {
                 </button>
               ))}
             </div>
-            <button className="btn-ghost" onClick={() => setSelected(null)}>
+            <button data-space className="btn-ghost" onClick={() => setSelected(null)}>
               {t("wb.close")}
             </button>
           </div>

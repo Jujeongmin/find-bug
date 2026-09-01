@@ -21,6 +21,7 @@ import {
 import { poolFor } from "./curriculum";
 import type { Band } from "./score";
 import "../styles/shared.css";
+import { HAS_KEYBOARD } from "../components/useSpaceCloses";
 import "./engine.css";
 
 type Phase = "intro" | "play" | "picking" | "category" | "result" | "dead";
@@ -848,8 +849,9 @@ export function EngineStage({
             <p>{t("intro.hint")}</p>
             <p className="once-warning">{t("challenge.once")}</p>
             <div className="modal-actions">
-              <button className="btn-primary" onClick={() => setPhase("play")}>
+              <button data-space className="btn-primary" onClick={() => setPhase("play")}>
                 {t("intro.go")}
+                {HAS_KEYBOARD && <em className="key-hint">space</em>}
               </button>
             </div>
           </div>
@@ -866,7 +868,7 @@ export function EngineStage({
               <button className="btn-ghost" onClick={onExit}>
                 {t("game.exit")}
               </button>
-              <button className="btn-primary" onClick={nextRound}>
+              <button data-space className="btn-primary" onClick={nextRound}>
                 {t("result.dead.retry")}
               </button>
             </div>

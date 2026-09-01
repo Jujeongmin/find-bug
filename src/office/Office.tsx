@@ -7,6 +7,7 @@ import { homeScene } from "../home/scene";
 import { streetScene } from "../street/scene";
 import { ENGINE_SCENES } from "../stages/registry";
 import { sfx } from "../audio/sfx";
+import { HAS_KEYBOARD } from "../components/useSpaceCloses";
 
 /**
  * Days to ship. Five left no room to earn: the three things on sale come to
@@ -195,25 +196,6 @@ export function Office({ onExit }: { onExit: () => void }) {
     }, 250);
     return () => clearInterval(id);
   }, [shipped]);
-
-  /**
-   * Space closes whatever the last prompt said, the same key that opened it.
-   *
-   * It listens in the capture phase and stops the event there, because the
-   * scene also binds space to "use the thing you are standing next to" — left
-   * to bubble, closing the developer's line would immediately reopen it.
-   */
-  useEffect(() => {
-    if (!note) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== " " && e.key !== "Escape" && e.key !== "Enter") return;
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      setNote(null);
-    };
-    window.addEventListener("keydown", onKey, true);
-    return () => window.removeEventListener("keydown", onKey, true);
-  }, [note]);
 
   const scenesById = useMemo(
     () => Object.fromEntries(ENGINE_SCENES.map((s) => [s.id, s])),
@@ -536,7 +518,7 @@ export function Office({ onExit }: { onExit: () => void }) {
                 );
               })}
             </div>
-            <button className="btn-primary" onClick={() => setShop(null)}>
+            <button data-space className="btn-primary" onClick={() => setShop(null)}>
               {t("wb.close")}
             </button>
           </div>
@@ -547,11 +529,9 @@ export function Office({ onExit }: { onExit: () => void }) {
         <div className="modal-backdrop" onClick={() => setNote(null)}>
           <div className="modal">
             <p>{note}</p>
-            <button className="btn-primary" onClick={() => setNote(null)}>
+            <button data-space className="btn-primary" onClick={() => setNote(null)}>
               {t("wb.close")}
-              {matchMedia("(pointer: fine)").matches && (
-                <em className="key-hint">space</em>
-              )}
+              {HAS_KEYBOARD && <em className="key-hint">space</em>}
             </button>
           </div>
         </div>

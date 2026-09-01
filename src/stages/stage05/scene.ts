@@ -19,7 +19,7 @@ export const stage05Scene: SceneSpec = {
       duration: 5,
       onDone: [
         { a: "increment", counter: "products", by: 1 },
-        { a: "increment", counter: "loaded", by: -1 },
+        { a: "increment", counter: "loaded", by: -1, quiet: true },
       ],
     },
   ],
@@ -49,7 +49,7 @@ export const stage05Scene: SceneSpec = {
         {
           t: "clickable" as const,
           action: [
-            { a: "increment" as const, counter: "stock", by: -1 },
+            { a: "increment" as const, counter: "stock", by: -1, quiet: true },
             { a: "increment" as const, counter: "loaded", by: 1 },
           ],
         },

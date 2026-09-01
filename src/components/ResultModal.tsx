@@ -24,11 +24,11 @@ export function ResultModal({ success, bug, bugText, onRetry, onDone }: Props) {
         {success && desc && <p className="bug-desc">🐛 {desc}</p>}
         <div className="modal-actions">
           {success ? (
-            <button className="btn-primary" onClick={onDone}>
+            <button data-space className="btn-primary" onClick={onDone}>
               {t("result.next")}
             </button>
           ) : (
-            <button className="btn-primary" onClick={onRetry}>
+            <button data-space className="btn-primary" onClick={onRetry}>
               {t("result.retry")}
             </button>
           )}

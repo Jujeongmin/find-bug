@@ -17,6 +17,7 @@ import { Workbench } from "./regression/Workbench";
 import { EndingScreen } from "./components/EndingScreen";
 import { MuteToggle } from "./components/MuteToggle";
 import { sfx } from "./audio/sfx";
+import { useSpaceCloses } from "./components/useSpaceCloses";
 import "./App.css";
 
 const CURRICULUM = buildCurriculum(ENGINE_SCENES, 30);
@@ -34,6 +35,7 @@ const REPRO = new URLSearchParams(location.search).has("repro");
 const STAGES = new URLSearchParams(location.search).has("stages");
 
 export default function App() {
+  useSpaceCloses();
   const [lang, setLang] = useState<Lang>(detectLang);
   /** stage number currently being played, or null on the title screen */
   const [playing, setPlaying] = useState<number | null>(null);

@@ -12,6 +12,15 @@ export type Action =
       by: number;
       /** what the floating popup claims was added (defaults to `by`) */
       popupBy?: number;
+      /**
+       * No floating number for this one.
+       *
+       * For the bookkeeping half of a pair: taking a herb off the shelf both
+       * empties the shelf and fills the pot, and two numbers rising out of the
+       * same click at the same instant read as noise rather than as either
+       * fact. The counter still moves in the HUD, where the shelf is shown.
+       */
+      quiet?: boolean;
     }
   | { a: "heal"; counter: string; by: number }
   | { a: "attack"; range: number }
