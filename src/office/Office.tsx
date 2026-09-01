@@ -12,6 +12,7 @@ import { sfx } from "../audio/sfx";
 import { shipRating, totalStake, type Severity } from "./rating";
 import { HAS_KEYBOARD } from "../components/useSpaceCloses";
 import { MuteToggle } from "../components/MuteToggle";
+import { available as adsAvailable, showRewarded } from "../net/ads";
 
 /**
  * Days to ship. Five left no room to earn: the three things on sale come to
@@ -122,6 +123,9 @@ const LATE_FINISH = 16 * 60 + 30;
 /** what a coffee on the way in costs, and what it is worth */
 const COFFEE_MINUTES = 15;
 
+/** how much of the evening a rewarded ad buys back, once a day */
+const OVERTIME_MINUTES = 30;
+
 /** what a confirmed defect is worth once the developer has it */
 const BOUNTY: Record<Severity, number> = { low: 20, normal: 40, critical: 80 };
 
@@ -230,6 +234,13 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [hadCoffee, setHadCoffee] = useState(false);
   /** how many people on the walk have been spoken to, so their lines rotate */
   const [greeted, setGreeted] = useState(0);
+  /** minutes bought back today, and whether each offer has been taken */
+  const [overtime, setOvertime] = useState(0);
+  const [tookOvertime, setTookOvertime] = useState(false);
+  const [tookFreeCoffee, setTookFreeCoffee] = useState(false);
+  /** an offer waiting on the player, drawn as a two-way prompt */
+  const [offer, setOffer] = useState<null | "overtime" | "coffee">(null);
+  const [watching, setWatching] = useState(false);
   const [condition, setCondition] = useState(MAX_CONDITION);
   /** one restful thing per evening */
   const [restedTonight, setRestedTonight] = useState(false);
@@ -247,10 +258,11 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (shipped || dayOver || place === "home") return;
     const id = setInterval(() => {
       setMinutes((m) => {
-        if (m >= DAY_END) return m;
+        const end = DAY_END + overtime;
+        if (m >= end) return m;
         const next = m + MINUTES_PER_SECOND / 4;
-        if (next >= DAY_END) goHomeRef.current();
-        return Math.min(next, DAY_END);
+        if (next >= end) goHomeRef.current();
+        return Math.min(next, end);
       });
     }, 250);
     return () => clearInterval(id);
@@ -258,7 +270,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     // again, so the clock ran on whatever the game had opened with. Starting the
     // day at home turned that from "time passes while you sleep" into "time
     // never passes at all".
-  }, [shipped, place, dayOver]);
+  }, [shipped, place, dayOver, overtime]);
 
   /**
    * The office floor, with the player put back where they were standing.
@@ -358,6 +370,9 @@ export function Office({ onExit }: { onExit: () => void }) {
     );
     setRestedTonight(false);
     setHadCoffee(false);
+    setOvertime(0);
+    setTookOvertime(false);
+    setTookFreeCoffee(false);
     setDayOver(false);
     setPlace("home");
     // the walk in is where the coffee is, and the fifteen minutes it costs is
@@ -365,7 +380,54 @@ export function Office({ onExit }: { onExit: () => void }) {
     // morning, by walking out of their own front door
     setNote(tp("home.morning", { n: String(day + 1) }));
   };
-  goHomeRef.current = clockOff;
+  /**
+   * Six o'clock. If there are builds left unverified and the half hour has
+   * not been taken today, the day pauses on the offer rather than ending —
+   * which is the one moment the player most wants more of it. Declining, or
+   * having nothing left to look at, knocks off as before.
+   */
+  const endOfDay = () => {
+    const left = assignments.filter((a) => a.result === null).length;
+    if (left > 0 && !tookOvertime && adsAvailable()) {
+      setOffer("overtime");
+      return;
+    }
+    clockOff();
+  };
+  goHomeRef.current = endOfDay;
+
+  /** the coffee as it has always been bought: with a quarter of an hour */
+  const payForCoffee = () => {
+    setHadCoffee(true);
+    setCondition((c) => Math.min(MAX_CONDITION, c + 1));
+    setMinutes((m) => Math.min(DAY_END + overtime, m + COFFEE_MINUTES));
+    sfx.play("pick");
+    setNote(tp("street.gotCoffee", { n: String(COFFEE_MINUTES) }));
+  };
+
+  /** the reward, once the ad has actually run to the end */
+  const takeOffer = async (kind: "overtime" | "coffee") => {
+    setWatching(true);
+    const done = await showRewarded(kind);
+    setWatching(false);
+    setOffer(null);
+    if (!done) {
+      // a dismissed ad earns nothing, and at six o'clock the day still ends
+      if (kind === "overtime") clockOff();
+      return;
+    }
+    if (kind === "overtime") {
+      setTookOvertime(true);
+      setOvertime((o) => o + OVERTIME_MINUTES);
+      sfx.play("success");
+      return;
+    }
+    setTookFreeCoffee(true);
+    setHadCoffee(true);
+    setCondition((c) => Math.min(MAX_CONDITION, c + 1));
+    sfx.play("pick");
+    setNote(t("street.freeCoffee"));
+  };
 
   /**
    * What the developer says, most pressing first. Reacting to the build you
@@ -413,11 +475,8 @@ export function Office({ onExit }: { onExit: () => void }) {
       if (hadCoffee) return setNote(t("street.hadCoffee"));
       // fifteen minutes for nothing is a trap, not a decision
       if (condition >= MAX_CONDITION) return setNote(t("common.alreadyFine"));
-      setHadCoffee(true);
-      setCondition((c) => Math.min(MAX_CONDITION, c + 1));
-      setMinutes((m) => Math.min(DAY_END, m + COFFEE_MINUTES));
-      sfx.play("pick");
-      return setNote(tp("street.gotCoffee", { n: String(COFFEE_MINUTES) }));
+      if (!tookFreeCoffee && adsAvailable()) return setOffer("coffee");
+      return payForCoffee();
     }
   };
 
@@ -708,6 +767,39 @@ export function Office({ onExit }: { onExit: () => void }) {
         </button>
         <MuteToggle />
       </div>
+
+      {offer && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h2>{t(`offer.${offer}.title`)}</h2>
+            <p>{t(`offer.${offer}.body`)}</p>
+            <div className="modal-actions">
+              <button
+                className="btn-ghost"
+                disabled={watching}
+                onClick={() => {
+                  const kind = offer;
+                  setOffer(null);
+                  // at six o'clock, saying no is knocking off; at the machine
+                  // it is buying the coffee the way it has always been bought
+                  if (kind === "overtime") clockOff();
+                  else payForCoffee();
+                }}
+              >
+                {t(`offer.${offer}.no`)}
+              </button>
+              <button
+                data-space
+                className="btn-primary"
+                disabled={watching}
+                onClick={() => takeOffer(offer)}
+              >
+                {watching ? t("offer.watching") : t(`offer.${offer}.yes`)}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {shop && (
         <div className="modal-backdrop" onClick={() => setShop(null)}>

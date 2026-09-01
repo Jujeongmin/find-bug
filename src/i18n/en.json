@@ -453,5 +453,15 @@
   "street.passer5": "That building is shipping something this week. Lights on every night.",
   "object.sign": "Sign",
   "common.alreadyFine": "You are fine as you are. Save it.",
-  "goal.stage04": "Turn the cards over and match the pairs"
+  "goal.stage04": "Turn the cards over and match the pairs",
+  "offer.overtime.title": "Six o'clock",
+  "offer.overtime.body": "There is a build you have not looked at. You could have another half hour.",
+  "offer.overtime.yes": "Watch an ad for 30 minutes",
+  "offer.overtime.no": "Knock off",
+  "offer.coffee.title": "Vending machine",
+  "offer.coffee.body": "A coffee. Fifteen minutes, or an ad.",
+  "offer.coffee.yes": "Watch an ad, keep the time",
+  "offer.coffee.no": "Pay the fifteen minutes",
+  "offer.watching": "Playing…",
+  "street.freeCoffee": "A coffee for the price of an ad. The time is still yours."
 }

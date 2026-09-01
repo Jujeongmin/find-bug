@@ -453,5 +453,15 @@
   "street.passer5": "저 건물, 이번 주에 뭐 하나 낸대요. 밤마다 불이 켜져 있더라고요.",
   "object.sign": "간판",
   "common.alreadyFine": "지금은 멀쩡하다. 아껴두자.",
-  "goal.stage04": "카드를 뒤집어 같은 그림끼리 짝을 맞춰라"
+  "goal.stage04": "카드를 뒤집어 같은 그림끼리 짝을 맞춰라",
+  "offer.overtime.title": "여섯 시다",
+  "offer.overtime.body": "아직 안 본 빌드가 남았다. 30분만 더 볼 수도 있다.",
+  "offer.overtime.yes": "광고 보고 30분 더",
+  "offer.overtime.no": "퇴근한다",
+  "offer.coffee.title": "자판기",
+  "offer.coffee.body": "커피 한 잔. 15분을 내거나, 광고를 보거나.",
+  "offer.coffee.yes": "광고 보고 공짜로",
+  "offer.coffee.no": "15분 내고 마신다",
+  "offer.watching": "재생 중…",
+  "street.freeCoffee": "광고 하나 값의 커피다. 시간은 안 썼다."
 }

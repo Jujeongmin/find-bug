@@ -95,7 +95,9 @@ export const streetScene: SceneSpec = {
      * it opens its mouth.
      */
     ...[
-      { id: "passer0", sheet: "worker2" as const, x: 98, y: 330, facing: "left" as const, tint: "p0" },
+      // clear of the vending machine: standing beside it, this one took the
+      // prompt that machine is the only reason to walk over there for
+      { id: "passer0", sheet: "worker2" as const, x: 152, y: 300, facing: "left" as const, tint: "p0" },
       { id: "passer1", sheet: "worker" as const, x: 262, y: 300, facing: "down" as const, tint: "p1" },
       { id: "passer2", sheet: "worker2" as const, x: 140, y: 482, facing: "up" as const, tint: "p2" },
     ].map((c) => ({

@@ -334,18 +334,30 @@ export class SceneRuntime {
               b.minY,
               Math.min(b.maxY, os.y + (dy / len) * b.speed * dt)
             );
-            let blocked = false;
-            for (const other of this.scene.objects) {
-              const bl = other.behaviors.find((x) => x.t === "blocker");
-              if (!bl || bl.t !== "blocker") continue;
-              const bc = hitCentre(other, st.objects[other.id]);
-              if (Math.hypot(nx - bc.x, ny - bc.y) < bl.radius) {
-                blocked = true;
-                break;
+            const free = (x: number, y: number) => {
+              for (const other of this.scene.objects) {
+                const bl = other.behaviors.find((b2) => b2.t === "blocker");
+                if (!bl || bl.t !== "blocker") continue;
+                const bc = hitCentre(other, st.objects[other.id]);
+                if (Math.hypot(x - bc.x, y - bc.y) < bl.radius) return false;
               }
-            }
-            if (!blocked) {
+              return true;
+            };
+            /*
+             * Slide along what you are pressed against.
+             *
+             * The whole move used to be tested as one point, so a diagonal that
+             * clipped a blocker cancelled both axes: standing next to someone on
+             * the pavement and walking away at an angle held you still, with no
+             * sign of what was holding you. Each axis is offered on its own
+             * before the move is refused.
+             */
+            if (free(nx, ny)) {
               os.x = nx;
+              os.y = ny;
+            } else if (free(nx, os.y)) {
+              os.x = nx;
+            } else if (free(os.x, ny)) {
               os.y = ny;
             }
             if (dx !== 0) os.facing = dx > 0 ? 1 : -1;
