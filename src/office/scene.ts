@@ -76,7 +76,16 @@ export const officeScene: SceneSpec = {
       behaviors: [],
     })),
 
-    /* three test machines on their desks */
+    /*
+     * Three test machines, each turned side-on.
+     *
+     * The screen used to sit square against the wall, which puts whoever uses
+     * it below the desk facing away from us — and the one chair drawn from
+     * behind reads as a ladder. Turning the station sideways asks nothing of
+     * the art that the art cannot do: monitor on the left of the desk, chair
+     * pulled up on the right facing left, and the side view of a chair is the
+     * one this pack draws well.
+     */
     ...[
       { id: "machineA", x: 62, labelKey: "office.runA" },
       { id: "machineB", x: 180, labelKey: "office.runB" },
@@ -85,7 +94,7 @@ export const officeScene: SceneSpec = {
       id: m.id,
       nameKey: `object.${m.id}`,
       kind: "sprite" as const,
-      x: m.x - 15,
+      x: m.x - 27,
       y: WALL_H - 22,
       z: 2,
       render: { className: "office-crt", bar: { width: 30, height: 26 } },
@@ -103,26 +112,14 @@ export const officeScene: SceneSpec = {
       render: { prop: { id: "desk" as const, scale: 1.4 } },
       behaviors: [],
     })),
-    /*
-     * Chairs, seen from behind, tucked in at their own desk.
-     *
-     * The screen is on the wall, so whoever uses it sits with their back to
-     * us — which means the back of the chair is what should be facing us. The
-     * front-facing art put the backrest between the seat and the desk and sat
-     * the worker down looking away from the machine; the side view dodged the
-     * question without answering it. This one answers it.
-     */
+    /* the seat, pulled up on the right of the desk and facing the screen */
     ...[62, 180, 298].map((x, i) => ({
       id: `chair${i}`,
       nameKey: "object.chair",
       kind: "decor" as const,
-      x,
-      // pushed up under the desk edge: the pale wood of this chair has little
-      // to say against an orange floor, and plenty against the desk above it
-      y: WALL_H + 34,
-      render: {
-        sprite: { sheet: "roguelike" as const, col: 38, row: 8, scale: 1.9 },
-      },
+      x: x + 30,
+      y: WALL_H + 30,
+      render: { prop: { id: "chairSide" as const, scale: 1.4 } },
       behaviors: [],
     })),
 

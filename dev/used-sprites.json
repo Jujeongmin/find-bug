@@ -264,18 +264,6 @@
   "margin": 0
  },
  {
-  "scene": "office",
-  "id": "chair0",
-  "name": "의자",
-  "sheet": "roguelike",
-  "col": 38,
-  "row": 8,
-  "spanX": 1,
-  "spanY": 1,
-  "tile": 16,
-  "margin": 1
- },
- {
   "scene": "home",
   "id": "bed",
   "name": "침대",
