@@ -47,11 +47,8 @@
   50% { opacity: 1; }
 }
 
-/* wide,
-flat props (platforms,
-shelves,
-pipes) */
-.s3-plat{
+/* wide, flat props (platforms, shelves, pipes) */
+.s3-plat, .s2-shelf-strip, .s6-water-strip {
   letter-spacing: -2px;
 }
 
@@ -137,5 +134,4 @@ pipes) */
 }
 @media (prefers-reduced-motion: reduce) {
   .waypoint { animation: none; }
-}
 }
