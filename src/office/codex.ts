@@ -22,7 +22,7 @@ import type { BugCategory } from "../core/types";
 const KEY = "fb_codex_v1";
 
 export type Seen = "caught" | "missed";
-type Book = Record<string, Seen>;
+export type Book = Record<string, Seen>;
 
 const id = (sceneId: string, bugId: string) => `${sceneId}/${bugId}`;
 
@@ -56,6 +56,31 @@ export function recordBug(sceneId: string, bugId: string, result: Seen): void {
   } catch {
     /* a browser that will not store is a browser that plays without a book */
   }
+}
+
+/**
+ * Fold another copy of the book into this one.
+ *
+ * Used when the account's copy comes down: the player caught what either
+ * device saw, and catching something never un-catches it, so the union is the
+ * answer and the order of the two arguments does not matter.
+ */
+export function mergeCodex(incoming: Book): Book {
+  const book = loadCodex();
+  let changed = false;
+  for (const [id, state] of Object.entries(incoming)) {
+    if (book[id] === "caught" || book[id] === state) continue;
+    book[id] = state;
+    changed = true;
+  }
+  if (changed) {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(book));
+    } catch {
+      /* a browser that will not store is a browser that plays without a book */
+    }
+  }
+  return book;
 }
 
 export interface CodexRow {

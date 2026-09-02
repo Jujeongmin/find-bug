@@ -1,5 +1,7 @@
 import { devParam, devFlag } from "../dev";
 import { recordBug, codexRows, codexTally } from "./codex";
+import { syncBook, queueSync, reportRun } from "../net/save";
+import { useGameServer } from "@agent8/gameserver";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { useI18n } from "../i18n";
@@ -447,6 +449,21 @@ export function Office({ onExit }: { onExit: () => void }) {
    * report on one run and says nothing about the next; this is the line that
    * does, so it belongs on the screen the player reads last.
    */
+  /*
+   * The account copy of the book.
+   *
+   * Local storage draws the game; this is the copy that survives a change of
+   * device, which is the only thing a book filling up across runs is for. It
+   * folds both ways on arrival and is allowed to fail silently — a book that
+   * did not sync is a book that syncs next time.
+   */
+  const { server, connected } = useGameServer();
+  useEffect(() => {
+    if (connected) void syncBook(server);
+  }, [connected, server]);
+
+  /** so a re-render of the terminal screen does not count the run twice */
+  const runReported = useRef(false);
   const [codexAtStart] = useState(() => codexTally(codexRows()).caught);
   const [shipped, setShipped] = useState(false);
   const [caught, setCaught] = useState(0);
@@ -630,7 +647,10 @@ export function Office({ onExit }: { onExit: () => void }) {
      * hours for it was never seen, and a book that counted it would be
      * recording the calendar rather than the player.
      */
-    if (running.bugId) recordBug(running.sceneId, running.bugId, result);
+    if (running.bugId) {
+      recordBug(running.sceneId, running.bugId, result);
+      queueSync(connected ? server : null);
+    }
     /*
      * And once a day, from the second step on, they come and take it off you
      * rather than waiting at their desk. One walk saved out of however many
@@ -1087,6 +1107,17 @@ export function Office({ onExit }: { onExit: () => void }) {
       0
     );
     const rating = shipRating(shipped_, late, stake);
+    /*
+     * The run is over, so the account hears about it once. Written straight
+     * into the render rather than an effect because this screen is terminal —
+     * there is no next state for an effect to belong to, and the guard is the
+     * ref rather than a dependency array.
+     */
+    if (!runReported.current) {
+      runReported.current = true;
+      void reportRun(connected ? server : null, rating);
+      void syncBook(server);
+    }
     return (
       <div className="wb-root wb-ship">
         <h1>{t("office.shipTitle")}</h1>
