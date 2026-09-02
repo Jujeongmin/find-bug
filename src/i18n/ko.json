@@ -542,5 +542,9 @@
   "quest.goHome": "집으로 가자",
   "quest.sleep": "자자 — 침대로",
   "quest.weekend": "오늘은 쉬는 날이다",
-  "quest.coffee": "커피부터 사자 — 넷째 빌드는 그게 있어야 본다"
+  "quest.coffee": "커피부터 사자 — 넷째 빌드는 그게 있어야 본다",
+  "home.morningBright": "{n}일차. 잘 잤다. 오늘은 좀 해볼 만하겠다.",
+  "home.morningFlat": "{n}일차. 눈은 떴는데 아직 안 일어난 것 같다.",
+  "office.dev.worried": "\"너 요즘 좀 그래 보여. 오늘은 일찍 가.\"",
+  "spirit.what": "마음. 포장마차에서 오르고, 야근·주말 출근에 깎인다. 야근하면 다음 날 빌드를 못 보는데 — 마음이 가득하면 1개, 보통이면 2개, 바닥이면 3개다."
 }

@@ -542,5 +542,9 @@
   "quest.goHome": "Head home",
   "quest.sleep": "Get some sleep — to bed",
   "quest.weekend": "Today is yours",
-  "quest.coffee": "Get a coffee first — the fourth build needs it"
+  "quest.coffee": "Get a coffee first — the fourth build needs it",
+  "home.morningBright": "Day {n}. You slept well. Today looks doable.",
+  "home.morningFlat": "Day {n}. Your eyes are open. The rest of you is not.",
+  "office.dev.worried": "“You have looked rough lately. Go home early today.”",
+  "spirit.what": "Your spirits. The stall raises them; overtime and weekend shifts lower them. Stay late and you lose builds tomorrow — one if your spirits are full, two if they are middling, three if they are empty."
 }

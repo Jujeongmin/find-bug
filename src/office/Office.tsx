@@ -565,8 +565,25 @@ export function Office({ onExit }: { onExit: () => void }) {
    * an item that could not do anything. Half of any long stint is something it
    * can always be doing.
    */
+  /**
+   * What one long stint takes out of the night.
+   *
+   * Spirits belong here rather than anywhere else in the day. Someone who has
+   * been eating and going home takes a late night better than someone who has
+   * not, and that is the only place the difference shows in a working life —
+   * not in how fast you read a screen, but in what the next morning costs.
+   *
+   * Never free. A night worked is a night worked, and a cost that reaches
+   * nothing turns the stall from something you want into something you farm.
+   */
   const borrowCost = () =>
-    owned.includes("chair") ? BORROW_COST / 2 : BORROW_COST;
+    Math.max(
+      1,
+      BORROW_COST -
+        (owned.includes("chair") ? 1 : 0) -
+        (spirit >= MAX_SPIRIT - 1 ? 1 : 0) +
+        (spirit <= 1 ? 1 : 0)
+    );
   /** a weekend spent on something else, cashed in on the next morning */
   const [earlyTomorrow, setEarlyTomorrow] = useState(false);
   /** one restful thing per evening */
@@ -662,7 +679,15 @@ export function Office({ onExit }: { onExit: () => void }) {
         ? tp("home.morningFreeze", { n: String(d) })
         : d === 1
           ? t("home.morningFirst")
-          : tp("home.morning", { n: String(d) });
+          : tp(
+              // the same day, in the voice of whoever is having it
+              spirit >= MAX_SPIRIT - 1
+                ? "home.morningBright"
+                : spirit <= 1
+                  ? "home.morningFlat"
+                  : "home.morning",
+              { n: String(d) }
+            );
   const morningLine = () => morningFor(day);
   // said once on the first morning too, not only on the ones you wake up to
   useEffect(() => {
@@ -955,6 +980,8 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (day >= DAYS) return "office.dev.lastDay";
     // the small talk is where the change is felt, so it belongs to the level
     // rather than to the number of times you have said hello
+    // someone who sees you every day notices before you do
+    if (spirit <= 1 && talks % 3 === 0) return "office.dev.worried";
     if (devLevel > 0) return `office.dev.warm${devLevel}_${talks % 2}`;
     return `office.dev.idle${talks % IDLE_LINES}`;
   };
@@ -1403,10 +1430,14 @@ export function Office({ onExit }: { onExit: () => void }) {
                 {"○".repeat(MAX_CONDITION - condition)}
               </span>
               {/* the other half of what the twelve days are making */}
-              <span className="office-spirit" title={t("spirit.name")}>
+              <button
+                type="button"
+                className="office-spirit hud-ask"
+                onClick={() => setNote(t("spirit.what"))}
+              >
                 {"♥".repeat(spirit)}
                 {"♡".repeat(MAX_SPIRIT - spirit)}
-              </span>
+              </button>
             </div>
           }
           onStation={onStreetStation}
@@ -1432,10 +1463,14 @@ export function Office({ onExit }: { onExit: () => void }) {
                 {"○".repeat(MAX_CONDITION - condition)}
               </span>
               {/* the other half of what the twelve days are making */}
-              <span className="office-spirit" title={t("spirit.name")}>
+              <button
+                type="button"
+                className="office-spirit hud-ask"
+                onClick={() => setNote(t("spirit.what"))}
+              >
                 {"♥".repeat(spirit)}
                 {"♡".repeat(MAX_SPIRIT - spirit)}
-              </span>
+              </button>
             </div>
           }
           onStation={onHomeStation}
@@ -1480,6 +1515,15 @@ export function Office({ onExit }: { onExit: () => void }) {
               <EyeIcon />
               {"●".repeat(condition)}
               {"○".repeat(MAX_CONDITION - condition)}
+            </button>
+            {/* six o'clock is decided in this room, and what it costs is here */}
+            <button
+              type="button"
+              className="office-spirit hud-ask"
+              onClick={() => setNote(t("spirit.what"))}
+            >
+              {"♥".repeat(spirit)}
+              {"♡".repeat(MAX_SPIRIT - spirit)}
             </button>
             <span className="office-pay">{tp("office.pay", { n: String(pay) })}</span>
             <span className="office-queue">

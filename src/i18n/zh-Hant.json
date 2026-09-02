@@ -436,5 +436,9 @@
   "quest.goHome": "回家吧",
   "quest.sleep": "去睡吧 — 上床",
   "quest.weekend": "今天是你的",
-  "quest.coffee": "先買杯咖啡 — 第四個版本要靠它"
+  "quest.coffee": "先買杯咖啡 — 第四個版本要靠它",
+  "home.morningBright": "第 {n} 天。睡得好。今天應該撐得住。",
+  "home.morningFlat": "第 {n} 天。眼睛睜開了，人還沒醒。",
+  "office.dev.worried": "「你最近看起來很累。今天早點走吧。」",
+  "spirit.what": "心情。路邊攤會補，加班和週末上班會扣。加班隔天會少看幾個版本 — 心情滿是 1 個，普通是 2 個，見底是 3 個。"
 }
