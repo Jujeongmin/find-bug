@@ -64,13 +64,30 @@ const DAY_END = 18 * 60;
  * crossing the room takes, and a build costs what it takes to inspect.
  */
 /**
- * How fast the working day runs. Playing a day through, the walking was
- * costing more of it than the looking: a commute, three machines and a trip
- * to the developer left barely any clock for the thing the game is about.
- * The day is longer and the walk is faster; the pressure is meant to come
- * from choosing what to inspect, not from the distance between desks.
+ * How fast the office clock runs, in game minutes per real second.
+ *
+ * It was 1.5, which made a nine-to-six day six real minutes long — and a
+ * playthrough finished three builds by one in the afternoon and the fourth by
+ * twenty past two. Three and a half hours of the working day left over, every
+ * day, which means the clock never bound on anything: the six o'clock offer
+ * could not come up, so nothing ever borrowed against a night, so the chair
+ * and the sofa and the half hour were all furniture.
+ *
+ * At 2.5 the same pace finishes the fourth build at about ten to six. A player
+ * quicker than that has room to spend a quarter of an hour on a coffee; a
+ * player slower than that meets the offer, which is the decision the whole
+ * evening economy is made of. The day is three and a half real minutes.
  */
-const MINUTES_PER_SECOND = 1.5;
+const MINUTES_PER_SECOND = 2.5;
+
+/**
+ * How long the screen stays dark between one day and the next.
+ *
+ * Long enough to read as a night rather than a flicker, short enough that
+ * twelve of them are not a tax on the run. The fade in and out are shorter
+ * still, so most of it is black rather than grey.
+ */
+const NIGHT_MS = 900;
 
 /** things the developer says when there is nothing more pressing */
 const IDLE_LINES = 5;
@@ -444,6 +461,16 @@ export function Office({ onExit }: { onExit: () => void }) {
   /** the book of every fault, open on the desk at home */
   const [codex, setCodex] = useState(false);
   /*
+   * The night, drawn.
+   *
+   * Going to bed swapped one lit room for another between two frames: the
+   * flat at night and the flat in the morning are the same picture with the
+   * player stood somewhere else, so twelve days went by without the game ever
+   * showing one of them ending. A second of black is the only thing that says
+   * time passed.
+   */
+  const [night, setNight] = useState(false);
+  /*
    * How much of the book was already filled when this run started, so the
    * ship screen can say what the twelve days added to it. The rating is a
    * report on one run and says nothing about the next; this is the line that
@@ -751,6 +778,13 @@ export function Office({ onExit }: { onExit: () => void }) {
       return;
     }
     sfx.play("click");
+    setNight(true);
+    // the room is gone before it is rebuilt, so the change never shows
+    window.setTimeout(wake, NIGHT_MS);
+  };
+
+  /** what actually turns the day over, once the screen is dark */
+  const wake = () => {
     const next = day + 1;
     setDay(next);
     setAssignments(isWeekend(next) ? [] : assignDay(next));
@@ -794,6 +828,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     setTookFreeCoffee(false);
     setDayOver(false);
     setPlace("home");
+    window.setTimeout(() => setNight(false), 40);
     // the walk in is where the coffee is, and the fifteen minutes it costs is
     // the morning's one real decision — so the player has to make it, every
     // morning, by walking out of their own front door
@@ -1561,6 +1596,9 @@ export function Office({ onExit }: { onExit: () => void }) {
           </div>
         </div>
       )}
+      {/* over the whole frame, modals included: the morning line belongs to
+          the new day and should not be readable through the old room */}
+      <div className={`night ${night ? "on" : ""}`} />
     </div>
   );
 }
