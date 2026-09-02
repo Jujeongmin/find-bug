@@ -510,5 +510,18 @@
   "codex.tally": "{caught} of {total} caught. {missed} seen and let through.",
   "codex.unseen": "not met yet",
   "codex.left": "{n} not met yet",
-  "codex.shipLine": "The book: {caught}/{total}. {fresh} of them met for the first time these two weeks."
+  "codex.shipLine": "The book: {caught}/{total}. {fresh} of them met for the first time these two weeks.",
+  "office.dev.coffee": "The developer slides a coffee across without a word. “Get that in you.”",
+  "office.dev.collected": "The developer catches you at the door. “Leave that one with me.” ({pay} won)",
+  "office.dev.warm1_0": "“Oh, it’s you. Anything for me today?”",
+  "office.dev.warm1_1": "“Fixed everything you sent me yesterday.”",
+  "office.dev.warm2_0": "“Honestly, before you got here this stuff just shipped.”",
+  "office.dev.warm2_1": "“What you wrote down reproduced exactly. That is rare.”",
+  "office.dev.warm3_0": "“When this ships I owe you a meal.”",
+  "office.dev.warm3_1": "“If anything is left, say so. I will come and get it.”",
+  "office.dev.step1": "The developer uses your name for the first time. “Coffee? I’ll make it.” — once a day, on them.",
+  "office.dev.step2": "“I’ll come and get one from now on.” — once a day, you do not make the walk.",
+  "office.dev.step3": "“Leave anything with me.” — at the end of the day they take the worst one themselves.",
+  "codex.dev": "The developer {pips} · {n} handed over",
+  "office.dev.cameOver": "The developer walks over to your desk. “I’ll take that one.” ({pay} won)"
 }

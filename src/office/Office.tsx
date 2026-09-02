@@ -227,6 +227,36 @@ const COFFEE_MINUTES = 15;
 /** how much of the evening a rewarded ad buys back, once a day */
 const OVERTIME_MINUTES = 30;
 
+/*
+ * How well the developer knows you, counted in defects actually handed over.
+ *
+ * They were a wall with a rotating line: the walk to their desk paid a bounty
+ * and nothing about the walk changed across twelve days. Talking is not the
+ * measure — anyone can talk. What they notice is how much of their own work
+ * you have caught before it got out.
+ *
+ * Each step gives back something the day is actually short of, so the office
+ * floor is somewhere to build a relationship rather than somewhere to walk.
+ */
+const DEV_STEPS = [8, 18, 30] as const;
+const devLevelFor = (handed: number) =>
+  DEV_STEPS.filter((n) => handed >= n).length;
+
+/** the mate's coffee, which costs the fifteen minutes the machine charges */
+const DEV_COFFEE_LEVEL = 1;
+/**
+ * At this point they get up and come to you, once a day.
+ *
+ * This step used to pay a bigger bounty, which rewards the player with the
+ * one thing they already have too much of: the shop holds three hundred and
+ * eighty won of goods and a run earns something like eighteen hundred. What
+ * a day is short of is minutes, so what a colleague who knows you saves you
+ * is the walk.
+ */
+const DEV_COMES_LEVEL = 2;
+/** at this point they come and collect one themselves at the end of the day */
+const DEV_COLLECT_LEVEL = 3;
+
 /** what a confirmed defect is worth once the developer has it */
 const BOUNTY: Record<Severity, number> = { low: 20, normal: 40, critical: 80 };
 
@@ -324,6 +354,10 @@ export function Office({ onExit }: { onExit: () => void }) {
   );
   const [running, setRunning] = useState<Assignment | null>(null);
   const [note, setNote] = useState<string | null>(null);
+  /** whether the developer has already made you one today */
+  const [devCoffee, setDevCoffee] = useState(false);
+  /** whether they have already walked over to collect today */
+  const [devCame, setDevCame] = useState(false);
   /** the book of every fault, open on the desk at home */
   const [codex, setCodex] = useState(false);
   /*
@@ -498,6 +532,20 @@ export function Office({ onExit }: { onExit: () => void }) {
      * recording the calendar rather than the player.
      */
     if (running.bugId) recordBug(running.sceneId, running.bugId, result);
+    /*
+     * And once a day, from the second step on, they come and take it off you
+     * rather than waiting at their desk. One walk saved out of however many
+     * the day holds — enough to feel, not enough to make the office a menu.
+     */
+    if (result === "caught" && devLevel >= DEV_COMES_LEVEL && !devCame) {
+      setDevCame(true);
+      // only the one in their hand. Emptying the pile paid a single bounty for
+      // however much was on the desk and threw the rest away.
+      setPending((v) => v.filter((a) => a.machine !== running.machine));
+      setPay((v) => v + BOUNTY[running.severity]);
+      setDelivered((n) => n + 1);
+      setNote(tp("office.dev.cameOver", { pay: String(BOUNTY[running.severity]) }));
+    }
     // charged here rather than on opening the machine, so backing out of a
     // build still costs nothing
     setCondition((c) => Math.max(0, c - INSPECT_COST));
@@ -520,12 +568,36 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (!isWeekend(day)) {
       setShipped_((v) => [...v, ...unseen.map((a) => a.severity)]);
     }
-    // a defect the developer never heard about does not get fixed
-    setLate((v) => [...v, ...pending.map((a) => a.severity)]);
+    /*
+     * A defect the developer never heard about does not get fixed — unless
+     * they have started coming to find you.
+     *
+     * At the last step they take the worst one off your desk on their way out:
+     * one report saved, paid for, and counted as handed over. Only one, so the
+     * walk is still the job; what changes is that the day you ran out of time
+     * costs you the second-worst thing rather than the worst.
+     */
+    let leaving: string | null = null;
+    let owed = pending;
+    if (devLevel >= DEV_COLLECT_LEVEL && owed.length) {
+      const worst = owed.reduce(
+        (best, a, i) =>
+          SEVERITY_PIPS[a.severity] > SEVERITY_PIPS[owed[best].severity] ? i : best,
+        0
+      );
+      const taken = owed[worst];
+      owed = owed.filter((_, i) => i !== worst);
+      setPay((v) => v + bountyOf(taken.severity));
+      setDelivered((n) => n + 1);
+      leaving = tp("office.dev.collected", { pay: String(bountyOf(taken.severity)) });
+    }
+    setLate((v) => [...v, ...owed.map((a) => a.severity)]);
     setPending([]);
     sfx.play("click");
     setRunning(null);
-    setNote(null);
+    // the line about what they took has to survive the walk out: clearing the
+    // note unconditionally is what wiped the weekend one, twice
+    setNote(leaving);
     // tomorrow starts at the door, not at yesterday's desk
     setOfficeAt(null);
     setDayOver(true);
@@ -575,6 +647,8 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (toWork) setEarlyTomorrow(false);
     setRestedTonight(false);
     setHadCoffee(false);
+    setDevCoffee(false);
+    setDevCame(false);
     setOvertime(0);
     setTookOvertime(false);
     setTookFreeCoffee(false);
@@ -668,6 +742,9 @@ export function Office({ onExit }: { onExit: () => void }) {
    * just signed off matters more than the day, and the day matters more than
    * small talk — otherwise the same line comes back and they stop reading it.
    */
+  const devLevel = devLevelFor(delivered);
+  const bountyOf = (sv: Severity) => BOUNTY[sv];
+
   const devLine = () => {
       if (day === 1 && talks === 0) return "office.dev.intro";
     if (pending.length) return "office.dev.waiting";
@@ -675,6 +752,9 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (lastResult === "missed") return "office.dev.missed";
     if (left === 0) return "office.dev.allDone";
     if (day >= DAYS) return "office.dev.lastDay";
+    // the small talk is where the change is felt, so it belongs to the level
+    // rather than to the number of times you have said hello
+    if (devLevel > 0) return `office.dev.warm${devLevel}_${talks % 2}`;
     return `office.dev.idle${talks % IDLE_LINES}`;
   };
 
@@ -818,12 +898,40 @@ export function Office({ onExit }: { onExit: () => void }) {
         setPay((p) => p + earned);
         setDelivered((n) => n + pending.length);
         setPending([]);
+        /*
+         * Crossing a step is the news. What the handoff paid is already in the
+         * bar above, and a relationship that changed what the day can do
+         * without saying so is one the player never finds out they have.
+         */
+        const stepped = devLevelFor(delivered + pending.length);
         setNote(
-          tp("office.dev.handoff", {
-            n: String(pending.length),
-            pay: String(earned),
-          })
+          stepped > devLevel
+            ? t(`office.dev.step${stepped}`)
+            : tp("office.dev.handoff", {
+                n: String(pending.length),
+                pay: String(earned),
+              })
         );
+        setTalks((n) => n + 1);
+        setLastResult(null);
+        return;
+      }
+      /*
+       * The cup on their desk. It is the same point of condition the machine
+       * on the walk in sells for a quarter of an hour, except a colleague who
+       * knows you does not charge you the quarter of an hour — and the fourth
+       * machine is exactly one point out of reach.
+       */
+      if (
+        devLevel >= DEV_COFFEE_LEVEL &&
+        !devCoffee &&
+        !dayOver &&
+        condition < MAX_CONDITION
+      ) {
+        setDevCoffee(true);
+        setCondition((c) => Math.min(MAX_CONDITION, c + 1));
+        sfx.play("pick");
+        setNote(t("office.dev.coffee"));
         setTalks((n) => n + 1);
         setLastResult(null);
         return;
@@ -1165,6 +1273,13 @@ export function Office({ onExit }: { onExit: () => void }) {
             {/* the line the journal used to print on its own: where the run is,
                 which is the other thing you open a notebook to check */}
             <p className="codex-where">
+              {tp("codex.dev", {
+                pips:
+                  "●".repeat(devLevel) +
+                  "○".repeat(DEV_STEPS.length - devLevel),
+                n: String(delivered),
+              })}
+              <br />
               {tp("home.journalLine", {
                 n: String(day),
                 left: String(DAYS - day),

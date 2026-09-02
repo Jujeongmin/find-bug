@@ -510,5 +510,18 @@
   "codex.tally": "{caught}/{total} 잡았다. {missed}개는 봤지만 놓쳤다.",
   "codex.unseen": "아직 만난 적 없다",
   "codex.left": "아직 만난 적 없는 결함 {n}개",
-  "codex.shipLine": "수첩 {caught}/{total}. 이번 2주에 처음 만난 결함 {fresh}개."
+  "codex.shipLine": "수첩 {caught}/{total}. 이번 2주에 처음 만난 결함 {fresh}개.",
+  "office.dev.coffee": "개발자가 말없이 커피 한 잔을 내민다. \"이거 마시고 해.\"",
+  "office.dev.collected": "퇴근길에 개발자가 따라나온다. \"그거 나한테 넘기고 가.\" ({pay}원)",
+  "office.dev.warm1_0": "\"아, 너구나. 오늘 것도 있어?\"",
+  "office.dev.warm1_1": "\"네가 올려준 거 어제 다 고쳤어.\"",
+  "office.dev.warm2_0": "\"솔직히 너 오기 전엔 이런 거 다 그냥 나갔어.\"",
+  "office.dev.warm2_1": "\"보고서에 적어준 거, 그대로 재현되더라. 그게 드물어.\"",
+  "office.dev.warm3_0": "\"출시 끝나면 밥 한 번 사야겠다.\"",
+  "office.dev.warm3_1": "\"뭐 남은 거 있으면 말해. 내가 가지러 갈게.\"",
+  "office.dev.step1": "개발자가 처음으로 이름을 부른다. \"커피 마실래? 내가 타 줄게.\" — 이제 하루 한 번 공짜다.",
+  "office.dev.step2": "\"앞으로 하나는 내가 가지러 갈게.\" — 하루 한 번, 걸어가지 않아도 된다.",
+  "office.dev.step3": "\"남은 거 있으면 내가 가지러 갈게.\" — 퇴근할 때 제일 나쁜 것 하나는 알아서 가져간다.",
+  "codex.dev": "개발자 {pips} · 전달 {n}건",
+  "office.dev.cameOver": "개발자가 자리로 걸어온다. \"그거 내가 가져갈게.\" ({pay}원)"
 }
