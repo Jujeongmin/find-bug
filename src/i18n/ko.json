@@ -372,7 +372,7 @@
   "home.evening": "{n}일차 저녁",
   "home.sleep": "잠자기",
   "home.rest": "소파에서 쉬기",
-  "home.journal": "개발 일지 보기",
+  "home.journal": "결함 수첩",
   "home.goWork": "출근하기",
   "home.rested": "소파에 좀 누워 있었다. 어젯밤 무리한 건 이걸로 없던 일이다.",
   "home.alreadyRested": "오늘은 충분히 쉬었다.",
@@ -380,7 +380,7 @@
   "home.journalLine": "{n}일차까지 왔다. 출시까지 {left}일. 지금까지 흘려보낸 결함 {shipped}건.",
   "object.bed": "침대",
   "object.sofa": "소파",
-  "object.journal": "개발 일지",
+  "object.journal": "결함 수첩",
   "street.name": "출근길",
   "street.intro": "사무실까지 걸어간다.",
   "street.enter": "사무실 들어가기",
@@ -505,5 +505,10 @@
   "object.btnSoda": "사이다 버튼",
   "object.btnJuice": "주스 버튼",
   "object.machineD": "D번 기기",
-  "office.runD": "D번 기기 켜기"
+  "office.runD": "D번 기기 켜기",
+  "codex.title": "결함 수첩",
+  "codex.tally": "{caught}/{total} 잡았다. {missed}개는 봤지만 놓쳤다.",
+  "codex.unseen": "아직 만난 적 없다",
+  "codex.left": "아직 만난 적 없는 결함 {n}개",
+  "codex.shipLine": "수첩 {caught}/{total}. 이번 2주에 처음 만난 결함 {fresh}개."
 }

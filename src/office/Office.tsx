@@ -1,4 +1,5 @@
 import { devParam, devFlag } from "../dev";
+import { recordBug, codexRows, codexTally } from "./codex";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { useI18n } from "../i18n";
@@ -323,6 +324,15 @@ export function Office({ onExit }: { onExit: () => void }) {
   );
   const [running, setRunning] = useState<Assignment | null>(null);
   const [note, setNote] = useState<string | null>(null);
+  /** the book of every fault, open on the desk at home */
+  const [codex, setCodex] = useState(false);
+  /*
+   * How much of the book was already filled when this run started, so the
+   * ship screen can say what the twelve days added to it. The rating is a
+   * report on one run and says nothing about the next; this is the line that
+   * does, so it belongs on the screen the player reads last.
+   */
+  const [codexAtStart] = useState(() => codexTally(codexRows()).caught);
   const [shipped, setShipped] = useState(false);
   const [caught, setCaught] = useState(0);
   const [missed, setMissed] = useState(0);
@@ -481,6 +491,13 @@ export function Office({ onExit }: { onExit: () => void }) {
       // bought. The whole economy was decorative.
       setPending((v) => [...v, { ...running, result }]);
     } else setMissed((n) => n + 1);
+    /*
+     * And into the book, which is the one thing that outlives the run. Only
+     * builds that were opened: a defect that shipped because nobody had the
+     * hours for it was never seen, and a book that counted it would be
+     * recording the calendar rather than the player.
+     */
+    if (running.bugId) recordBug(running.sceneId, running.bugId, result);
     // charged here rather than on opening the machine, so backing out of a
     // build still costs nothing
     setCondition((c) => Math.max(0, c - INSPECT_COST));
@@ -736,13 +753,9 @@ export function Office({ onExit }: { onExit: () => void }) {
       return setNote(tp("home.hobbyDid", { n: String(HOBBY_PAY) }));
     }
     if (id === "journal") {
-      return setNote(
-        tp("home.journalLine", {
-          n: String(day),
-          left: String(DAYS - day),
-          shipped: String(shipped_.length),
-        })
-      );
+      sfx.play("click");
+      setCodex(true);
+      return;
     }
     if (id === "parcel") {
       sfx.play("click");
@@ -856,6 +869,18 @@ export function Office({ onExit }: { onExit: () => void }) {
             critical: String(shipped_.filter((s2) => s2 === "critical").length),
           })}
         </p>
+        {(() => {
+          const book = codexTally(codexRows());
+          return (
+            <p className="wb-tally wb-book">
+              {tp("codex.shipLine", {
+                caught: String(book.caught),
+                total: String(book.total),
+                fresh: String(Math.max(0, book.caught - codexAtStart)),
+              })}
+            </p>
+          );
+        })()}
         <button className="btn-primary" onClick={onExit}>
           {t("wb.backToTitle")}
         </button>
@@ -875,12 +900,17 @@ export function Office({ onExit }: { onExit: () => void }) {
       key: `${day}-${running.machine}`,
       title: `${tp("office.buildTitle", { machine: t(`object.${running.machine}`) })} · ${clock(minutes)}`,
       bugId: running.bugId,
-      onBugPicked: (id: string) =>
+      onBugPicked: (id: string) => {
         setAssignments((as) =>
           as.map((a) =>
             a.machine === running.machine ? { ...a, bugId: id } : a
           )
-        ),
+        );
+        // and on the build in hand, which is a snapshot taken when the
+        // machine opened — the book is written from it, and without this it
+        // was still holding the null it was opened with
+        setRunning((r) => (r ? { ...r, bugId: id } : r));
+      },
       onClear: () => finish("caught"),
       onFail: () => finish("missed"),
       onExit: () => setRunning(null),
@@ -1124,6 +1154,100 @@ export function Office({ onExit }: { onExit: () => void }) {
                   {watching ? t("offer.watching") : t(`offer.${offer}.free`)}
                 </button>
               )}
+          </div>
+        </div>
+      )}
+
+      {codex && (
+        <div className="modal-backdrop" onClick={() => setCodex(false)}>
+          <div className="modal codex" onClick={(e) => e.stopPropagation()}>
+            <h2>{t("codex.title")}</h2>
+            {/* the line the journal used to print on its own: where the run is,
+                which is the other thing you open a notebook to check */}
+            <p className="codex-where">
+              {tp("home.journalLine", {
+                n: String(day),
+                left: String(DAYS - day),
+                shipped: String(shipped_.length),
+              })}
+            </p>
+            {(() => {
+              const rows = codexRows();
+              const tally = codexTally(rows);
+              const byScene = new Map<string, typeof rows>();
+              for (const r of rows) {
+                byScene.set(r.sceneId, [...(byScene.get(r.sceneId) ?? []), r]);
+              }
+              return (
+                <>
+                  <p className="codex-tally">
+                    {tp("codex.tally", {
+                      caught: String(tally.caught),
+                      total: String(tally.total),
+                      missed: String(tally.missed),
+                    })}
+                  </p>
+                  <div className="codex-list">
+                    {[...byScene].map(([sceneId, list]) => (
+                      <section key={sceneId}>
+                        <h3>
+                          {t(`stage.${sceneId}.name`)}
+                          <b>
+                            {list.filter((r) => r.state === "caught").length}/
+                            {list.length}
+                          </b>
+                        </h3>
+                        {/*
+                          Only what has been met gets a line. A hundred and
+                          twenty-one repetitions of "not met yet" is not a
+                          collection, it is a wall — the empty ones say how
+                          many are left the way empty shelves do, in a row of
+                          slots you can take in at a glance.
+                        */}
+                        <div className="codex-rows">
+                          {list
+                            .filter((r) => r.state !== "unseen")
+                            .map((r) => (
+                              <span
+                                key={r.bugId}
+                                className={`codex-row ${r.state}`}
+                              >
+                                {tp(r.descKey, {
+                                  ...r.descParams,
+                                  obj: t(r.descParams.obj ?? ""),
+                                })}
+                              </span>
+                            ))}
+                          {(() => {
+                            const left = list.filter(
+                              (r) => r.state === "unseen"
+                            ).length;
+                            if (!left) return null;
+                            return (
+                              <span
+                                className="codex-slots"
+                                title={tp("codex.left", { n: String(left) })}
+                              >
+                                {"▫".repeat(left)}
+                              </span>
+                            );
+                          })()}
+                        </div>
+                      </section>
+                    ))}
+                  </div>
+                </>
+              );
+            })()}
+            <div className="modal-actions">
+              <button
+                data-space
+                className="btn-primary"
+                onClick={() => setCodex(false)}
+              >
+                {t("wb.close")}
+              </button>
+            </div>
           </div>
         </div>
       )}

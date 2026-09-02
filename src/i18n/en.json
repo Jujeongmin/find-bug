@@ -372,7 +372,7 @@
   "home.evening": "Evening, day {n}",
   "home.sleep": "Sleep",
   "home.rest": "Rest on the sofa",
-  "home.journal": "Read the journal",
+  "home.journal": "the defect book",
   "home.goWork": "Leave for work",
   "home.rested": "An hour on the sofa. The night you overdrew is settled.",
   "home.alreadyRested": "You have rested enough for tonight.",
@@ -380,7 +380,7 @@
   "home.journalLine": "Day {n} done. {left} to ship. {shipped} defects have gone out so far.",
   "object.bed": "Bed",
   "object.sofa": "Sofa",
-  "object.journal": "Journal",
+  "object.journal": "the defect book",
   "street.name": "The walk in",
   "street.intro": "You walk to the office.",
   "street.enter": "Go inside",
@@ -505,5 +505,10 @@
   "object.btnSoda": "the lemonade button",
   "object.btnJuice": "the juice button",
   "object.machineD": "machine D",
-  "office.runD": "Start machine D"
+  "office.runD": "Start machine D",
+  "codex.title": "The defect book",
+  "codex.tally": "{caught} of {total} caught. {missed} seen and let through.",
+  "codex.unseen": "not met yet",
+  "codex.left": "{n} not met yet",
+  "codex.shipLine": "The book: {caught}/{total}. {fresh} of them met for the first time these two weeks."
 }

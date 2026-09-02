@@ -1098,3 +1098,59 @@
   border-radius: 3px;
   pointer-events: none;
 }
+
+/* ---- the defect book ---- */
+/*
+ * The only thing in the game that outlives a run. It is a list of what has
+ * been met, and what has not says nothing about itself — a book that answered
+ * the question would not be a reason to open the game again.
+ */
+.modal.codex { max-width: 330px; width: 92%; }
+.codex-tally { margin: 0; font-size: 12px; color: #9aa6bb; }
+.codex-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 46vh;
+  overflow-y: auto;
+  text-align: left;
+}
+.codex-list h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0 0 4px;
+  font-size: 12px;
+  color: #e0a03f;
+  border-bottom: 1px solid #333b4a;
+  padding-bottom: 2px;
+}
+.codex-list h3 b { font-size: 11px; color: #9aa6bb; font-variant-numeric: tabular-nums; }
+.codex-rows { display: flex; flex-direction: column; gap: 2px; }
+.codex-row {
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 2px 6px;
+  border-left: 3px solid transparent;
+  border-radius: 2px;
+}
+.codex-row.caught { color: #c9d2e0; border-left-color: #3f9e5a; background: rgba(63, 158, 90, 0.07); }
+.codex-row.missed { color: #b0a08a; border-left-color: #c0392b; background: rgba(192, 57, 43, 0.07); }
+.codex-row.unseen { color: #4e5666; border-left-color: #2f3644; font-style: italic; }
+
+.codex-where { margin: 0; font-size: 11px; color: #7e879a; }
+
+/* Empty shelves. The count of what is left, in a shape you can take in at a
+   glance instead of a hundred and twenty-one identical sentences. */
+.codex-slots {
+  display: block;
+  margin-top: 3px;
+  padding-left: 6px;
+  font-size: 13px;
+  line-height: 1.1;
+  letter-spacing: 1px;
+  color: #3d4453;
+  word-break: break-all;
+}
+
+.wb-book { color: #e0a03f; }
