@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { sfx } from "../audio/sfx";
 import { useI18n, LANGS, type Lang } from "../i18n";
+import { SettingsIcon, SpeakerIcon, SpeakerMutedIcon } from "./icons";
 
 /**
  * Language and sound, behind one button in the corner of the floor.
@@ -80,7 +81,7 @@ export function Settings() {
                 setMuted(true);
               }}
             >
-              {silent ? "🔇" : "🔊"}
+              {silent ? <SpeakerMutedIcon /> : <SpeakerIcon />}
             </button>
             <input
               type="range"
@@ -105,7 +106,7 @@ export function Settings() {
         title={t("settings.title")}
         onClick={() => setOpen((v) => !v)}
       >
-        ⚙
+        <SettingsIcon />
       </button>
     </div>
   );

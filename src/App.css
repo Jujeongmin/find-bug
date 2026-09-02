@@ -31,10 +31,20 @@
   display: flex;
   gap: 5px;
   z-index: 6;
+}
+/*
+ * The fade belongs to the button, not to the corner.
+ *
+ * It was on the container, so the settings panel inherited half transparency
+ * and read as a ghost over the floor — and it only came back on hover, which
+ * on a phone is never.
+ */
+.settings-btn {
   opacity: 0.5;
   transition: opacity 0.15s;
 }
-.floor-controls:hover {
+.settings-btn:hover,
+.settings-btn.on {
   opacity: 1;
 }
 .floor-controls button {
@@ -1208,4 +1218,17 @@
   min-width: 0;
   accent-color: #e0a03f;
   cursor: pointer;
+}
+
+/* the drawn marks sit on the text baseline rather than above it, the way the
+   emoji they replaced did not */
+.settings-btn svg,
+.settings-mute svg {
+  display: block;
+}
+.settings-btn,
+.settings-mute {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
