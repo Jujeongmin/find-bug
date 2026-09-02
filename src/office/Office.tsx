@@ -14,7 +14,6 @@ import { ENGINE_SCENES } from "../stages/registry";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { shipRating, totalStake, type Severity } from "./rating";
-import { HAS_KEYBOARD } from "../components/useSpaceCloses";
 import { Settings } from "../components/Settings";
 import { EyeIcon } from "../components/icons";
 import { available as adsAvailable, showRewarded } from "../net/ads";
@@ -1584,7 +1583,6 @@ export function Office({ onExit }: { onExit: () => void }) {
             <p>{t(`offer.${offer}.body`)}</p>
             <div className="modal-actions">
               <button
-                data-space
                 className="btn-ghost"
                 disabled={watching}
                 onClick={() => {
@@ -1765,7 +1763,6 @@ export function Office({ onExit }: { onExit: () => void }) {
             <p>{note}</p>
             <button data-space className="btn-primary" onClick={() => setNote(null)}>
               {t("wb.close")}
-              {HAS_KEYBOARD && <em className="key-hint">space</em>}
             </button>
           </div>
         </div>

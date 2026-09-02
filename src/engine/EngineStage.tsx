@@ -29,7 +29,6 @@ import {
 import { poolFor } from "./curriculum";
 import type { Band } from "./score";
 import "../styles/shared.css";
-import { HAS_KEYBOARD } from "../components/useSpaceCloses";
 import "./engine.css";
 
 type Phase = "intro" | "play" | "picking" | "category" | "result" | "dead";
@@ -946,9 +945,6 @@ export function EngineStage({
               }}
             >
               {t(nearStation.labelKey)}
-              {matchMedia("(pointer: fine)").matches && (
-                <em className="key-hint">space</em>
-              )}
             </button>
           )}
           {!picking && hasPlayer && (
@@ -1005,7 +1001,6 @@ export function EngineStage({
             <div className="modal-actions">
               <button data-space className="btn-primary" onClick={() => setPhase("play")}>
                 {t("intro.go")}
-                {HAS_KEYBOARD && <em className="key-hint">space</em>}
               </button>
             </div>
           </div>

@@ -19,7 +19,6 @@ import face5 from "../../assets/cards/card_spades_06.png";
 import face6 from "../../assets/cards/card_diamonds_07.png";
 import face7 from "../../assets/cards/card_clubs_08.png";
 import "../../styles/shared.css";
-import { HAS_KEYBOARD } from "../../components/useSpaceCloses";
 import "./stage04.css";
 
 type Phase = "intro" | "play" | "picking" | "category" | "result";
@@ -428,7 +427,6 @@ export function Stage04({
             <div className="modal-actions">
               <button data-space className="btn-primary" onClick={() => setPhase("play")}>
                 {t("intro.go")}
-                {HAS_KEYBOARD && <em className="key-hint">space</em>}
               </button>
             </div>
           </div>
