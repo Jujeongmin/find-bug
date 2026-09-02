@@ -83,8 +83,6 @@
   position: relative;
 }
 
-
-
 .sun {
   position: absolute;
   left: 40px;
@@ -113,12 +111,6 @@
 
 .sprite-emoji {
   position: relative;
-  line-height: 1;
-}
-
-.player-sprite {
-  position: relative;
-  font-size: 46px;
   line-height: 1;
 }
 
@@ -164,27 +156,10 @@
   border: 2px solid #2c8236;
 }
 
-.slime-hop {
-  animation: hop 0.5s ease-in-out infinite;
-}
-
 @keyframes hop {
   0%, 100% { transform: scale(1, 1); }
   30% { transform: scale(1.15, 0.8); }
   60% { transform: scale(0.9, 1.15) translateY(-6px); }
-}
-
-.slime-eye {
-  position: absolute;
-  top: 10px;
-  width: 6px;
-  height: 8px;
-  background: #123;
-  border-radius: 50%;
-}
-
-.slime-eye.left { left: 12px; }
-.slime-eye.right { right: 12px; }
 
 .hud {
   position: absolute;
@@ -345,8 +320,7 @@
   line-height: 1.4;
 }
 
-.modal p,
-.intro-line {
+.modal p{
   text-wrap: pretty;
   line-height: 1.55;
 }
@@ -576,7 +550,6 @@
   transform-origin: bottom center;
 }
 
-
 .eng-bar.moving {
   background: linear-gradient(#5a6ea0, #3c4a75);
   border-top-color: #7d92c9;
@@ -650,8 +623,7 @@
 .engine-btn,
 .attack-btn,
 .s3-jump-btn,
-.s4-shuffle-btn,
-.s2-buy-btn {
+.s4-shuffle-btn{
   border-radius: 4px;
   border: 2px solid rgba(0, 0, 0, 0.55);
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.45);
@@ -664,8 +636,7 @@
 .engine-btn:active,
 .attack-btn:active,
 .s3-jump-btn:active,
-.s4-shuffle-btn:active,
-.s2-buy-btn:active:not(:disabled) {
+.s4-shuffle-btn:active{
   transform: translateY(3px);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
 }
@@ -673,17 +644,9 @@
 .s3-jump-btn { border-radius: 50%; }
 
 .btn-ghost,
-.exit-btn,
-.mute-btn,
-.lang-switch button {
+.exit-btn{
   border-radius: 4px;
 }
-
-.stage-cell {
-  border-radius: 4px;
-  border-width: 2px;
-}
-
 
 /* ---- shooting gallery ---- */
 .s6-room {
@@ -696,20 +659,6 @@
     ) 0 0 / 100% 46px no-repeat,
     /* back wall, then the counter the keeper stands behind */
     linear-gradient(#2c2a3a 46px 640px, #3a2f2c 640px);
-}
-
-.s6-wheel {
-  border-radius: 50%;
-  border: 3px solid #f0e3d0;
-  background: conic-gradient(
-    #e0575f 0 60deg,
-    #f2c14e 60deg 120deg,
-    #4f9d69 120deg 180deg,
-    #4a7bc8 180deg 240deg,
-    #f2c14e 240deg 300deg,
-    #e0575f 300deg
-  );
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35);
 }
 
 /* rails the targets ride along */

@@ -47,8 +47,11 @@
   50% { opacity: 1; }
 }
 
-/* wide, flat props (platforms, shelves, pipes) */
-.s3-plat, .s2-shelf-strip, .s6-water-strip {
+/* wide,
+flat props (platforms,
+shelves,
+pipes) */
+.s3-plat{
   letter-spacing: -2px;
 }
 

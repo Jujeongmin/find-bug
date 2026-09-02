@@ -192,7 +192,6 @@
   transform: rotateX(180deg);
 }
 
-
 /* floor */
 .s4-pot {
   position: absolute;
@@ -206,8 +205,6 @@
   bottom: 18px;
   image-rendering: pixelated;
 }
-
-
 
 /* shuffle */
 .s4-shuffle-btn {

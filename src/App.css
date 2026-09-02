@@ -61,61 +61,10 @@
   color: #fff;
   border-color: #3b6ea5;
 }
-.lang-switch {
-  align-self: flex-end;
-  display: flex;
-  gap: 6px;
-  flex: none;
-}
-
-.lang-switch button {
-  background: transparent;
-  border: 1px solid #556;
-  color: #99a;
-  border-radius: 6px;
-  padding: 4px 10px;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.lang-switch button.on {
-  background: #3568d4;
-  border-color: #3568d4;
-  color: #fff;
-}
-
-.title-screen {
-  /* the stage list is the only thing allowed to scroll, and it scrolls inside
-     the frame rather than making the page taller */
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  text-align: center;
-}
-
-.title-screen h1 {
-  font-size: 42px;
-  margin-bottom: 8px;
-}
-
-.subtitle {
-  color: #aab;
-  margin-bottom: 32px;
-  line-height: 1.6;
-}
 
 .btn-primary.big {
   font-size: 18px;
   padding: 16px 32px;
-}
-
-.stage-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: stretch;
 }
 
 /* 9:16 field scaling */
@@ -172,67 +121,14 @@
   gap: 8px;
 }
 
-
 .title-screen.wide {
   max-width: none;
   margin-top: 0;
 }
 
-.progress-line {
-  color: #8c9;
-  font-weight: 700;
-  margin: -18px 0 20px;
-}
-
-.stage-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 8px;
-}
-
-.stage-cell {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid #3a3a52;
-  background: #23233a;
-  color: #eef;
-  cursor: pointer;
-  text-align: left;
-}
-
-.stage-cell:hover:not(:disabled) {
-  border-color: #3568d4;
-  background: #2a2a48;
-}
-
-.stage-cell.done {
-  border-color: #2a9d3f;
-  background: #1f3327;
-}
-
 .stage-cell.locked {
   opacity: 0.35;
   cursor: default;
-}
-
-.cell-no {
-  font-size: 12px;
-  color: #99a;
-  font-weight: 700;
-}
-
-.cell-name {
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.cell-stars {
-  font-size: 12px;
-  color: #ffd400;
 }
 
 /* playtest overlay */
@@ -267,88 +163,6 @@
   flex-direction: column;
   align-items: center;
   gap: 14px;
-}
-
-.ending-eyebrow {
-  margin: 0;
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #6f9c78;
-  font-weight: 700;
-}
-
-.ending-title {
-  margin: 0;
-  font-size: 44px;
-  line-height: 1.1;
-  text-wrap: balance;
-}
-
-.ending-lead {
-  margin: 0;
-  color: #aab;
-  line-height: 1.7;
-}
-
-.ending-card {
-  display: flex;
-  gap: 10px;
-  margin: 6px 0;
-}
-
-.ending-stat {
-  background: #1f3327;
-  border: 1px solid #2f6b40;
-  border-radius: 10px;
-  padding: 12px 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.ending-stat b {
-  font-size: 26px;
-  font-variant-numeric: tabular-nums;
-}
-
-.ending-stat span {
-  font-size: 11px;
-  color: #8fb89a;
-  letter-spacing: 0.06em;
-}
-
-.ending-note {
-  margin: 0;
-  color: #778;
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.link-btn {
-  background: none;
-  border: none;
-  color: #6fbf85;
-  font: inherit;
-  font-size: 13px;
-  text-decoration: underline;
-  cursor: pointer;
-  margin-left: 8px;
-}
-
-.mute-btn {
-  background: transparent;
-  border: 1px solid #556;
-  color: #aab;
-  border-radius: 6px;
-  padding: 3px 8px;
-  font-size: 13px;
-  cursor: pointer;
-  line-height: 1.4;
-}
-
-.mute-btn.off {
-  opacity: 0.55;
 }
 
 /* ---- regression workbench (prototype) ---- */
@@ -477,11 +291,6 @@
   border: none;
   border-radius: 0;
   image-rendering: pixelated;
-}
-.office-desk {
-  background: linear-gradient(#8a5f38, #6a4526);
-  border-top: 2px solid #b07f4e;
-  border-radius: 2px;
 }
 .eng-station-btn {
   position: absolute; left: 50%; transform: translateX(-50%);
@@ -677,24 +486,6 @@
   border-radius: 0;
   image-rendering: pixelated;
 }
-.home-bed {
-  background:
-    /* pillow */
-    linear-gradient(#f2ece0, #ddd4c2) 6px 6px / calc(100% - 12px) 26px no-repeat,
-    /* blanket */
-    linear-gradient(#4f7bbf, #38598f) 0 44px / 100% calc(100% - 44px) no-repeat,
-    linear-gradient(#8a5f38, #6a4526);
-  border: 3px solid #4a3a2c;
-  border-radius: 5px;
-}
-.home-sofa {
-  background:
-    linear-gradient(#8e5b52, #6f443d) 0 12px / 100% calc(100% - 12px) no-repeat,
-    linear-gradient(#a76b60, #8e5b52);
-  border: 3px solid #4a2f2a;
-  border-radius: 8px 8px 4px 4px;
-  box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.18);
-}
 .office-condition {
   margin-left: auto;
   font-size: 12px;
@@ -853,7 +644,6 @@
   pointer-events: none;
 }
 
-
 /* how to move, for the first few seconds of a build */
 .control-hint {
   padding: 5px 12px;
@@ -989,21 +779,6 @@
     letter-spacing: 0.04em;
     vertical-align: 1px;
   }
-}
-
-/* the key that does the same thing as the prompt, for players on a keyboard */
-.eng-station-btn .key-hint,
-.btn-primary .key-hint {
-  display: inline-block;
-  margin-left: 8px;
-  padding: 1px 6px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  font-style: normal;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
 }
 
 /* The drinks machine on the way in. It was a plain box that only the prompt
