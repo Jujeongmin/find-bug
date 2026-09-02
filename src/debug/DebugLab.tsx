@@ -82,7 +82,11 @@ export function DebugLab({ onExit }: { onExit: () => void }) {
           key={open}
           bugId={open}
           playtest
-          title={`${STAGE04} · ${open}`}
+          /* the id is mutator:target and runs to thirty characters, which
+             wraps the stage header and folds the report button in half with
+             it. The whole id is on the row that opened this, and in the
+             playtest bar underneath. */
+          title={`${STAGE04} · ${open}`.slice(0, 24)}
           onClear={back}
           onExit={back}
           onFail={back}
@@ -95,7 +99,7 @@ export function DebugLab({ onExit }: { onExit: () => void }) {
         scene={scene!}
         bugId={open}
         playtest
-        title={`${sceneId} · ${open}`}
+        title={`${sceneId} · ${open}`.slice(0, 24)}
         onClear={back}
         onExit={back}
         onFail={back}
