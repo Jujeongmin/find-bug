@@ -105,9 +105,19 @@ export const noCollision: Mutator = {
   answerIds: (_s, t) => [t.objectId],
 };
 
+/**
+ * Something hanging in the air above its own shadow.
+ *
+ * Filed as physics because the physics category's description names it —
+ * "뚫고 지나가거나, 공중에 떠 있다" — and it takes graphic as well, because
+ * what this actually does is lift the drawing by twenty-eight pixels and leave
+ * the position, the collision and the shadow where they were. A player who
+ * reads that as "it is drawn in the wrong place" is describing the code.
+ */
 export const floating: Mutator = {
   id: "floating",
   category: "physics",
+  alsoCategories: ["graphic"],
   descKey: "bugdesc.floating",
   subtlety: 2,
   requiresPeer: false,
