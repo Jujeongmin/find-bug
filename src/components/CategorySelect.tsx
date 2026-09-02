@@ -47,8 +47,17 @@ export function CategorySelect({
           <button className="btn-ghost" onClick={onCancel}>
             {t("challenge.cancel")}
           </button>
+          {/*
+            Blue, and space does not press it.
+            
+            A report is one per build and it stands: this is the one button in
+            the game where a reflex costs the player something they cannot get
+            back, and space is a reflex — it is the key they have just been
+            hammering to walk, to read a line, to close a prompt.
+          */}
           <button
             className="btn-primary"
+            data-no-space
             disabled={!selected}
             onClick={() => selected && onSubmit(selected)}
           >

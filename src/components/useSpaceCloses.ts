@@ -15,9 +15,10 @@ import { useEffect } from "react";
  * someone had remembered to write it and quietly did not where they had not.
  *
  * `data-space` still wins if a prompt marks something explicitly, for the one
- * case that is not a blue button. A prompt with no primary and no mark — the
- * defect categories, the shop shelf — answers nothing, because choosing is not
- * safe to do blind.
+ * case that is not a blue button, and `data-no-space` opts a blue button out.
+ * Filing a report is the one press in the game that cannot be taken back, and
+ * space is a reflex — it is the key the player has been hammering to walk, to
+ * read a line, to close a prompt. That one has to be aimed.
  */
 const LEARNED_KEY = "fb_learned_space";
 
@@ -58,7 +59,7 @@ export function useSpaceCloses() {
       const top = backdrops[backdrops.length - 1];
       const pick = (root: ParentNode) =>
         root.querySelector<HTMLButtonElement>(
-          "button[data-space]:not([disabled]), button.btn-primary:not([disabled])"
+          "button[data-space]:not([disabled]), button.btn-primary:not([disabled]):not([data-no-space])"
         );
       /*
        * With no prompt open, only a screen that has finished answers.
