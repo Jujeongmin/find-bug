@@ -470,7 +470,10 @@
 }
 
 /* ---- scene backgrounds (engine-driven scenes) ---- */
-.s2-room { background: linear-gradient(#5d4a66 0 500px, #8a6f4d 500px); }
+/* The floor line sat at 500, which left the lower third of the shop as bare
+   boards once the shopkeeper, the assistant and the door came out of it. The
+   wall carries further down now, so what is left in the room fills it. */
+.s2-room { background: linear-gradient(#5d4a66 0 610px, #8a6f4d 610px); }
 .s3-field { background: linear-gradient(#2b2438 0 555px, #4a3a2c 555px); }
 .s5-forest {
   background:

@@ -146,27 +146,6 @@ export const freezeAnimation: Mutator = {
   answerIds: (_s, t) => [t.objectId],
 };
 
-export const reverseDirection: Mutator = {
-  id: "reverseDirection",
-  category: "weird-movement",
-  descKey: "bugdesc.reverseDirection",
-  subtlety: 2,
-  requiresPeer: true,
-  comparative: true,
-  // a left/right flip is invisible on a symmetrical sprite, so scenes opt in
-  candidates: (s) =>
-    withPeers(
-      s,
-      byBehavior(s, "patrol").filter((o) => o.render.directional)
-    ).map((o) => ({ objectId: o.id })),
-  apply: (s, t) =>
-    mapObject(s, t.objectId, (o) => {
-      o.behaviors = o.behaviors.map((b) =>
-        b.t === "patrol" ? { ...b, flipSprite: !b.flipSprite } : b
-      );
-    }),
-  answerIds: (_s, t) => [t.objectId],
-};
 
 export const mirrorShadow: Mutator = {
   id: "mirrorShadow",
@@ -540,7 +519,6 @@ export const MUTATORS: Mutator[] = [
   noCollision,
   floating,
   freezeAnimation,
-  reverseDirection,
   speedScale,
   teleportOnEnd,
   bounceOnEnd,

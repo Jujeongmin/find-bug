@@ -89,30 +89,6 @@ export const stage02Scene: SceneSpec = {
       behaviors: [{ t: "spin", rpm: 10, dir: 1 }],
     },
 
-    /* merchant + cat */
-    {
-      id: "merchant",
-      nameKey: "object.merchant",
-      kind: "sprite",
-      x: 260,
-      y: 440,
-      peerGroup: "person",
-      render: { sprite: { sheet: "platchars" as const, col: 0, row: 1, scale: 1.9 }, orientable: true, shadow: { offsetX: 10, width: 28 } },
-      behaviors: [],
-    },
-    {
-      id: "cat",
-      nameKey: "object.cat",
-      kind: "sprite",
-      x: 120,
-      y: 550,
-      peerGroup: "person",
-      render: { sprite: { sheet: "platchars" as const, col: 2, row: 0, scale: 1.6 }, orientable: true, directional: true, shadow: { offsetX: 10, width: 24 } },
-      behaviors: [
-        { t: "patrol", axis: "x", min: 50, max: 310, speed: 40, flipSprite: true },
-      ],
-    },
-
     /* scenery */
     {
       id: "shelf",
@@ -121,15 +97,6 @@ export const stage02Scene: SceneSpec = {
       x: 30,
       y: 322,
       render: { className: "s2-plank", bar: { width: 300, height: 12 } },
-      behaviors: [],
-    },
-    {
-      id: "door",
-      nameKey: "object.door",
-      kind: "decor",
-      x: 55,
-      y: 440,
-      render: { sprite: { sheet: "tinytown" as const, col: 5, row: 7, scale: 3 }, shadow: { offsetX: 10, width: 26 } },
       behaviors: [],
     },
 
