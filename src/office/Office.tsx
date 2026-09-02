@@ -169,6 +169,33 @@ function withPlayerAt(scene: SceneSpec, x: number, y: number): SceneSpec {
   };
 }
 
+/**
+ * The same scene, walked faster.
+ *
+ * Walking is the tax on every one of these rooms — four machines, a
+ * developer, a shop and a door, and a clock running through all of it. Shoes
+ * are the one thing on sale that shortens the errand rather than paying for
+ * it, so they touch the three rooms the commute is made of and leave the
+ * builds alone: how fast the player crosses a build's floor is that build's
+ * own business.
+ */
+function withSpeed(scene: SceneSpec, mult: number): SceneSpec {
+  if (mult === 1) return scene;
+  return {
+    ...scene,
+    objects: scene.objects.map((o) =>
+      o.id === "player"
+        ? {
+            ...o,
+            behaviors: o.behaviors.map((b) =>
+              b.t === "playerTopDown" ? { ...b, speed: b.speed * mult } : b
+            ),
+          }
+        : o
+    ),
+  };
+}
+
 /** 월 화 수 목 금 토 일 — the calendar the ship date does not care about */
 const dayName = (day: number) => `week.d${(day - 1) % WEEK}`;
 
@@ -258,7 +285,15 @@ const DEV_COMES_LEVEL = 2;
 const DEV_COLLECT_LEVEL = 3;
 
 /** what a confirmed defect is worth once the developer has it */
-const BOUNTY: Record<Severity, number> = { low: 20, normal: 40, critical: 80 };
+/*
+ * A confirmed defect, once the developer has it.
+ *
+ * These were 20/40/80, which paid something like two thousand won across a
+ * run against a shop holding three hundred and eighty. Everything was bought
+ * by the third day and the rest of the money was a number that went up. What
+ * a wage is for is not being able to afford all of it.
+ */
+const BOUNTY: Record<Severity, number> = { low: 8, normal: 16, critical: 32 };
 
 /** how many pips a severity draws on its machine chip */
 const SEVERITY_PIPS: Record<Severity, number> = { low: 1, normal: 2, critical: 3 };
@@ -269,7 +304,13 @@ const SEVERITY_PIPS: Record<Severity, number> = { low: 1, normal: 2, critical: 3
  * chair keeps overtime from borrowing against the night, and the alarm hands
  * back half an hour of every morning.
  */
-type ItemId = "magnifier" | "chair" | "alarm";
+type ItemId =
+  | "magnifier"
+  | "chair"
+  | "alarm"
+  | "shoes"
+  | "thermos"
+  | "retest";
 
 const CATALOGUE: {
   id: ItemId;
@@ -278,8 +319,16 @@ const CATALOGUE: {
 }[] = [
   { id: "magnifier", cost: 120, where: "office" },
   { id: "chair", cost: 160, where: "office" },
+  { id: "retest", cost: 260, where: "office" },
   { id: "alarm", cost: 100, where: "home" },
+  { id: "shoes", cost: 140, where: "home" },
+  { id: "thermos", cost: 90, where: "home" },
 ];
+
+/** how much faster a decent pair of shoes crosses a room */
+const SHOES_SPEED = 1.4;
+/** what a coffee costs once you are not queueing at the machine for it */
+const THERMOS_MINUTES = 5;
 
 /** the alarm clock starts the day this much earlier */
 const ALARM_MINUTES = 30;
@@ -374,6 +423,8 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [devCoffee, setDevCoffee] = useState(false);
   /** whether they have already walked over to collect today */
   const [devCame, setDevCame] = useState(false);
+  /** the one re-test the form buys, spent once in a run */
+  const [retestUsed, setRetestUsed] = useState(false);
   /** the book of every fault, open on the desk at home */
   const [codex, setCodex] = useState(false);
   /*
@@ -475,9 +526,15 @@ export function Office({ onExit }: { onExit: () => void }) {
    * Walking to a machine and stepping out of the build used to drop them in
    * the middle of the room, so a second look cost the whole walk again.
    */
+  /** what the shoes are worth, applied to the three rooms the commute is in */
+  const pace = owned.includes("shoes") ? SHOES_SPEED : 1;
   const officeHere = useMemo(
-    () => (officeAt ? withPlayerAt(officeScene, officeAt.x, officeAt.y) : officeScene),
-    [officeAt]
+    () =>
+      withSpeed(
+        officeAt ? withPlayerAt(officeScene, officeAt.x, officeAt.y) : officeScene,
+        pace
+      ),
+    [officeAt, pace]
   );
 
   /**
@@ -487,9 +544,9 @@ export function Office({ onExit }: { onExit: () => void }) {
    */
   const homeHere = useMemo(() => {
     const at = withPlayerAt(homeScene, dayOver ? 272 : 132, dayOver ? 545 : 258);
-    if (!isWeekend(day)) return at;
+    if (!isWeekend(day)) return withSpeed(at, pace);
     // the same desk, doing the other thing it would obviously be doing
-    return {
+    return withSpeed({
       ...at,
       objects: at.objects.map((o) =>
         o.id === "homeScreen"
@@ -506,11 +563,11 @@ export function Office({ onExit }: { onExit: () => void }) {
             }
           : o
       ),
-    };
-  }, [dayOver, day]);
+    }, pace);
+  }, [dayOver, day, pace]);
   const streetHere = useMemo(
-    () => withPlayerAt(streetScene, 180, dayOver ? 250 : 540),
-    [dayOver]
+    () => withSpeed(withPlayerAt(streetScene, 180, dayOver ? 250 : 540), pace),
+    [dayOver, pace]
   );
 
   const morningLine = () =>
@@ -565,8 +622,27 @@ export function Office({ onExit }: { onExit: () => void }) {
     // charged here rather than on opening the machine, so backing out of a
     // build still costs nothing
     setCondition((c) => Math.max(0, c - INSPECT_COST));
+    /*
+     * A wrong report stands — the briefing says so two screens before the
+     * player makes one, and it is the whole weight of the decision. The form
+     * buys exactly one exception in a run: the build goes back on the machine
+     * with a different defect in it, and the point of condition and the walk
+     * are spent either way.
+     */
+    const retesting =
+      result === "missed" && owned.includes("retest") && !retestUsed;
+    if (retesting) {
+      setRetestUsed(true);
+      setNote(t("office.retested"));
+    }
     setAssignments((as) =>
-      as.map((a) => (a.machine === running.machine ? { ...a, result } : a))
+      as.map((a) =>
+        a.machine === running.machine
+          ? retesting
+            ? { ...a, result: null, bugId: null }
+            : { ...a, result }
+          : a
+      )
     );
     setRunning(null);
   };
@@ -714,9 +790,11 @@ export function Office({ onExit }: { onExit: () => void }) {
   const payForCoffee = () => {
     setHadCoffee(true);
     setCondition((c) => Math.min(MAX_CONDITION, c + 1));
-    setMinutes((m) => Math.min(DAY_END + overtime, m + COFFEE_MINUTES));
+    // a flask filled at home is the same cup without the queue for it
+    const spent = owned.includes("thermos") ? THERMOS_MINUTES : COFFEE_MINUTES;
+    setMinutes((m) => Math.min(DAY_END + overtime, m + spent));
     sfx.play("pick");
-    setNote(tp("street.gotCoffee", { n: String(COFFEE_MINUTES) }));
+    setNote(tp("street.gotCoffee", { n: String(spent) }));
   };
 
   /** the half hour as it is bought without an advert: against tonight */

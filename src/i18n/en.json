@@ -525,5 +525,12 @@
   "codex.dev": "The developer {pips} · {n} handed over",
   "office.dev.cameOver": "The developer walks over to your desk. “I’ll take that one.” ({pay} won)",
   "home.morningFreeze": "Day {n}. Code freeze. Nobody is writing anything new, and what is left on the machines is what nobody wanted to touch. Miss one today and it ships.",
-  "office.dayFreeze": "Day {n} · freeze, {left} left"
+  "office.dayFreeze": "Day {n} · freeze, {left} left",
+  "item.shoes": "Decent shoes",
+  "item.shoes.desc": "You cross the office, the street and the flat faster",
+  "item.thermos": "A flask",
+  "item.thermos.desc": "Coffee costs five minutes instead of fifteen",
+  "item.retest": "A re-test request",
+  "item.retest.desc": "Once a run, a build you got wrong goes back on the machine",
+  "office.retested": "You file the re-test. The build is back on the machine, with a different fault hiding in it."
 }

@@ -525,5 +525,12 @@
   "codex.dev": "개발자 {pips} · 전달 {n}건",
   "office.dev.cameOver": "개발자가 자리로 걸어온다. \"그거 내가 가져갈게.\" ({pay}원)",
   "home.morningFreeze": "{n}일차. 코드 프리즈다. 새로 짜는 사람은 없고, 기기에 남은 건 아무도 손대기 싫어했던 것들뿐이다. 오늘 놓치면 그대로 나간다.",
-  "office.dayFreeze": "{n}일차 · 프리즈 D-{left}"
+  "office.dayFreeze": "{n}일차 · 프리즈 D-{left}",
+  "item.shoes": "좋은 신발",
+  "item.shoes.desc": "사무실·출근길·집에서 더 빨리 걷는다",
+  "item.thermos": "보온병",
+  "item.thermos.desc": "커피에 15분이 아니라 5분만 든다",
+  "item.retest": "재검토 요청서",
+  "item.retest.desc": "회차당 한 번, 오탐한 빌드를 다시 볼 수 있다",
+  "office.retested": "재검토 요청서를 썼다. 빌드가 기기로 돌아갔다 — 이번엔 다른 결함이 숨어 있다."
 }
