@@ -77,13 +77,24 @@ export function useSpaceCloses() {
 
       e.preventDefault();
       e.stopImmediatePropagation();
-      markLearned();
       btn.click();
     };
     document.documentElement.classList.toggle("learning-space", !learned());
     // the world key counts too: activating a station is the lesson
+    /*
+     * The lesson is the door, not the dialogue.
+     *
+     * Marking it learned on any space press meant the first morning's prompt
+     * taught it: the player closes that with space and the badge is gone
+     * before they ever walk up to the thing it was for. Closing a box teaches
+     * that space closes boxes. Opening the front door with it is the other
+     * lesson, and the badge belongs to that one — so it only counts while a
+     * station is actually offering itself.
+     */
     const onAnySpace = (e: KeyboardEvent) => {
-      if (e.key === " ") markLearned();
+      if (e.key !== " ") return;
+      if (!document.querySelector(".eng-station-btn")) return;
+      markLearned();
     };
     window.addEventListener("keydown", onAnySpace);
     window.addEventListener("keydown", onKey, true);
