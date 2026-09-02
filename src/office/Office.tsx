@@ -583,10 +583,22 @@ export function Office({ onExit }: { onExit: () => void }) {
     [dayOver, pace]
   );
 
-  const morningLine = () =>
-    day === 1
-      ? t("home.morningFirst")
-      : tp("home.morning", { n: String(day) });
+  /*
+   * One morning line, wherever the morning came from.
+   *
+   * Waking up worked out the weekend and the freeze; opening the game did
+   * not, so the first screen of a Saturday told the player to get to work.
+   * Two places deciding what today is will always end up disagreeing about it.
+   */
+  const morningFor = (d: number) =>
+    isWeekend(d)
+      ? t("home.morningWeekend")
+      : isFreeze(d)
+        ? tp("home.morningFreeze", { n: String(d) })
+        : d === 1
+          ? t("home.morningFirst")
+          : tp("home.morning", { n: String(d) });
+  const morningLine = () => morningFor(day);
   // said once on the first morning too, not only on the ones you wake up to
   useEffect(() => {
     setNote(morningLine());
@@ -765,11 +777,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     // the morning's one real decision — so the player has to make it, every
     // morning, by walking out of their own front door
     setNote(
-      isWeekend(next)
-        ? t("home.morningWeekend")
-        : isFreeze(next)
-          ? tp("home.morningFreeze", { n: String(next) })
-          : tp("home.morning", { n: String(next) })
+      morningFor(next)
     );
   };
   /**
