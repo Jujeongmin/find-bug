@@ -523,5 +523,8 @@
   "office.retested": "Re-test filed. The build is back, with a different fault.",
   "settings.title": "Settings",
   "settings.language": "Language",
-  "settings.sound": "Sound"
+  "settings.sound": "Sound",
+  "settings.data": "Saved data",
+  "settings.wipe": "Erase the defect book",
+  "settings.wipeSure": "Erase it · this cannot be undone"
 }

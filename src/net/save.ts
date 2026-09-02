@@ -64,3 +64,15 @@ export async function reportRun(
     /* the rating is on screen either way */
   }
 }
+
+/** wipe the account's copy as well, so the two do not disagree */
+export async function resetSave(
+  server: Remote | null | undefined
+): Promise<void> {
+  if (!server) return;
+  try {
+    await server.remoteFunction("resetSave", []);
+  } catch {
+    /* the local book is already gone; this one goes on the next connection */
+  }
+}

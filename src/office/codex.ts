@@ -83,6 +83,22 @@ export function mergeCodex(incoming: Book): Book {
   return book;
 }
 
+/**
+ * Forget everything.
+ *
+ * The book is the only thing the game keeps, so a player has to be able to
+ * put it back to empty — otherwise the one durable record they own is one
+ * they cannot get out of. Clearing is deliberately not undoable and says so
+ * before it happens.
+ */
+export function clearCodex(): void {
+  try {
+    localStorage.removeItem(KEY);
+  } catch {
+    /* nothing was stored, so nothing needs removing */
+  }
+}
+
 export interface CodexRow {
   sceneId: string;
   bugId: string;

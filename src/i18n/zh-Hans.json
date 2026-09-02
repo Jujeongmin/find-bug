@@ -417,5 +417,8 @@
   "bug.E5.desc": "洗牌按钮：有洗牌的动作，牌却没有动。",
   "bug.E6.desc": "花盆：越过桌缘，浮在空中。",
   "bug.E7.desc": "画框：里面的画倒着挂。",
-  "bug.E8.desc": "卡片：明明图案一样的一对配不起来。"
+  "bug.E8.desc": "卡片：明明图案一样的一对配不起来。",
+  "settings.data": "记录",
+  "settings.wipe": "清除缺陷手册",
+  "settings.wipeSure": "确定清除 · 无法复原"
 }

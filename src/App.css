@@ -1242,3 +1242,24 @@
   vertical-align: -2px;
 }
 .result-emoji { color: inherit; }
+
+/* Erasing the book. Red enough to be read as different from the two settings
+   above it, quiet enough not to look like the point of the panel. */
+.settings-wipe {
+  width: 100%;
+  padding: 5px;
+  font: inherit;
+  font-size: 11px;
+  color: #d98a80;
+  background: rgba(192, 57, 43, 0.1);
+  border: 1px solid #6b342c;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.settings-wipe:hover { background: rgba(192, 57, 43, 0.2); }
+.settings-wipe.arm {
+  color: #1a1d25;
+  background: #c0392b;
+  border-color: #c0392b;
+  font-weight: 700;
+}

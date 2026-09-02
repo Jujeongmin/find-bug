@@ -523,5 +523,8 @@
   "office.retested": "재검토 요청서를 썼다. 빌드가 돌아왔다 — 이번엔 다른 결함이다.",
   "settings.title": "설정",
   "settings.language": "언어",
-  "settings.sound": "소리"
+  "settings.sound": "소리",
+  "settings.data": "기록",
+  "settings.wipe": "결함 수첩 지우기",
+  "settings.wipeSure": "정말 지운다 · 되돌릴 수 없다"
 }

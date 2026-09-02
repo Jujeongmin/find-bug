@@ -21,23 +21,8 @@ const CAUGHT = "caught";
 const MISSED = "missed";
 
 class Server {
-  /** connectivity probe used by the client before it trusts server progress */
-  async ping() {
-    return "pong";
-  }
-
-  /** everything the account remembers */
-  async getSave() {
-    const state = (await $global.getMyState()) || {};
-    return {
-      account: $sender.account,
-      book: sanitise(state.book),
-      best: Number(state.best) || 0,
-      runs: Number(state.runs) || 0,
-      updatedAt: Number(state.updatedAt) || 0,
-    };
-  }
-
+  
+  
   /**
    * Fold a client's book into the account's and hand back the union.
    *

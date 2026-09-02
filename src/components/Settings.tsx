@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import { useGameServer } from "@agent8/gameserver";
 import { sfx } from "../audio/sfx";
+import { clearCodex } from "../office/codex";
+import { resetSave } from "../net/save";
 import { useI18n, LANGS, type Lang } from "../i18n";
 import { SettingsIcon, SpeakerIcon, SpeakerMutedIcon } from "./icons";
 
@@ -21,6 +24,16 @@ export function Settings() {
   const [muted, setMuted] = useState(() => sfx.isMuted());
   const [vol, setVol] = useState(() => sfx.getVolume());
   const panel = useRef<HTMLDivElement>(null);
+  const { server, connected } = useGameServer();
+  /*
+   * Wiping asks once.
+   *
+   * The book is the only thing the game keeps, and a stray press in a panel
+   * that otherwise only changes a language or a volume should not be able to
+   * empty it. The button becomes the question rather than opening a dialogue
+   * over the top of one.
+   */
+  const [confirming, setConfirming] = useState(false);
   /*
    * Silence is silence. A slider at nothing and a speaker still drawn as on
    * is the panel disagreeing with itself about whether the game makes a
@@ -32,7 +45,10 @@ export function Settings() {
   useEffect(() => {
     if (!open) return;
     const away = (e: MouseEvent) => {
-      if (!panel.current?.contains(e.target as Node)) setOpen(false);
+      if (!panel.current?.contains(e.target as Node)) {
+        setOpen(false);
+        setConfirming(false);
+      }
     };
     document.addEventListener("mousedown", away);
     return () => document.removeEventListener("mousedown", away);
@@ -99,6 +115,24 @@ export function Settings() {
               onPointerUp={() => sfx.play("click")}
             />
           </div>
+
+          <label>{t("settings.data")}</label>
+          <button
+            className={`settings-wipe ${confirming ? "arm" : ""}`}
+            onClick={() => {
+              if (!confirming) {
+                setConfirming(true);
+                return;
+              }
+              clearCodex();
+              void resetSave(connected ? server : null);
+              setConfirming(false);
+              setOpen(false);
+              sfx.play("fail");
+            }}
+          >
+            {t(confirming ? "settings.wipeSure" : "settings.wipe")}
+          </button>
         </div>
       )}
       <button
