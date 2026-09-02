@@ -280,7 +280,16 @@
 
 .picking-banner {
   position: absolute;
-  bottom: 12px;
+  /*
+   * The top, because the bottom of a build is where its controls live: the
+   * attack button in the meadow, the shuffle button on the card table. Both of
+   * those are objects a report can name, and the banner was sitting on them —
+   * the sentence telling the player to point at the faulty thing was covering
+   * the faulty thing.
+   *
+   * Clear of the HUD strip, which is the only thing above it.
+   */
+  top: 46px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.8);
@@ -293,6 +302,18 @@
   gap: 12px;
   align-items: center;
   white-space: nowrap;
+  /*
+   * The banner is an instruction, not a control, and it sat across the bottom
+   * of the field eating clicks. The card build keeps its shuffle button down
+   * there, and one of that build's defects is the shuffle button — so the
+   * sentence telling the player to point at the faulty object was covering the
+   * faulty object.
+   */
+  pointer-events: none;
+}
+/* except the way out of picking, which is a control */
+.picking-banner button {
+  pointer-events: auto;
 }
 
 /* modals */
