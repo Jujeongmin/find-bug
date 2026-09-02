@@ -19,6 +19,33 @@ import { useEffect } from "react";
  * defect categories, the shop shelf — answers nothing, because choosing is not
  * safe to do blind.
  */
+const LEARNED_KEY = "fb_learned_space";
+
+/**
+ * Whether the player still needs telling that space is a key.
+ *
+ * The hint was on every blue button, which teaches the rule four times a
+ * minute for the rest of the run. It belongs on the first thing the player
+ * walks up to — the front door on the first morning — and nowhere after they
+ * have pressed the key once, because at that point they know.
+ */
+function learned(): boolean {
+  try {
+    return localStorage.getItem(LEARNED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function markLearned(): void {
+  try {
+    localStorage.setItem(LEARNED_KEY, "1");
+  } catch {
+    /* a browser that will not store just keeps showing the hint */
+  }
+  document.documentElement.classList.remove("learning-space");
+}
+
 export function useSpaceCloses() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -49,10 +76,20 @@ export function useSpaceCloses() {
 
       e.preventDefault();
       e.stopImmediatePropagation();
+      markLearned();
       btn.click();
     };
+    document.documentElement.classList.toggle("learning-space", !learned());
+    // the world key counts too: activating a station is the lesson
+    const onAnySpace = (e: KeyboardEvent) => {
+      if (e.key === " ") markLearned();
+    };
+    window.addEventListener("keydown", onAnySpace);
     window.addEventListener("keydown", onKey, true);
-    return () => window.removeEventListener("keydown", onKey, true);
+    return () => {
+      window.removeEventListener("keydown", onAnySpace);
+      window.removeEventListener("keydown", onKey, true);
+    };
   }, []);
 }
 

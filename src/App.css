@@ -968,16 +968,15 @@
 .shop-item.have em { color: #2f7a4a; }
 
 /*
- * Every blue button says "space", because space presses every blue button.
+ * The one place the game says "space" out loud.
  *
- * The hint used to be written into each prompt by hand, so it appeared on four
- * of them and not on the rest — and the rule a player learns from a hint is
- * the rule they expect everywhere. Drawn from the class instead, and only
- * where a keyboard is likely.
+ * It was on every blue button, which teaches the same rule four times a minute
+ * for twelve days. It sits on the thing the player walks up to instead — the
+ * front door, the first morning — and stops the moment they press the key,
+ * because at that point they know and the badge is decoration.
  */
 @media (pointer: fine) {
-  .btn-primary:not(:disabled)::after,
-  .eng-station-btn::after {
+  .learning-space .eng-station-btn::after {
     content: "space";
     display: inline-block;
     margin-left: 8px;
