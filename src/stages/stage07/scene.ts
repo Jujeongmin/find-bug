@@ -60,7 +60,9 @@ export const stage07Scene: SceneSpec = {
       x: 34,
       y: 96,
       z: 1,
-      render: { className: "s7-window", bar: { width: 292, height: 226 } },
+      // just deep enough for the shelf: the empty half below the cans made the
+      // drop read as a fall through nothing rather than a can leaving a machine
+      render: { className: "s7-window", bar: { width: 292, height: 152 } },
       behaviors: [],
     },
 
@@ -103,6 +105,24 @@ export const stage07Scene: SceneSpec = {
         },
       ],
     })),
+
+    /*
+     * The flap over the mouth of the tray.
+     *
+     * Without it the can lands in front of the machine rather than inside it,
+     * which is the difference between a drink being dispensed and a brick
+     * falling down a wall. It is drawn above the cans so they pass behind it.
+     */
+    {
+      id: "vendFlap",
+      nameKey: "object.vendTray",
+      kind: "decor" as const,
+      x: 44,
+      y: 452,
+      z: 4,
+      render: { className: "s7-flap", bar: { width: 272, height: 22 } },
+      behaviors: [],
+    },
 
     /* where it lands */
     {

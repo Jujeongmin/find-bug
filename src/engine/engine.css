@@ -76,24 +76,71 @@
   border-radius: 6px;
   box-shadow: inset 0 8px 18px rgba(255, 255, 255, 0.08);
 }
+/*
+ * A can, rather than a coloured block.
+ *
+ * The first version was a rounded rectangle in a flavour colour, and what it
+ * read as when it moved was a brick sliding down a wall. A drinks can has four
+ * things that say what it is at this size: a bright rim where the lid catches
+ * the light, a pale label band across the middle, a dark foot, and a curve
+ * across the body from the light on one side to the shadow on the other.
+ *
+ * The flavour is a variable now, because the body is a stack of layers and a
+ * plain background would paint over them.
+ */
 .s7-can {
-  border-radius: 7px;
-  border: 3px solid rgba(0, 0, 0, 0.45);
-  box-shadow: inset -8px 0 0 rgba(0, 0, 0, 0.22),
-    inset 8px 0 0 rgba(255, 255, 255, 0.16);
-  transition: transform 0.28s ease-in;
+  border-radius: 5px / 8px;
+  border: 3px solid rgba(0, 0, 0, 0.5);
+  background-color: var(--can);
+  background-image:
+    /* lid */
+    linear-gradient(rgba(255, 255, 255, 0.55) 0 7px, transparent 7px),
+    /* label */
+    linear-gradient(
+      transparent 0 34px,
+      rgba(255, 255, 255, 0.82) 34px 56px,
+      transparent 56px
+    ),
+    /* foot */
+    linear-gradient(transparent 0 82px, rgba(0, 0, 0, 0.34) 82px),
+    /* the round of the body */
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.28) 0 5px,
+      rgba(255, 255, 255, 0.22) 9px 17px,
+      transparent 22px 34px,
+      rgba(0, 0, 0, 0.26) 40px
+    );
+  transition: transform 0.34s cubic-bezier(0.45, 0, 0.85, 0.4);
 }
-/* the drop: window shelf down into the tray, and back when the wire releases */
+/*
+ * The drop.
+ *
+ * It used to ease out, which is what something being lowered does. A can that
+ * has been let go accelerates the whole way and stops when it hits the tray,
+ * so the curve starts slow and ends fast, and the way back up is the same
+ * curve read backwards — the machine restocking rather than the can flying.
+ */
 .s7-can.triggered {
-  transform: translateY(330px);
+  transform: translateY(324px);
 }
 .s7-btn {
+  /* the shared prop rule paints a wooden gradient over every bar; the flavour
+     is a colour and has to be the only thing on this one */
+  background-image: none;
   border-radius: 8px;
   border: 3px solid rgba(0, 0, 0, 0.5);
   box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.3);
 }
 .s7-btn:active {
   box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+}
+/* the lip the can goes in behind, so the tray is a slot and not a shelf */
+.s7-flap {
+  border-radius: 3px 3px 6px 6px;
+  background: linear-gradient(#4a5265 0 40%, #2b313d 40%);
+  border: 2px solid #1b1f27;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.45);
 }
 .s7-tray {
   background: #171a22;
@@ -102,9 +149,9 @@
   box-shadow: inset 0 10px 20px rgba(0, 0, 0, 0.55);
 }
 /* the three flavours, so a button and its can are the same thing to look at */
-.s7-cola { background: #c0392b; }
-.s7-soda { background: #3f9e5a; }
-.s7-juice { background: #d98324; }
+.s7-cola { --can: #c0392b; background-color: #c0392b; }
+.s7-soda { --can: #3f9e5a; background-color: #3f9e5a; }
+.s7-juice { --can: #d98324; background-color: #d98324; }
 
 /* ---- where the day is pointing ---- */
 /*
