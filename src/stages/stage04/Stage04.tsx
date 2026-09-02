@@ -1,3 +1,4 @@
+import { AlertIcon, BugIcon } from "../../components/icons";
 import { useEffect, useRef, useState } from "react";
 import type { BugCategory, BugDef } from "../../core/types";
 import { judge, pickBug } from "../../core/judge";
@@ -270,7 +271,7 @@ export function Stage04({
             disabled={phase !== "play"}
             onClick={() => setPhase("picking")}
           >
-            {t("challenge.button")}
+            <AlertIcon size={13} /> {t("challenge.button")}
           </button>
         </div>
       </div>
@@ -418,7 +419,9 @@ export function Stage04({
       {phase === "intro" && (
         <div className="modal-backdrop">
           <div className="modal">
-            <h2>🐛 {t("intro.stage04.line")}</h2>
+            <h2>
+              <BugIcon size={16} /> {t("intro.stage04.line")}
+            </h2>
             <p className="intro-goal">{t("goal.stage04")}</p>
             <p>{t("intro.hint")}</p>
             <p className="once-warning">{t("challenge.once")}</p>

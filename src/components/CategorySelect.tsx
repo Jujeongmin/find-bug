@@ -1,3 +1,4 @@
+import { MagnifierIcon } from "./icons";
 import { ALL_CATEGORIES, type BugCategory } from "../core/types";
 import { useI18n } from "../i18n";
 import { useState } from "react";
@@ -25,7 +26,7 @@ export function CategorySelect({
       <div className="modal">
         <h2>{t("category.title")}</h2>
         <p className="modal-target">
-          🔍 {targetLabel ?? t(`object.${targetObjectId}`)}
+          <MagnifierIcon /> {targetLabel ?? t(`object.${targetObjectId}`)}
         </p>
         <div className="category-list">
           {ALL_CATEGORIES.map((c) => (

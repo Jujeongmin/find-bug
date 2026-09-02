@@ -1235,3 +1235,10 @@
 
 /* the eye sits with the pips rather than above them */
 .office-condition svg { display: inline-block; vertical-align: -2px; margin-right: 2px; }
+
+/* the drawn marks share the line with the text beside them */
+.result-emoji svg, .bug-desc svg, .modal-target svg, .modal h2 svg, .challenge-btn svg {
+  display: inline-block;
+  vertical-align: -2px;
+}
+.result-emoji { color: inherit; }

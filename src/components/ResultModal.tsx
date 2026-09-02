@@ -1,3 +1,4 @@
+import { BugIcon, CheckIcon, CrossIcon } from "./icons";
 import type { BugDef } from "../core/types";
 import { useI18n } from "../i18n";
 
@@ -20,12 +21,16 @@ export function ResultModal({ success, bug, bugText, onRetry, onDone, final }: P
   return (
     <div className="modal-backdrop">
       <div className={`modal result ${success ? "success" : "fail"}`}>
-        <div className="result-emoji">{success ? "🎉" : "❌"}</div>
+        <div className="result-emoji">{success ? <CheckIcon /> : <CrossIcon />}</div>
         <h2>{success ? t("result.success.title") : t("result.fail.title")}</h2>
         <p>{success
             ? t("result.success.body")
             : t(final ? "result.fail.bodyFinal" : "result.fail.body")}</p>
-        {success && desc && <p className="bug-desc">🐛 {desc}</p>}
+        {success && desc && (
+          <p className="bug-desc">
+            <BugIcon /> {desc}
+          </p>
+        )}
         <div className="modal-actions">
           {success ? (
             <button data-space className="btn-primary" onClick={onDone}>

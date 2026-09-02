@@ -129,11 +129,23 @@
   line-height: 1;
 }
 
+/*
+ * The attack swing.
+ *
+ * This was ⚔️ at thirty pixels — two crossed sabres with gold hilts, drawn by
+ * whoever made the platform's emoji font, hanging over pixel art at a size
+ * nothing else in the scene is. A blade is a shape; it does not need a picture.
+ */
 .sword {
   position: absolute;
-  right: -30px;
-  top: 0;
-  font-size: 30px;
+  right: -26px;
+  top: 2px;
+  width: 26px;
+  height: 5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #8a6b3d 0 26%, #d8dde8 26% 100%);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45);
+  transform-origin: left center;
   animation: swing 0.25s ease-out;
 }
 

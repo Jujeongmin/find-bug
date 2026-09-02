@@ -9,6 +9,12 @@ import { ResultModal } from "../components/ResultModal";
 import { FieldScaler, FIELD_W, FIELD_H } from "../components/FieldScaler";
 import { TouchControls } from "../components/TouchControls";
 import { PlaytestBar } from "../components/PlaytestBar";
+import {
+  AlertIcon,
+  BugIcon,
+  MagnifierIcon,
+  SkullIcon,
+} from "../components/icons";
 import { propStyle, spriteStyle } from "./spriteStyle";
 import { sfx } from "../audio/sfx";
 import type { SceneSpec } from "./types";
@@ -509,7 +515,7 @@ export function EngineStage({
                 setPhase("picking");
               }}
             >
-              {t("challenge.button")}
+              <AlertIcon size={13} /> {t("challenge.button")}
             </button>
           </div>
         </div>
@@ -827,7 +833,7 @@ export function EngineStage({
                     {o.render.sprite ? null : o.render.emoji}
                   </div>
                   {isPlayer && st.now < st.attackUntil && (
-                    <div className="sword">⚔️</div>
+                    <div className="sword" />
                   )}
                 </div>
               );
@@ -879,7 +885,7 @@ export function EngineStage({
               onPointerCancel={() => setZoomed(false)}
               title={t("item.magnifier")}
             >
-              🔍
+              <MagnifierIcon size={16} />
             </button>
           )}
 
@@ -940,7 +946,9 @@ export function EngineStage({
       {phase === "intro" && !bare && (
         <div className="modal-backdrop">
           <div className="modal">
-            <h2>🐛 {t(scene.introKey)}</h2>
+            <h2>
+              <BugIcon size={16} /> {t(scene.introKey)}
+            </h2>
             {scene.goalKey && (
               <p className="intro-goal">{t(scene.goalKey)}</p>
             )}
@@ -959,7 +967,7 @@ export function EngineStage({
       {phase === "dead" && (
         <div className="modal-backdrop">
           <div className="modal result fail">
-            <div className="result-emoji">💀</div>
+            <div className="result-emoji"><SkullIcon /></div>
             <h2>{t("result.dead.title")}</h2>
             <p>{t("result.dead.body")}</p>
             <div className="modal-actions">

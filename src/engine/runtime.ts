@@ -199,7 +199,9 @@ export class SceneRuntime {
           const cur = this.state.counters[a.counter] ?? 0;
           const cap = spec?.max ?? Infinity;
           this.state.counters[a.counter] = Math.min(cap, cur + a.by);
-          this.addPopup(at.x, at.y - 26, `❤️+${a.by}`);
+          // a text heart, not the emoji: the popup sits over pixel art and the
+          // platform picture arrives glossy, rounded and the wrong red
+          this.addPopup(at.x, at.y - 26, `♥+${a.by}`);
           break;
         }
         case "attack":
