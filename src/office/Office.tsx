@@ -73,13 +73,13 @@ const DAY_END = 18 * 60;
  * could not come up, so nothing ever borrowed against a night, so the chair
  * and the sofa and the half hour were all furniture.
  *
- * At 2.0 that same pace has the fourth build done around ten past four, which
- * leaves the afternoon with something in it without making the day a race. A
- * player slower than that still meets six o'clock with work left, which is the
- * decision the evening economy is made of. The day is four and a half real
- * minutes.
+ * At 2.3 that same pace has the fourth build done around a quarter past five,
+ * which leaves the end of the afternoon worth something without making the day
+ * a race — and a player slower than that meets six o'clock with work left,
+ * which is the decision the evening economy is made of. The day is a little
+ * under four real minutes.
  */
-const MINUTES_PER_SECOND = 2.0;
+const MINUTES_PER_SECOND = 2.3;
 
 /**
  * How long the screen stays dark between one day and the next.
