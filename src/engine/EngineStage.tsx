@@ -656,10 +656,27 @@ export function EngineStage({
                     (target.render.sprite.scale ?? 3) * 0.5
                   : 24);
             return (
-              <div
+              <svg
                 className="waypoint"
-                style={{ left: c.x, top: c.y - lift - 16, zIndex: 40 }}
-              />
+                viewBox="0 0 9 6"
+                style={{ left: c.x, top: c.y - lift - 18, zIndex: 40 }}
+                aria-hidden
+              >
+                {/*
+                  Drawn on the same grid as everything else: nine pixels across,
+                  a one-pixel outline the weight of the tile art's own, a lighter
+                  row along the top where the light is. Four sheets were scanned
+                  for a marker first and none of them has one — the shapes that
+                  came back narrowing to a point were a pillar, a potion and a
+                  key.
+                */}
+                <path
+                  className="wp-line"
+                  d="M0 0h9v1H0zM0 1h1v1H0zM8 1h1v1H8zM1 2h1v1H1zM7 2h1v1H7zM2 3h1v1H2zM6 3h1v1H6zM3 4h1v1H3zM5 4h1v1H5zM4 5h1v1H4z"
+                />
+                <path className="wp-fill" d="M1 1h7v1H1zM2 2h5v1H2zM3 3h3v1H3zM4 4h1v1H4z" />
+                <path className="wp-top" d="M1 1h7v1H1z" />
+              </svg>
             );
           })()}
 
