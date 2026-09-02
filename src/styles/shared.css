@@ -93,13 +93,6 @@
   user-select: none;
 }
 
-.cloud {
-  position: absolute;
-  top: 30px;
-  font-size: 44px;
-  user-select: none;
-}
-
 /* entities: positioned by center-bottom */
 .entity {
   position: absolute;
@@ -589,43 +582,6 @@
   border-radius: 50%;
   border: none;
 }
-/*
- * A cloud is flat underneath and lumpy on top.
- *
- * This one was a pill with a fully rounded bottom and two shadows nudged a few
- * pixels up — which at this size reads as a rounded underside with a flat top,
- * so it looked upside down. A player checking a build for graphical faults
- * spent a report on it and was told they were wrong, which is the worst thing
- * a QA game can do: the scene has to be right, not merely unmutated.
- *
- * box-shadow copies the element's own corners, so the puffs cannot be round
- * while the body is flat-bottomed. They are their own elements.
- */
-.s1-cloud {
-  background: #fdfdff;
-  border-radius: 999px 999px 5px 5px;
-  border: none;
-}
-.s1-cloud::before,
-.s1-cloud::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  background: #fdfdff;
-}
-.s1-cloud::before {
-  width: 26px;
-  height: 26px;
-  left: 5px;
-  top: -13px;
-}
-.s1-cloud::after {
-  width: 19px;
-  height: 19px;
-  right: 6px;
-  top: -9px;
-}
-
 /* Ground in the Tiny Town palette. The pack's props carry a heavy dark
    outline, which reads as a hole punched in a flat field; on a green close to
    the props' own fill the outline reads as an outline. The speckles are the

@@ -100,9 +100,36 @@ const ok = (label: string, cond: boolean) =>
 /* generic runtime sanity */
 {
   const r = new SceneRuntime(stage01Scene);
-  const c0 = r.state.objects.cloud.x;
-  tick(r, 2);
-  ok("runtime: cloud drifts", r.state.objects.cloud.x > c0);
+  /*
+   * Drift, on a scene made for the purpose.
+   *
+   * It used to be checked on stage one's cloud, which was the only object in
+   * the whole game with the behaviour — so deleting a decoration deleted the
+   * only coverage the behaviour had. A capability the runtime offers should be
+   * tested by the runtime's own fixture, not by whichever scene happens to be
+   * using it this month.
+   */
+  const drifting = {
+    ...stage01Scene,
+    objects: [
+      ...stage01Scene.objects,
+      {
+        id: "driftProbe",
+        nameKey: "object.cloud",
+        kind: "decor" as const,
+        x: 40,
+        y: 40,
+        render: { bar: { width: 10, height: 10 } },
+        behaviors: [
+          { t: "drift" as const, axis: "x" as const, speed: 14, wrapMin: -60, wrapMax: 420 },
+        ],
+      },
+    ],
+  };
+  const d = new SceneRuntime(drifting);
+  const c0 = d.state.objects.driftProbe.x;
+  tick(d, 2);
+  ok("runtime: drift moves an object", d.state.objects.driftProbe.x > c0);
   const s0 = r.state.objects.slimeA.x;
   tick(r, 1);
   ok("runtime: slime patrols", r.state.objects.slimeA.x !== s0);

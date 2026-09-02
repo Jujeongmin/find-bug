@@ -177,15 +177,6 @@ export const stage01Scene: SceneSpec = {
       },
       behaviors: [],
     },
-    {
-      id: "cloud",
-      nameKey: "object.cloud",
-      kind: "decor",
-      x: 60,
-      y: 125,
-      render: { className: "s1-cloud", bar: { width: 54, height: 20 } },
-      behaviors: [{ t: "drift", axis: "x", speed: 14, wrapMin: -60, wrapMax: 420 }],
-    },
 
     /* attack button */
     {
