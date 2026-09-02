@@ -31,7 +31,34 @@ const dictionaries: Record<Lang, Record<string, string>> = {
  * zh-SG simplified, and a bare "zh" is neither on its own — the script tag
  * is what decides, and most browsers only send the region.
  */
+const LANG_KEY = "fb_lang";
+
+/** the language the player chose last time, if the browser kept it */
+function storedLang(): Lang | null {
+  try {
+    const raw = localStorage.getItem(LANG_KEY);
+    return LANGS.some((l) => l.id === raw) ? (raw as Lang) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Remember it. The choice used to live in React state alone, so a reload put
+ * the player back into whatever their browser asks for — and someone reading
+ * the game in their second language has a browser that asks for their first.
+ */
+export function rememberLang(lang: Lang): void {
+  try {
+    localStorage.setItem(LANG_KEY, lang);
+  } catch {
+    /* private browsing — it just will not persist */
+  }
+}
+
 export function detectLang(): Lang {
+  const chosen = storedLang();
+  if (chosen) return chosen;
   const tag = navigator.language.toLowerCase();
   if (tag.startsWith("ko")) return "ko";
   if (tag.startsWith("ja")) return "ja";

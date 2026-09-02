@@ -1232,3 +1232,6 @@
   align-items: center;
   justify-content: center;
 }
+
+/* the eye sits with the pips rather than above them */
+.office-condition svg { display: inline-block; vertical-align: -2px; margin-right: 2px; }

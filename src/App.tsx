@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import {
   I18nContext,
   detectLang,
+  rememberLang,
   translate,
   translateParams,
   type Lang,
@@ -36,7 +37,11 @@ const DEBUG = devFlag("debug");
 
 export default function App() {
   useSpaceCloses();
-  const [lang, setLang] = useState<Lang>(detectLang);
+  const [lang, setLangState] = useState<Lang>(detectLang);
+  const setLang = (next: Lang) => {
+    rememberLang(next);
+    setLangState(next);
+  };
 
   const i18n = useMemo(
     () => ({

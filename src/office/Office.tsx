@@ -14,6 +14,7 @@ import { sfx } from "../audio/sfx";
 import { shipRating, totalStake, type Severity } from "./rating";
 import { HAS_KEYBOARD } from "../components/useSpaceCloses";
 import { Settings } from "../components/Settings";
+import { EyeIcon } from "../components/icons";
 import { available as adsAvailable, showRewarded } from "../net/ads";
 
 /**
@@ -1287,7 +1288,8 @@ export function Office({ onExit }: { onExit: () => void }) {
                 setNote(tp("office.whatCondition", { n: String(condition) }))
               }
             >
-              👁{"●".repeat(condition)}
+              <EyeIcon />
+              {"●".repeat(condition)}
               {"○".repeat(MAX_CONDITION - condition)}
             </button>
             <span className="office-pay">{tp("office.pay", { n: String(pay) })}</span>

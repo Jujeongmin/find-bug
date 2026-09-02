@@ -68,3 +68,20 @@ export function SettingsIcon({ size = 14 }: Props) {
     </svg>
   );
 }
+
+/**
+ * What is left in you today, on the bar beside the pips.
+ *
+ * This was 👁, which on Windows is a cartoon eye with a blue iris and on
+ * Android is brown — a picture from someone else's set sitting in a row of
+ * numbers. The pips next to it already carry the count; the mark only has to
+ * say what is being counted.
+ */
+export function EyeIcon({ size = 12 }: Props) {
+  return (
+    <svg {...box(size)} strokeWidth={1.4}>
+      <path d="M1.4 8s2.4-4 6.6-4 6.6 4 6.6 4-2.4 4-6.6 4S1.4 8 1.4 8z" />
+      <circle cx="8" cy="8" r="1.7" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
