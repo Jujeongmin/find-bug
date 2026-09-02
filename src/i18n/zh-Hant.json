@@ -431,5 +431,14 @@
   "spirit.name": "心情",
   "spirit.endHigh": "十二天過去，人還在。",
   "spirit.endMid": "是出去了。下週要做什麼，說不上來。",
-  "spirit.endLow": "發佈說明上沒有名字，人也沒剩下多少。"
+  "spirit.endLow": "發佈說明上沒有名字，人也沒剩下多少。",
+  "quest.goWork": "該上班了 — 走出家門",
+  "quest.goOffice": "進辦公室",
+  "quest.runBuild": "啟動 {machine} — 最嚴重的在那裡",
+  "quest.handOver": "把 {n} 件交給開發者",
+  "quest.outOfEyes": "已經看不動了 — 喝咖啡，或下班",
+  "quest.clockOff": "今天的份做完了 — 下班吧",
+  "quest.goHome": "回家吧",
+  "quest.sleep": "去睡吧 — 上床",
+  "quest.weekend": "今天是你的"
 }

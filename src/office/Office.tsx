@@ -865,6 +865,7 @@ export function Office({ onExit }: { onExit: () => void }) {
    */
   const endOfDay = () => {
     const left = assignments.filter((a) => a.result === null).length;
+
     /*
      * Six o'clock, and the choice is the player's either way.
      *
@@ -1304,6 +1305,47 @@ export function Office({ onExit }: { onExit: () => void }) {
   }
 
   const left = assignments.filter((a) => a.result === null).length;
+
+  /*
+   * The one thing to do next, and where it is.
+   *
+   * Three rooms, four machines, a developer, two shops, a sofa, a bed and a
+   * stall, and nothing anywhere said which of them the day was waiting on. A
+   * player who put the game down on Tuesday came back to a flat with no idea
+   * why they were in it.
+   *
+   * One line, derived rather than scripted, so it cannot drift out of step
+   * with the state it describes. Order matters: look at builds while there is
+   * anything to look with, hand over when there is not, and go home when",
+   * there is neither — which is the loop the office was built around.
+   */
+  const quest = (): { key: string; params?: Record<string, string> } => {
+    if (place === "home") {
+      if (dayOver) return { key: "quest.sleep" };
+      if (isWeekend(day) && !workedWeekend) return { key: "quest.weekend" };
+      return { key: "quest.goWork" };
+    }
+    if (place === "street") {
+      return { key: dayOver ? "quest.goHome" : "quest.goOffice" };
+    }
+    if (left && condition >= INSPECT_COST) {
+      // the worst one first, which is the advice the pips are already giving
+      const worst = assignments
+        .filter((a) => a.result === null)
+        .reduce((best, a) =>
+          SEVERITY_PIPS[a.severity] > SEVERITY_PIPS[best.severity] ? a : best
+        );
+      return {
+        key: "quest.runBuild",
+        params: { machine: t(`object.${worst.machine}`) },
+      };
+    }
+    if (pending.length) {
+      return { key: "quest.handOver", params: { n: String(pending.length) } };
+    }
+    if (left) return { key: "quest.outOfEyes" };
+    return { key: "quest.clockOff" };
+  };
   const sky = skyAt(minutes);
 
   return (
@@ -1324,9 +1366,6 @@ export function Office({ onExit }: { onExit: () => void }) {
           mode="play"
           header={
             <div className="wb-header">
-              <button className="exit-btn" onClick={onExit} title={t("game.exit")}>
-                ←
-              </button>
               <span className="wb-build">
               {tp("office.day", { n: String(day) })} {t(dayName(day))}
             </span>
@@ -1353,9 +1392,6 @@ export function Office({ onExit }: { onExit: () => void }) {
           mode="play"
           header={
             <div className="wb-header">
-              <button className="exit-btn" onClick={onExit} title={t("game.exit")}>
-                ←
-              </button>
               <span className="wb-build">
                 {tp(dayOver ? "home.evening" : "home.morningHeader", {
                   n: String(day),
@@ -1385,9 +1421,6 @@ export function Office({ onExit }: { onExit: () => void }) {
         onPlayerRest={setOfficeAt}
         header={
           <div className="wb-header">
-            <button className="exit-btn" onClick={onExit} title={t("game.exit")}>
-              ←
-            </button>
             {/* one date, not two: which day this is and how many are left are
                 the same fact read from opposite ends, and each was taking its
                 own slot on a bar 360 wide */}
@@ -1459,6 +1492,16 @@ export function Office({ onExit }: { onExit: () => void }) {
         * longer exists — so they sit in the corner of the floor instead,
         * small enough to ignore and gone while a build is running.
         */}
+      {/* what the day is waiting on, over the top of the room it is in */}
+      {!running && !shipped && (
+        <div className="quest">
+          {(() => {
+            const q = quest();
+            return q.params ? tp(q.key, q.params) : t(q.key);
+          })()}
+        </div>
+      )}
+
       <div className="floor-controls">
         <Settings />
       </div>

@@ -537,5 +537,14 @@
   "spirit.name": "마음",
   "spirit.endHigh": "열두 날을 지나고도 사람이 남아 있다.",
   "spirit.endMid": "출시는 했다. 다음 주에 뭘 할지는 모르겠다.",
-  "spirit.endLow": "출시 노트에 이름은 없고, 남은 것도 별로 없다."
+  "spirit.endLow": "출시 노트에 이름은 없고, 남은 것도 별로 없다.",
+  "quest.goWork": "출근하자 — 현관으로",
+  "quest.goOffice": "사무실로 들어가자",
+  "quest.runBuild": "{machine}를 켜자 — 제일 나쁜 게 거기 있다",
+  "quest.handOver": "잡은 것 {n}건을 개발자에게 넘기자",
+  "quest.outOfEyes": "더 볼 눈이 없다 — 커피를 마시거나 퇴근하자",
+  "quest.clockOff": "오늘 몫은 끝났다 — 퇴근하자",
+  "quest.goHome": "집으로 가자",
+  "quest.sleep": "자자 — 침대로",
+  "quest.weekend": "오늘은 쉬는 날이다"
 }
