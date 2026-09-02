@@ -67,6 +67,20 @@ function byBehavior(scene: SceneSpec, t: Behavior["t"]): ObjectSpec[] {
 
 /* ---------- mutator catalog ---------- */
 
+/**
+ * What a control operates, as well as the control itself.
+ *
+ * A vending machine is three objects for one thing: a button, the can it is
+ * wired to, and the count of what came out. A player who presses the lemonade
+ * button and sees the wrong number is looking at the lemonade — naming it is
+ * naming the row, and the row is what is broken.
+ *
+ * The wiring is already in the scene, so the answer reads it rather than
+ * anyone listing pairs by hand.
+ */
+const linkedTo = (s: SceneSpec, id: string): string[] =>
+  (s.links ?? []).filter((l) => l.from === id).map((l) => l.to);
+
 export const noAction: Mutator = {
   id: "noAction",
   category: "no-action",
@@ -86,7 +100,7 @@ export const noAction: Mutator = {
         b.t === "clickable" ? { t: "clickable", action: null } : b
       );
     }),
-  answerIds: (_s, t) => [t.objectId],
+  answerIds: (s, t) => [t.objectId, ...linkedTo(s, t.objectId)],
 };
 
 export const noCollision: Mutator = {
@@ -236,7 +250,8 @@ export const counterSkew: Mutator = {
   /** the counter widget is the visible offender; the source object counts too */
   answerIds: (s, t) => {
     const widget = s.objects.find((o) => o.counter === t.note);
-    return widget ? [widget.id, t.objectId] : [t.objectId];
+    const from = [t.objectId, ...linkedTo(s, t.objectId)];
+    return widget ? [widget.id, ...from] : from;
   },
   descParams: (s, t) => {
     const widget = s.objects.find((o) => o.counter === t.note);
