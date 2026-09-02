@@ -503,5 +503,7 @@
   "object.drinkJuice": "the juice",
   "object.btnCola": "the cola button",
   "object.btnSoda": "the lemonade button",
-  "object.btnJuice": "the juice button"
+  "object.btnJuice": "the juice button",
+  "object.machineD": "machine D",
+  "office.runD": "Start machine D"
 }

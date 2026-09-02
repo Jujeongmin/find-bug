@@ -503,5 +503,7 @@
   "object.drinkJuice": "주스",
   "object.btnCola": "콜라 버튼",
   "object.btnSoda": "사이다 버튼",
-  "object.btnJuice": "주스 버튼"
+  "object.btnJuice": "주스 버튼",
+  "object.machineD": "D번 기기",
+  "office.runD": "D번 기기 켜기"
 }

@@ -418,14 +418,25 @@ export function EngineStage({
     const p = live.objects.find((o) => o.kind === "player");
     if (!p) return null;
     const ps = runtime.state.objects[p.id];
+    /*
+     * The nearest one, not the first one listed.
+     *
+     * It returned whichever object came first in the scene, which is the same
+     * answer as long as no two stations reach the same floor. Put four desks
+     * along a wall three hundred and sixty wide and they do, and then walking
+     * up to the fourth machine opens the first.
+     */
+    let best: { id: string; labelKey: string; d: number } | null = null;
     for (const o of live.objects) {
       const b = o.behaviors.find((x) => x.t === "station");
       if (!b || b.t !== "station") continue;
       const c = hitCentre(o, runtime.state.objects[o.id]);
-      if (Math.hypot(c.x - ps.x, c.y - ps.y) <= b.radius) {
-        return { id: o.id, labelKey: b.labelKey };
+      const d = Math.hypot(c.x - ps.x, c.y - ps.y);
+      if (d <= b.radius && (!best || d < best.d)) {
+        best = { id: o.id, labelKey: b.labelKey, d };
       }
     }
+    if (best) return { id: best.id, labelKey: best.labelKey };
     return null;
   })();
   nearStationRef.current = nearStation;

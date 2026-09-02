@@ -188,23 +188,29 @@ const clock = (m: number) =>
  * could do anything about it. Now it is what a build costs to look at, so it
  * is spent in front of them, on the thing they chose to spend it on.
  */
-const MAX_CONDITION = 3;
+/*
+ * Four, and a night only ever fills three of them.
+ *
+ * There are four machines and the fourth point is the one you buy: a night
+ * gets you to three, and the morning's coffee is the only thing that reaches
+ * the top. So the empty pip on the way in is not damage, it is the day
+ * saying there is one more build in you if you pay a quarter of an hour for
+ * it — which is the whole of the choice the fourth machine exists to pose.
+ */
+const MAX_CONDITION = 4;
 
 /** what one build takes out of you to look at properly */
 const INSPECT_COST = 1;
 
 /**
- * What a night gives back: all of it.
+ * What a night gives back: three, one short of the top.
  *
- * It gave back two, and the sofa made up the third — which made lying on the
- * sofa free, always right, and worth eight builds over twelve days if you
- * forgot. That is not a decision, it is a chore with a penalty attached, and
- * it also meant a night borrowed by overtime was absorbed for nothing.
- *
- * An ordinary night now costs nothing and returns everything. What the sofa
- * is for is the nights that were borrowed against.
+ * It used to be all of it, back when all of it was also a full day's work.
+ * A night still costs nothing and still owes nothing — what it cannot do is
+ * reach the fourth point, and what the sofa is for is the nights that were
+ * borrowed against.
  */
-const SLEEP_RECOVERY = MAX_CONDITION;
+const SLEEP_RECOVERY = 3;
 /**
  * Nine to six is the job. Leaving at any point up to six costs nothing —
  * there used to be a threshold at half four, which read as the game telling
@@ -273,7 +279,14 @@ interface Assignment {
  * severity, and which machine carries the critical one rotates — so there is
  * always a build worth reaching first, and it is never the same walk twice.
  */
-const SEVERITIES: Severity[] = ["normal", "low", "critical"];
+/*
+ * One per machine, rotated by the day so no machine is always the bad one.
+ *
+ * Four entries because there are four machines: with three the fourth build
+ * doubled a severity that moved from day to day, and the total riding on a
+ * day changed with it — which is not something a rating can be a share of.
+ */
+const SEVERITIES: Severity[] = ["normal", "low", "critical", "normal"];
 
 /**
  * Every build the game can queue. The card game is not a scene the engine
@@ -285,7 +298,7 @@ const BUILD_IDS = [...ENGINE_SCENES.map((s) => s.id), "stage04"];
 function assignDay(day: number, machines: readonly MachineId[] = MACHINES): Assignment[] {
   return machines.map((machine, i) => ({
     machine,
-    // a stride that is coprime with the list, so the day's three slide along
+    // a stride that is coprime with the list, so the day's four slide along
     // it instead of alternating between the same two sets
     sceneId: BUILD_IDS[(day * 5 + i) % BUILD_IDS.length],
     severity: SEVERITIES[(i + day) % SEVERITIES.length],
@@ -345,7 +358,13 @@ export function Office({ onExit }: { onExit: () => void }) {
   /** an offer waiting on the player, drawn as a two-way prompt */
   const [offer, setOffer] = useState<null | "overtime" | "coffee">(null);
   const [watching, setWatching] = useState(false);
-  const [condition, setCondition] = useState(MAX_CONDITION);
+  /*
+   * The first morning is a morning like the others: a night got you to three
+   * of four. Starting at the top handed day one a fourth build for nothing,
+   * and the one day that should teach the player what the coffee is for was
+   * the only day they did not need it.
+   */
+  const [condition, setCondition] = useState(SLEEP_RECOVERY);
   /** points owed to tonight, from overtime or a weekend shift */
   const [borrowed, setBorrowed] = useState(0);
   /**

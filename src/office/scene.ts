@@ -1,7 +1,12 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
 
 /** the three machines today's builds are queued on */
-export const MACHINES = ["machineA", "machineB", "machineC"] as const;
+export const MACHINES = [
+  "machineA",
+  "machineB",
+  "machineC",
+  "machineD",
+] as const;
 export type MachineId = (typeof MACHINES)[number];
 
 /** the wall band along the top; everything below it is walkable floor */
@@ -17,7 +22,15 @@ const WALL_H = 110;
  * The seat still sits on the right of its desk, so whoever uses it faces left
  * into the screen rather than away from it.
  */
-const DESKS = [52, 170, 288];
+/*
+ * Four desks, and three points of condition to spend on them.
+ *
+ * Three machines and three points meant there was never a choice: look at
+ * all of them, every day, and the coffee and the chair and the half hour
+ * were things nobody had a reason to buy. A fourth build is the reason.
+ * Either something ships unlooked-at or the day costs money and minutes.
+ */
+const DESKS = [44, 129, 214, 299];
 /** the screen stands in the middle of the slab */
 const SCREEN_DX = -15;
 /** the seat is tucked in at the front of the desk, its back to us */
@@ -105,6 +118,7 @@ export const officeScene: SceneSpec = {
       { id: "machineA", x: DESKS[0], labelKey: "office.runA" },
       { id: "machineB", x: DESKS[1], labelKey: "office.runB" },
       { id: "machineC", x: DESKS[2], labelKey: "office.runC" },
+      { id: "machineD", x: DESKS[3], labelKey: "office.runD" },
     ].map((m) => ({
       id: m.id,
       nameKey: `object.${m.id}`,
