@@ -523,5 +523,7 @@
   "office.dev.step2": "“I’ll come and get one from now on.” — once a day, you do not make the walk.",
   "office.dev.step3": "“Leave anything with me.” — at the end of the day they take the worst one themselves.",
   "codex.dev": "The developer {pips} · {n} handed over",
-  "office.dev.cameOver": "The developer walks over to your desk. “I’ll take that one.” ({pay} won)"
+  "office.dev.cameOver": "The developer walks over to your desk. “I’ll take that one.” ({pay} won)",
+  "home.morningFreeze": "Day {n}. Code freeze. Nobody is writing anything new, and what is left on the machines is what nobody wanted to touch. Miss one today and it ships.",
+  "office.dayFreeze": "Day {n} · freeze, {left} left"
 }

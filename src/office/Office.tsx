@@ -30,10 +30,10 @@ const DAYS = 12;
 const WEEK = 7;
 /** Saturday and Sunday: the office is shut unless you decide otherwise */
 const isWeekend = (day: number) => (day - 1) % WEEK >= 5;
-/** how many of the fourteen carry a queue, which is what the rating is out of */
+/** the days that carry a queue, which is what the rating is out of */
 const WORK_DAYS = Array.from({ length: DAYS }, (_, i) => i + 1).filter(
   (d) => !isWeekend(d)
-).length;
+);
 /** what a Saturday at the desk costs, and what a weekend off the desk gives */
 /**
  * Overtime and a weekend shift do not take a point on the spot — they take it
@@ -320,6 +320,22 @@ interface Assignment {
 const SEVERITIES: Severity[] = ["normal", "low", "critical", "normal"];
 
 /**
+ * Code freeze: the last two working days, when everything on the machines is
+ * critical.
+ *
+ * Eleven of the twelve days were the same day. The ship date was a number in
+ * the corner that counted down past a calendar nothing happened on, and the
+ * last morning of the run played exactly like the first.
+ *
+ * Nothing new is written this close to a release, so what is left on the
+ * machines is the work nobody dared touch until now. A day of it weighs
+ * sixteen against an ordinary nine, dropping a build costs four times what
+ * it costs in week one, and the coffee stops being optional.
+ */
+const FREEZE_FROM = 11;
+const isFreeze = (day: number) => day >= FREEZE_FROM;
+
+/**
  * Every build the game can queue. The card game is not a scene the engine
  * drives — it is its own component — but it is a build like any other from
  * the floor, so it belongs in the rotation rather than behind a URL flag.
@@ -332,7 +348,7 @@ function assignDay(day: number, machines: readonly MachineId[] = MACHINES): Assi
     // a stride that is coprime with the list, so the day's four slide along
     // it instead of alternating between the same two sets
     sceneId: BUILD_IDS[(day * 5 + i) % BUILD_IDS.length],
-    severity: SEVERITIES[(i + day) % SEVERITIES.length],
+    severity: isFreeze(day) ? "critical" : SEVERITIES[(i + day) % SEVERITIES.length],
     result: null,
     bugId: null,
   }));
@@ -660,7 +676,9 @@ export function Office({ onExit }: { onExit: () => void }) {
     setNote(
       isWeekend(next)
         ? t("home.morningWeekend")
-        : tp("home.morning", { n: String(next) })
+        : isFreeze(next)
+          ? tp("home.morningFreeze", { n: String(next) })
+          : tp("home.morning", { n: String(next) })
     );
   };
   /**
@@ -955,7 +973,16 @@ export function Office({ onExit }: { onExit: () => void }) {
 
   if (shipped) {
     const total = caught + missed;
-    const rating = shipRating(shipped_, late, totalStake(WORK_DAYS, SEVERITIES));
+    /*
+     * Everything the run put on the line, read off the plan itself rather than
+     * from one day multiplied out — the freeze means the days are no longer
+     * interchangeable, and a share of the wrong total is the wrong rating.
+     */
+    const stake = WORK_DAYS.reduce(
+      (sum, d) => sum + totalStake(1, assignDay(d).map((a) => a.severity)),
+      0
+    );
+    const rating = shipRating(shipped_, late, stake);
     return (
       <div className="wb-root wb-ship">
         <h1>{t("office.shipTitle")}</h1>
@@ -1134,8 +1161,10 @@ export function Office({ onExit }: { onExit: () => void }) {
             {/* one date, not two: which day this is and how many are left are
                 the same fact read from opposite ends, and each was taking its
                 own slot on a bar 360 wide */}
-            <span className="wb-deadline">
-              {tp("office.dayShip", {
+            {/* the last two days are a different kind of day and the bar has
+                to say so before the player opens a machine and finds out */}
+            <span className={`wb-deadline ${isFreeze(day) ? "freeze" : ""}`}>
+              {tp(isFreeze(day) ? "office.dayFreeze" : "office.dayShip", {
                 n: String(day),
                 left: String(DAYS - day),
               })}

@@ -1154,3 +1154,13 @@
 }
 
 .wb-book { color: #e0a03f; }
+
+/* The last two days, when every machine holds something critical. The pill is
+   the only thing on the bar that can carry it — the queue chips are already
+   saying which machine, and three pips beside all four of them is the shape of
+   the day rather than a warning about it. */
+.wb-deadline.freeze {
+  color: #ff9b8b;
+  border-color: #8a3a2c;
+  background: rgba(192, 57, 43, 0.14);
+}
