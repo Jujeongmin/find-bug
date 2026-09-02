@@ -8,6 +8,7 @@ import { CategorySelect } from "../components/CategorySelect";
 import { ResultModal } from "../components/ResultModal";
 import { FieldScaler, FIELD_W, FIELD_H } from "../components/FieldScaler";
 import { TouchControls } from "../components/TouchControls";
+import { SHEETS } from "./sheets";
 import { PlaytestBar } from "../components/PlaytestBar";
 import {
   AlertIcon,
@@ -94,6 +95,15 @@ interface Props {
   ) => Action[] | null;
   /** the magnifier is owned, so the build offers a hold-to-zoom button */
   canZoom?: boolean;
+  /**
+   * The thing the room is currently waiting on, marked where it stands.
+   *
+   * The line at the top says what to do; a player who does not already know
+   * this office still has to find the door it means. The mark rides in the
+   * world layer, so it pans and zooms with the object rather than floating
+   * over a room it has lost track of.
+   */
+  markId?: string | null;
   /** replaces the stage header in observe mode */
   header?: ReactNode;
 }
@@ -117,6 +127,7 @@ export function EngineStage({
   onPlayerRest,
   onStation,
   canZoom = false,
+  markId,
   header,
 }: Props) {
   const observing = mode === "observe";
@@ -632,6 +643,26 @@ export function EngineStage({
               transformOrigin: "0 0",
             }}
           >
+          {(() => {
+            if (!markId) return null;
+            const target = live.objects.find((o) => o.id === markId);
+            const ts = target && st.objects[target.id];
+            if (!target || !ts) return null;
+            const c = hitCentre(target, ts);
+            const lift = target.render.bar
+              ? target.render.bar.height / 2
+              : (target.render.sprite
+                  ? SHEETS[target.render.sprite.sheet].tile *
+                    (target.render.sprite.scale ?? 3) * 0.5
+                  : 24);
+            return (
+              <div
+                className="waypoint"
+                style={{ left: c.x, top: c.y - lift - 16, zIndex: 40 }}
+              />
+            );
+          })()}
+
           {/* world objects */}
           {live.objects
             .filter((o) => o.kind !== "hud" && o.kind !== "button")

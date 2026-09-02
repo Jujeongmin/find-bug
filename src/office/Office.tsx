@@ -1319,14 +1319,22 @@ export function Office({ onExit }: { onExit: () => void }) {
    * anything to look with, hand over when there is not, and go home when",
    * there is neither — which is the loop the office was built around.
    */
-  const quest = (): { key: string; params?: Record<string, string> } => {
+  const quest = (): {
+    key: string;
+    params?: Record<string, string>;
+    at?: string;
+  } => {
     if (place === "home") {
-      if (dayOver) return { key: "quest.sleep" };
-      if (isWeekend(day) && !workedWeekend) return { key: "quest.weekend" };
-      return { key: "quest.goWork" };
+      if (dayOver) return { key: "quest.sleep", at: "bed" };
+      if (isWeekend(day) && !workedWeekend) {
+        return { key: "quest.weekend", at: "hobby" };
+      }
+      return { key: "quest.goWork", at: "frontDoor" };
     }
     if (place === "street") {
-      return { key: dayOver ? "quest.goHome" : "quest.goOffice" };
+      return dayOver
+        ? { key: "quest.goHome", at: "homeDoor" }
+        : { key: "quest.goOffice", at: "officeDoor" };
     }
     if (left && condition >= INSPECT_COST) {
       // the worst one first, which is the advice the pips are already giving
@@ -1338,14 +1346,22 @@ export function Office({ onExit }: { onExit: () => void }) {
       return {
         key: "quest.runBuild",
         params: { machine: t(`object.${worst.machine}`) },
+        at: worst.machine,
       };
     }
     if (pending.length) {
-      return { key: "quest.handOver", params: { n: String(pending.length) } };
+      return {
+        key: "quest.handOver",
+        params: { n: String(pending.length) },
+        at: "dev",
+      };
     }
-    if (left) return { key: "quest.outOfEyes" };
-    return { key: "quest.clockOff" };
+    if (left) return { key: "quest.outOfEyes", at: "exitDoor" };
+    return { key: "quest.clockOff", at: "exitDoor" };
   };
+
+  /** evaluated once: the line reads it, and so does the mark in the world */
+  const here = quest();
   const sky = skyAt(minutes);
 
   return (
@@ -1363,6 +1379,7 @@ export function Office({ onExit }: { onExit: () => void }) {
         <EngineStage
           key={`street-${day}`}
           scene={streetHere}
+          markId={here.at ?? null}
           mode="play"
           header={
             <div className="wb-header">
@@ -1389,6 +1406,7 @@ export function Office({ onExit }: { onExit: () => void }) {
         <EngineStage
           key={`home-${day}`}
           scene={homeHere}
+          markId={here.at ?? null}
           mode="play"
           header={
             <div className="wb-header">
@@ -1417,6 +1435,7 @@ export function Office({ onExit }: { onExit: () => void }) {
       <EngineStage
         key={`office-${day}`}
         scene={officeHere}
+        markId={here.at ?? null}
         mode="play"
         onPlayerRest={setOfficeAt}
         header={
@@ -1495,10 +1514,7 @@ export function Office({ onExit }: { onExit: () => void }) {
       {/* what the day is waiting on, over the top of the room it is in */}
       {!running && !shipped && (
         <div className="quest">
-          {(() => {
-            const q = quest();
-            return q.params ? tp(q.key, q.params) : t(q.key);
-          })()}
+          {here.params ? tp(here.key, here.params) : t(here.key)}
         </div>
       )}
 

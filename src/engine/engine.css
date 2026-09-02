@@ -105,3 +105,30 @@
 .s7-cola { background: #c0392b; }
 .s7-soda { background: #3f9e5a; }
 .s7-juice { background: #d98324; }
+
+/* ---- where the day is pointing ---- */
+/*
+ * A chevron over whatever the quest line is naming. It rides in the world
+ * layer so it pans and zooms with the object rather than floating over a room
+ * it has lost track of, and it bobs, because a still arrow over a still room
+ * reads as part of the scenery.
+ */
+.waypoint {
+  position: absolute;
+  width: 0;
+  height: 0;
+  margin-left: -8px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 11px solid #ffd166;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.55));
+  animation: waypointbob 1.1s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes waypointbob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .waypoint { animation: none; }
+}
