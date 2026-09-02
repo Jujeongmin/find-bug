@@ -134,6 +134,36 @@ export const streetScene: SceneSpec = {
       ],
     },
 
+    /*
+     * The stall, on the way home.
+     *
+     * The walk in has a vending machine on it and the walk home had nothing —
+     * the same street twice, once with a reason to stop and once without. This
+     * is the evening's own thing, and the only place in the game money buys
+     * something that is not equipment.
+     *
+     * It stands opposite the machine so the two ends of the day are not the
+     * same errand, and it only offers itself once the day is over: nobody sets
+     * up a tent at nine in the morning.
+     */
+    {
+      id: "pocha",
+      nameKey: "object.pocha",
+      kind: "sprite" as const,
+      x: 300,
+      y: 396,
+      z: 1,
+      render: {
+        className: "street-pocha",
+        bar: { width: 56, height: 62 },
+        glow: { radius: 96, offsetX: 28, offsetY: 26 },
+      },
+      behaviors: [
+        { t: "blocker" as const, radius: 34 },
+        { t: "station" as const, radius: 62, labelKey: "street.pocha" },
+      ],
+    },
+
     /* home at the other end, so the street runs between two doors */
     {
       id: "homeBlock",
@@ -169,12 +199,14 @@ export const streetScene: SceneSpec = {
       },
       behaviors: [{ t: "blocker" as const, radius: 14 }],
     })),
+      /* moved up the wall: the stall wants the lower right, and a crate that
+         a tent is standing inside of is not dressing, it is a mistake */
     {
       id: "crateStreet",
       nameKey: "object.crate",
       kind: "decor",
       x: 332,
-      y: 440,
+      y: 232,
       render: { prop: { id: "crate", scale: 1.3 } },
       behaviors: [{ t: "blocker", radius: 18 }],
     },
@@ -183,7 +215,7 @@ export const streetScene: SceneSpec = {
       nameKey: "object.barrel",
       kind: "decor",
       x: 332,
-      y: 486,
+      y: 278,
       render: { prop: { id: "barrel", scale: 1.3 } },
       behaviors: [{ t: "blocker", radius: 18 }],
     },

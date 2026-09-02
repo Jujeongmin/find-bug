@@ -526,5 +526,16 @@
   "settings.sound": "소리",
   "settings.data": "기록",
   "settings.wipe": "결함 수첩 지우기",
-  "settings.wipeSure": "정말 지운다 · 되돌릴 수 없다"
+  "settings.wipeSure": "정말 지운다 · 되돌릴 수 없다",
+  "object.pocha": "포장마차",
+  "street.pocha": "포장마차에 들르기",
+  "street.pochaAte": "따끈한 국물에 한 잔. 오늘이 조금 덜 길게 느껴진다. ({n}원)",
+  "street.pochaShut": "아직 낮이다. 천막도 안 쳤다.",
+  "street.pochaDone": "오늘은 이미 들렀다.",
+  "street.pochaFine": "오늘은 그냥 집에 가고 싶다.",
+  "street.pochaBroke": "{n}원이 없다. 다음에.",
+  "spirit.name": "마음",
+  "spirit.endHigh": "열두 날을 지나고도 사람이 남아 있다.",
+  "spirit.endMid": "출시는 했다. 다음 주에 뭘 할지는 모르겠다.",
+  "spirit.endLow": "출시 노트에 이름은 없고, 남은 것도 별로 없다."
 }

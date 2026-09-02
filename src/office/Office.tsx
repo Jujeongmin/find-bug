@@ -73,12 +73,13 @@ const DAY_END = 18 * 60;
  * could not come up, so nothing ever borrowed against a night, so the chair
  * and the sofa and the half hour were all furniture.
  *
- * At 2.5 the same pace finishes the fourth build at about ten to six. A player
- * quicker than that has room to spend a quarter of an hour on a coffee; a
- * player slower than that meets the offer, which is the decision the whole
- * evening economy is made of. The day is three and a half real minutes.
+ * At 2.0 that same pace has the fourth build done around ten past four, which
+ * leaves the afternoon with something in it without making the day a race. A
+ * player slower than that still meets six o'clock with work left, which is the
+ * decision the evening economy is made of. The day is four and a half real
+ * minutes.
  */
-const MINUTES_PER_SECOND = 2.5;
+const MINUTES_PER_SECOND = 2.0;
 
 /**
  * How long the screen stays dark between one day and the next.
@@ -88,6 +89,22 @@ const MINUTES_PER_SECOND = 2.5;
  * still, so most of it is black rather than grey.
  */
 const NIGHT_MS = 900;
+
+/**
+ * How the twelve days treated you, which the star rating does not say.
+ *
+ * A run can ship clean and leave the person who shipped it wrecked, and the
+ * game only reported the half the company cares about.
+ *
+ * Deliberately not a second resource: nothing in the day is spent from it or
+ * gated on it. A number with a cost attached becomes a number to optimise,
+ * and then a stall on the way home is a chore. It is the second thing the run
+ * produces, read at the end beside the first.
+ */
+const MAX_SPIRIT = 5;
+const SPIRIT_START = 3;
+/** what the stall costs, and what it is worth */
+const POCHA_PAY = 25;
 
 /** things the developer says when there is nothing more pressing */
 const IDLE_LINES = 5;
@@ -470,6 +487,9 @@ export function Office({ onExit }: { onExit: () => void }) {
    * time passed.
    */
   const [night, setNight] = useState(false);
+  const [spirit, setSpirit] = useState(SPIRIT_START);
+  /** the stall serves once a night */
+  const [ateOut, setAteOut] = useState(false);
   /*
    * How much of the book was already filled when this run started, so the
    * ship screen can say what the twelve days added to it. The rating is a
@@ -823,6 +843,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     setHadCoffee(false);
     setDevCoffee(false);
     setDevCame(false);
+    setAteOut(false);
     setOvertime(0);
     setTookOvertime(false);
     setTookFreeCoffee(false);
@@ -882,6 +903,8 @@ export function Office({ onExit }: { onExit: () => void }) {
     setTookOvertime(true);
     setOvertime((o) => o + OVERTIME_MINUTES);
     setBorrowed((b) => b + borrowCost());
+    // the night is not the only thing it comes out of
+    setSpirit((v) => Math.max(0, v - 1));
     sfx.play("click");
     setNote(tp("office.stayedLate", { n: String(OVERTIME_MINUTES) }));
   };
@@ -962,6 +985,21 @@ export function Office({ onExit }: { onExit: () => void }) {
       setPlace("home");
       return;
     }
+    if (id === "pocha") {
+      // shut in the morning, and not a second sofa: what it buys is the only
+      // thing money buys in this game that is not equipment
+      if (!dayOver) return setNote(t("street.pochaShut"));
+      if (ateOut) return setNote(t("street.pochaDone"));
+      if (spirit >= MAX_SPIRIT) return setNote(t("street.pochaFine"));
+      if (pay < POCHA_PAY) {
+        return setNote(tp("street.pochaBroke", { n: String(POCHA_PAY) }));
+      }
+      setAteOut(true);
+      setPay((v) => v - POCHA_PAY);
+      setSpirit((v) => Math.min(MAX_SPIRIT, v + 1));
+      sfx.play("pick");
+      return setNote(tp("street.pochaAte", { n: String(POCHA_PAY) }));
+    }
     if (id === "coffee") {
       if (dayOver) return setNote(t("street.shut"));
       if (hadCoffee) return setNote(t("street.hadCoffee"));
@@ -1031,6 +1069,8 @@ export function Office({ onExit }: { onExit: () => void }) {
           assignDay(day, [MACHINES[0]]).map((a) => ({ ...a, hotfix: true }))
         );
         setBorrowed((b) => b + borrowCost());
+    // the night is not the only thing it comes out of
+    setSpirit((v) => Math.max(0, v - 1));
         // and stop here. Walking straight out wiped the line explaining what
         // the point of condition had just been spent on; the door opens on
         // the next press, once it has been read.
@@ -1174,6 +1214,16 @@ export function Office({ onExit }: { onExit: () => void }) {
             critical: String(shipped_.filter((s2) => s2 === "critical").length),
           })}
         </p>
+        {/*
+          Two numbers, not one. The stars are what the company got out of the
+          twelve days; this is what they cost the person who worked them, and a
+          run can be excellent at one and dreadful at the other.
+        */}
+        <p className="wb-tally wb-spirit">
+          {"♥".repeat(spirit)}
+          {"♡".repeat(MAX_SPIRIT - spirit)}{" "}
+          {t(`spirit.end${spirit >= 4 ? "High" : spirit >= 2 ? "Mid" : "Low"}`)}
+        </p>
         {(() => {
           const book = codexTally(codexRows());
           return (
@@ -1285,6 +1335,11 @@ export function Office({ onExit }: { onExit: () => void }) {
                 {t("home.condition")} {"●".repeat(condition)}
                 {"○".repeat(MAX_CONDITION - condition)}
               </span>
+              {/* the other half of what the twelve days are making */}
+              <span className="office-spirit" title={t("spirit.name")}>
+                {"♥".repeat(spirit)}
+                {"♡".repeat(MAX_SPIRIT - spirit)}
+              </span>
             </div>
           }
           onStation={onStreetStation}
@@ -1310,6 +1365,11 @@ export function Office({ onExit }: { onExit: () => void }) {
               <span className="office-condition">
                 {t("home.condition")} {"●".repeat(condition)}
                 {"○".repeat(MAX_CONDITION - condition)}
+              </span>
+              {/* the other half of what the twelve days are making */}
+              <span className="office-spirit" title={t("spirit.name")}>
+                {"♥".repeat(spirit)}
+                {"♡".repeat(MAX_SPIRIT - spirit)}
               </span>
             </div>
           }

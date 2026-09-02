@@ -526,5 +526,16 @@
   "settings.sound": "Sound",
   "settings.data": "Saved data",
   "settings.wipe": "Erase the defect book",
-  "settings.wipeSure": "Erase it · this cannot be undone"
+  "settings.wipeSure": "Erase it · this cannot be undone",
+  "object.pocha": "The stall",
+  "street.pocha": "Stop at the stall",
+  "street.pochaAte": "A hot bowl and a drink. Today feels a little shorter. ({n} won)",
+  "street.pochaShut": "It is still daylight. The tent is not even up.",
+  "street.pochaDone": "You have been already tonight.",
+  "street.pochaFine": "Tonight you would rather just get home.",
+  "street.pochaBroke": "You do not have {n}. Another night.",
+  "spirit.name": "Spirits",
+  "spirit.endHigh": "Twelve days, and there is still someone here.",
+  "spirit.endMid": "It shipped. What next week is for, you could not say.",
+  "spirit.endLow": "Your name is not in the release notes, and there is not much of you left either."
 }

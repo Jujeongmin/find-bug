@@ -420,5 +420,16 @@
   "bug.E8.desc": "カード：明らかに同じ絵の一組が揃わなかった。",
   "settings.data": "記録",
   "settings.wipe": "不具合手帳を消す",
-  "settings.wipeSure": "本当に消す · 元に戻せない"
+  "settings.wipeSure": "本当に消す · 元に戻せない",
+  "object.pocha": "屋台",
+  "street.pocha": "屋台に寄る",
+  "street.pochaAte": "熱いのを一杯。今日が少しだけ短く感じる。（{n}円）",
+  "street.pochaShut": "まだ昼だ。テントも張っていない。",
+  "street.pochaDone": "今夜はもう寄った。",
+  "street.pochaFine": "今夜はまっすぐ帰りたい。",
+  "street.pochaBroke": "{n}円がない。またの機会に。",
+  "spirit.name": "気分",
+  "spirit.endHigh": "十二日過ぎても、人が残っている。",
+  "spirit.endMid": "出しはした。来週何をするかは分からない。",
+  "spirit.endLow": "リリースノートに名前はなく、こちらもあまり残っていない。"
 }

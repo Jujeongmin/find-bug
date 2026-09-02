@@ -420,5 +420,16 @@
   "bug.E8.desc": "卡片：明明图案一样的一对配不起来。",
   "settings.data": "记录",
   "settings.wipe": "清除缺陷手册",
-  "settings.wipeSure": "确定清除 · 无法复原"
+  "settings.wipeSure": "确定清除 · 无法复原",
+  "object.pocha": "路边摊",
+  "street.pocha": "去路边摊",
+  "street.pochaAte": "一碗热的配一杯。今天好像没那么长了。（{n} 元）",
+  "street.pochaShut": "天还亮着。棚子都还没搭。",
+  "street.pochaDone": "今晚已经去过了。",
+  "street.pochaFine": "今晚只想直接回家。",
+  "street.pochaBroke": "没有 {n} 元。下次吧。",
+  "spirit.name": "心情",
+  "spirit.endHigh": "十二天过去，人还在。",
+  "spirit.endMid": "是出去了。下周要做什么，说不上来。",
+  "spirit.endLow": "发布说明上没有名字，人也没剩下多少。"
 }
