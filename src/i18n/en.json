@@ -541,5 +541,6 @@
   "quest.clockOff": "That is everything for today — clock out",
   "quest.goHome": "Head home",
   "quest.sleep": "Get some sleep — to bed",
-  "quest.weekend": "Today is yours"
+  "quest.weekend": "Today is yours",
+  "quest.coffee": "Get a coffee first — the fourth build needs it"
 }

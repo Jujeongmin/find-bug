@@ -1332,9 +1332,20 @@ export function Office({ onExit }: { onExit: () => void }) {
       return { key: "quest.goWork", at: "frontDoor" };
     }
     if (place === "street") {
-      return dayOver
-        ? { key: "quest.goHome", at: "homeDoor" }
-        : { key: "quest.goOffice", at: "officeDoor" };
+      if (dayOver) return { key: "quest.goHome", at: "homeDoor" };
+      /*
+       * The machine on the way in, while it is still on the way in.
+       *
+       * Four builds and three points to look at them with: the fourth is a
+       * coffee, and the only place to buy one is a machine the player walks
+       * straight past on their way to the door. Being told about it once in the
+       * first morning is not the same as being told about it on the morning it
+       * is needed.
+       */
+      if (!hadCoffee && condition < left) {
+        return { key: "quest.coffee", at: "coffee" };
+      }
+      return { key: "quest.goOffice", at: "officeDoor" };
     }
     if (left && condition >= INSPECT_COST) {
       // the worst one first, which is the advice the pips are already giving
