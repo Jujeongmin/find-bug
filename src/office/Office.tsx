@@ -295,6 +295,19 @@ const DEV_COLLECT_LEVEL = 3;
  */
 const BOUNTY: Record<Severity, number> = { low: 8, normal: 16, critical: 32 };
 
+/**
+ * What a freeze-day fix pays, against an ordinary one.
+ *
+ * Every build is critical in the freeze, so those two days were the richest
+ * in the run — and they are the two days there is nothing left to spend it
+ * on. Money arriving after the last thing worth buying is a number going up.
+ *
+ * Nobody signs off on equipment the week of a release either. Halving it puts
+ * every purchase back in the first ten days, which is where a thing that
+ * saves you minutes wants to be bought anyway.
+ */
+const FREEZE_PAY = 0.5;
+
 /** how many pips a severity draws on its machine chip */
 const SEVERITY_PIPS: Record<Severity, number> = { low: 1, normal: 2, critical: 3 };
 
@@ -615,9 +628,11 @@ export function Office({ onExit }: { onExit: () => void }) {
       // only the one in their hand. Emptying the pile paid a single bounty for
       // however much was on the desk and threw the rest away.
       setPending((v) => v.filter((a) => a.machine !== running.machine));
-      setPay((v) => v + BOUNTY[running.severity]);
+      setPay((v) => v + bountyOf(running.severity));
       setDelivered((n) => n + 1);
-      setNote(tp("office.dev.cameOver", { pay: String(BOUNTY[running.severity]) }));
+      setNote(
+        tp("office.dev.cameOver", { pay: String(bountyOf(running.severity)) })
+      );
     }
     // charged here rather than on opening the machine, so backing out of a
     // build still costs nothing
@@ -839,7 +854,9 @@ export function Office({ onExit }: { onExit: () => void }) {
    * small talk — otherwise the same line comes back and they stop reading it.
    */
   const devLevel = devLevelFor(delivered);
-  const bountyOf = (sv: Severity) => BOUNTY[sv];
+  /** a bounty, at whatever the day it was earned on is paying */
+  const bountyOf = (sv: Severity, on: number = day) =>
+    Math.round(BOUNTY[sv] * (isFreeze(on) ? FREEZE_PAY : 1));
 
   const devLine = () => {
       if (day === 1 && talks === 0) return "office.dev.intro";
@@ -974,7 +991,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     }
     if (id === "dev") {
       if (pending.length) {
-        const earned = pending.reduce((sum, a) => sum + BOUNTY[a.severity], 0);
+        const earned = pending.reduce((sum, a) => sum + bountyOf(a.severity), 0);
         // every hotfix handed over pulls back the worst thing that got out
         const fixes = pending.filter((a) => a.hotfix).length;
         if (fixes) {
