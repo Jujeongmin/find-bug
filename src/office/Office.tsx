@@ -13,7 +13,7 @@ import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { shipRating, totalStake, type Severity } from "./rating";
 import { HAS_KEYBOARD } from "../components/useSpaceCloses";
-import { MuteToggle } from "../components/MuteToggle";
+import { Settings } from "../components/Settings";
 import { available as adsAvailable, showRewarded } from "../net/ads";
 
 /**
@@ -425,7 +425,7 @@ function assignDay(day: number, machines: readonly MachineId[] = MACHINES): Assi
  * arrives whether or not the queue is clear.
  */
 export function Office({ onExit }: { onExit: () => void }) {
-  const { t, tp, lang, setLang } = useI18n();
+  const { t, tp } = useI18n();
   const [day, setDay] = useState(START_DAY);
   const [assignments, setAssignments] = useState<Assignment[]>(() =>
     isWeekend(START_DAY) ? [] : assignDay(START_DAY)
@@ -1332,19 +1332,7 @@ export function Office({ onExit }: { onExit: () => void }) {
         * small enough to ignore and gone while a build is running.
         */}
       <div className="floor-controls">
-        <button
-          className={lang === "ko" ? "on" : ""}
-          onClick={() => setLang("ko")}
-        >
-          한국어
-        </button>
-        <button
-          className={lang === "en" ? "on" : ""}
-          onClick={() => setLang("en")}
-        >
-          EN
-        </button>
-        <MuteToggle />
+        <Settings />
       </div>
 
       {offer && (

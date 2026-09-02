@@ -520,5 +520,8 @@
   "item.thermos.desc": "Coffee costs five minutes instead of fifteen",
   "item.retest": "A re-test request",
   "item.retest.desc": "Once a run, a build you got wrong goes back on the machine",
-  "office.retested": "Re-test filed. The build is back, with a different fault."
+  "office.retested": "Re-test filed. The build is back, with a different fault.",
+  "settings.title": "Settings",
+  "settings.language": "Language",
+  "settings.sound": "Sound"
 }

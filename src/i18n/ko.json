@@ -520,5 +520,8 @@
   "item.thermos.desc": "커피에 15분이 아니라 5분만 든다",
   "item.retest": "재검토 요청서",
   "item.retest.desc": "회차당 한 번, 오탐한 빌드를 다시 볼 수 있다",
-  "office.retested": "재검토 요청서를 썼다. 빌드가 돌아왔다 — 이번엔 다른 결함이다."
+  "office.retested": "재검토 요청서를 썼다. 빌드가 돌아왔다 — 이번엔 다른 결함이다.",
+  "settings.title": "설정",
+  "settings.language": "언어",
+  "settings.sound": "소리"
 }

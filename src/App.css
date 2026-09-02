@@ -1164,3 +1164,48 @@
   border-color: #8a3a2c;
   background: rgba(192, 57, 43, 0.14);
 }
+
+/* ---- settings ---- */
+/*
+ * One gear where two language buttons and a speaker used to sit. Two fitted on
+ * the floor; five languages and a slider do not, and a control that wants a
+ * drag has no business on top of a scene the player drags to walk around.
+ */
+.settings { position: relative; }
+.settings-btn {
+  font-size: 13px;
+  line-height: 1;
+  padding: 3px 7px;
+}
+.settings-panel {
+  position: absolute;
+  left: 0;
+  bottom: 28px;
+  width: 186px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 9px 10px;
+  background: rgba(16, 18, 25, 0.97);
+  border: 1px solid #3a4152;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+.settings-panel label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #7e879a;
+}
+.settings-panel label b { color: #e0a03f; font-variant-numeric: tabular-nums; }
+.settings-langs { display: flex; flex-wrap: wrap; gap: 4px; }
+.settings-langs button { flex: 1 0 auto; padding: 4px 7px; font-size: 11px; }
+.settings-sound { display: flex; align-items: center; gap: 7px; }
+.settings-mute { padding: 2px 5px; font-size: 13px; line-height: 1; }
+.settings-sound input[type="range"] {
+  flex: 1;
+  min-width: 0;
+  accent-color: #e0a03f;
+  cursor: pointer;
+}

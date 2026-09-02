@@ -1,13 +1,44 @@
 import { createContext, useContext } from "react";
 import ko from "./ko.json";
 import en from "./en.json";
+import ja from "./ja.json";
+import zhHant from "./zh-Hant.json";
+import zhHans from "./zh-Hans.json";
 
-export type Lang = "ko" | "en";
+export type Lang = "ko" | "en" | "ja" | "zh-Hant" | "zh-Hans";
 
-const dictionaries: Record<Lang, Record<string, string>> = { ko, en };
+/** the order they are offered in, and what each one calls itself */
+export const LANGS: { id: Lang; label: string }[] = [
+  { id: "ko", label: "한국어" },
+  { id: "en", label: "EN" },
+  { id: "ja", label: "日本語" },
+  { id: "zh-Hant", label: "繁體" },
+  { id: "zh-Hans", label: "简体" },
+];
 
+const dictionaries: Record<Lang, Record<string, string>> = {
+  ko,
+  en,
+  ja,
+  "zh-Hant": zhHant,
+  "zh-Hans": zhHans,
+};
+
+/**
+ * Which language the browser is asking for.
+ *
+ * Chinese is the awkward one: zh-TW and zh-HK are traditional, zh-CN and
+ * zh-SG simplified, and a bare "zh" is neither on its own — the script tag
+ * is what decides, and most browsers only send the region.
+ */
 export function detectLang(): Lang {
-  return navigator.language.toLowerCase().startsWith("ko") ? "ko" : "en";
+  const tag = navigator.language.toLowerCase();
+  if (tag.startsWith("ko")) return "ko";
+  if (tag.startsWith("ja")) return "ja";
+  if (tag.startsWith("zh")) {
+    return /hant|tw|hk|mo/.test(tag) ? "zh-Hant" : "zh-Hans";
+  }
+  return "en";
 }
 
 /*
@@ -38,7 +69,16 @@ const bind = (text: string, lang: Lang) =>
   lang === "ko" ? text.replace(GLUE, "$1" + NBSP + "$2") : text;
 
 export function translate(lang: Lang, key: string): string {
-  return bind(dictionaries[lang][key] ?? key, lang);
+  /*
+   * English is the floor under every other language.
+   *
+   * A key with no translation yet used to render as the key itself —
+   * "office.dev.step2" in the middle of a sentence — which is worse than any
+   * translation and looks like a crash rather than a gap. A language being
+   * partly done is a normal state for a game that is still being written.
+   */
+  const hit = dictionaries[lang][key] ?? dictionaries.en[key] ?? key;
+  return bind(hit, lang);
 }
 
 /** translate with {placeholder} substitution */

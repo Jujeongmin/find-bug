@@ -13,6 +13,16 @@
 export type Cue = "click" | "pick" | "success" | "fail" | "death";
 
 const MUTE_KEY = "fb_muted";
+const VOL_KEY = "fb_vol";
+
+/*
+ * The loudest the game ever gets.
+ *
+ * The master gain was a literal 0.25 written in two places, and mute was the
+ * only control over it — on, or off. A slider needs a ceiling to be a
+ * fraction of, and both places need to be reading the same one.
+ */
+const FULL_GAIN = 0.25;
 
 function readMuted(): boolean {
   try {
@@ -22,10 +32,53 @@ function readMuted(): boolean {
   }
 }
 
+/** 0 to 1, and anything the browser will not store just starts at full */
+function readVolume(): number {
+  try {
+    // Number(null) is 0, not NaN, so an absent setting read as silence and the
+    // game started muted with the speaker still showing as on
+    const raw = localStorage.getItem(VOL_KEY);
+    if (raw === null) return 1;
+    const n = Number(raw);
+    return Number.isFinite(n) && n >= 0 && n <= 1 ? n : 1;
+  } catch {
+    return 1;
+  }
+}
+
 class Sfx {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private muted = readMuted();
+  private volume = readVolume();
+
+  getVolume() {
+    return this.volume;
+  }
+
+  /**
+   * Turning it all the way down is the same intent as muting, so it is the
+   * same state: a slider at zero and a speaker crossed out disagreeing about
+   * whether the game is silent is a settings panel arguing with itself.
+   */
+  setVolume(next: number) {
+    this.volume = Math.min(1, Math.max(0, next));
+    try {
+      localStorage.setItem(VOL_KEY, String(this.volume));
+    } catch {
+      /* private browsing — the setting just will not persist */
+    }
+    if (this.volume > 0 && this.muted) this.setMuted(false);
+    else this.applyGain();
+  }
+
+  private applyGain() {
+    if (this.master) this.master.gain.value = this.gain();
+  }
+
+  private gain() {
+    return this.muted ? 0 : FULL_GAIN * this.volume;
+  }
 
   isMuted() {
     return this.muted;
@@ -38,7 +91,7 @@ class Sfx {
     } catch {
       /* private browsing — the setting just won't persist */
     }
-    if (this.master) this.master.gain.value = next ? 0 : 0.25;
+    this.applyGain();
   }
 
   /** created on first use so we never touch audio before a gesture */
@@ -50,7 +103,7 @@ class Sfx {
     try {
       const ctx = new AudioContext();
       const master = ctx.createGain();
-      master.gain.value = this.muted ? 0 : 0.25;
+      master.gain.value = this.gain();
       master.connect(ctx.destination);
       this.ctx = ctx;
       this.master = master;
