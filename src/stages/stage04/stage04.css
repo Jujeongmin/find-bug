@@ -118,10 +118,25 @@
   cursor: pointer;
 }
 
+/*
+ * A matched pair stays on the table, face up and faded.
+ *
+ * It used to disappear, which took the evidence with it: the defect on this
+ * build can be a card that flips the wrong way, and a player who matched that
+ * card had nothing left to point at when they came to report it. Clearing a
+ * pair is the goal of the game — it should not also destroy the thing the
+ * player is here to find.
+ *
+ * Faded rather than gone also reads better as a memory game: the board fills
+ * up with what you have already solved instead of emptying out.
+ */
 .s4-card.matched {
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0.32;
   transition: opacity 0.5s;
+}
+/* dead to a second flip during play, alive to the finger that accuses it */
+.s4-card.matched:not(.pickable) {
+  pointer-events: none;
 }
 
 .s4-card.shuffling {
