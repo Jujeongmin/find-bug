@@ -7,6 +7,9 @@ import dungeonSrc from "../assets/sheets/dungeon.png";
 import workerSrc from "../assets/sheets/worker.png";
 import worker2Src from "../assets/sheets/worker2.png";
 import furnitureSrc from "../assets/sheets/furniture.png";
+import citySrc from "../assets/sheets/city.png";
+import indoorSrc from "../assets/sheets/indoor.png";
+import foodSrc from "../assets/sheets/food.png";
 import deskSrc from "../assets/props/desk.png";
 import bookshelfSrc from "../assets/props/bookshelf.png";
 import chairSrc from "../assets/props/chair.png";
@@ -32,6 +35,9 @@ const SHEET_SRC: Record<SheetId, string> = {
   worker: workerSrc,
   worker2: worker2Src,
   furniture: furnitureSrc,
+  city: citySrc,
+  indoor: indoorSrc,
+  food: foodSrc,
 };
 
 /** CSS needed to show one sprite, scaled and pixel-crisp */

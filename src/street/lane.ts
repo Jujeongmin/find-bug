@@ -17,28 +17,36 @@ import { streetActor } from "./scene";
  * by walking into it: a street corner is not a thing you press.
  */
 
-/** the drawn face of a building, in blocking slices */
-const wall = (
+/**
+ * A box the player cannot walk into, out of overlapping circles.
+ *
+ * Blocking is round — one radius per object — and buildings are not. A row of
+ * circles whose ends land exactly on the box's edges blocks the whole face
+ * without the invisible wall a single fat circle leaves sticking out of it.
+ * The objects are transparent: what the player sees is the sprite drawn over
+ * them.
+ */
+const solid = (
   id: string,
   x: number,
   y: number,
   w: number,
-  h: number,
-  slices: number,
-  className: string
+  h: number
 ): ObjectSpec[] => {
-  const sw = w / slices;
-  return Array.from({ length: slices }, (_, i) => ({
-    id: `${id}${i}`,
-    nameKey: `object.${id}`,
-    kind: "decor" as const,
-    x: x + i * sw,
-    y,
-    render: { className, bar: { width: sw, height: h } },
-    // the slices overlap, so the face blocks as one wall rather than as a row
-    // of posts with the gaps between them walkable
-    behaviors: [{ t: "blocker" as const, radius: h / 2 }],
-  }));
+  const r = h / 2;
+  const n = Math.max(2, Math.ceil((w - 2 * r) / r) + 1);
+  return Array.from({ length: n }, (_, i) => {
+    const cx = x + r + ((w - 2 * r) * i) / (n - 1);
+    return {
+      id: `${id}${i}`,
+      nameKey: `object.${id}`,
+      kind: "decor" as const,
+      x: cx - 4,
+      y,
+      render: { className: "edge-zone", bar: { width: 8, height: h } },
+      behaviors: [{ t: "blocker" as const, radius: r }],
+    };
+  });
 };
 
 export const laneScene: SceneSpec = {
@@ -66,7 +74,7 @@ export const laneScene: SceneSpec = {
       kind: "decor",
       x: 0,
       y: 0,
-      render: { className: "lane-road", bar: { width: 360, height: 44 } },
+      render: { className: "lane-road", bar: { width: 360, height: 30 } },
       behaviors: [],
     },
     {
@@ -76,54 +84,86 @@ export const laneScene: SceneSpec = {
       nameKey: "object.crossing",
       kind: "sprite",
       x: 240,
-      y: 44,
-      render: { className: "lane-crossing", bar: { width: 120, height: 40 } },
+      y: 30,
+      render: { className: "lane-crossing", bar: { width: 120, height: 46 } },
       behaviors: [
         { t: "station", radius: 84, labelKey: "lane.toStreet", auto: true },
       ],
     },
 
-    /* the neighbours, who are the reason the road is only reachable one way */
-    {
-      id: "neighbourRoof",
+    /*
+     * The neighbours, who are the reason the road is only reachable one way.
+     *
+     * Two units of the sheet's grey front, side by side, which is what a
+     * terrace is. No roof over them: the road is drawn beyond, and a roof deep
+     * enough to read would cover it.
+     */
+    ...[59, 177].map((x, i) => ({
+      id: `neighbour${i}`,
       nameKey: "object.neighbour",
-      kind: "decor",
-      x: 0,
-      y: 22,
-      render: { className: "lane-roof", bar: { width: 236, height: 26 } },
+      kind: "decor" as const,
+      x,
+      y: 112,
+      render: {
+        sprite: { sheet: "city" as const, col: 4, row: 5, spanX: 3, spanY: 2, scale: 2.46 },
+      },
       behaviors: [],
-    },
-    ...wall("neighbour", 0, 48, 236, 64, 4, "lane-house"),
-    ...[26, 150].map((x, i) => ({
+    })),
+    ...solid("neighbourWall", 0, 34, 236, 78),
+    ...[46, 164].map((x, i) => ({
       id: `neighbourWindow${i}`,
       nameKey: "object.window",
       kind: "decor" as const,
       x,
-      y: 62,
+      y: 96,
       z: 1,
-      render: { className: "office-window", bar: { width: 34, height: 26 } },
+      render: { sprite: { sheet: "city" as const, col: 25, row: 19, scale: 1.9 } },
       behaviors: [],
     })),
 
-    /* and your own, in the middle of the block */
+    /*
+     * And your own, in the middle of the block.
+     *
+     * Drawn rather than built out of coloured bars: the roof is the sheet's
+     * four-by-three corner block and the front is its brick, both taken in one
+     * span each, so the tiling and the corners are the artist's rather than a
+     * gradient's. Sprites hang from the bottom edge of where they are put,
+     * which is why the roof sits at the top of the wall and not over it.
+     */
     {
       id: "houseRoof",
       nameKey: "object.house",
       kind: "decor",
-      x: 84,
-      y: 208,
-      render: { className: "lane-roof", bar: { width: 192, height: 46 } },
+      x: 180,
+      y: 270,
+      render: {
+        sprite: { sheet: "city", col: 0, row: 0, spanX: 3, spanY: 2, scale: 2.8 },
+      },
       behaviors: [],
     },
-    ...wall("house", 96, 252, 168, 96, 3, "lane-house"),
-    ...[116, 212].map((x, i) => ({
+    {
+      id: "houseWall",
+      nameKey: "object.house",
+      kind: "decor",
+      x: 180,
+      y: 360,
+      z: 1,
+      render: {
+        sprite: { sheet: "city", col: 1, row: 5, spanX: 3, spanY: 2, scale: 2.8 },
+      },
+      behaviors: [],
+    },
+    ...solid("house", 113, 282, 134, 78),
+    ...[140, 220].map((x, i) => ({
       id: `houseWindow${i}`,
       nameKey: "object.window",
       kind: "decor" as const,
       x,
-      y: 278,
-      z: 1,
-      render: { className: "office-window", bar: { width: 32, height: 26 } },
+      y: 326,
+      z: 2,
+      render: {
+        sprite: { sheet: "city" as const, col: 25, row: 16, scale: 2 },
+      },
       behaviors: [],
     })),
     {
@@ -133,9 +173,9 @@ export const laneScene: SceneSpec = {
       nameKey: "object.frontDoor",
       kind: "sprite",
       x: 180,
-      y: 344,
+      y: 360,
       z: 2,
-      render: { prop: { id: "door", scale: 1.7 } },
+      render: { sprite: { sheet: "city", col: 25, row: 17, scale: 2.2 } },
       behaviors: [{ t: "station", radius: 62, labelKey: "street.home" }],
     },
 

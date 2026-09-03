@@ -168,3 +168,37 @@ above:
 
 - Office Interior Tileset (16x16) by Donarg — https://donarg.itch.io/officetileset
 - Modern Office by LimeZu — https://limezu.itch.io/modernoffice
+
+## Kenney — Roguelike Modern City (CC0)
+
+https://kenney.nl/assets/roguelike-modern-city
+
+`src/assets/sheets/city.png` is the pack's `Tilemap/tilemap_packed.png` —
+592x448, a 37x28 grid of 16px tiles with no margin (the pack's other tilemap
+keeps a 1px one; the packed sheet is the easier of the two to index).
+
+Brick and plaster building fronts, roofs, doors, windows, shop awnings,
+pavement, road markings, street furniture, trees and cars. Same outline weight
+as Tiny Town and Tiny Dungeon, so it sits beside them.
+
+Buildings are drawn as a roof block over a facade rather than as one picture,
+and both are taken in a single `spanX`/`spanY` sprite each — the tiling and
+the corners are the artist's rather than a gradient's. What the roof block's
+grammar is (which columns carry the rim) has to be read off
+`dev/atlas.html?sheet=city`, not guessed: the first pass drew a house with a
+drainpipe up the middle of it.
+
+## Kenney — Roguelike Indoors (CC0)
+
+https://kenney.nl/assets/roguelike-indoors
+
+`src/assets/sheets/indoor.png` is `roguelikeIndoor_transparent.png` — 458x305,
+a 27x18 grid of 16px tiles with a 1px margin. Desks, monitors, chairs, shelves
+and the rest of an office seen from the front.
+
+## 64 food sprites (CC0)
+
+https://opengameart.org/content/64-16x16-food-sprites
+
+`src/assets/sheets/food.png` — 128x128, an 8x8 grid of 16px tiles. What a
+stall sells.
