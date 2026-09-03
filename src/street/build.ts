@@ -11,6 +11,16 @@ import type { ObjectSpec } from "../engine/types";
  *
  * `front` lays the run out properly. `solid` is the other half: what the
  * player cannot walk through, which is not the same object as what they see.
+ *
+ * The sheet's own grammar, read off the pixels rather than guessed at:
+ *
+ * - A family of four columns is `[on its own, left end, middle, right end]`.
+ *   That holds for the one-tile-tall eaves (row 2), the walls (rows 5+) and
+ *   the shopfronts (row 4). Taking column 0 as the left end is what boxed the
+ *   first roof in on itself — column 0 is a building one tile wide.
+ * - The two-tall roofs (rows 0-1) are the exception: `[left, right, middle,
+ *   vertical edge]`. A run of them is left, middles, right — column 1, not
+ *   column 3, closes it.
  */
 
 /** one horizontal run of a building's face */

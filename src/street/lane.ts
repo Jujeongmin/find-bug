@@ -68,7 +68,7 @@ export const laneScene: SceneSpec = {
      * enough to read would cover it.
      */
     ...front("neighbour", { left: 5, mid: 6, right: 7 }, 5, 2, 0, 112, 6, 2.46),
-    ...front("neighbourEave", { left: 8, mid: 10, right: 11 }, 2, 1, 0, 33, 6, 2.46),
+    ...front("neighbourEave", { left: 9, mid: 10, right: 11 }, 2, 1, 0, 33, 6, 2.46),
     ...solid("neighbourWall", 0, 34, 236, 78),
     ...[46, 164].map((x, i) => ({
       id: `neighbourWindow${i}`,
@@ -91,7 +91,7 @@ export const laneScene: SceneSpec = {
      * which is why the roof sits at the top of the wall and not over it.
      */
     ...front("houseWall", { left: 1, mid: 2, right: 3 }, 5, 2, 90, 360, 4, 2.8, 1),
-    ...front("houseRoof", { left: 0, mid: 2, right: 3 }, 2, 1, 90, 270, 4, 2.8),
+    ...front("houseRoof", { left: 0, mid: 2, right: 1 }, 0, 2, 90, 270, 4, 2.8),
     ...solid("house", 91, 272, 178, 88),
     ...[135, 225].map((x, i) => ({
       id: `houseWindow${i}`,
@@ -188,7 +188,9 @@ export const laneScene: SceneSpec = {
     ...[
       // clear of the gap, so the way to the road is never the thing you are
       // walking round
-      { id: "lane0", x: 214, y: 150 },
+      // clear of the roof: a lamp whose post ends inside the tiles reads as
+      // standing on the house
+      { id: "lane0", x: 214, y: 132 },
       { id: "lane1", x: 22, y: 300 },
     ].map((l) => ({
       id: l.id,

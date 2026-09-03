@@ -64,8 +64,9 @@ export const streetScene: SceneSpec = {
      * used to be a repeating brick texture with two pale rectangles on it for
      * windows, which is a wall, not an office.
      */
-    ...front("blockGlass", { left: 12, mid: 14, right: 15 }, 6, 3, 0, 120, 9, 2.5),
-    ...front("blockFront", { left: 12, mid: 14, right: 15 }, 4, 1, 0, 160, 9, 2.5),
+    ...front("blockEave", { left: 9, mid: 10, right: 11 }, 2, 1, 0, 40, 9, 2.5),
+    ...front("blockGlass", { left: 13, mid: 14, right: 15 }, 6, 2, 0, 120, 9, 2.5),
+    ...front("blockFront", { left: 13, mid: 14, right: 15 }, 4, 1, 0, 160, 9, 2.5),
     {
       /* the sign over the door: a grub and a name, which is all a small studio
          ever has on the front of its building */
