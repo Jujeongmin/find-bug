@@ -11,7 +11,7 @@ import { officeScene, MACHINES, type MachineId } from "./scene";
 import { homeScene } from "../home/scene";
 import { streetScene } from "../street/scene";
 import { laneScene } from "../street/lane";
-import { PASSERS } from "../street/passers";
+import { PASSERS, passerLine } from "../street/passers";
 import { ENGINE_SCENES } from "../stages/registry";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
@@ -913,6 +913,9 @@ export function Office({ onExit }: { onExit: () => void }) {
     setHadCoffee(false);
     setDevCoffee(false);
     setDevCame(false);
+    // everyone on the walk starts the day with their first line again, which
+    // is what makes the freeze and the morning-after ones land
+    setGreeted({});
     setAteOut(false);
     setOvertime(0);
     setTookOvertime(false);
@@ -1038,13 +1041,29 @@ export function Office({ onExit }: { onExit: () => void }) {
     sfx.play("success");
   };
 
-  /** whoever this is, in their own words, at the right end of the day */
+  /**
+   * Whoever this is, in their own words, at the right end of the day.
+   *
+   * The first time you speak to somebody on a day that is about something —
+   * the freeze, or a morning after a night you borrowed — they say the thing
+   * that day is about. After that they are back in their own rotation, which
+   * is how a person on a pavement works: they mention it once.
+   */
   const greet = (id: string) => {
     const person = PASSERS[id];
     if (!person) return;
     const said = greeted[id] ?? 0;
-    const pool = dayOver ? person.evening : person.morning;
-    setNote(t(`street.${person.who}.${dayOver ? "e" : "m"}${said % pool}`));
+    setNote(
+      t(
+        passerLine(person, said, {
+          dayOver,
+          freeze: isFreeze(day),
+          // a night spent at the office shows on the walk in: the day starts
+          // with the points a night off would have given back
+          worn: condition <= MAX_CONDITION - 2,
+        })
+      )
+    );
     setGreeted((g) => ({ ...g, [id]: said + 1 }));
   };
 

@@ -531,5 +531,11 @@
   "street.c.m1": "That building ships something this week. Lights on every night.",
   "street.c.m2": "We keep meeting in the mornings. Same timetable, I suppose.",
   "street.c.e0": "Late again. There is a stall up at the end of the block tonight.",
-  "street.c.e1": "I counted the lit windows. That building's stay on longest."
+  "street.c.e1": "I counted the lit windows. That building's stay on longest.",
+  "street.a.freeze": "Code freeze, I hear. Nothing left to fix it with, and they still want it looked at.",
+  "street.a.tired": "…you have my face on this morning. Late one, was it.",
+  "street.b.freeze": "Nobody touches the code this week. So what are we for, exactly.",
+  "street.b.tired": "You are going to read a build with those eyes? Have another before you go up.",
+  "street.c.freeze": "The lights in that building are on till dawn now. Deadline, I suppose.",
+  "street.c.tired": "You came in late last night. I hear the stairs."
 }

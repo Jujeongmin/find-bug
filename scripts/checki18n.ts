@@ -14,7 +14,7 @@ import en from "../src/i18n/en.json";
 import ja from "../src/i18n/ja.json";
 import zhHant from "../src/i18n/zh-Hant.json";
 import zhHans from "../src/i18n/zh-Hans.json";
-import { passerKeys } from "../src/street/passers";
+import { PASSERS, passerKeys, passerLine } from "../src/street/passers";
 
 type Dict = Record<string, string>;
 const dicts: [string, Dict][] = [
@@ -65,6 +65,44 @@ for (const [name, dict] of dicts) {
     bad++;
   } else {
     console.log(`PASS  every line the passers-by can ask for exists (${passerKeys().length})`);
+  }
+
+  /* and the rules that decide which of them is said */
+  const p = PASSERS.passer0;
+  const cases: [string, string, string][] = [
+    [
+      "the freeze is the first thing said that week",
+      passerLine(p, 0, { dayOver: false, freeze: true, worn: true }),
+      "street.a.freeze",
+    ],
+    [
+      "and only the first thing: after that, the rotation",
+      passerLine(p, 1, { dayOver: false, freeze: true, worn: false }),
+      "street.a.m1",
+    ],
+    [
+      "a borrowed night shows on the walk in",
+      passerLine(p, 0, { dayOver: false, freeze: false, worn: true }),
+      "street.a.tired",
+    ],
+    [
+      "but not on the walk home, which has its own lines",
+      passerLine(p, 0, { dayOver: true, freeze: false, worn: true }),
+      "street.a.e0",
+    ],
+    [
+      "the evening pool wraps on its own length",
+      passerLine(p, 2, { dayOver: true, freeze: false, worn: false }),
+      "street.a.e0",
+    ],
+  ];
+  for (const [label, got, want] of cases) {
+    if (got === want) {
+      console.log(`PASS  ${label}`);
+    } else {
+      console.log(`FAIL  ${label}: got ${got}, want ${want}`);
+      bad++;
+    }
   }
 }
 
