@@ -164,9 +164,15 @@ export const laneScene: SceneSpec = {
          * along the top — the parasols do not reach the ceiling of their own
          * tiles — so a box the size of the cell walled off eighteen pixels of
          * empty pavement above the canopy. Measured off the sheet: eighty-three
-         * across, sixty-five down, sitting on the feet.
+         * across and sixty-five down.
+         *
+         * It runs ten further down than that, to the bottom of where anyone
+         * can walk. The tent stands eight pixels off the end of the block, and
+         * eight pixels is a gap somebody will squeeze through — behind the
+         * canopy, because that is how it sorts, so the walk reads as going
+         * straight through the stall.
          */
-        { t: "blocker", radius: 34, box: { w: 83, h: 65, dy: -32.5 } },
+        { t: "blocker", radius: 34, box: { w: 83, h: 75, dy: -27.5 } },
         { t: "station", radius: 62, labelKey: "street.pocha" },
       ],
     },

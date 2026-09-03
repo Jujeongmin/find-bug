@@ -254,10 +254,20 @@ const ok = (label: string, cond: boolean) =>
    * the parasols do not reach the top of their own tiles, and a box the size
    * of the cell walls off eighteen pixels of nothing.
    */
-  for (const [x, y] of [[286, 604], [230, 560], [286, 520]] as [number, number][]) {
+  for (const [x, y] of [[230, 560], [286, 520]] as [number, number][]) {
     if (rt.blockedAt(x, y)) throw new Error(`the block is walled at ${x},${y}`);
   }
   ok("runtime: the stall is solid where it is drawn, and nowhere else", true);
+
+  /*
+   * And nobody squeezes under it. The tent stands eight pixels off the bottom
+   * of the block, which is a gap somebody will walk through — behind the
+   * canopy, so it reads as walking through the stall itself.
+   */
+  for (const [x, y] of [[286, 600], [286, 604]] as [number, number][]) {
+    if (!rt.blockedAt(x, y)) throw new Error(`there is a way under the stall at ${x},${y}`);
+  }
+  ok("runtime: and there is no squeezing under it", true);
 }
 
 /*
