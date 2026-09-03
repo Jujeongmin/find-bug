@@ -193,8 +193,13 @@ drainpipe up the middle of it.
 https://kenney.nl/assets/roguelike-indoors
 
 `src/assets/sheets/indoor.png` is `roguelikeIndoor_transparent.png` — 458x305,
-a 27x18 grid of 16px tiles with a 1px margin. Desks, monitors, chairs, shelves
-and the rest of an office seen from the front.
+a 27x18 grid of 16px tiles with a 1px margin.
+
+Downloaded for the office and not used there: "indoors" in this pack means a
+tavern. Beds, benches, barrels, chandeliers and cooking pots, all medieval, and
+not one monitor. The office keeps its Fantasy Interior desks with a CRT drawn
+over them. The sheet stays registered because it is the best set of shelves and
+crates here if a build ever needs a room dressed.
 
 ## 64 food sprites (CC0)
 
