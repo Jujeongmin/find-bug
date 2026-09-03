@@ -27,6 +27,7 @@
 
 .s4-frame {
   position: absolute;
+  z-index: 2;
   left: 92px;
   top: 78px;
   width: 58px;
@@ -66,6 +67,7 @@
 
 .s4-lamp {
   position: absolute;
+  z-index: 2;
   left: 282px;
   top: 78px;
   font-size: 32px;
@@ -194,14 +196,25 @@
 
 
 /* floor */
+/*
+ * Everything in this room that is not the table needs a layer of its own.
+ *
+ * The table sets z-index 1, so anything positioned without one is painted
+ * underneath it however far down the markup it sits. The pot is a defect that
+ * lifts it thirty-four pixels — up behind the table's bottom edge, where the
+ * player was being asked to spot something they could not see. The doll and
+ * the two things on the wall are one moved object away from the same fault.
+ */
 .s4-pot {
   position: absolute;
+  z-index: 2;
   right: 18px;
   image-rendering: pixelated;
 }
 
 .s4-cat {
   position: absolute;
+  z-index: 2;
   left: 16px;
   bottom: 18px;
   image-rendering: pixelated;
