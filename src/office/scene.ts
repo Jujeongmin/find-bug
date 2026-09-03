@@ -167,11 +167,9 @@ export const officeScene: SceneSpec = {
       id: `chair${i}`,
       nameKey: "object.chair",
       kind: "decor" as const,
-      // a bar, so it is anchored top-left: x is shifted half its width to
-      // centre it on the desk
-      x: x - 11,
-      y: WALL_H + SEAT_DY,
-      render: { className: "office-chair-back", bar: { width: 22, height: 30 } },
+      x,
+      y: WALL_H + SEAT_DY + 24,
+      render: { sprite: { sheet: "office" as const, col: 3, row: 1, scale: 1.8 } },
       behaviors: [],
     })),
 

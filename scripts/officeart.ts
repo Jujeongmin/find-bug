@@ -20,6 +20,7 @@
  *   (2,0)        monitor, screen towards the player
  *   (3,0)        monitor from behind, for the developer's bench
  *   (2,1)        keyboard
+ *   (3,1)        the seat, backrest towards the player
  */
 import { blank, box, encode, rect } from "./png";
 
@@ -36,6 +37,11 @@ const PANEL = "#79512f";
 const DRAWER = "#946a41";
 const KNOB = "#e6c887";
 const LEG = "#5c4028";
+
+const SEAT = "#4f5763";
+const SEAT_LIT = "#657084";
+const SEAT_EDGE = "#272c34";
+const POST = "#9a958a";
 
 const CASE = "#d8d2c0";
 const CASE_DARK = "#b3ad9b";
@@ -108,6 +114,30 @@ const img = blank(COLS * TILE, ROWS * TILE);
       rect(img, x + 3 + i * 2, y + 10 + row * 2, 1, 1, CASE_DARK);
     }
   }
+}
+
+/* ---------- the seat, at (3,1), seen from behind ---------- */
+{
+  const x = 3 * TILE;
+  const y = TILE;
+  /*
+   * The back of a chair, not the front of one.
+   *
+   * What faces the camera at a desk against the wall is the backrest, and the
+   * front view would sit the worker down looking away from their screen. The
+   * CSS one this replaces made the same choice for the same reason.
+   */
+  box(img, x + 3, y + 1, 10, 8, SEAT, SEAT_EDGE);
+  rect(img, x + 4, y + 2, 8, 2, SEAT_LIT);
+  // the seat itself, wider than the back and just visible under it
+  box(img, x + 2, y + 8, 12, 4, SEAT, SEAT_EDGE);
+  rect(img, x + 3, y + 9, 10, 1, SEAT_LIT);
+  // post and the star base, with a caster on each visible arm
+  rect(img, x + 7, y + 12, 2, 2, POST);
+  rect(img, x + 4, y + 14, 8, 1, POST);
+  rect(img, x + 3, y + 14, 1, 1, SEAT_EDGE);
+  rect(img, x + 12, y + 14, 1, 1, SEAT_EDGE);
+  rect(img, x + 7, y + 14, 2, 1, SEAT_EDGE);
 }
 
 encode("src/assets/sheets/office.png", img);

@@ -132,9 +132,9 @@ export const homeScene: SceneSpec = {
       id: "homeChair",
       nameKey: "object.chair",
       kind: "decor",
-      x: 289,
-      y: 160,
-      render: { className: "office-chair-back", bar: { width: 22, height: 30 } },
+      x: 300,
+      y: 202,
+      render: { sprite: { sheet: "office", col: 3, row: 1, scale: 1.6 } },
       behaviors: [],
     },
     {
