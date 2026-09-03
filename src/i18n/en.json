@@ -512,5 +512,15 @@
   "home.morningBright": "Day {n}. You slept well. Today looks doable.",
   "home.morningFlat": "Day {n}. Your eyes are open. The rest of you is not.",
   "office.dev.worried": "“You have looked rough lately. Go home early today.”",
-  "spirit.what": "Your spirits. The stall on the way home raises them; overtime and weekend shifts lower them.\nThe day after working late you can look at fewer than three builds — and the more spirits you have left, the fewer you lose."
+  "spirit.what": "Your spirits. The stall on the way home raises them; overtime and weekend shifts lower them.\nThe day after working late you can look at fewer than three builds — and the more spirits you have left, the fewer you lose.",
+  "lane.name": "Your block",
+  "lane.intro": "The street you live on.",
+  "lane.toStreet": "Out to the main road",
+  "street.toLane": "Back to your block",
+  "quest.goStreet": "Out to the main road",
+  "object.road": "Main road",
+  "object.crossing": "Crossing",
+  "object.house": "Your building",
+  "object.alley": "Road home",
+  "object.neighbour": "Neighbours' house"
 }

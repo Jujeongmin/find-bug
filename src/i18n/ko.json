@@ -512,5 +512,15 @@
   "home.morningBright": "{n}일차. 잘 잤다. 오늘은 좀 해볼 만하겠다.",
   "home.morningFlat": "{n}일차. 눈은 떴는데 아직 안 일어난 것 같다.",
   "office.dev.worried": "\"너 요즘 좀 그래 보여. 오늘은 일찍 가.\"",
-  "spirit.what": "마음. 퇴근길 포장마차에서 오르고, 야근이나 주말 출근을 하면 내려간다.\n야근한 다음 날은 볼 수 있는 빌드가 3개보다 적어지는데, 마음이 많이 남아 있을수록 덜 줄어든다."
+  "spirit.what": "마음. 퇴근길 포장마차에서 오르고, 야근이나 주말 출근을 하면 내려간다.\n야근한 다음 날은 볼 수 있는 빌드가 3개보다 적어지는데, 마음이 많이 남아 있을수록 덜 줄어든다.",
+  "lane.name": "우리 동네",
+  "lane.intro": "내가 사는 골목.",
+  "lane.toStreet": "큰길로 나가기",
+  "street.toLane": "동네로 돌아가기",
+  "quest.goStreet": "큰길로 — 회사 쪽으로",
+  "object.road": "큰길",
+  "object.crossing": "횡단보도",
+  "object.house": "우리 집 건물",
+  "object.alley": "집으로 가는 길",
+  "object.neighbour": "옆집"
 }

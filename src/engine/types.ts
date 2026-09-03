@@ -102,7 +102,21 @@ export type Behavior =
    * fires from anywhere on screen, this only offers itself when the player is
    * close — so the office floor plan, and the walking, actually matter.
    */
-  | { t: "station"; radius: number; labelKey: string }
+  | {
+      t: "station";
+      radius: number;
+      labelKey: string;
+      /**
+       * Opens by being walked into rather than pressed.
+       *
+       * Doors take the space bar, because a door you can fall through is a
+       * door you leave by accident. The edges of a map are the opposite case:
+       * there is nothing to press, the player is walking off the screen, and
+       * asking them to stop at the kerb and confirm it turns a street corner
+       * into a dialogue box.
+       */
+      auto?: boolean;
+    }
   /** rises while a flag is set, falls otherwise */
   | { t: "pressure"; counter: string; flag: string; rise: number; fall: number };
 

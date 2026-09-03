@@ -1,6 +1,13 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
 
-const actor = (sheet: "worker" | "worker2" = "worker"): ActorSpec => ({
+/**
+ * The walk's character sheet, shared with the block at the other end of it:
+ * one commute, two screens, and a player who should not change shoes between
+ * them.
+ */
+export const streetActor = (
+  sheet: "worker" | "worker2" = "worker"
+): ActorSpec => ({
   sheet,
   rows: {
     down: 0,
@@ -19,12 +26,18 @@ const actor = (sheet: "worker" | "worker2" = "worker"): ActorSpec => ({
 });
 
 /**
- * The walk to work.
+ * The office street.
  *
  * Sleeping used to put you at your desk. The commute is where the night before
  * gets paid for: the office clock is already running, so a late start and a
  * slow walk are the same currency, and the coffee stand sells alertness for
  * minutes you may not have.
+ *
+ * The house used to be a strip of brick along the bottom of this same screen,
+ * which made the walk to work a second and a half. Home is its own block now,
+ * one screen back down the road — this end has the office on it, and what
+ * belongs outside an office: the machine, the sign, and everyone else who is
+ * already late.
  */
 export const streetScene: SceneSpec = {
   id: "street",
@@ -39,7 +52,7 @@ export const streetScene: SceneSpec = {
       x: 180,
       y: 540,
       z: 3,
-      render: { actor: actor() },
+      render: { actor: streetActor() },
       behaviors: [{ t: "playerTopDown", speed: 150, minY: 186, maxY: 566 }],
     },
 
@@ -99,7 +112,6 @@ export const streetScene: SceneSpec = {
       // prompt that machine is the only reason to walk over there for
       { id: "passer0", sheet: "worker2" as const, x: 152, y: 300, facing: "left" as const, tint: "p0" },
       { id: "passer1", sheet: "worker" as const, x: 262, y: 300, facing: "down" as const, tint: "p1" },
-      { id: "passer2", sheet: "worker2" as const, x: 140, y: 482, facing: "up" as const, tint: "p2" },
     ].map((c) => ({
       id: c.id,
       nameKey: `object.${c.id}`,
@@ -108,7 +120,7 @@ export const streetScene: SceneSpec = {
       y: c.y,
       z: 2,
       facing: c.facing,
-      render: { actor: actor(c.sheet), className: `street-passer ${c.tint}` },
+      render: { actor: streetActor(c.sheet), className: `street-passer ${c.tint}` },
       behaviors: [
         { t: "blocker" as const, radius: 16 },
         { t: "station" as const, radius: 46, labelKey: "street.talk" },
@@ -135,55 +147,35 @@ export const streetScene: SceneSpec = {
     },
 
     /*
-     * The stall, on the way home.
+     * The way back down the road, where the flat is. Walked into rather than
+     * pressed: the map's edges are corners, not doors.
      *
-     * The walk in has a vending machine on it and the walk home had nothing —
-     * the same street twice, once with a reason to stop and once without. This
-     * is the evening's own thing, and the only place in the game money buys
-     * something that is not equipment.
-     *
-     * It stands opposite the machine so the two ends of the day are not the
-     * same errand, and it only offers itself once the day is over: nobody sets
-     * up a tent at nine in the morning.
+     * In slices, because a station is a circle and this is three hundred and
+     * sixty pixels of kerb — one circle over the middle of it leaves both
+     * corners walkable and the way home missable by hugging a wall.
      */
     {
-      id: "pocha",
-      nameKey: "object.pocha",
-      kind: "sprite" as const,
-      x: 300,
-      y: 396,
-      z: 1,
-      render: {
-        className: "street-pocha",
-        bar: { width: 56, height: 62 },
-        glow: { radius: 96, offsetX: 28, offsetY: 26 },
-      },
-      behaviors: [
-        { t: "blocker" as const, radius: 34 },
-        { t: "station" as const, radius: 62, labelKey: "street.pocha" },
-      ],
-    },
-
-    /* home at the other end, so the street runs between two doors */
-    {
-      id: "homeBlock",
-      nameKey: "object.block",
-      kind: "decor",
+      /* the kerb itself, drawn in one piece: five painted ones leave five
+         hairlines wherever the field is scaled to a fraction of a pixel */
+      id: "kerb",
+      nameKey: "object.alley",
+      kind: "decor" as const,
       x: 0,
-      y: 578,
-      render: { className: "street-home", bar: { width: 360, height: 62 } },
+      y: 596,
+      render: { className: "street-alley", bar: { width: 360, height: 44 } },
       behaviors: [],
     },
-    {
-      id: "homeDoor",
-      nameKey: "object.frontDoor",
-      kind: "sprite",
-      x: 180,
-      y: 600,
-      z: 1,
-      render: { prop: { id: "door", scale: 1.6 } },
-      behaviors: [{ t: "station", radius: 58, labelKey: "street.home" }],
-    },
+    ...Array.from({ length: 5 }, (_, i) => ({
+      id: i === 2 ? "toLane" : `toLane${i}`,
+      nameKey: "object.alley",
+      kind: "sprite" as const,
+      x: i * 72,
+      y: 596,
+      render: { className: "edge-zone", bar: { width: 72, height: 44 } },
+      behaviors: [
+        { t: "station" as const, radius: 70, labelKey: "street.toLane", auto: true },
+      ],
+    })),
 
     /* street furniture, so the walk has something in it */
     ...[24, 326].map((x, i) => ({
@@ -199,8 +191,8 @@ export const streetScene: SceneSpec = {
       },
       behaviors: [{ t: "blocker" as const, radius: 14 }],
     })),
-      /* moved up the wall: the stall wants the lower right, and a crate that
-         a tent is standing inside of is not dressing, it is a mistake */
+      /* moved up the wall: a crate at the kerb is dressing, a crate in the
+         doorway is a mistake */
     {
       id: "crateStreet",
       nameKey: "object.crate",

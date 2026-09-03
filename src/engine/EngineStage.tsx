@@ -445,7 +445,7 @@ export function EngineStage({
     let best: { id: string; labelKey: string; d: number } | null = null;
     for (const o of live.objects) {
       const b = o.behaviors.find((x) => x.t === "station");
-      if (!b || b.t !== "station") continue;
+      if (!b || b.t !== "station" || b.auto) continue;
       const c = hitCentre(o, runtime.state.objects[o.id]);
       const d = Math.hypot(c.x - ps.x, c.y - ps.y);
       if (d <= b.radius && (!best || d < best.d)) {
@@ -456,6 +456,31 @@ export function EngineStage({
     return null;
   })();
   nearStationRef.current = nearStation;
+
+  /**
+   * The way out that is taken by walking into it.
+   *
+   * Read during the frame and acted on after it, so the scene it belongs to is
+   * never torn down in the middle of being drawn.
+   */
+  const autoStation = (() => {
+    if (!onStation) return null;
+    const p = live.objects.find((o) => o.kind === "player");
+    if (!p) return null;
+    const ps = runtime.state.objects[p.id];
+    for (const o of live.objects) {
+      const b = o.behaviors.find((x) => x.t === "station");
+      if (!b || b.t !== "station" || !b.auto) continue;
+      const c = hitCentre(o, runtime.state.objects[o.id]);
+      if (Math.hypot(c.x - ps.x, c.y - ps.y) <= b.radius) return o.id;
+    }
+    return null;
+  })();
+  useEffect(() => {
+    if (autoStation) onStationRef.current?.(autoStation);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStation]);
+
   const st = runtime.state;
 
   /** the row for a facing, falling back to a cardinal the sheet does have */

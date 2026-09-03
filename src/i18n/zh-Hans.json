@@ -439,5 +439,15 @@
   "office.dev.worried": "「你最近看起来很累。今天早点走吧。」",
   "spirit.what": "心情。回家路上的路边摊会补，加班或周末上班会扣。\n加班的隔天能看的版本会少于三个，心情剩得越多，少掉的就越少。",
   "wb.close": "关闭",
-  "wb.backToTitle": "重新开始"
+  "wb.backToTitle": "重新开始",
+  "lane.name": "我住的街区",
+  "lane.intro": "你住的那条巷子。",
+  "lane.toStreet": "走向大路",
+  "street.toLane": "回街区",
+  "quest.goStreet": "走向大路 — 往公司",
+  "object.road": "大路",
+  "object.crossing": "斑马线",
+  "object.house": "我住的楼",
+  "object.alley": "回家的路",
+  "object.neighbour": "邻居家"
 }

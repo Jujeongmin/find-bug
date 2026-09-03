@@ -10,6 +10,7 @@ import type { SceneSpec } from "../engine/types";
 import { officeScene, MACHINES, type MachineId } from "./scene";
 import { homeScene } from "../home/scene";
 import { streetScene } from "../street/scene";
+import { laneScene } from "../street/lane";
 import { ENGINE_SCENES } from "../stages/registry";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
@@ -146,9 +147,18 @@ const START_DAY = (() => {
   return Number.isInteger(asked) && asked >= 1 && asked <= DAYS ? asked : 1;
 })();
 
+/**
+ * The four rooms a working day is made of, and the door each was entered by.
+ * "wake" is the one arrival with no room behind it.
+ */
+type Place = "office" | "home" | "lane" | "street";
+type Arrival = "wake" | "home" | "lane" | "street" | "office";
+
 const START_PLACE = (() => {
   const asked = devParam("place");
-  return asked === "office" || asked === "street" ? asked : "home";
+  return asked === "office" || asked === "street" || asked === "lane"
+    ? asked
+    : "home";
 })();
 
 /** the clock to open on, as HHMM — the only way to reach six without waiting */
@@ -529,7 +539,22 @@ export function Office({ onExit }: { onExit: () => void }) {
    * The day opens at home, so leaving for work is something the player does
    * rather than something that has already happened when they arrive.
    */
-  const [place, setPlace] = useState<"office" | "home" | "street">(START_PLACE);
+  const [place, setPlace] = useState<Place>(START_PLACE);
+  /**
+   * Which way you came in, so every room puts you back at the door you used.
+   *
+   * Two screens of street ago the answer was derivable — before six you were
+   * walking to work, after it you were walking home — and with a block, a
+   * street and two ends to each of them it is not: going back out of your own
+   * front door for something you forgot dropped you at the far kerb. The
+   * arrival is a fact now, recorded where it happens.
+   */
+  const [from, setFrom] = useState<Arrival>("wake");
+  /** one move between rooms: where to, and which door it came out of */
+  const go = (to: Place, via: Arrival) => {
+    setFrom(via);
+    setPlace(to);
+  };
   /** true once the day has been signed off, which is what makes the bed work */
   const [dayOver, setDayOver] = useState(false);
   /** one coffee per commute */
@@ -637,7 +662,9 @@ export function Office({ onExit }: { onExit: () => void }) {
    * puts you at whichever end you stepped out of.
    */
   const homeHere = useMemo(() => {
-    const at = withPlayerAt(homeScene, dayOver ? 272 : 132, dayOver ? 545 : 258);
+    // in from the block, or out of bed
+    const inside = from === "lane";
+    const at = withPlayerAt(homeScene, inside ? 272 : 132, inside ? 545 : 258);
     if (!isWeekend(day)) return withSpeed(at, pace);
     // the same desk, doing the other thing it would obviously be doing
     return withSpeed({
@@ -658,10 +685,27 @@ export function Office({ onExit }: { onExit: () => void }) {
           : o
       ),
     }, pace);
-  }, [dayOver, day, pace]);
+  }, [from, day, pace]);
+  /**
+   * The block, entered from your own doorstep or from the corner of the main
+   * road, and the office street, entered from that same corner or out of the
+   * office door.
+   */
+  const laneHere = useMemo(
+    () =>
+      withSpeed(
+        // in off the main road, at the gap; or out of your own front door,
+        // with the house behind you
+        from === "street"
+          ? withPlayerAt(laneScene, 300, 176)
+          : withPlayerAt(laneScene, 180, 424),
+        pace
+      ),
+    [from, pace]
+  );
   const streetHere = useMemo(
-    () => withSpeed(withPlayerAt(streetScene, 180, dayOver ? 250 : 540), pace),
-    [dayOver, pace]
+    () => withSpeed(withPlayerAt(streetScene, 180, from === "office" ? 250 : 512), pace),
+    [from, pace]
   );
 
   /*
@@ -812,7 +856,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     // tomorrow starts at the door, not at yesterday's desk
     setOfficeAt(null);
     setDayOver(true);
-    setPlace("street");
+    go("street", "office");
   };
 
   /** the bed, and the only way into tomorrow */
@@ -872,7 +916,7 @@ export function Office({ onExit }: { onExit: () => void }) {
     setTookOvertime(false);
     setTookFreeCoffee(false);
     setDayOver(false);
-    setPlace("home");
+    go("home", "wake");
     window.setTimeout(() => setNight(false), 40);
     // the walk in is where the coffee is, and the fifteen minutes it costs is
     // the morning's one real decision — so the player has to make it, every
@@ -992,6 +1036,12 @@ export function Office({ onExit }: { onExit: () => void }) {
     sfx.play("success");
   };
 
+  /** everyone on the walk says the same tired things, on either screen */
+  const greet = () => {
+    setNote(t(`street.passer${greeted % PASSER_LINES}`));
+    setGreeted((n) => n + 1);
+  };
+
   const onStreetStation = (id: string) => {
     if (id === "officeDoor") {
       if (dayOver) return setNote(t("street.shut"));
@@ -1001,17 +1051,46 @@ export function Office({ onExit }: { onExit: () => void }) {
       setNote(null);
       return;
     }
-    if (id.startsWith("passer")) {
-      setNote(t(`street.passer${greeted % PASSER_LINES}`));
-      setGreeted((n) => n + 1);
-      return;
-    }
-    if (id === "homeDoor") {
+    if (id.startsWith("passer")) return greet();
+    if (id.startsWith("toLane")) {
       sfx.play("click");
       setNote(null);
-      setPlace("home");
+      go("lane", "street");
       return;
     }
+    if (id === "coffee") {
+      if (dayOver) return setNote(t("street.shut"));
+      if (hadCoffee) return setNote(t("street.hadCoffee"));
+      // fifteen minutes for nothing is a trap, not a decision
+      if (condition >= MAX_CONDITION) return setNote(t("common.alreadyFine"));
+      /*
+       * Always ask. Where the adverts were reachable the machine put up a
+       * prompt; where they were not it took the quarter of an hour on the press,
+       * so walking into the vending machine on the way past cost a sixth of the
+       * morning with nothing asked and nothing to undo.
+       */
+      return setOffer("coffee");
+    }
+  };
+
+  /**
+   * The block the flat is on: your own front door, the stall, and the corner
+   * that takes you out to the office street.
+   */
+  const onLaneStation = (id: string) => {
+    if (id === "frontDoor") {
+      sfx.play("click");
+      setNote(null);
+      go("home", "lane");
+      return;
+    }
+    if (id === "toStreet") {
+      sfx.play("click");
+      setNote(null);
+      go("street", "lane");
+      return;
+    }
+    if (id.startsWith("passer")) return greet();
     if (id === "pocha") {
       // shut in the morning, and not a second sofa: what it buys is the only
       // thing money buys in this game that is not equipment
@@ -1026,19 +1105,6 @@ export function Office({ onExit }: { onExit: () => void }) {
       setSpirit((v) => Math.min(MAX_SPIRIT, v + 1));
       sfx.play("pick");
       return setNote(tp("street.pochaAte", { n: String(POCHA_PAY) }));
-    }
-    if (id === "coffee") {
-      if (dayOver) return setNote(t("street.shut"));
-      if (hadCoffee) return setNote(t("street.hadCoffee"));
-      // fifteen minutes for nothing is a trap, not a decision
-      if (condition >= MAX_CONDITION) return setNote(t("common.alreadyFine"));
-      /*
-       * Always ask. Where the adverts were reachable the machine put up a
-       * prompt; where they were not it took the quarter of an hour on the press,
-       * so walking into the vending machine on the way past cost a sixth of the
-       * morning with nothing asked and nothing to undo.
-       */
-      return setOffer("coffee");
     }
   };
 
@@ -1105,7 +1171,7 @@ export function Office({ onExit }: { onExit: () => void }) {
       }
       sfx.play("click");
       setNote(null);
-      setPlace("street");
+      go("lane", "home");
       return;
     }
   };
@@ -1357,8 +1423,13 @@ export function Office({ onExit }: { onExit: () => void }) {
       }
       return { key: "quest.goWork", at: "frontDoor" };
     }
+    if (place === "lane") {
+      // the corner in the morning, your own door at the end of it
+      if (dayOver) return { key: "quest.goHome", at: "frontDoor" };
+      return { key: "quest.goStreet", at: "toStreet" };
+    }
     if (place === "street") {
-      if (dayOver) return { key: "quest.goHome", at: "homeDoor" };
+      if (dayOver) return { key: "quest.goHome", at: "toLane" };
       /*
        * The machine on the way in, while it is still on the way in.
        *
@@ -1401,6 +1472,33 @@ export function Office({ onExit }: { onExit: () => void }) {
   const here = quest();
   const sky = skyAt(minutes);
 
+  /**
+   * The bar the two outdoor screens share. They are one walk with a corner in
+   * the middle of it, and a clock that reads differently on either side of
+   * that corner would be two different afternoons.
+   */
+  const outdoorHeader = (
+    <div className="wb-header">
+      <span className="wb-build">
+        {tp("office.day", { n: String(day) })} {t(dayName(day))}
+      </span>
+      <span className="office-clock">{clock(minutes)}</span>
+      <span className="office-condition">
+        {t("home.condition")} {"●".repeat(condition)}
+        {"○".repeat(MAX_CONDITION - condition)}
+      </span>
+      {/* the other half of what the twelve days are making */}
+      <button
+        type="button"
+        className="office-spirit hud-ask"
+        onClick={() => setNote(t("spirit.what"))}
+      >
+        {"♥".repeat(spirit)}
+        {"♡".repeat(MAX_SPIRIT - spirit)}
+      </button>
+    </div>
+  );
+
   return (
     <div
       className="wb-root"
@@ -1412,33 +1510,24 @@ export function Office({ onExit }: { onExit: () => void }) {
         } as CSSProperties
       }
     >
-      {place === "street" ? (
+      {place === "lane" ? (
+        <EngineStage
+          key={`lane-${day}`}
+          scene={laneHere}
+          markId={here.at ?? null}
+          mode="play"
+          header={outdoorHeader}
+          onStation={onLaneStation}
+          onClear={() => {}}
+          onExit={onExit}
+        />
+      ) : place === "street" ? (
         <EngineStage
           key={`street-${day}`}
           scene={streetHere}
           markId={here.at ?? null}
           mode="play"
-          header={
-            <div className="wb-header">
-              <span className="wb-build">
-              {tp("office.day", { n: String(day) })} {t(dayName(day))}
-            </span>
-              <span className="office-clock">{clock(minutes)}</span>
-              <span className="office-condition">
-                {t("home.condition")} {"●".repeat(condition)}
-                {"○".repeat(MAX_CONDITION - condition)}
-              </span>
-              {/* the other half of what the twelve days are making */}
-              <button
-                type="button"
-                className="office-spirit hud-ask"
-                onClick={() => setNote(t("spirit.what"))}
-              >
-                {"♥".repeat(spirit)}
-                {"♡".repeat(MAX_SPIRIT - spirit)}
-              </button>
-            </div>
-          }
+          header={outdoorHeader}
           onStation={onStreetStation}
           onClear={() => {}}
           onExit={onExit}

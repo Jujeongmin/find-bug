@@ -834,6 +834,64 @@
   border: 2px solid #4a463c;
 }
 
+/* The corner the office street runs off, drawn as kerb and tarmac so the edge
+   of the map looks like somewhere rather than like the end of the screen. */
+/* A way out has to be reached from anywhere along the edge, and a circle is
+   not an edge, so the corner is several of them. They are the reach, not the
+   picture: what the player sees is the one kerb drawn behind them. */
+.edge-zone {
+  background: transparent;
+  border: none;
+  pointer-events: none;
+}
+.street-alley {
+  background: linear-gradient(#6f6a60 0 5px, #4b4740 5px 9px, #55514a 9px);
+  border-top: 3px solid #33302b;
+}
+
+/* ---- the block the flat is on ---- */
+/* Same paving as the office street — one walk, one surface — but without the
+   worn line up the middle of it: nobody crosses their own block on the same
+   three tiles every morning. A verge down each side says houses rather than
+   offices before anything is built on it. */
+.lane-ground {
+  background:
+    repeating-linear-gradient(90deg, transparent 0 38px, rgba(0, 0, 0, 0.09) 38px 40px),
+    repeating-linear-gradient(180deg, transparent 0 38px, rgba(0, 0, 0, 0.09) 38px 40px),
+    linear-gradient(90deg, #6f7a55 0 26px, transparent 26px 334px, #6f7a55 334px),
+    linear-gradient(#9a948a, #8c867c);
+}
+/* the main road across the top, seen from the pavement */
+.lane-road {
+  background: linear-gradient(#3f3c37, #46433d);
+  border-bottom: 4px solid #6f6a60;
+}
+/* and the crossing over it, which is the way out of the block */
+.lane-crossing {
+  background:
+    repeating-linear-gradient(90deg, rgba(236, 232, 220, 0.85) 0 16px, transparent 16px 34px),
+    linear-gradient(#55514a, #4b4740);
+}
+/* The house. The office block is brick to the top of the screen; this is a
+   building with a roof on it, which is the difference between where you work
+   and where you live at this size. */
+.lane-roof {
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.14) 0 1px, transparent 1px 9px),
+    linear-gradient(#7d3f34, #5d2c25);
+  border-bottom: 4px solid #2a1f19;
+  border-radius: 6px 6px 0 0;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.1);
+}
+.lane-house {
+  background:
+    url("./assets/props/tile1.png") 0 0 / 48px 48px repeat,
+    linear-gradient(#6b5040, #4e382c);
+  border: none;
+  border-radius: 0;
+  image-rendering: pixelated;
+}
+
 /* What the build is for, kept on screen instead of only in the modal before
    it. A tester who cannot tell what the game is meant to do cannot tell when
    it is doing the wrong thing. */

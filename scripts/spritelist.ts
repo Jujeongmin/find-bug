@@ -12,11 +12,12 @@ import { ENGINE_SCENES } from "../src/stages/registry";
 import { officeScene } from "../src/office/scene";
 import { homeScene } from "../src/home/scene";
 import { streetScene } from "../src/street/scene";
+import { laneScene } from "../src/street/lane";
 import type { SceneSpec } from "../src/engine/types";
 import ko from "../src/i18n/ko.json";
 
 const names = ko as Record<string, string>;
-const scenes: SceneSpec[] = [...ENGINE_SCENES, officeScene, homeScene, streetScene];
+const scenes: SceneSpec[] = [...ENGINE_SCENES, officeScene, homeScene, streetScene, laneScene];
 
 interface Cell {
   scene: string;

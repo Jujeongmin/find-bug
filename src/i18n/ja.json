@@ -439,5 +439,15 @@
   "office.dev.worried": "「最近ちょっと顔色悪いよ。今日は早く上がりな」",
   "spirit.what": "気分。帰り道の屋台で上がり、残業や休日出勤で下がる。\n残業した翌日は見られるビルドが三本より少なくなる。気分が残っているほど、減る本数が少ない。",
   "wb.close": "閉じる",
-  "wb.backToTitle": "最初から"
+  "wb.backToTitle": "最初から",
+  "lane.name": "うちの近所",
+  "lane.intro": "住んでいる路地。",
+  "lane.toStreet": "大通りへ出る",
+  "street.toLane": "近所へ戻る",
+  "quest.goStreet": "大通りへ — 会社の方へ",
+  "object.road": "大通り",
+  "object.crossing": "横断歩道",
+  "object.house": "うちの建物",
+  "object.alley": "家へ帰る道",
+  "object.neighbour": "隣の家"
 }
