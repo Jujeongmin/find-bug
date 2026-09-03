@@ -174,9 +174,16 @@ export const laneScene: SceneSpec = {
     },
 
     /* what a street of houses has that a street of offices does not */
+    /*
+     * The block's trees, in full.
+     *
+     * The sheet draws a tree in two pieces — the crown on one row, the leaves
+     * and trunk on the next — and taking only the lower tile left a bush on a
+     * stick with its top cut off. Both rows, so what stands there is a tree.
+     */
     ...[
-      { id: "tree1", x: 36, y: 178 },
-      { id: "tree2", x: 36, y: 566 },
+      { id: "tree1", x: 36, y: 190 },
+      { id: "tree2", x: 36, y: 574 },
     ].map((t) => ({
       id: t.id,
       nameKey: `object.${t.id}`,
@@ -184,19 +191,16 @@ export const laneScene: SceneSpec = {
       x: t.x,
       y: t.y,
       render: {
-        // the city pack's own tree, so the block is drawn out of one sheet
-        sprite: { sheet: "city" as const, col: 33, row: 12, scale: 3 },
+        sprite: { sheet: "city" as const, col: 33, row: 10, spanY: 2, scale: 2.6 },
         shadow: { offsetX: 10, width: 30 },
       },
-      behaviors: [{ t: "blocker" as const, radius: 26 }],
+      behaviors: [{ t: "blocker" as const, radius: 22 }],
     })),
     ...[
       // clear of the gap, so the way to the road is never the thing you are
       // walking round
-      // clear of the roof: a lamp whose post ends inside the tiles reads as
-      // standing on the house
-      { id: "lane0", x: 214, y: 132 },
-      { id: "lane1", x: 22, y: 300 },
+      { id: "lane0", x: 218, y: 178 },
+      { id: "lane1", x: 26, y: 346 },
     ].map((l) => ({
       id: l.id,
       nameKey: "object.lamp",
@@ -205,10 +209,10 @@ export const laneScene: SceneSpec = {
       y: l.y,
       render: {
         className: "street-lamp",
-        bar: { width: 8, height: 46 },
-        glow: { radius: 80, offsetX: 4, offsetY: 2 },
+        sprite: { sheet: "city" as const, col: 5, row: 16, spanY: 2, scale: 2.2 },
+        glow: { radius: 80, offsetX: 18, offsetY: 12 },
       },
-      behaviors: [{ t: "blocker" as const, radius: 14 }],
+      behaviors: [{ t: "blocker" as const, radius: 12 }],
     })),
     {
       id: "binLane",

@@ -192,19 +192,31 @@ export const streetScene: SceneSpec = {
       ],
     })),
 
-    /* street furniture, so the walk has something in it */
-    ...[24, 326].map((x, i) => ({
+    /*
+     * Street furniture, so the walk has something in it.
+     *
+     * The sheet's own lamp: a head with two arms on it and the post under it,
+     * one tile by two. It was a grey rectangle with a rounded lozenge stuck on
+     * top, which is what a lamp looks like to someone who has not looked at
+     * one.
+     */
+    ...[
+      { x: 28, y: 516 },
+      { x: 330, y: 346 },
+    ].map((p, i) => ({
       id: `lamp${i}`,
       nameKey: "object.lamp",
       kind: "decor" as const,
-      x,
-      y: i === 0 ? 470 : 300,
+      x: p.x,
+      y: p.y,
       render: {
+        // the class is only the dimmer now: what it draws is the sprite
         className: "street-lamp",
-        bar: { width: 8, height: 46 },
-        glow: { radius: 80, offsetX: 4, offsetY: 2 },
+        sprite: { sheet: "city" as const, col: 5, row: 16, spanY: 2, scale: 2.2 },
+        // the light hangs off the head, which is at the top of the post
+        glow: { radius: 80, offsetX: 18, offsetY: 12 },
       },
-      behaviors: [{ t: "blocker" as const, radius: 14 }],
+      behaviors: [{ t: "blocker" as const, radius: 12 }],
     })),
       /* moved up the wall: a crate at the kerb is dressing, a crate in the
          doorway is a mistake */

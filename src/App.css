@@ -709,31 +709,12 @@
   color: #ecdfc3;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);
 }
-.street-lamp {
-  background: linear-gradient(#6f6a5c, #4a463c);
-  border: none;
-  border-radius: 2px;
-}
+/* The lamp is a sprite now; the class is only what dims it. Its background
+   and the lozenge it wore as a head went with the rectangle. */
 /* lit by the clock, not always: --lamp runs from 0 in daylight to 1 at dusk */
 .street-lamp .eng-glow {
   opacity: var(--lamp, 1);
 }
-.street-lamp::before {
-  filter: brightness(calc(0.72 + 0.28 * var(--lamp, 1)));
-}
-.street-lamp::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -9px;
-  width: 18px;
-  height: 12px;
-  margin-left: -9px;
-  border-radius: 4px 4px 2px 2px;
-  background: radial-gradient(circle at 50% 70%, #fff3c4 0 45%, #e0b23f 100%);
-  border: 2px solid #4a463c;
-}
-
 /* The corner the office street runs off, drawn as kerb and tarmac so the edge
    of the map looks like somewhere rather than like the end of the screen. */
 /* A way out has to be reached from anywhere along the edge, and a circle is
