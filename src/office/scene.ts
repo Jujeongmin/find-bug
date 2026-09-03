@@ -48,7 +48,9 @@ const SLAB = 16;
 
 /** the developer, across the room, at a desk laid out the same way */
 const DEV_X = 282;
-const DEV_Y = 520;
+// far enough up the floor that the mat inside the door is not under their
+// chair: a desk standing on the doormat is somebody else's problem
+const DEV_Y = 470;
 
 const actor = (sheet: "worker" | "worker2"): ActorSpec => ({
   sheet,
