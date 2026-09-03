@@ -504,6 +504,25 @@ export function EngineStage({
     return 24;
   };
 
+  /**
+   * Which layer a drawn object belongs on.
+   *
+   * In a y-sorted scene, where something stands decides what it covers: a
+   * sprite hangs from its own feet, so its foot line is the sort key, and
+   * `z` becomes the tie-break for two things standing on the same line. The
+   * hundred keeps the crowd above the flat scenery underneath it.
+   *
+   * Two things stay out of it. Bars are the flat scenery — roads, kerbs,
+   * floors — and so is anything given `z: 0`, which is how a scene says
+   * "this is the room, not something in it": a wall's foot is at the bottom
+   * of the wall, so sorting it would hang it in front of everything standing
+   * against it, monitors included.
+   */
+  const layerOf = (o: ObjectSpec, y: number) =>
+    scene.ySort && !o.render.bar && (o.z ?? 1) > 0
+      ? 100 + Math.round(o.sortY ?? y) + (o.z ?? 0)
+      : o.z ?? 1;
+
   const actorRow = (a: NonNullable<RenderSpec["actor"]>, dir: Facing) => {
     const FALLBACK: Record<Facing, Facing> = {
       down: "down",
@@ -703,7 +722,7 @@ export function EngineStage({
               <svg
                 className="waypoint"
                 viewBox="0 0 9 6"
-                style={{ left: c.x, top: c.y - lift - 18, zIndex: 40 }}
+                style={{ left: c.x, top: c.y - lift - 18, zIndex: 900 }}
                 aria-hidden
               >
                 {/*
@@ -834,7 +853,7 @@ export function EngineStage({
                   } ${high ? "meter-high" : ""} ${
                     triggered ? "triggered" : ""
                   } ${o.render.className ?? ""}`}
-                  style={{ left: os.x, top: os.y, zIndex: o.z ?? 1 }}
+                  style={{ left: os.x, top: os.y, zIndex: layerOf(o, os.y) }}
                   onClick={(e) => {
                     e.stopPropagation();
                     onObjectTap(o.id);

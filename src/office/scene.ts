@@ -84,6 +84,9 @@ export const officeScene: SceneSpec = {
   nameKey: "office.name",
   introKey: "office.intro",
   backgroundClass: "office-floor",
+  // the four rooms you walk around in: what covers what is decided by where
+  // people are standing, not by the order the scene was written
+  ySort: true,
   counters: [],
   objects: [
     {
@@ -134,6 +137,9 @@ export const officeScene: SceneSpec = {
       x: m.x + SCREEN_DX,
       // standing on the slab, not among the legs below it
       y: WALL_H + 12 - SLAB - 17,
+      // and sorting on the desk's own foot, a pixel in front of it: its screen
+      // stands at the back of the slab, which is behind the desk it is on
+      sortY: WALL_H + 13,
       z: 2,
       render: { sprite: { sheet: "office" as const, col: 2, row: 0, scale: 1.7 } },
       behaviors: [
@@ -198,6 +204,7 @@ export const officeScene: SceneSpec = {
       kind: "decor",
       x: DEV_X + SCREEN_DX,
       y: DEV_Y - SLAB - 17,
+      sortY: DEV_Y + 1,
       z: 3,
       render: { sprite: { sheet: "office" as const, col: 3, row: 0, scale: 1.7 } },
       behaviors: [],

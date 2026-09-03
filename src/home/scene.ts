@@ -32,6 +32,9 @@ export const homeScene: SceneSpec = {
   nameKey: "home.name",
   introKey: "home.intro",
   backgroundClass: "home-floor",
+  // the four rooms you walk around in: what covers what is decided by where
+  // people are standing, not by the order the scene was written
+  ySort: true,
   counters: [],
   objects: [
     {
@@ -118,6 +121,8 @@ export const homeScene: SceneSpec = {
       kind: "sprite",
       x: 288,
       y: 152,
+      // the desk it is on, plus a pixel
+      sortY: 179,
       z: 2,
       // the same machine as the office's, turned away: this is the one you
       // chose to sit at

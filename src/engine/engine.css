@@ -206,7 +206,8 @@
   line-height: 1.35;
   text-align: center;
   pointer-events: none;
-  z-index: 5;
+  /* over everyone, including the y-sorted crowd underneath */
+  z-index: 1000;
   animation: bubble-in 0.18s ease-out;
 }
 /* the tail, pointing back down at whoever said it */

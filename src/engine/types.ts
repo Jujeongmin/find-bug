@@ -253,6 +253,16 @@ export interface ObjectSpec {
   /** HUD widgets read this counter */
   counter?: string;
   /**
+   * The line this object sorts on, when it is not the line it stands on.
+   *
+   * For a thing standing on the floor the two are the same. For a thing
+   * standing on top of another thing they are not: a monitor's foot is on the
+   * desk's slab, which is behind the desk's own foot, so sorting it where it
+   * stands puts the desk in front of the screen on it. This is the foot of
+   * whatever it is sitting on, plus a pixel.
+   */
+  sortY?: number;
+  /**
    * Which way an actor is turned before anything moves it. Standing figures
    * default to facing the camera, which is wrong for anyone working at a desk
    * beside them.
@@ -314,6 +324,20 @@ export interface SceneSpec {
   world?: { w: number; h: number };
   /** side-view scenes get gravity and a ground line */
   sideView?: { groundY: number };
+  /**
+   * Draw the people and the props in the order they stand, not the order they
+   * were written.
+   *
+   * In a room seen from above, whatever is further down the screen is nearer
+   * the camera and covers what is behind it. Without this the player walks
+   * over the top of a lamp post they are standing behind and under a tree they
+   * are standing in front of, because `z` is a number picked once when the
+   * scene was written and a person moves.
+   *
+   * Opt-in: the builds under test are laid out by hand and several of them
+   * depend on the order they were written in.
+   */
+  ySort?: boolean;
 }
 
 /* ---------- generated bugs ---------- */
