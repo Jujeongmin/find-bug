@@ -32,8 +32,14 @@ const WALL_H = 110;
  * Either something ships unlooked-at or the day costs money and minutes.
  */
 const DESKS = [44, 129, 214, 299];
-/** the screen stands in the middle of the slab */
-const SCREEN_DX = -15;
+/**
+ * The screen stands in the middle of the slab.
+ *
+ * It used to be fifteen pixels left of the desk's centre, which was the middle
+ * of the old one: the desk is drawn now rather than borrowed, and it is wider
+ * than the prop it replaced, so the same offset hung the monitor over the edge.
+ */
+const SCREEN_DX = 0;
 /** the seat is tucked in at the front of the desk, its back to us */
 const SEAT_DY = 2;
 /** the desk slab ends this far above the desk's foot; the screen stands on it */
@@ -126,9 +132,9 @@ export const officeScene: SceneSpec = {
       kind: "sprite" as const,
       x: m.x + SCREEN_DX,
       // standing on the slab, not among the legs below it
-      y: WALL_H + 12 - SLAB - 26,
+      y: WALL_H + 12 - SLAB - 17,
       z: 2,
-      render: { className: "office-crt", bar: { width: 30, height: 26 } },
+      render: { sprite: { sheet: "office" as const, col: 2, row: 0, scale: 1.7 } },
       behaviors: [
         { t: "blocker" as const, radius: 26 },
         { t: "station" as const, radius: 54, labelKey: m.labelKey },
@@ -140,7 +146,9 @@ export const officeScene: SceneSpec = {
       kind: "decor" as const,
       x,
       y: WALL_H + 12,
-      render: { prop: { id: "desk" as const, scale: 1.4 } },
+      render: {
+        sprite: { sheet: "office" as const, col: 0, row: 0, spanX: 2, spanY: 2, scale: 1.7 },
+      },
       behaviors: [],
     })),
     /*
@@ -179,7 +187,9 @@ export const officeScene: SceneSpec = {
       kind: "decor",
       x: DEV_X,
       y: DEV_Y,
-      render: { prop: { id: "desk" as const, scale: 1.4 } },
+      render: {
+        sprite: { sheet: "office" as const, col: 0, row: 0, spanX: 2, spanY: 2, scale: 1.7 },
+      },
       behaviors: [],
     },
     {
@@ -188,9 +198,9 @@ export const officeScene: SceneSpec = {
       nameKey: "object.devCrt",
       kind: "decor",
       x: DEV_X + SCREEN_DX,
-      y: DEV_Y - SLAB - 26,
+      y: DEV_Y - SLAB - 17,
       z: 3,
-      render: { className: "office-crt-back", bar: { width: 30, height: 26 } },
+      render: { sprite: { sheet: "office" as const, col: 3, row: 0, scale: 1.7 } },
       behaviors: [],
     },
     {

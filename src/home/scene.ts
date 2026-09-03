@@ -106,18 +106,22 @@ export const homeScene: SceneSpec = {
       nameKey: "object.desk",
       kind: "decor",
       x: 300,
-      y: 170,
-      render: { prop: { id: "desk", scale: 1.4 } },
+      y: 178,
+      render: {
+        sprite: { sheet: "office", col: 0, row: 0, spanX: 2, spanY: 2, scale: 1.5 },
+      },
       behaviors: [],
     },
     {
       id: "homeScreen",
       nameKey: "object.homeScreen",
       kind: "sprite",
-      x: 285,
-      y: 128,
+      x: 288,
+      y: 152,
       z: 2,
-      render: { className: "office-crt-back", bar: { width: 30, height: 26 } },
+      // the same machine as the office's, turned away: this is the one you
+      // chose to sit at
+      render: { sprite: { sheet: "office", col: 3, row: 0, scale: 1.5 } },
       behaviors: [
         { t: "blocker", radius: 24 },
       ],

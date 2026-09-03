@@ -226,3 +226,19 @@ looks like the original and is only obviously wrong when it stands beside it.
 
 Puny Characters is CC0, and a palette swap of a public domain sprite is still
 public domain.
+
+## The office furniture (drawn here)
+
+`src/assets/sheets/office.png` is built by `npm run officeart`
+([scripts/officeart.ts](../scripts/officeart.ts)) — a 4x2 grid of 16px tiles:
+a desk (two by two), a monitor, the same monitor from behind, and a keyboard.
+
+Every sheet here was searched for a desk and a screen first. The city pack is a
+city from above and has no interiors; Roguelike Indoors is a tavern; Messy
+Furniture has sofas, wardrobes and beds and not one monitor. What the room had
+instead was a fantasy writing desk and a monitor made of CSS gradients — the
+last thing in it that was not pixel art.
+
+Drawn in code rather than in a paint program, for the same reason the chair
+back is CSS: the shapes are rectangles, and a rectangle written down is one
+anybody can move a pixel later.

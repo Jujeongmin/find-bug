@@ -11,6 +11,7 @@ import personASrc from "../assets/sheets/personA.png";
 import personBSrc from "../assets/sheets/personB.png";
 import personCSrc from "../assets/sheets/personC.png";
 import citySrc from "../assets/sheets/city.png";
+import officeSrc from "../assets/sheets/office.png";
 import indoorSrc from "../assets/sheets/indoor.png";
 import foodSrc from "../assets/sheets/food.png";
 import deskSrc from "../assets/props/desk.png";
@@ -42,6 +43,7 @@ const SHEET_SRC: Record<SheetId, string> = {
   personB: personBSrc,
   personC: personCSrc,
   city: citySrc,
+  office: officeSrc,
   indoor: indoorSrc,
   food: foodSrc,
 };
