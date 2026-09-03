@@ -1,5 +1,6 @@
-import type { ObjectSpec, SceneSpec } from "../engine/types";
+import type { SceneSpec } from "../engine/types";
 import { streetActor } from "./scene";
+import { front, solid } from "./build";
 
 /**
  * The block the flat is on.
@@ -16,38 +17,6 @@ import { streetActor } from "./scene";
  * where the neighbours' terrace ends and the main road begins, and it is taken
  * by walking into it: a street corner is not a thing you press.
  */
-
-/**
- * A box the player cannot walk into, out of overlapping circles.
- *
- * Blocking is round — one radius per object — and buildings are not. A row of
- * circles whose ends land exactly on the box's edges blocks the whole face
- * without the invisible wall a single fat circle leaves sticking out of it.
- * The objects are transparent: what the player sees is the sprite drawn over
- * them.
- */
-const solid = (
-  id: string,
-  x: number,
-  y: number,
-  w: number,
-  h: number
-): ObjectSpec[] => {
-  const r = h / 2;
-  const n = Math.max(2, Math.ceil((w - 2 * r) / r) + 1);
-  return Array.from({ length: n }, (_, i) => {
-    const cx = x + r + ((w - 2 * r) * i) / (n - 1);
-    return {
-      id: `${id}${i}`,
-      nameKey: `object.${id}`,
-      kind: "decor" as const,
-      x: cx - 4,
-      y,
-      render: { className: "edge-zone", bar: { width: 8, height: h } },
-      behaviors: [{ t: "blocker" as const, radius: r }],
-    };
-  });
-};
 
 export const laneScene: SceneSpec = {
   id: "lane",
@@ -98,17 +67,8 @@ export const laneScene: SceneSpec = {
      * terrace is. No roof over them: the road is drawn beyond, and a roof deep
      * enough to read would cover it.
      */
-    ...[59, 177].map((x, i) => ({
-      id: `neighbour${i}`,
-      nameKey: "object.neighbour",
-      kind: "decor" as const,
-      x,
-      y: 112,
-      render: {
-        sprite: { sheet: "city" as const, col: 4, row: 5, spanX: 3, spanY: 2, scale: 2.46 },
-      },
-      behaviors: [],
-    })),
+    ...front("neighbour", { left: 5, mid: 6, right: 7 }, 5, 2, 0, 112, 6, 2.46),
+    ...front("neighbourEave", { left: 8, mid: 10, right: 11 }, 2, 1, 0, 33, 6, 2.46),
     ...solid("neighbourWall", 0, 34, 236, 78),
     ...[46, 164].map((x, i) => ({
       id: `neighbourWindow${i}`,
@@ -130,52 +90,37 @@ export const laneScene: SceneSpec = {
      * gradient's. Sprites hang from the bottom edge of where they are put,
      * which is why the roof sits at the top of the wall and not over it.
      */
-    {
-      id: "houseRoof",
-      nameKey: "object.house",
-      kind: "decor",
-      x: 180,
-      y: 270,
-      render: {
-        sprite: { sheet: "city", col: 0, row: 0, spanX: 3, spanY: 2, scale: 2.8 },
-      },
-      behaviors: [],
-    },
-    {
-      id: "houseWall",
-      nameKey: "object.house",
-      kind: "decor",
-      x: 180,
-      y: 360,
-      z: 1,
-      render: {
-        sprite: { sheet: "city", col: 1, row: 5, spanX: 3, spanY: 2, scale: 2.8 },
-      },
-      behaviors: [],
-    },
-    ...solid("house", 113, 282, 134, 78),
-    ...[140, 220].map((x, i) => ({
+    ...front("houseWall", { left: 1, mid: 2, right: 3 }, 5, 2, 90, 360, 4, 2.8, 1),
+    ...front("houseRoof", { left: 0, mid: 2, right: 3 }, 2, 1, 90, 270, 4, 2.8),
+    ...solid("house", 91, 272, 178, 88),
+    ...[135, 225].map((x, i) => ({
       id: `houseWindow${i}`,
       nameKey: "object.window",
       kind: "decor" as const,
       x,
-      y: 326,
+      y: 330,
       z: 2,
       render: {
-        sprite: { sheet: "city" as const, col: 25, row: 16, scale: 2 },
+        sprite: { sheet: "city" as const, col: 25, row: 16, scale: 1.8 },
       },
       behaviors: [],
     })),
     {
-      /* your own door still takes the space bar: a door you can fall through
-         is a door you leave by accident */
+      /*
+       * Your own door, and the game's own door art rather than the sheet's.
+       *
+       * The pack's doors and its windows are the same panel in two sizes, so a
+       * door drawn from it read as a third window — and every other door in
+       * this game is this one. It still takes the space bar: a door you can
+       * fall through is a door you leave by accident.
+       */
       id: "frontDoor",
       nameKey: "object.frontDoor",
       kind: "sprite",
       x: 180,
       y: 360,
       z: 2,
-      render: { sprite: { sheet: "city", col: 25, row: 17, scale: 2.2 } },
+      render: { prop: { id: "door", scale: 1.7 } },
       behaviors: [{ t: "station", radius: 62, labelKey: "street.home" }],
     },
 
@@ -191,13 +136,15 @@ export const laneScene: SceneSpec = {
       id: "pocha",
       nameKey: "object.pocha",
       kind: "sprite",
-      x: 274,
-      y: 552,
+      x: 286,
+      y: 596,
       z: 1,
       render: {
-        className: "street-pocha",
-        bar: { width: 56, height: 62 },
-        glow: { radius: 96, offsetX: 28, offsetY: 26 },
+        // two of the sheet's parasols over their table: a tent that goes up
+        // in the evening and comes down again, which is what it is
+        sprite: { sheet: "city", col: 34, row: 14, spanX: 2, spanY: 2, scale: 2.6 },
+        // the entity box is the sprite: the light hangs in the middle of it
+        glow: { radius: 96, offsetX: 42, offsetY: 56 },
       },
       behaviors: [
         { t: "blocker", radius: 34 },
@@ -232,10 +179,11 @@ export const laneScene: SceneSpec = {
       x: t.x,
       y: t.y,
       render: {
-        sprite: { sheet: "tinytown" as const, col: 4, row: 2, scale: 3.2 },
+        // the city pack's own tree, so the block is drawn out of one sheet
+        sprite: { sheet: "city" as const, col: 33, row: 12, scale: 3 },
         shadow: { offsetX: 10, width: 30 },
       },
-      behaviors: [{ t: "blocker" as const, radius: 28 }],
+      behaviors: [{ t: "blocker" as const, radius: 26 }],
     })),
     ...[
       // clear of the gap, so the way to the road is never the thing you are

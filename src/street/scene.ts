@@ -1,4 +1,5 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
+import { front } from "./build";
 
 /**
  * The walk's character sheet, shared with the block at the other end of it:
@@ -56,25 +57,16 @@ export const streetScene: SceneSpec = {
       behaviors: [{ t: "playerTopDown", speed: 150, minY: 186, maxY: 566 }],
     },
 
-    /* the office block across the top, with the way in */
-    {
-      id: "block",
-      nameKey: "object.block",
-      kind: "decor",
-      x: 0,
-      y: 0,
-      render: { className: "street-block", bar: { width: 360, height: 150 } },
-      behaviors: [],
-    },
-    ...[70, 290].map((x, i) => ({
-      id: `blockWindow${i}`,
-      nameKey: "object.window",
-      kind: "decor" as const,
-      x,
-      y: 34,
-      render: { className: "office-window", bar: { width: 48, height: 40 } },
-      behaviors: [],
-    })),
+    /*
+     * The office block across the top, with the way in.
+     *
+     * Three units of the sheet's glass curtain wall over its shopfront band —
+     * what the studio rents two floors of. Drawn rather than tinted: the block
+     * used to be a repeating brick texture with two pale rectangles on it for
+     * windows, which is a wall, not an office.
+     */
+    ...front("blockGlass", { left: 12, mid: 14, right: 15 }, 6, 3, 0, 120, 9, 2.5),
+    ...front("blockFront", { left: 12, mid: 14, right: 15 }, 4, 1, 0, 160, 9, 2.5),
     {
       /* the sign over the door: a grub and a name, which is all a small studio
          ever has on the front of its building */
@@ -82,7 +74,7 @@ export const streetScene: SceneSpec = {
       nameKey: "object.sign",
       kind: "decor",
       x: 134,
-      y: 56,
+      y: 62,
       z: 1,
       render: { className: "street-sign", bar: { width: 92, height: 26 } },
       behaviors: [],
@@ -92,9 +84,11 @@ export const streetScene: SceneSpec = {
       nameKey: "object.officeDoor",
       kind: "sprite",
       x: 180,
-      y: 148,
-      z: 1,
-      render: { prop: { id: "door", scale: 1.6 } },
+      y: 164,
+      z: 2,
+      // the game's own door, here as everywhere: the sheet's is a window with
+      // taller panes
+      render: { prop: { id: "door", scale: 1.9 } },
       behaviors: [{ t: "station", radius: 58, labelKey: "street.enter" }],
     },
 
