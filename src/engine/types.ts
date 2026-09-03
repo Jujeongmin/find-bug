@@ -49,6 +49,40 @@ export type Action =
 export type Behavior =
   /** 4-way keyboard/touch controlled actor */
   | { t: "playerTopDown"; speed: number; minY: number; maxY: number }
+  /**
+   * Walks about inside a box, stopping now and then.
+   *
+   * Patrol is a line: two ends and a speed, which reads as a machine on a
+   * rail. The people on the street are not going anywhere in particular, and
+   * that is the point of them — so this picks somewhere inside its box, walks
+   * there around whatever is in the way, stands for a moment and picks again.
+   */
+  | {
+      t: "wander";
+      speed: number;
+      minX: number;
+      maxX: number;
+      minY: number;
+      maxY: number;
+      /** seconds stood still between walks, give or take a half */
+      pause: number;
+    }
+  /**
+   * Says something to nobody, on its own, in a bubble over its head.
+   *
+   * The talking in this game all waits for the player to walk up and press a
+   * key, so a street with three people on it is silent until it is worked. A
+   * mutter is not addressed to anyone: it is the line you catch walking past.
+   */
+  | {
+      t: "mutter";
+      /** i18n keys, said in turn */
+      keys: string[];
+      /** seconds between mutters, give or take a third */
+      every: number;
+      /** how long one stays up */
+      dwell: number;
+    }
   /** back-and-forth patrol along one axis */
   | { t: "patrol"; axis: "x" | "y"; min: number; max: number; speed: number; flipSprite: boolean; endMode?: "turn" | "teleport" | "bounce" }
   /** one-way drift that wraps around the field */

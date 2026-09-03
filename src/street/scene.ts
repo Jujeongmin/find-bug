@@ -1,5 +1,6 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
 import type { SheetId } from "../engine/sheets";
+import { MUTTERS } from "./passers";
 import { front, glassDoor } from "./build";
 
 /**
@@ -102,8 +103,26 @@ export const streetScene: SceneSpec = {
     ...[
       // clear of the vending machine: standing beside it, this one took the
       // prompt that machine is the only reason to walk over there for
-      { id: "passer0", sheet: "personA" as const, x: 152, y: 300, facing: "left" as const },
-      { id: "passer1", sheet: "personB" as const, x: 262, y: 300, facing: "down" as const },
+      {
+        id: "passer0",
+        sheet: "personA" as const,
+        x: 152,
+        y: 300,
+        facing: "left" as const,
+        who: "a",
+        box: { minX: 96, maxX: 200, minY: 236, maxY: 430 },
+      },
+      {
+        id: "passer1",
+        sheet: "personB" as const,
+        x: 262,
+        y: 300,
+        facing: "down" as const,
+        who: "b",
+        // their own stretch of pavement: two people wandering the same box
+        // spend the morning walking through each other
+        box: { minX: 224, maxX: 316, minY: 236, maxY: 430 },
+      },
     ].map((c) => ({
       id: c.id,
       nameKey: `object.${c.id}`,
@@ -116,6 +135,10 @@ export const streetScene: SceneSpec = {
       behaviors: [
         { t: "blocker" as const, radius: 16 },
         { t: "station" as const, radius: 46, labelKey: "street.talk" },
+        // slower than the player, and standing still more of the time than
+        // walking: they are waiting for the day to start, not going anywhere
+        { t: "wander" as const, speed: 44, ...c.box, pause: 3 },
+        { t: "mutter" as const, keys: MUTTERS[c.who], every: 17, dwell: 3.5 },
       ],
     })),
 

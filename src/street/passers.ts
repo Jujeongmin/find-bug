@@ -62,6 +62,20 @@ export function passerLine(person: Passer, said: number, walk: Walk): string {
   return `street.${person.who}.${walk.dayOver ? "e" : "m"}${said % pool}`;
 }
 
+/**
+ * What each of them says to nobody while they stand there.
+ *
+ * Everything else in this game waits for the player to walk up and press a
+ * key, so a street with three people on it is silent until it is worked.
+ * These are not addressed to anyone — they are the line you catch walking
+ * past — so they are short, and they are about the job rather than about you.
+ */
+export const MUTTERS: Record<string, string[]> = {
+  a: ["mutter.a0", "mutter.a1", "mutter.a2"],
+  b: ["mutter.b0", "mutter.b1", "mutter.b2"],
+  c: ["mutter.c0", "mutter.c1", "mutter.c2"],
+};
+
 /** the days that get a line of their own, said before anything in rotation */
 export const PASSER_SPECIALS = ["freeze", "tired"] as const;
 
@@ -71,5 +85,6 @@ export function passerKeys(): string[] {
     ...Array.from({ length: p.morning }, (_, i) => `street.${p.who}.m${i}`),
     ...Array.from({ length: p.evening }, (_, i) => `street.${p.who}.e${i}`),
     ...PASSER_SPECIALS.map((s) => `street.${p.who}.${s}`),
+    ...(MUTTERS[p.who] ?? []),
   ]);
 }

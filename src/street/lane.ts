@@ -1,6 +1,7 @@
 import type { SceneSpec } from "../engine/types";
 import { streetActor } from "./scene";
 import { front, solid } from "./build";
+import { MUTTERS } from "./passers";
 
 /**
  * The block the flat is on.
@@ -165,6 +166,10 @@ export const laneScene: SceneSpec = {
       behaviors: [
         { t: "blocker", radius: 16 },
         { t: "station", radius: 46, labelKey: "street.talk" },
+        // the strip between the house and the trees, which is as far as
+        // somebody who is not going anywhere goes
+        { t: "wander", speed: 40, minX: 44, maxX: 150, minY: 380, maxY: 556, pause: 4 },
+        { t: "mutter", keys: MUTTERS.c, every: 19, dwell: 3.5 },
       ],
     },
 

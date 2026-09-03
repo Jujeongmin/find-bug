@@ -821,6 +821,13 @@ export function EngineStage({
                   }}
                   title={picking ? t(o.nameKey) : undefined}
                 >
+                  {/*
+                    What this one is saying to nobody. It rides in the world
+                    layer with the sprite, so it pans and zooms with whoever is
+                    speaking rather than floating over a street it has lost
+                    track of — the same reason the quest mark does.
+                  */}
+                  {os.says && <div className="eng-bubble">{t(os.says)}</div>}
                   {g && (
                     <div
                       className="eng-glow"

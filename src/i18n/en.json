@@ -562,5 +562,18 @@
   "offer.dinner.yes": "Go along",
   "offer.dinner.no": "Head home",
   "event.dinner.went": "An evening of listening to other people's problems for once. Your spirits are up, and tomorrow will start short.",
-  "event.dinner.skipped": "You said your goodbyes at the door. The street is quiet."
+  "event.dinner.skipped": "You said your goodbyes at the door. The street is quiet.",
+  "mutter.a0": "…not even nine yet.",
+  "mutter.a1": "Should have bought the coffee first.",
+  "mutter.a2": "Let it be an early one today.",
+  "mutter.b0": "That ticket is still open.",
+  "mutter.b1": "Heard the build broke again.",
+  "mutter.b2": "What is lunch, then.",
+  "mutter.c0": "Came out for the shopping and just stood here.",
+  "mutter.c1": "Late again in that flat, by the look of it.",
+  "mutter.c2": "Wind has gone cool, at least.",
+  "mutter.dev0": "…why does that work.",
+  "mutter.dev1": "It will not reproduce.",
+  "mutter.dev2": "If this goes out as it is, we are finished.",
+  "mutter.dev3": "What do I even write in the commit."
 }

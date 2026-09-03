@@ -562,5 +562,18 @@
   "offer.dinner.yes": "따라간다",
   "offer.dinner.no": "그냥 집에 간다",
   "event.dinner.went": "오랜만에 남의 얘기만 듣다 왔다. 마음이 올랐다. 대신 들어온 시간이 시간이라, 내일 아침은 짧다.",
-  "event.dinner.skipped": "먼저 간다고 하고 나왔다. 골목은 조용하다."
+  "event.dinner.skipped": "먼저 간다고 하고 나왔다. 골목은 조용하다.",
+  "mutter.a0": "…아직 아홉 시도 안 됐네.",
+  "mutter.a1": "커피부터 살 걸.",
+  "mutter.a2": "오늘은 좀 일찍 끝났으면.",
+  "mutter.b0": "그 티켓 아직도 안 닫혔네.",
+  "mutter.b1": "빌드 또 깨졌다던데.",
+  "mutter.b2": "점심은 뭐 먹지.",
+  "mutter.c0": "장 보러 나왔다가 계속 서 있네.",
+  "mutter.c1": "저 집은 오늘도 늦나 보네.",
+  "mutter.c2": "바람은 좀 선선해졌다.",
+  "mutter.dev0": "…이게 왜 되지.",
+  "mutter.dev1": "재현이 안 되는데.",
+  "mutter.dev2": "이거 그대로 나가면 큰일인데.",
+  "mutter.dev3": "커밋 메시지 뭐라고 쓰지."
 }

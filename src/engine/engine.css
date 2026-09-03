@@ -182,3 +182,44 @@
 @media (prefers-reduced-motion: reduce) {
   .waypoint { animation: none; }
 }
+
+/* Somebody muttering to themselves on the pavement.
+
+   Above the sprite and centred on it, small, and never in the way: it does
+   not take clicks, and it wraps at a width that reads at a glance rather
+   than one that has to be stopped for and read. */
+.eng-bubble {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  margin-bottom: 6px;
+  max-width: 140px;
+  width: max-content;
+  padding: 3px 7px;
+  border-radius: 8px;
+  background: rgba(250, 248, 240, 0.94);
+  color: #2b2620;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
+  font-size: 10px;
+  line-height: 1.35;
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+  animation: bubble-in 0.18s ease-out;
+}
+/* the tail, pointing back down at whoever said it */
+.eng-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  margin-left: -4px;
+  border: 4px solid transparent;
+  border-top-color: rgba(250, 248, 240, 0.94);
+}
+@keyframes bubble-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(3px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}

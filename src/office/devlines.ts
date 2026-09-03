@@ -89,6 +89,18 @@ export function devShipLine(rating: number, level: number): string {
   return "office.dev.shipBad";
 }
 
+/**
+ * And what they say to the screen when nobody has asked them anything. They
+ * do not wander — they are working — but a room with one other person in it
+ * should not be silent for eight hours.
+ */
+export const DEV_MUTTERS = [
+  "mutter.dev0",
+  "mutter.dev1",
+  "mutter.dev2",
+  "mutter.dev3",
+];
+
 /** every dictionary key the developer can ask for */
 export function devKeys(): string[] {
   return [
@@ -113,5 +125,6 @@ export function devKeys(): string[] {
       `office.dev.warm${lv}_0`,
       `office.dev.warm${lv}_1`,
     ]),
+    ...DEV_MUTTERS,
   ];
 }

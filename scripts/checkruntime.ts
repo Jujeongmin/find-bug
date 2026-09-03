@@ -171,6 +171,51 @@ const ok = (label: string, cond: boolean) =>
   console.log("PASS  eight facings, and standing still is not moving");
 }
 
+/*
+ * The people on the street walk about and talk to themselves.
+ *
+ * Both are timed and both are random, so what is checked is what has to hold
+ * every time: they stay inside the box they were given, they never stand
+ * inside something solid, and a mutter goes up and comes down again.
+ */
+{
+  const rt = new SceneRuntime(streetScene);
+  const spec = streetScene.objects.find((o) => o.id === "passer0")!;
+  const box = spec.behaviors.find((b) => b.t === "wander");
+  if (!box || box.t !== "wander") throw new Error("passer0 does not wander");
+  const start = { ...rt.state.objects.passer0 };
+  let moved = 0;
+  let saidSomething = false;
+  let wentQuietAgain = false;
+  let wasSaying = false;
+  for (let i = 0; i < 60 * 60; i++) {
+    rt.tick(1 / 60);
+    const os = rt.state.objects.passer0;
+    if (Math.hypot(os.x - start.x, os.y - start.y) > 8) moved++;
+    // the walls are the box, plus a step of slack: the goal is inside it and
+    // the last step of any walk lands on the goal
+    if (os.x < box.minX - 2 || os.x > box.maxX + 2) {
+      throw new Error(`wandered out of its box: x ${os.x}`);
+    }
+    if (os.y < box.minY - 2 || os.y > box.maxY + 2) {
+      throw new Error(`wandered out of its box: y ${os.y}`);
+    }
+    if (rt.blockedAt(os.x, os.y, "passer0")) {
+      throw new Error(`walked into something solid at ${os.x},${os.y}`);
+    }
+    if (os.says) {
+      saidSomething = true;
+      wasSaying = true;
+    } else if (wasSaying) {
+      wentQuietAgain = true;
+    }
+  }
+  ok("runtime: a minute of street leaves nobody where they started", moved > 0);
+  ok("runtime: and nobody inside a wall", true);
+  ok("runtime: somebody says something to themselves", saidSomething);
+  ok("runtime: and stops saying it", wentQuietAgain);
+}
+
 /* the ship rating spreads across the play, instead of pinning to the floor */
 {
   const { shipRating, totalStake } = await import("../src/office/rating");

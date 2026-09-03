@@ -16,6 +16,13 @@ export interface ObjectState {
   respawnAt: number;
   /** accumulated rotation in degrees */
   angle: number;
+  /** where a wanderer is currently headed, and when it may set off again */
+  goal?: { x: number; y: number };
+  waitUntil?: number;
+  /** what it is saying to nobody, and until when */
+  says?: string;
+  saysUntil?: number;
+  nextSayAt?: number;
 }
 
 export interface Popup {
@@ -45,6 +52,24 @@ export interface RuntimeState {
   /** set once a health counter reaches zero — the run is over */
   dead: boolean;
 }
+
+/**
+ * Eight facings, one per 45 degrees, so walking diagonally shows the diagonal
+ * art rather than snapping to a cardinal.
+ */
+const OCTANTS: Facing[] = [
+  "right",
+  "downRight",
+  "down",
+  "downLeft",
+  "left",
+  "upLeft",
+  "up",
+  "upRight",
+];
+
+export const octant = (dx: number, dy: number): Facing =>
+  OCTANTS[((Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) % 8) + 8) % 8];
 
 const ATTACK_ANIM = 0.25;
 const INVULN = 1.2;
@@ -153,6 +178,48 @@ export class SceneRuntime {
 
   private player(): ObjectSpec | undefined {
     return this.scene.objects.find((o) => o.kind === "player");
+  }
+
+  /**
+   * Is this point inside something solid?
+   *
+   * `self` is skipped, because everything that walks about is also something
+   * to walk around, and an object standing inside its own blocker would never
+   * take a step.
+   */
+  blockedAt(x: number, y: number, self?: string): boolean {
+    for (const other of this.scene.objects) {
+      if (other.id === self) continue;
+      const bl = other.behaviors.find((b) => b.t === "blocker");
+      if (!bl || bl.t !== "blocker") continue;
+      const c = hitCentre(other, this.state.objects[other.id]);
+      if (Math.hypot(x - c.x, y - c.y) < bl.radius) return true;
+    }
+    return false;
+  }
+
+  /**
+   * Somewhere in the box worth walking to.
+   *
+   * A spot inside a wall is a walk that ends the moment it starts, so a few
+   * are tried before one is taken; the last one is used either way, because a
+   * person who cannot think of anywhere to go still has to stand somewhere.
+   */
+  private somewhereIn(b: {
+    minX: number;
+    maxX: number;
+    minY: number;
+    maxY: number;
+  }, self?: string): { x: number; y: number } {
+    let spot = { x: 0, y: 0 };
+    for (let i = 0; i < 8; i++) {
+      spot = {
+        x: b.minX + Math.random() * (b.maxX - b.minX),
+        y: b.minY + Math.random() * (b.maxY - b.minY),
+      };
+      if (!this.blockedAt(spot.x, spot.y, self)) return spot;
+    }
+    return spot;
   }
 
   /**
@@ -309,20 +376,7 @@ export class SceneRuntime {
               break;
             }
             os.moving = true;
-            // eight facings, one per 45 degrees, so walking diagonally shows
-            // the diagonal art rather than snapping to a cardinal
-            const OCTANTS: Facing[] = [
-              "right",
-              "downRight",
-              "down",
-              "downLeft",
-              "left",
-              "upLeft",
-              "up",
-              "upRight",
-            ];
-            const oct = Math.round(Math.atan2(dy, dx) / (Math.PI / 4));
-            os.dir4 = OCTANTS[((oct % 8) + 8) % 8];
+            os.dir4 = octant(dx, dy);
             const len = Math.hypot(dx, dy);
             // the horizontal bound follows the room, not the viewport. It was
             // hardcoded to 340 from when every scene was exactly one screen
@@ -395,6 +449,68 @@ export class SceneRuntime {
               }
             }
             if (dx !== 0) os.facing = dx > 0 ? 1 : -1;
+            break;
+          }
+
+          case "wander": {
+            if (!os.alive) break;
+            if ((os.waitUntil ?? 0) > st.now) {
+              os.moving = false;
+              break;
+            }
+            const goal = (os.goal ??= this.somewhereIn(b, o.id));
+            const dx = goal.x - os.x;
+            const dy = goal.y - os.y;
+            const len = Math.hypot(dx, dy);
+            // close enough is arrived: walking the last three pixels of a
+            // random errand looks like a stutter
+            if (len < 4) {
+              os.goal = undefined;
+              os.moving = false;
+              os.waitUntil = st.now + b.pause * (0.5 + Math.random());
+              break;
+            }
+            const nx = os.x + (dx / len) * b.speed * dt;
+            const ny = os.y + (dy / len) * b.speed * dt;
+            /*
+             * Something in the way ends the errand rather than being walked
+             * around. A person who gives up and goes somewhere else reads as a
+             * person; one that slides along a wall towards a fixed point reads
+             * as a bug, and the sliding is the part that is hard to get right.
+             */
+            if (this.blockedAt(nx, ny, o.id)) {
+              os.goal = undefined;
+              os.moving = false;
+              os.waitUntil = st.now + b.pause * 0.5;
+              break;
+            }
+            os.x = nx;
+            os.y = ny;
+            os.moving = true;
+            os.dir4 = octant(dx, dy);
+            break;
+          }
+
+          case "mutter": {
+            if (!os.alive) break;
+            if (os.nextSayAt === undefined) {
+              // staggered, so three people on one pavement do not all speak on
+              // the same frame and then fall silent together
+              os.nextSayAt = st.now + Math.random() * b.every;
+            }
+            if (st.now >= os.nextSayAt) {
+              let i = Math.floor(Math.random() * b.keys.length);
+              // not the same line twice running, which is what makes a rotation
+              // read as a loop
+              if (b.keys.length > 1 && b.keys[i] === os.says) {
+                i = (i + 1) % b.keys.length;
+              }
+              os.says = b.keys[i];
+              os.saysUntil = st.now + b.dwell;
+              os.nextSayAt = st.now + b.every * (0.7 + Math.random() * 0.6);
+            } else if (os.saysUntil !== undefined && st.now >= os.saysUntil) {
+              os.says = undefined;
+            }
             break;
           }
 

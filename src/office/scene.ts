@@ -1,5 +1,6 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
 import { front, glassDoor } from "../street/build";
+import { DEV_MUTTERS } from "./devlines";
 
 /** the three machines today's builds are queued on */
 export const MACHINES = [
@@ -213,6 +214,9 @@ export const officeScene: SceneSpec = {
       behaviors: [
         { t: "blocker", radius: 22 },
         { t: "station", radius: 52, labelKey: "office.talkDev" },
+        // they do not wander — they are working — but a room with one other
+        // person in it should not be silent for eight hours
+        { t: "mutter", keys: DEV_MUTTERS, every: 21, dwell: 4 },
       ],
     },
     /* the supply form on the wall: where pay turns into equipment */

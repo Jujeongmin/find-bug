@@ -489,5 +489,18 @@
   "offer.dinner.yes": "一起去",
   "offer.dinner.no": "直接回家",
   "event.dinner.went": "難得整晚只聽別人說話。心情好了些，代價是明天早上會短一截。",
-  "event.dinner.skipped": "說了聲先走，就出來了。巷子很安靜。"
+  "event.dinner.skipped": "說了聲先走，就出來了。巷子很安靜。",
+  "mutter.a0": "…還沒到九點呢。",
+  "mutter.a1": "早該先買杯咖啡的。",
+  "mutter.a2": "今天能早點結束就好了。",
+  "mutter.b0": "那張單子還沒關。",
+  "mutter.b1": "聽說版本又壞了。",
+  "mutter.b2": "中午吃什麼好。",
+  "mutter.c0": "出來買菜，結果一直站著。",
+  "mutter.c1": "那家今天大概又晚。",
+  "mutter.c2": "風倒是涼快了些。",
+  "mutter.dev0": "…這為什麼能跑。",
+  "mutter.dev1": "重現不出來啊。",
+  "mutter.dev2": "這要是就這麼發出去可完了。",
+  "mutter.dev3": "提交訊息寫什麼好。"
 }
