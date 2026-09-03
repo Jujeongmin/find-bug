@@ -161,7 +161,7 @@ export const laneScene: SceneSpec = {
       y: 424,
       z: 2,
       facing: "down",
-      render: { actor: streetActor("worker2"), className: "street-passer p2" },
+      render: { actor: streetActor("personC") },
       behaviors: [
         { t: "blocker", radius: 16 },
         { t: "station", radius: 46, labelKey: "street.talk" },

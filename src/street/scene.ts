@@ -1,4 +1,5 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
+import type { SheetId } from "../engine/sheets";
 import { front } from "./build";
 
 /**
@@ -6,9 +7,7 @@ import { front } from "./build";
  * one commute, two screens, and a player who should not change shoes between
  * them.
  */
-export const streetActor = (
-  sheet: "worker" | "worker2" = "worker"
-): ActorSpec => ({
+export const streetActor = (sheet: SheetId = "worker"): ActorSpec => ({
   sheet,
   rows: {
     down: 0,
@@ -96,16 +95,16 @@ export const streetScene: SceneSpec = {
      * Other people on the same walk, standing where they stopped.
      *
      * The pack has two characters in it and both are spoken for — one is the
-     * player, the other is the developer — so these are the same sprites with
-     * the colour turned round on each. A stranger in a blue coat is not you
-     * and is not him, which is all a passer-by has to say for itself before
-     * it opens its mouth.
+     * player, the other is the developer — so the rest of the street is drawn
+     * from palette-swapped sheets of the first (scripts/recolor.ts). A shirt,
+     * a pair of trousers and a head of hair each, which is all a passer-by has
+     * to say for itself before it opens its mouth.
      */
     ...[
       // clear of the vending machine: standing beside it, this one took the
       // prompt that machine is the only reason to walk over there for
-      { id: "passer0", sheet: "worker2" as const, x: 152, y: 300, facing: "left" as const, tint: "p0" },
-      { id: "passer1", sheet: "worker" as const, x: 262, y: 300, facing: "down" as const, tint: "p1" },
+      { id: "passer0", sheet: "personA" as const, x: 152, y: 300, facing: "left" as const },
+      { id: "passer1", sheet: "personB" as const, x: 262, y: 300, facing: "down" as const },
     ].map((c) => ({
       id: c.id,
       nameKey: `object.${c.id}`,
@@ -114,7 +113,7 @@ export const streetScene: SceneSpec = {
       y: c.y,
       z: 2,
       facing: c.facing,
-      render: { actor: streetActor(c.sheet), className: `street-passer ${c.tint}` },
+      render: { actor: streetActor(c.sheet) },
       behaviors: [
         { t: "blocker" as const, radius: 16 },
         { t: "station" as const, radius: 46, labelKey: "street.talk" },

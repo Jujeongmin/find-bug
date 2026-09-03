@@ -27,6 +27,11 @@ export const SHEETS = {
   // counter-clockwise order from down, columns are idle then the walk cycle
   worker: { tile: 32, margin: 0, cols: 24, rows: 8 },
   worker2: { tile: 32, margin: 0, cols: 24, rows: 8 },
+  // The same 32px frames as worker, palette-swapped by scripts/recolor.ts:
+  // three people who are not each other and not the player.
+  personA: { tile: 32, margin: 0, cols: 24, rows: 8 },
+  personB: { tile: 32, margin: 0, cols: 24, rows: 8 },
+  personC: { tile: 32, margin: 0, cols: 24, rows: 8 },
   // Roguelike Modern City: the packed tilemap, so no margin. 37x28 of 16px
   // tiles — brick and plaster walls, roofs, shop fronts, doors, windows,
   // pavement and street furniture, drawn with the same outline weight as Tiny

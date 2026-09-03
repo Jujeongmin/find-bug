@@ -7,6 +7,9 @@ import dungeonSrc from "../assets/sheets/dungeon.png";
 import workerSrc from "../assets/sheets/worker.png";
 import worker2Src from "../assets/sheets/worker2.png";
 import furnitureSrc from "../assets/sheets/furniture.png";
+import personASrc from "../assets/sheets/personA.png";
+import personBSrc from "../assets/sheets/personB.png";
+import personCSrc from "../assets/sheets/personC.png";
 import citySrc from "../assets/sheets/city.png";
 import indoorSrc from "../assets/sheets/indoor.png";
 import foodSrc from "../assets/sheets/food.png";
@@ -35,6 +38,9 @@ const SHEET_SRC: Record<SheetId, string> = {
   worker: workerSrc,
   worker2: worker2Src,
   furniture: furnitureSrc,
+  personA: personASrc,
+  personB: personBSrc,
+  personC: personCSrc,
   city: citySrc,
   indoor: indoorSrc,
   food: foodSrc,

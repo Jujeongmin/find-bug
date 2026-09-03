@@ -207,3 +207,22 @@ https://opengameart.org/content/64-16x16-food-sprites
 
 `src/assets/sheets/food.png` — 128x128, an 8x8 grid of 16px tiles. What a
 stall sells.
+
+## The townspeople (CC0, made here)
+
+`src/assets/sheets/personA.png`, `personB.png` and `personC.png` are built by
+`npm run recolor` ([scripts/recolor.ts](../scripts/recolor.ts)) out of
+`worker.png`. Same 32px frames, same eight facings, same walk cycle — only the
+shirt, trouser and hair ramps are remapped, and personC also gets its own skin
+ramp.
+
+They replaced a CSS `hue-rotate` on the one sheet. Rotating the hue of a whole
+sprite turns the skin and the hair with the shirt, so three passers-by on one
+pavement were the same person under three coloured lights.
+
+The script fails loudly if a source colour in its table matches no pixel: the
+palette is written down by hand there, and one wrong digit gives a sheet that
+looks like the original and is only obviously wrong when it stands beside it.
+
+Puny Characters is CC0, and a palette swap of a public domain sprite is still
+public domain.

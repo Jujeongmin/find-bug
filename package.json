@@ -13,7 +13,8 @@
     "deploy": "npx -y @agent8/deploy",
     "typecheck": "tsc -b",
     "sprites": "tsx scripts/spritesheet.ts && tsx scripts/spritelist.ts",
-    "build:release": "vite build --mode release"
+    "build:release": "vite build --mode release",
+    "recolor": "tsx scripts/recolor.ts"
   },
   "dependencies": {
     "@agent8/gameserver": "^1.10.2",
