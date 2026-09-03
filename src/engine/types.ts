@@ -103,7 +103,19 @@ export type Behavior =
    * the vending machine is forty-eight by sixty-eight, and a disc over the
    * middle of it let the player walk up the outside and stand in the art.
    */
-  | { t: "blocker"; radius: number; box?: { w: number; h: number } }
+  | {
+      t: "blocker";
+      radius: number;
+      /**
+       * A rectangle instead of a circle, measured from the object's hit
+       * centre and moved by `dx`/`dy` from it.
+       *
+       * The offset is what makes this usable on a sprite: a sprite hangs from
+       * its feet, so its hit centre is the ground under it and all of its art
+       * is above — a box centred there covers half pavement and half stall.
+       */
+      box?: { w: number; h: number; dx?: number; dy?: number };
+    }
   /** hurts the player on contact */
   | { t: "damage"; counter: string; amount: number; radius: number }
   /** can be destroyed by an attack; respawns later */

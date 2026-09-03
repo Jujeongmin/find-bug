@@ -235,6 +235,8 @@ export const streetScene: SceneSpec = {
       kind: "decor" as const,
       x: p.x,
       y: p.y,
+      // the post is what you walk into; the arms at the top are over your head
+      sortY: p.y + 48,
       render: {
         // the class is only the dimmer now: what it draws is the sprite
         className: "street-lamp",
@@ -242,7 +244,9 @@ export const streetScene: SceneSpec = {
         // the light hangs off the head, which is at the top of the post
         glow: { radius: 80, offsetX: 18, offsetY: 12 },
       },
-      behaviors: [{ t: "blocker" as const, radius: 12 }],
+      behaviors: [
+        { t: "blocker" as const, radius: 12, box: { w: 10, h: 70, dy: -35 } },
+      ],
     })),
       /* moved up the wall: a crate at the kerb is dressing, a crate in the
          doorway is a mistake */

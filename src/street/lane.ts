@@ -145,6 +145,9 @@ export const laneScene: SceneSpec = {
       kind: "sprite",
       x: 286,
       y: 596,
+      // a body's height below the parasols: anyone standing at the counter is
+      // standing in front of them, and drawn behind
+      sortY: 644,
       z: 1,
       render: {
         // two of the sheet's parasols over their table: a tent that goes up
@@ -154,7 +157,8 @@ export const laneScene: SceneSpec = {
         glow: { radius: 96, offsetX: 42, offsetY: 56 },
       },
       behaviors: [
-        { t: "blocker", radius: 34 },
+        // the whole tent: two parasols by two tiles at 2.6, hung from its feet
+        { t: "blocker", radius: 34, box: { w: 83, h: 83, dy: -41 } },
         { t: "station", radius: 62, labelKey: "street.pocha" },
       ],
     },
@@ -213,12 +217,16 @@ export const laneScene: SceneSpec = {
       kind: "decor" as const,
       x: l.x,
       y: l.y,
+      // the post is what you walk into; the arms at the top are over your head
+      sortY: l.y + 48,
       render: {
         className: "street-lamp",
         sprite: { sheet: "city" as const, col: 5, row: 16, spanY: 2, scale: 2.2 },
         glow: { radius: 80, offsetX: 18, offsetY: 12 },
       },
-      behaviors: [{ t: "blocker" as const, radius: 12 }],
+      behaviors: [
+        { t: "blocker" as const, radius: 12, box: { w: 10, h: 70, dy: -35 } },
+      ],
     })),
     {
       id: "binLane",

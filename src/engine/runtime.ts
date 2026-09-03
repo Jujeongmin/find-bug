@@ -85,15 +85,15 @@ const INVULN = 1.2;
  */
 /** is this point inside what the blocker covers? */
 export function insideBlocker(
-  b: { radius: number; box?: { w: number; h: number } },
+  b: { radius: number; box?: { w: number; h: number; dx?: number; dy?: number } },
   centre: { x: number; y: number },
   x: number,
   y: number
 ): boolean {
   if (b.box) {
-    return (
-      Math.abs(x - centre.x) < b.box.w / 2 && Math.abs(y - centre.y) < b.box.h / 2
-    );
+    const cx = centre.x + (b.box.dx ?? 0);
+    const cy = centre.y + (b.box.dy ?? 0);
+    return Math.abs(x - cx) < b.box.w / 2 && Math.abs(y - cy) < b.box.h / 2;
   }
   return Math.hypot(x - centre.x, y - centre.y) < b.radius;
 }

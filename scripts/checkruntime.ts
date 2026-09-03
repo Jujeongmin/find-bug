@@ -2,6 +2,7 @@ import { stage01Scene } from "../src/stages/stage01/scene";
 import { generateMutations, applyMutation } from "../src/engine/generate";
 import { SceneRuntime } from "../src/engine/runtime";
 import { streetScene } from "../src/street/scene";
+import { laneScene } from "../src/street/lane";
 
 const muts = generateMutations(stage01Scene);
 const find = (id: string) => {
@@ -214,6 +215,44 @@ const ok = (label: string, cond: boolean) =>
     if (rt.blockedAt(x, y)) throw new Error(`the pavement is walled at ${x},${y}`);
   }
   ok("runtime: and the pavement beside it is not", true);
+
+  /*
+   * The lamp is a post with arms on it. The post is what you walk into; the
+   * pavement either side of it is not, or the street is a fence.
+   */
+  const post: [number, number][] = [
+    [28, 450],
+    [28, 480],
+    [28, 514],
+  ];
+  for (const [x, y] of post) {
+    if (!rt.blockedAt(x, y)) throw new Error(`the lamp post is walkable at ${x},${y}`);
+  }
+  for (const [x, y] of [[16, 480], [40, 480]] as [number, number][]) {
+    if (rt.blockedAt(x, y)) throw new Error(`the pavement is walled at ${x},${y}`);
+  }
+  ok("runtime: the lamp post is solid the whole way up, and only the post", true);
+}
+
+/*
+ * The stall is two parasols over a counter, hung from its feet, so all of its
+ * art is above the point it stands at — the thing a box on a sprite has to be
+ * moved for.
+ */
+{
+  const rt = new SceneRuntime(laneScene);
+  const inside: [number, number][] = [
+    [286, 560],
+    [250, 520],
+    [322, 592],
+  ];
+  for (const [x, y] of inside) {
+    if (!rt.blockedAt(x, y)) throw new Error(`the stall is walkable at ${x},${y}`);
+  }
+  for (const [x, y] of [[286, 604], [230, 560]] as [number, number][]) {
+    if (rt.blockedAt(x, y)) throw new Error(`the block is walled at ${x},${y}`);
+  }
+  ok("runtime: the stall is solid where it is drawn, and nowhere else", true);
 }
 
 /*
