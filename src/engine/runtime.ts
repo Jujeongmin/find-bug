@@ -83,6 +83,21 @@ const INVULN = 1.2;
  * thing on screen — an invisible wall above the supply form, and a machine you
  * could activate from empty floor beside it.
  */
+/** is this point inside what the blocker covers? */
+export function insideBlocker(
+  b: { radius: number; box?: { w: number; h: number } },
+  centre: { x: number; y: number },
+  x: number,
+  y: number
+): boolean {
+  if (b.box) {
+    return (
+      Math.abs(x - centre.x) < b.box.w / 2 && Math.abs(y - centre.y) < b.box.h / 2
+    );
+  }
+  return Math.hypot(x - centre.x, y - centre.y) < b.radius;
+}
+
 export function hitCentre(
   o: ObjectSpec,
   s: { x: number; y: number }
@@ -193,7 +208,7 @@ export class SceneRuntime {
       const bl = other.behaviors.find((b) => b.t === "blocker");
       if (!bl || bl.t !== "blocker") continue;
       const c = hitCentre(other, this.state.objects[other.id]);
-      if (Math.hypot(x - c.x, y - c.y) < bl.radius) return true;
+      if (insideBlocker(bl, c, x, y)) return true;
     }
     return false;
   }
@@ -375,8 +390,20 @@ export class SceneRuntime {
               os.moving = false;
               break;
             }
-            os.moving = true;
             os.dir4 = octant(dx, dy);
+            /*
+             * Shift turns without walking.
+             *
+             * Facing comes from the direction of travel, which means the only
+             * way to look at something was to walk at it — and in a room where
+             * walking costs minutes, turning to face a desk should not. Held
+             * shift takes the direction and leaves the feet where they are.
+             */
+            if (this.keys.has("shift")) {
+              os.moving = false;
+              break;
+            }
+            os.moving = true;
             const len = Math.hypot(dx, dy);
             // the horizontal bound follows the room, not the viewport. It was
             // hardcoded to 340 from when every scene was exactly one screen
@@ -396,7 +423,7 @@ export class SceneRuntime {
                 const bl = other.behaviors.find((b2) => b2.t === "blocker");
                 if (!bl || bl.t !== "blocker") continue;
                 const bc = hitCentre(other, st.objects[other.id]);
-                if (Math.hypot(x - bc.x, y - bc.y) < bl.radius) return bc;
+                if (insideBlocker(bl, bc, x, y)) return bc;
               }
               return null;
             };

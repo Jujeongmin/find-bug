@@ -162,7 +162,9 @@ export const streetScene: SceneSpec = {
         glow: { radius: 74, offsetX: 24, offsetY: 30 },
       },
       behaviors: [
-        { t: "blocker", radius: 34 },
+        // the machine is a rectangle and blocks like one: a disc over the
+        // middle of it let the player walk up the outside and stand in the art
+        { t: "blocker", radius: 34, box: { w: 48, h: 68 } },
         { t: "station", radius: 62, labelKey: "street.coffee" },
       ],
     },

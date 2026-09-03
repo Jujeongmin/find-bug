@@ -94,8 +94,16 @@ export type Behavior =
    * fair targets for the freezeAnimation mutator.
    */
   | { t: "animate"; name: "hop" | "flicker" | "flap"; period: number; essential?: boolean }
-  /** blocks the player */
-  | { t: "blocker"; radius: number }
+  /**
+   * Blocks the player.
+   *
+   * A circle by default, which is right for a barrel, a tree or a person. Give
+   * it a `box` and it blocks that rectangle instead, measured from the
+   * object's own hit centre: a circle can never cover a rectangle's corners —
+   * the vending machine is forty-eight by sixty-eight, and a disc over the
+   * middle of it let the player walk up the outside and stand in the art.
+   */
+  | { t: "blocker"; radius: number; box?: { w: number; h: number } }
   /** hurts the player on contact */
   | { t: "damage"; counter: string; amount: number; radius: number }
   /** can be destroyed by an attack; respawns later */

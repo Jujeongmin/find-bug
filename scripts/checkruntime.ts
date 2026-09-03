@@ -169,6 +169,44 @@ const ok = (label: string, cond: boolean) =>
   still.tick(0.05);
   if (still.state.objects.player.moving) throw new Error("standing still but marked moving");
   console.log("PASS  eight facings, and standing still is not moving");
+
+  /* shift turns without walking */
+  const turn = new SceneRuntime(streetScene);
+  const from = { ...turn.state.objects.player };
+  turn.keys.add("shift");
+  turn.keys.add("arrowleft");
+  tick(turn, 0.5);
+  const p = turn.state.objects.player;
+  ok("runtime: shift turns the player", p.dir4 === "left");
+  ok(
+    "runtime: and leaves their feet where they were",
+    p.x === from.x && p.y === from.y && !p.moving
+  );
+  turn.keys.delete("shift");
+  tick(turn, 0.2);
+  ok("runtime: letting go walks again", turn.state.objects.player.x < from.x);
+}
+
+/*
+ * The machine on the pavement is a rectangle, and one circle over a rectangle
+ * leaves its corners open. Every corner of its footprint has to be solid, or
+ * the player walks up the outside of it and stands in the middle of the art.
+ */
+{
+  const rt = new SceneRuntime(streetScene);
+  const CORNERS: [number, number][] = [
+    [8, 302],
+    [52, 302],
+    [8, 366],
+    [52, 366],
+    [30, 334],
+  ];
+  for (const [x, y] of CORNERS) {
+    if (!rt.blockedAt(x, y)) {
+      throw new Error(`the vending machine is walkable at ${x},${y}`);
+    }
+  }
+  ok("runtime: the vending machine is solid to its corners", true);
 }
 
 /*
