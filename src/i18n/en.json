@@ -537,5 +537,14 @@
   "street.b.freeze": "Nobody touches the code this week. So what are we for, exactly.",
   "street.b.tired": "You are going to read a build with those eyes? Have another before you go up.",
   "street.c.freeze": "The lights in that building are on till dawn now. Deadline, I suppose.",
-  "street.c.tired": "You came in late last night. I hear the stairs."
+  "street.c.tired": "You came in late last night. I hear the stairs.",
+  "pocha.first": "\"New face. Sit down, soup first.\"",
+  "pocha.last": "\"Tomorrow is the day, they tell me. Have another bowl on me, then.\"",
+  "pocha.freeze": "\"Everyone from that building comes at this hour lately. Something must be on.\"",
+  "pocha.low0": "\"Look at the state of you. More broth, and eat it slowly.\"",
+  "pocha.low1": "\"I will not ask you anything tonight. Just finish it.\"",
+  "pocha.mid0": "\"Late again. The usual?\"",
+  "pocha.mid1": "\"The people who come at this hour all have the same face.\"",
+  "pocha.high0": "\"You look all right tonight. Good day, was it.\"",
+  "pocha.high1": "\"Nice to have somebody turn up smiling for once.\""
 }

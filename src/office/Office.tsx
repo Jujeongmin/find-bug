@@ -12,6 +12,7 @@ import { homeScene } from "../home/scene";
 import { streetScene } from "../street/scene";
 import { laneScene } from "../street/lane";
 import { PASSERS, passerLine } from "../street/passers";
+import { pochaLine } from "../street/pocha";
 import { ENGINE_SCENES } from "../stages/registry";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
@@ -614,6 +615,8 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [earlyTomorrow, setEarlyTomorrow] = useState(false);
   /** one restful thing per evening */
   const [restedTonight, setRestedTonight] = useState(false);
+  /** nights eaten at the stall this run, which is what its owner knows of you */
+  const [pochaNights, setPochaNights] = useState(0);
   /** pay, earned by handing defects over, spent on equipment */
   const [pay, setPay] = useState(0);
   const [owned, setOwned] = useState<ItemId[]>([]);
@@ -1128,8 +1131,25 @@ export function Office({ onExit }: { onExit: () => void }) {
       setAteOut(true);
       setPay((v) => v - POCHA_PAY);
       setSpirit((v) => Math.min(MAX_SPIRIT, v + 1));
+      setPochaNights((n) => n + 1);
       sfx.play("pick");
-      return setNote(tp("street.pochaAte", { n: String(POCHA_PAY) }));
+      /*
+       * What they say, and then what it cost. The other way round reads as a
+       * receipt with a comment stapled to it, and the numbers are the part the
+       * player can already see in the bar.
+       */
+      return setNote(
+        `${t(
+          pochaLine({
+            nights: pochaNights,
+            spirit,
+            max: MAX_SPIRIT,
+            freeze: isFreeze(day),
+            lastDay: day >= DAYS,
+          })
+        )}
+${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
+      );
     }
   };
 

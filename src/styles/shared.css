@@ -327,6 +327,12 @@
   z-index: 20;
 }
 
+/* Notes are written with line breaks in them — the stall owner speaks, then
+   the bowl is paid for — and a paragraph that collapses them puts the two on
+   one line with a space between. It also gets `spirit.what`, which has had a
+   newline in it since it was written and has never shown one. */
+.modal p { white-space: pre-line; }
+
 .modal {
   background: #fff;
   color: #223;

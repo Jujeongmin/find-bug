@@ -15,6 +15,7 @@ import ja from "../src/i18n/ja.json";
 import zhHant from "../src/i18n/zh-Hant.json";
 import zhHans from "../src/i18n/zh-Hans.json";
 import { PASSERS, passerKeys, passerLine } from "../src/street/passers";
+import { pochaKeys, pochaLine } from "../src/street/pocha";
 
 type Dict = Record<string, string>;
 const dicts: [string, Dict][] = [
@@ -95,6 +96,35 @@ for (const [name, dict] of dicts) {
       passerLine(p, 2, { dayOver: true, freeze: false, worn: false }),
       "street.a.e0",
     ],
+  ];
+  for (const [label, got, want] of cases) {
+    if (got === want) {
+      console.log(`PASS  ${label}`);
+    } else {
+      console.log(`FAIL  ${label}: got ${got}, want ${want}`);
+      bad++;
+    }
+  }
+}
+
+/* and the stall, which has an owner now rather than a price list */
+{
+  const missing = pochaKeys().filter((k) => !(k in (en as Dict)));
+  if (missing.length) {
+    console.log(`FAIL  lines the stall owner asks for and English does not have: ${missing.join(", ")}`);
+    bad++;
+  } else {
+    console.log(`PASS  every line the stall owner can ask for exists (${pochaKeys().length})`);
+  }
+  const night = (over: Partial<Parameters<typeof pochaLine>[0]>) =>
+    pochaLine({ nights: 3, spirit: 3, max: 5, freeze: false, lastDay: false, ...over });
+  const cases: [string, string, string][] = [
+    ["the first night is the first night", night({ nights: 0, spirit: 1 }), "pocha.first"],
+    ["the last one knows it is the last", night({ lastDay: true, freeze: true }), "pocha.last"],
+    ["the freeze comes before the face", night({ freeze: true, spirit: 1 }), "pocha.freeze"],
+    ["a bad fortnight is spoken to", night({ spirit: 1, nights: 2 }), "pocha.low0"],
+    ["a good one too", night({ spirit: 4, nights: 3 }), "pocha.high1"],
+    ["and the middle alternates", night({ spirit: 3, nights: 4 }), "pocha.mid0"],
   ];
   for (const [label, got, want] of cases) {
     if (got === want) {
