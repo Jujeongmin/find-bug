@@ -1,4 +1,5 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
+import { front, glassDoor } from "../street/build";
 
 /** the three machines today's builds are queued on */
 export const MACHINES = [
@@ -93,23 +94,23 @@ export const officeScene: SceneSpec = {
       ],
     },
 
-    /* the wall the machines stand against */
-    {
-      id: "wall",
-      nameKey: "object.wall",
-      kind: "decor",
-      x: 0,
-      y: 0,
-      render: { className: "office-wall", bar: { width: 360, height: WALL_H } },
-      behaviors: [],
-    },
+    /*
+     * The wall the machines stand against, drawn from the city sheet — the
+     * same plaster and the same windows the building has outside, so walking
+     * in is one building rather than two.
+     *
+     * Three rows of it hung from the wall's foot, so the top row runs off the
+     * screen rather than leaving a strip of floor above it.
+     */
+    ...front("wall", { left: 9, mid: 10, right: 11 }, 5, 3, 0, WALL_H, 9, 2.5),
     ...[112, 220].map((x, i) => ({
       id: `window${i}`,
       nameKey: "object.window",
       kind: "decor" as const,
       x,
-      y: 26,
-      render: { className: "office-window", bar: { width: 52, height: 44 } },
+      y: 74,
+      z: 1,
+      render: { sprite: { sheet: "city" as const, col: 26, row: 18, scale: 2.6 } },
       behaviors: [],
     })),
 
@@ -232,12 +233,14 @@ export const officeScene: SceneSpec = {
       behaviors: [{ t: "blocker", radius: 24 }],
     },
     {
+      // boxes and the office bin, rather than the crate and barrel a tavern
+      // would have
       id: "crate",
       nameKey: "object.crate",
       kind: "decor",
       x: 322,
-      y: 250,
-      render: { prop: { id: "crate" as const, scale: 1.3 } },
+      y: 262,
+      render: { sprite: { sheet: "city" as const, col: 13, row: 16, scale: 2.2 } },
       behaviors: [{ t: "blocker", radius: 18 }],
     },
     {
@@ -245,8 +248,8 @@ export const officeScene: SceneSpec = {
       nameKey: "object.barrel",
       kind: "decor",
       x: 322,
-      y: 300,
-      render: { prop: { id: "barrel" as const, scale: 1.3 } },
+      y: 312,
+      render: { sprite: { sheet: "city" as const, col: 12, row: 15, scale: 2.2 } },
       behaviors: [{ t: "blocker", radius: 18 }],
     },
     {
@@ -260,16 +263,10 @@ export const officeScene: SceneSpec = {
       behaviors: [],
     },
 
-    /* the door home, clear of the touch pad in the bottom-left */
-    {
-      id: "exitDoor",
-      nameKey: "object.exitDoor",
-      kind: "sprite",
-      x: 240,
-      y: 626,
-      z: 1,
-      render: { prop: { id: "door" as const, scale: 1.4 } },
-      behaviors: [{ t: "station", radius: 50, labelKey: "office.goHome" }],
-    },
+    /* the door home, clear of the touch pad in the bottom-left: the same
+       pair of leaves seen from the pavement outside */
+    ...glassDoor("exitDoor", 240, 640, 1.4, [
+      { t: "station", radius: 50, labelKey: "office.goHome" },
+    ]),
   ],
 };

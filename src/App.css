@@ -466,18 +466,6 @@
   background: url("./assets/props/tile2.png") 0 0 / 32px 32px repeat;
   image-rendering: pixelated;
 }
-.office-wall {
-  /* tile4 is one wall course: plaster above, wood moulding along its foot. It
-     repeats sideways only and sits at the bottom of the band, with plain
-     plaster filling the height above it — repeating it vertically put a second
-     moulding halfway up the wall. */
-  background:
-    url("./assets/props/tile4.png") 0 100% / 64px 64px repeat-x,
-    linear-gradient(#c9cac6, #bcbdb8);
-  border: none;
-  border-radius: 0;
-  image-rendering: pixelated;
-}
 .office-desk {
   background: linear-gradient(#8a5f38, #6a4526);
   border-top: 2px solid #b07f4e;

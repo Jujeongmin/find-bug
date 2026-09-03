@@ -23,6 +23,35 @@ import type { ObjectSpec } from "../engine/types";
  *   column 3, closes it.
  */
 
+/**
+ * The studio's entrance: the sheet's glass double door, two leaves of three
+ * tiles each. Only the leaf named `id` carries anything — the other is
+ * dressing — so a caller can hang a station on the pair without the player
+ * being offered the same door twice.
+ */
+export function glassDoor(
+  id: string,
+  x: number,
+  bottom: number,
+  scale: number,
+  behaviors: ObjectSpec["behaviors"],
+  z = 2
+): ObjectSpec[] {
+  const w = 16 * scale;
+  return [19, 20].map((col, i) => ({
+    id: i === 0 ? id : `${id}Leaf`,
+    nameKey: `object.${id}`,
+    kind: "sprite" as const,
+    x: x + (i === 0 ? -w / 2 : w / 2),
+    y: bottom,
+    z,
+    render: {
+      sprite: { sheet: "city" as const, col, row: 10, spanY: 3, scale },
+    },
+    behaviors: i === 0 ? behaviors : [],
+  }));
+}
+
 /** one horizontal run of a building's face */
 export function front(
   id: string,

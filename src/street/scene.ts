@@ -1,6 +1,6 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
 import type { SheetId } from "../engine/sheets";
-import { front } from "./build";
+import { front, glassDoor } from "./build";
 
 /**
  * The walk's character sheet, shared with the block at the other end of it:
@@ -73,24 +73,22 @@ export const streetScene: SceneSpec = {
       id: "sign",
       nameKey: "object.sign",
       kind: "decor",
-      x: 134,
-      y: 62,
+      x: 20,
+      y: 126,
       z: 1,
       render: { className: "street-sign", bar: { width: 92, height: 26 } },
       behaviors: [],
     },
-    {
-      id: "officeDoor",
-      nameKey: "object.officeDoor",
-      kind: "sprite",
-      x: 180,
-      y: 164,
-      z: 2,
-      // the game's own door, here as everywhere: the sheet's is a window with
-      // taller panes
-      render: { prop: { id: "door", scale: 1.9 } },
-      behaviors: [{ t: "station", radius: 58, labelKey: "street.enter" }],
-    },
+    /*
+     * The way in.
+     *
+     * A cottage door on a glass front, hung a few pixels below the building it
+     * was cut into. The sheet has the door this building is drawn for: two
+     * glass leaves, three tiles tall, standing on the shopfront band.
+     */
+    ...glassDoor("officeDoor", 180, 160, 2.2, [
+      { t: "station", radius: 58, labelKey: "street.enter" },
+    ]),
 
     /*
      * Other people on the same walk, standing where they stopped.
