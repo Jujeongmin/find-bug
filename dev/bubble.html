@@ -1,0 +1,40 @@
+<!doctype html><meta charset="utf-8"><title>bubble check</title>
+<!--
+  Dev-only. The browser pane this project is developed in suspends
+  requestAnimationFrame while it is hidden, so the running game cannot be
+  looked at from here — but a screenshot of a static page still can. This is
+  the mutter bubble and the sprite under it, in the real stylesheet, at the
+  scale the street draws them.
+-->
+<link rel="stylesheet" href="/src/styles/shared.css">
+<link rel="stylesheet" href="/src/engine/engine.css">
+<style>
+  body { margin: 0; background: #8c867c; font: 12px system-ui, sans-serif; }
+  .row { position: relative; height: 150px; }
+  .lab { position: absolute; left: 8px; top: 8px; color: #2b2620; font-size: 11px; }
+</style>
+<div id="rows"></div>
+<script type="module">
+const LINES = [
+  ["personA", "…아직 아홉 시도 안 됐네."],
+  ["personB", "그 티켓 아직도 안 닫혔네."],
+  ["personC", "장 보러 나왔다가 계속 서 있네."],
+  ["worker2", "이거 그대로 나가면 큰일인데."],
+  ["personA", "…not even nine yet."],
+];
+const rows = document.getElementById("rows");
+LINES.forEach(([sheet, text], i) => {
+  const row = document.createElement("div");
+  row.className = "row";
+  row.innerHTML =
+    `<span class="lab">${sheet}</span>` +
+    `<div class="entity" style="left:180px;top:120px">` +
+    `<div class="eng-bubble">${text}</div>` +
+    `<div class="sprite-emoji" style="width:48px;height:48px;` +
+    `background-image:url(/src/assets/sheets/${sheet}.png);` +
+    `background-position:0px 0px;background-size:1152px 384px;` +
+    `background-repeat:no-repeat;image-rendering:pixelated"></div>` +
+    `</div>`;
+  rows.appendChild(row);
+});
+</script>
