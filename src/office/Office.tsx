@@ -11,6 +11,7 @@ import { officeScene, MACHINES, type MachineId } from "./scene";
 import { homeScene } from "../home/scene";
 import { streetScene } from "../street/scene";
 import { laneScene } from "../street/lane";
+import { PASSERS } from "../street/passers";
 import { ENGINE_SCENES } from "../stages/registry";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
@@ -108,8 +109,8 @@ const POCHA_PAY = 25;
 
 /** things the developer says when there is nothing more pressing */
 const IDLE_LINES = 5;
-/** tired things the people on the commute say, in rotation */
-const PASSER_LINES = 6;
+
+
 
 /**
  * ?place=office (or home, street) opens the day in that room.
@@ -560,7 +561,8 @@ export function Office({ onExit }: { onExit: () => void }) {
   /** one coffee per commute */
   const [hadCoffee, setHadCoffee] = useState(false);
   /** how many people on the walk have been spoken to, so their lines rotate */
-  const [greeted, setGreeted] = useState(0);
+  /** how many times each of them has been spoken to, by object id */
+  const [greeted, setGreeted] = useState<Record<string, number>>({});
   /** minutes bought back today, and whether each offer has been taken */
   const [overtime, setOvertime] = useState(0);
   const [tookOvertime, setTookOvertime] = useState(false);
@@ -1036,10 +1038,14 @@ export function Office({ onExit }: { onExit: () => void }) {
     sfx.play("success");
   };
 
-  /** everyone on the walk says the same tired things, on either screen */
-  const greet = () => {
-    setNote(t(`street.passer${greeted % PASSER_LINES}`));
-    setGreeted((n) => n + 1);
+  /** whoever this is, in their own words, at the right end of the day */
+  const greet = (id: string) => {
+    const person = PASSERS[id];
+    if (!person) return;
+    const said = greeted[id] ?? 0;
+    const pool = dayOver ? person.evening : person.morning;
+    setNote(t(`street.${person.who}.${dayOver ? "e" : "m"}${said % pool}`));
+    setGreeted((g) => ({ ...g, [id]: said + 1 }));
   };
 
   const onStreetStation = (id: string) => {
@@ -1051,7 +1057,7 @@ export function Office({ onExit }: { onExit: () => void }) {
       setNote(null);
       return;
     }
-    if (id.startsWith("passer")) return greet();
+    if (id.startsWith("passer")) return greet(id);
     if (id.startsWith("toLane")) {
       sfx.play("click");
       setNote(null);
@@ -1090,7 +1096,7 @@ export function Office({ onExit }: { onExit: () => void }) {
       go("street", "lane");
       return;
     }
-    if (id.startsWith("passer")) return greet();
+    if (id.startsWith("passer")) return greet(id);
     if (id === "pocha") {
       // shut in the morning, and not a second sofa: what it buys is the only
       // thing money buys in this game that is not equipment

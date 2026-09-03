@@ -14,6 +14,7 @@ import en from "../src/i18n/en.json";
 import ja from "../src/i18n/ja.json";
 import zhHant from "../src/i18n/zh-Hant.json";
 import zhHans from "../src/i18n/zh-Hans.json";
+import { passerKeys } from "../src/street/passers";
 
 type Dict = Record<string, string>;
 const dicts: [string, Dict][] = [
@@ -52,6 +53,21 @@ for (const [name, dict] of dicts) {
       (missing.length ? `, ${missing.length} falling back to English` : "")
   );
 }
+/*
+ * The people on the walk ask for their lines by number, so the dictionary has
+ * to hold as many as each of them promises. A missing one is not a crash: the
+ * key renders as itself, and a stranger says "street.b.e1" to you.
+ */
+{
+  const missing = passerKeys().filter((k) => !(k in (en as Dict)));
+  if (missing.length) {
+    console.log(`FAIL  lines the passers-by ask for and English does not have: ${missing.join(", ")}`);
+    bad++;
+  } else {
+    console.log(`PASS  every line the passers-by can ask for exists (${passerKeys().length})`);
+  }
+}
+
 if (bad) {
   console.log(`\n${bad} problem(s)`);
   process.exit(1);
