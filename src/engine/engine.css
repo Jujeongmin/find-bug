@@ -190,10 +190,10 @@
    than one that has to be stopped for and read. */
 .eng-bubble {
   position: absolute;
-  left: 50%;
-  bottom: 100%;
-  transform: translateX(-50%);
-  margin-bottom: 6px;
+  /* placed at the speaker's feet and lifted clear of their head by the
+     caller, which knows how tall the art under it is */
+  transform: translate(-50%, -100%);
+  margin-top: -6px;
   max-width: 140px;
   width: max-content;
   padding: 3px 7px;
@@ -220,6 +220,6 @@
   border-top-color: rgba(250, 248, 240, 0.94);
 }
 @keyframes bubble-in {
-  from { opacity: 0; transform: translateX(-50%) translateY(3px); }
-  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  from { opacity: 0; transform: translate(-50%, calc(-100% + 3px)); }
+  to { opacity: 1; transform: translate(-50%, -100%); }
 }

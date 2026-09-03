@@ -1,10 +1,11 @@
 <!doctype html><meta charset="utf-8"><title>bubble check</title>
 <!--
   Dev-only. The browser pane this project is developed in suspends
-  requestAnimationFrame while it is hidden, so the running game cannot be
-  looked at from here — but a screenshot of a static page still can. This is
-  the mutter bubble and the sprite under it, in the real stylesheet, at the
-  scale the street draws them.
+  requestAnimationFrame while it is hidden, so the running game cannot always
+  be looked at from here — but a screenshot of a static page can. This is the
+  mutter bubble and the sprite under it, in the real stylesheet, laid out the
+  way EngineStage lays them out: the bubble is its own element in the world
+  layer, placed at the speaker's feet and lifted by the height of their art.
 -->
 <link rel="stylesheet" href="/src/styles/shared.css">
 <link rel="stylesheet" href="/src/engine/engine.css">
@@ -15,6 +16,8 @@
 </style>
 <div id="rows"></div>
 <script type="module">
+/** 32px frames at 1.5, which is what the street draws people at */
+const LIFT = 48;
 const LINES = [
   ["personA", "…아직 아홉 시도 안 됐네."],
   ["personB", "그 티켓 아직도 안 닫혔네."],
@@ -23,18 +26,18 @@ const LINES = [
   ["personA", "…not even nine yet."],
 ];
 const rows = document.getElementById("rows");
-LINES.forEach(([sheet, text], i) => {
+LINES.forEach(([sheet, text]) => {
   const row = document.createElement("div");
   row.className = "row";
   row.innerHTML =
     `<span class="lab">${sheet}</span>` +
     `<div class="entity" style="left:180px;top:120px">` +
-    `<div class="eng-bubble">${text}</div>` +
     `<div class="sprite-emoji" style="width:48px;height:48px;` +
     `background-image:url(/src/assets/sheets/${sheet}.png);` +
     `background-position:0px 0px;background-size:1152px 384px;` +
     `background-repeat:no-repeat;image-rendering:pixelated"></div>` +
-    `</div>`;
+    `</div>` +
+    `<div class="eng-bubble" style="left:180px;top:${120 - LIFT}px">${text}</div>`;
   rows.appendChild(row);
 });
 </script>

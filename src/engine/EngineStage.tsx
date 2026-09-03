@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { BugCategory } from "../core/types";
-import type { Action, Facing, RenderSpec } from "./types";
+import type { Action, Facing, ObjectSpec, RenderSpec } from "./types";
 import { judge } from "../core/judge";
 import { useI18n } from "../i18n";
 import { CategorySelect } from "../components/CategorySelect";
@@ -484,6 +484,26 @@ export function EngineStage({
   const st = runtime.state;
 
   /** the row for a facing, falling back to a cardinal the sheet does have */
+  /**
+   * How far the art rises above the point the object sits at.
+   *
+   * Sprites and characters hang from their bottom edge, so their top is that
+   * much higher; bars are drawn downward from theirs, so their top is where
+   * they are. It is what a bubble has to clear to sit over somebody's head
+   * rather than across their face.
+   */
+  const artTop = (o: ObjectSpec) => {
+    const r = o.render;
+    if (r.bar) return 0;
+    if (r.actor) return SHEETS[r.actor.sheet].tile * r.actor.scale;
+    if (r.sprite) {
+      return (
+        SHEETS[r.sprite.sheet].tile * (r.sprite.spanY ?? 1) * (r.sprite.scale ?? 3)
+      );
+    }
+    return 24;
+  };
+
   const actorRow = (a: NonNullable<RenderSpec["actor"]>, dir: Facing) => {
     const FALLBACK: Record<Facing, Facing> = {
       down: "down",
@@ -821,13 +841,6 @@ export function EngineStage({
                   }}
                   title={picking ? t(o.nameKey) : undefined}
                 >
-                  {/*
-                    What this one is saying to nobody. It rides in the world
-                    layer with the sprite, so it pans and zooms with whoever is
-                    speaking rather than floating over a street it has lost
-                    track of — the same reason the quest mark does.
-                  */}
-                  {os.says && <div className="eng-bubble">{t(os.says)}</div>}
                   {g && (
                     <div
                       className="eng-glow"
@@ -917,6 +930,29 @@ export function EngineStage({
                 </div>
               );
             })}
+
+          {/*
+            What people are saying to nobody.
+            
+            A layer of its own, after every object: a bubble inside the
+            speaker's own element is inside their stacking context, so the
+            developer's monitor — drawn later, and higher — was printing across
+            the middle of what they said. It still rides in the world layer, so
+            it pans and zooms with whoever said it.
+          */}
+          {live.objects.map((o) => {
+            const os = st.objects[o.id];
+            if (!os?.says) return null;
+            return (
+              <div
+                key={`${o.id}-says`}
+                className="eng-bubble"
+                style={{ left: os.x, top: os.y - artTop(o) }}
+              >
+                {t(os.says)}
+              </div>
+            );
+          })}
 
           {/* popups */}
           {st.popups.map((p) => (
