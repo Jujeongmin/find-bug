@@ -153,6 +153,9 @@ export const streetScene: SceneSpec = {
       x: 6,
       y: 300,
       z: 1,
+      // a bar, so its foot is its own top-left plus its height: told here,
+      // because a machine on a pavement is something you can stand behind
+      sortY: 368,
       render: {
         className: "street-vending",
         bar: { width: 48, height: 68 },

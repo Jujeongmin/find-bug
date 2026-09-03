@@ -94,7 +94,7 @@ export const laneScene: SceneSpec = {
      * gradient's. Sprites hang from the bottom edge of where they are put,
      * which is why the roof sits at the top of the wall and not over it.
      */
-    ...front("houseWall", { left: 1, mid: 2, right: 3 }, 5, 2, 90, 360, 4, 2.8, 1),
+    ...front("houseWall", { left: 1, mid: 2, right: 3 }, 5, 2, 90, 360, 4, 2.8),
     ...front("houseRoof", { left: 0, mid: 2, right: 1 }, 0, 2, 90, 270, 4, 2.8),
     ...solid("house", 91, 272, 178, 88),
     ...[135, 225].map((x, i) => ({
@@ -103,6 +103,9 @@ export const laneScene: SceneSpec = {
       kind: "decor" as const,
       x,
       y: 330,
+      // set into the wall, so they sort on the wall's own foot: they are in
+      // it, not standing in front of it half way up
+      sortY: 361,
       z: 2,
       render: {
         sprite: { sheet: "city" as const, col: 25, row: 16, scale: 1.8 },

@@ -513,13 +513,18 @@ export function EngineStage({
    * hundred keeps the crowd above the flat scenery underneath it.
    *
    * Two things stay out of it. Bars are the flat scenery — roads, kerbs,
-   * floors — and so is anything given `z: 0`, which is how a scene says
-   * "this is the room, not something in it": a wall's foot is at the bottom
-   * of the wall, so sorting it would hang it in front of everything standing
-   * against it, monitors included.
+   * floors, the wall a window is cut into — and so is anything given `z: 0`,
+   * which is how a scene says "this is the room, not something in it": a
+   * wall's foot is at the bottom of the wall, so sorting it would hang it in
+   * front of everything standing against it, monitors included.
+   *
+   * A bar that is a thing rather than the room says so by giving its own
+   * `sortY` — the vending machine on the pavement and the form on the office
+   * wall are drawn as bars and are stood behind like anything else.
    */
   const layerOf = (o: ObjectSpec, y: number) =>
-    scene.ySort && !o.render.bar && (o.z ?? 1) > 0
+    scene.ySort &&
+    (o.sortY !== undefined || (!o.render.bar && (o.z ?? 1) > 0))
       ? 100 + Math.round(o.sortY ?? y) + (o.z ?? 0)
       : o.z ?? 1;
 

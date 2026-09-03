@@ -233,6 +233,8 @@ export const officeScene: SceneSpec = {
       kind: "sprite" as const,
       x: 36,
       y: 250,
+      // the foot of the bar it is drawn as
+      sortY: 282,
       z: 2,
       render: { className: "office-form", bar: { width: 26, height: 32 } },
       behaviors: [
