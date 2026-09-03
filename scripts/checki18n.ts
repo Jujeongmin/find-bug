@@ -16,6 +16,7 @@ import zhHant from "../src/i18n/zh-Hant.json";
 import zhHans from "../src/i18n/zh-Hans.json";
 import { PASSERS, passerKeys, passerLine } from "../src/street/passers";
 import { pochaKeys, pochaLine } from "../src/street/pocha";
+import { devKeys, devLine, devShipLine } from "../src/office/devlines";
 
 type Dict = Record<string, string>;
 const dicts: [string, Dict][] = [
@@ -125,6 +126,61 @@ for (const [name, dict] of dicts) {
     ["a bad fortnight is spoken to", night({ spirit: 1, nights: 2 }), "pocha.low0"],
     ["a good one too", night({ spirit: 4, nights: 3 }), "pocha.high1"],
     ["and the middle alternates", night({ spirit: 3, nights: 4 }), "pocha.mid0"],
+  ];
+  for (const [label, got, want] of cases) {
+    if (got === want) {
+      console.log(`PASS  ${label}`);
+    } else {
+      console.log(`FAIL  ${label}: got ${got}, want ${want}`);
+      bad++;
+    }
+  }
+}
+
+/* and the one person in the game you work with rather than walk past */
+{
+  const missing = devKeys().filter((k) => !(k in (en as Dict)));
+  if (missing.length) {
+    console.log(`FAIL  lines the developer asks for and English does not have: ${missing.join(", ")}`);
+    bad++;
+  } else {
+    console.log(`PASS  every line the developer can ask for exists (${devKeys().length})`);
+  }
+  const talk = (over: Partial<Parameters<typeof devLine>[0]>) =>
+    devLine({
+      day: 4,
+      days: 12,
+      firstTalk: false,
+      pending: 0,
+      lastResult: null,
+      left: 2,
+      freeze: false,
+      weekend: false,
+      spirit: 3,
+      talks: 0,
+      level: 0,
+      ...over,
+    });
+  const cases: [string, string, string][] = [
+    ["a build just signed off comes first", talk({ lastResult: "caught", left: 0, day: 12 }), "office.dev.caught"],
+    ["and a pile on your desk before that", talk({ pending: 2, lastResult: "caught" }), "office.dev.waiting"],
+    [
+      "the last day beats being finished for the day",
+      talk({ day: 12, left: 0 }),
+      "office.dev.lastFlat",
+    ],
+    [
+      "and what they say about it depends on what reached them",
+      talk({ day: 12, level: 3 }),
+      "office.dev.lastWarm",
+    ],
+    ["a weekend is remarked on", talk({ weekend: true }), "office.dev.weekend"],
+    ["so is the freeze", talk({ freeze: true }), "office.dev.freeze"],
+    ["and the state you are in, before small talk", talk({ spirit: 1 }), "office.dev.worried"],
+    ["otherwise the relationship talks", talk({ level: 2, talks: 3 }), "office.dev.warm2_1"],
+    ["or nothing much does", talk({ talks: 7 }), "office.dev.idle2"],
+    ["the ship is spoken to as well", devShipLine(4.5, 0), "office.dev.shipGood"],
+    ["and a friend says something else about it", devShipLine(1, 3), "office.dev.shipWarm"],
   ];
   for (const [label, got, want] of cases) {
     if (got === want) {

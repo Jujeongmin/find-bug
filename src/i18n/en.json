@@ -304,7 +304,6 @@
   "office.dev.caught": "\"Reproduced it on the first try. The fix lands in the next build.\"",
   "office.dev.missed": "\"You let that one through, right? ...I will note it down anyway.\"",
   "office.dev.allDone": "\"That is today's lot. You can clock out.\"",
-  "office.dev.lastDay": "\"We ship tomorrow. Whatever you miss today goes out as it is.\"",
   "office.dev.idle0": "\"There is coffee. Over by the bookcase.\"",
   "office.dev.idle1": "\"Nothing scares me like something that used to work.\"",
   "office.dev.idle2": "\"I do not trust my own code either. That is what you are for.\"",
@@ -546,5 +545,14 @@
   "pocha.mid0": "\"Late again. The usual?\"",
   "pocha.mid1": "\"The people who come at this hour all have the same face.\"",
   "pocha.high0": "\"You look all right tonight. Good day, was it.\"",
-  "pocha.high1": "\"Nice to have somebody turn up smiling for once.\""
+  "pocha.high1": "\"Nice to have somebody turn up smiling for once.\"",
+  "office.dev.lastFlat": "\"Tomorrow is the ship. Whatever we miss today goes out as it is.\"",
+  "office.dev.lastKnown": "\"Last one tomorrow. Let's just get through today's.\"",
+  "office.dev.lastWarm": "\"You have had a fortnight of it. Today's, and then tomorrow we watch it go out together.\"",
+  "office.dev.weekend": "\"Did not expect to see you on a Saturday. Do not stay long.\"",
+  "office.dev.freeze": "\"Nothing gets fixed now. We should still know what is going out.\"",
+  "office.dev.shipGood": "\"It is out. First time I have not been nervous about one.\"",
+  "office.dev.shipOk": "\"It is out. A few went with it, but they always do.\"",
+  "office.dev.shipBad": "\"It is out, technically. I will be on the phone all next week.\"",
+  "office.dev.shipWarm": "\"Everything you handed me went out fixed. And I still owe you dinner.\""
 }

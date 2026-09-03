@@ -1273,3 +1273,11 @@
   border-radius: 999px;
   pointer-events: none;
 }
+
+/* the developer's word on the fortnight, under the two numbers it made */
+.wb-dev-word {
+  margin: 2px 0 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c9b98f;
+}

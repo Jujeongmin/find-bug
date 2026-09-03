@@ -13,6 +13,7 @@ import { streetScene } from "../street/scene";
 import { laneScene } from "../street/lane";
 import { PASSERS, passerLine } from "../street/passers";
 import { pochaLine } from "../street/pocha";
+import { devLine, devShipLine } from "./devlines";
 import { ENGINE_SCENES } from "../stages/registry";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
@@ -108,8 +109,6 @@ const SPIRIT_START = 3;
 /** what the stall costs, and what it is worth */
 const POCHA_PAY = 25;
 
-/** things the developer says when there is nothing more pressing */
-const IDLE_LINES = 5;
 
 
 
@@ -1022,20 +1021,21 @@ export function Office({ onExit }: { onExit: () => void }) {
   const bountyOf = (sv: Severity, on: number = day) =>
     Math.round(BOUNTY[sv] * (isFreeze(on) ? FREEZE_PAY : 1));
 
-  const devLine = () => {
-      if (day === 1 && talks === 0) return "office.dev.intro";
-    if (pending.length) return "office.dev.waiting";
-    if (lastResult === "caught") return "office.dev.caught";
-    if (lastResult === "missed") return "office.dev.missed";
-    if (left === 0) return "office.dev.allDone";
-    if (day >= DAYS) return "office.dev.lastDay";
-    // the small talk is where the change is felt, so it belongs to the level
-    // rather than to the number of times you have said hello
-    // someone who sees you every day notices before you do
-    if (spirit <= 1 && talks % 3 === 0) return "office.dev.worried";
-    if (devLevel > 0) return `office.dev.warm${devLevel}_${talks % 2}`;
-    return `office.dev.idle${talks % IDLE_LINES}`;
-  };
+  /** what they have to say, out of the state of the day */
+  const devSays = () =>
+    devLine({
+      day,
+      days: DAYS,
+      firstTalk: day === 1 && talks === 0,
+      pending: pending.length,
+      lastResult,
+      left,
+      freeze: isFreeze(day),
+      weekend: isWeekend(day),
+      spirit,
+      talks,
+      level: devLevel,
+    });
 
   const buy = (item: ItemId, cost: number) => {
     if (owned.includes(item) || pay < cost) return;
@@ -1291,7 +1291,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
         setLastResult(null);
         return;
       }
-      setNote(t(devLine()));
+      setNote(t(devSays()));
       setTalks((n) => n + 1);
       setLastResult(null);
       return;
@@ -1362,6 +1362,13 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
           {"♡".repeat(MAX_SPIRIT - spirit)}{" "}
           {t(`spirit.end${spirit >= 4 ? "High" : spirit >= 2 ? "Mid" : "Low"}`)}
         </p>
+        {/*
+          And the one person who saw both numbers. The screen was two figures
+          and a book count with nobody in it — the developer worked the same
+          fortnight, and what they say about it depends on how much of their
+          own work reached them.
+        */}
+        <p className="wb-dev-word">{t(devShipLine(rating, devLevel))}</p>
         {(() => {
           const book = codexTally(codexRows());
           return (

@@ -18,7 +18,6 @@
   "office.dev.caught": "「一次就重现了。下个版本会修好。」",
   "office.dev.missed": "「那个你放过去了吧。……我还是记一笔。」",
   "office.dev.allDone": "「今天就这些。可以下班了。」",
-  "office.dev.lastDay": "「明天就发布。今天漏掉的就这样出去。」",
   "office.dev.idle0": "「有咖啡。书架那边。」",
   "office.dev.idle1": "「最可怕的就是本来会动的东西。」",
   "office.dev.idle2": "「我也不信自己写的。所以才要你。」",
@@ -473,5 +472,14 @@
   "pocha.mid0": "“今天又晚了。老样子？”",
   "pocha.mid1": "“这个点来的人，脸都差不多。”",
   "pocha.high0": "“今天气色不错。是好日子吧。”",
-  "pocha.high1": "“总得有几天是笑着来的。”"
+  "pocha.high1": "“总得有几天是笑着来的。”",
+  "office.dev.lastFlat": "“明天就发布了。今天漏掉的就那样出去。”",
+  "office.dev.lastKnown": "“明天就结束了。先把今天的看完吧。”",
+  "office.dev.lastWarm": "“这两周辛苦了。看完今天的，明天一起看着它出去。”",
+  "office.dev.weekend": "“没想到周末你也来。别待太久。”",
+  "office.dev.freeze": "“现在改不了了。不过总得知道要出去的是什么。”",
+  "office.dev.shipGood": "“出去了。这次我居然不紧张。”",
+  "office.dev.shipOk": "“出去了。有几个跟着一起走了，不过一向如此。”",
+  "office.dev.shipBad": "“算是出去了。下周我大概要一直接电话。”",
+  "office.dev.shipWarm": "“你交给我的都修好才发的。说好的那顿饭我没忘。”"
 }
