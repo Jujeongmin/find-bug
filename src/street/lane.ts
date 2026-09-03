@@ -157,8 +157,16 @@ export const laneScene: SceneSpec = {
         glow: { radius: 96, offsetX: 42, offsetY: 56 },
       },
       behaviors: [
-        // the whole tent: two parasols by two tiles at 2.6, hung from its feet
-        { t: "blocker", radius: 34, box: { w: 83, h: 83, dy: -41 } },
+        /*
+         * What the tent actually covers, which is not its cell.
+         *
+         * The two-by-two block it is drawn from has seven transparent rows
+         * along the top — the parasols do not reach the ceiling of their own
+         * tiles — so a box the size of the cell walled off eighteen pixels of
+         * empty pavement above the canopy. Measured off the sheet: eighty-three
+         * across, sixty-five down, sitting on the feet.
+         */
+        { t: "blocker", radius: 34, box: { w: 83, h: 65, dy: -32.5 } },
         { t: "station", radius: 62, labelKey: "street.pocha" },
       ],
     },

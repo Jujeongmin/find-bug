@@ -243,13 +243,18 @@ const ok = (label: string, cond: boolean) =>
   const rt = new SceneRuntime(laneScene);
   const inside: [number, number][] = [
     [286, 560],
-    [250, 520],
+    [250, 540],
     [322, 592],
   ];
   for (const [x, y] of inside) {
     if (!rt.blockedAt(x, y)) throw new Error(`the stall is walkable at ${x},${y}`);
   }
-  for (const [x, y] of [[286, 604], [230, 560]] as [number, number][]) {
+  /*
+   * And the empty pavement around it, including the strip above the canopy:
+   * the parasols do not reach the top of their own tiles, and a box the size
+   * of the cell walls off eighteen pixels of nothing.
+   */
+  for (const [x, y] of [[286, 604], [230, 560], [286, 520]] as [number, number][]) {
     if (rt.blockedAt(x, y)) throw new Error(`the block is walled at ${x},${y}`);
   }
   ok("runtime: the stall is solid where it is drawn, and nowhere else", true);
