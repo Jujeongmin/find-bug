@@ -278,11 +278,13 @@ export const officeScene: SceneSpec = {
       behaviors: [{ t: "blocker", radius: 18 }],
     },
     {
+      // inside the door, where a mat goes: in the middle of the floor it was
+      // something to walk round rather than something walked over
       id: "rug",
       nameKey: "object.rug",
       kind: "decor",
-      x: 180,
-      y: 420,
+      x: 240,
+      y: 574,
       z: 0,
       render: { prop: { id: "rug" as const, scale: 1.2 } },
       behaviors: [],

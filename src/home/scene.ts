@@ -158,11 +158,12 @@ export const homeScene: SceneSpec = {
       ],
     },
     {
+      // inside your own front door, for the same reason
       id: "homeRug",
       nameKey: "object.rug",
       kind: "decor",
-      x: 180,
-      y: 470,
+      x: 296,
+      y: 580,
       z: 0,
       render: { prop: { id: "rug", scale: 1.3 } },
       behaviors: [],
