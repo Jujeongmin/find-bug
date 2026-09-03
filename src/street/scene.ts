@@ -153,18 +153,36 @@ export const streetScene: SceneSpec = {
       x: 6,
       y: 300,
       z: 1,
-      // a bar, so its foot is its own top-left plus its height: told here,
-      // because a machine on a pavement is something you can stand behind
-      sortY: 368,
+      /*
+       * Its foot, and then some.
+       *
+       * A bar's own foot is its top-left plus its height — 368 here, the line
+       * the art stops on. Sorting on that line puts a player standing one
+       * pixel below it in front of the machine, and a player is forty-eight
+       * pixels tall: their body covers the lower half of a machine they are
+       * standing beside, which reads as standing in it.
+       *
+       * So the line it sorts on is a body's height below the art. Anyone whose
+       * feet are inside that band is drawn behind the machine, which is where
+       * somebody at a vending machine is.
+       */
+      sortY: 412,
       render: {
         className: "street-vending",
         bar: { width: 48, height: 68 },
         glow: { radius: 74, offsetX: 24, offsetY: 30 },
       },
       behaviors: [
-        // the machine is a rectangle and blocks like one: a disc over the
-        // middle of it let the player walk up the outside and stand in the art
-        { t: "blocker", radius: 34, box: { w: 48, h: 68 } },
+        /*
+         * The machine is a rectangle and blocks like one: a disc over the
+         * middle of it let the player walk up the outside and stand in the
+         * art. The box is the whole of what is drawn — the body, and the cup
+         * sign standing on top of it, which is why it reaches above the bar:
+         * the box is measured from the bar's middle, so covering fourteen
+         * pixels of sign above costs the same below, where the machine's own
+         * drop shadow is anyway.
+         */
+        { t: "blocker", radius: 34, box: { w: 48, h: 94 } },
         { t: "station", radius: 62, labelKey: "street.coffee" },
       ],
     },

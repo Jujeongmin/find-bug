@@ -194,12 +194,14 @@ const ok = (label: string, cond: boolean) =>
  */
 {
   const rt = new SceneRuntime(streetScene);
+  // every corner of the body, the sign standing on top of it, and the middle
   const CORNERS: [number, number][] = [
     [8, 302],
     [52, 302],
     [8, 366],
     [52, 366],
     [30, 334],
+    [30, 290],
   ];
   for (const [x, y] of CORNERS) {
     if (!rt.blockedAt(x, y)) {
@@ -207,6 +209,11 @@ const ok = (label: string, cond: boolean) =>
     }
   }
   ok("runtime: the vending machine is solid to its corners", true);
+  // and the pavement around it is not: a machine you cannot walk past is a wall
+  for (const [x, y] of [[30, 386], [60, 334], [30, 284]] as [number, number][]) {
+    if (rt.blockedAt(x, y)) throw new Error(`the pavement is walled at ${x},${y}`);
+  }
+  ok("runtime: and the pavement beside it is not", true);
 }
 
 /*
