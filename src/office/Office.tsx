@@ -14,6 +14,7 @@ import { laneScene } from "../street/lane";
 import { PASSERS, passerLine } from "../street/passers";
 import { pochaLine } from "../street/pocha";
 import { devLine, devShipLine } from "./devlines";
+import { DINNER_SPIRIT, HOTFIX_CONDITION, isDinner, isHotfix } from "./events";
 import { ENGINE_SCENES } from "../stages/registry";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
@@ -457,7 +458,10 @@ function assignDay(day: number, machines: readonly MachineId[] = MACHINES): Assi
     // a stride that is coprime with the list, so the day's four slide along
     // it instead of alternating between the same two sets
     sceneId: BUILD_IDS[(day * 5 + i) % BUILD_IDS.length],
-    severity: isFreeze(day) ? "critical" : SEVERITIES[(i + day) % SEVERITIES.length],
+    severity:
+      isFreeze(day) || (isHotfix(day) && i === 0)
+        ? "critical"
+        : SEVERITIES[(i + day) % SEVERITIES.length],
     result: null,
     bugId: null,
   }));
@@ -571,7 +575,11 @@ export function Office({ onExit }: { onExit: () => void }) {
   const [workedWeekend, setWorkedWeekend] = useState(false);
   const [hobbyDone, setHobbyDone] = useState(false);
   /** an offer waiting on the player, drawn as a two-way prompt */
-  const [offer, setOffer] = useState<null | "overtime" | "coffee">(null);
+  const [offer, setOffer] = useState<null | "overtime" | "coffee" | "dinner">(
+    null
+  );
+  /** the ninth evening is offered once, whether or not it is taken */
+  const [dinnerAsked, setDinnerAsked] = useState(false);
   const [watching, setWatching] = useState(false);
   /*
    * The first morning is a morning like the others: a night got you to three
@@ -724,7 +732,9 @@ export function Office({ onExit }: { onExit: () => void }) {
       ? t("home.morningWeekend")
       : isFreeze(d)
         ? tp("home.morningFreeze", { n: String(d) })
-        : d === 1
+        : isHotfix(d)
+          ? t("event.hotfix.morning")
+          : d === 1
           ? t("home.morningFirst")
           : tp(
               // the same day, in the voice of whoever is having it
@@ -861,6 +871,32 @@ export function Office({ onExit }: { onExit: () => void }) {
     setOfficeAt(null);
     setDayOver(true);
     go("street", "office");
+    /*
+     * And on the ninth, the question that is asked on the pavement rather than
+     * at the desk: the day is already signed off, so saying yes costs an
+     * evening rather than an hour of the clock.
+     */
+    if (isDinner(day) && !dinnerAsked) {
+      setDinnerAsked(true);
+      setOffer("dinner");
+    }
+  };
+
+  /**
+   * The one evening the company pays for.
+   *
+   * Two of spirits, which is more than the stall gives and more than a
+   * weekend's hobby, against a night that ends late — the same borrowed night
+   * overtime buys, which caps how rested tomorrow can start. And you have
+   * eaten, so the stall has nothing to sell you on the way home.
+   */
+  const goToDinner = () => {
+    setOffer(null);
+    setSpirit((v) => Math.min(MAX_SPIRIT, v + DINNER_SPIRIT));
+    setBorrowed((b) => b + 1);
+    setAteOut(true);
+    sfx.play("pick");
+    setNote(t("event.dinner.went"));
   };
 
   /** the bed, and the only way into tomorrow */
@@ -892,9 +928,15 @@ export function Office({ onExit }: { onExit: () => void }) {
      * A night that was borrowed against is a worse night whatever was left in
      * the player when they started it.
      */
-    setCondition((c) =>
-      Math.max(0, Math.min(MAX_CONDITION - borrowed, c + SLEEP_RECOVERY))
-    );
+    setCondition((c) => {
+      const rested = Math.max(
+        0,
+        Math.min(MAX_CONDITION - borrowed, c + SLEEP_RECOVERY)
+      );
+      // the morning something that already shipped came back: the message
+      // arrived at three, and the day starts with what that was worth
+      return isHotfix(next) ? Math.max(0, rested - HOTFIX_CONDITION) : rested;
+    });
     setBorrowed(0);
     /*
      * The half hour a hobby buys waits for a morning that has work in it.
@@ -1032,6 +1074,7 @@ export function Office({ onExit }: { onExit: () => void }) {
       left,
       freeze: isFreeze(day),
       weekend: isWeekend(day),
+      hotfix: isHotfix(day),
       spirit,
       talks,
       level: devLevel,
@@ -1730,8 +1773,9 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
                   const kind = offer;
                   setOffer(null);
                   // saying no at six o'clock is knocking off; at the machine it
-                  // is walking past it
+                  // is walking past it; on the ninth it is going home instead
                   if (kind === "overtime") clockOff();
+                  if (kind === "dinner") setNote(t("event.dinner.skipped"));
                 }}
               >
                 {t(`offer.${offer}.no`)}
@@ -1741,6 +1785,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
                 disabled={watching}
                 onClick={() => {
                   if (offer === "overtime") return stayLate();
+                  if (offer === "dinner") return goToDinner();
                   setOffer(null);
                   payForCoffee();
                 }}
@@ -1753,8 +1798,10 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
               and staying late are both there without it. Space goes home,
               because that is the answer that costs nothing.
             */}
+            {/* the advert buys the half hour or the cup; nobody sells you a
+                dinner the company is already paying for */}
             {adsAvailable() &&
-              (offer === "overtime" || !tookFreeCoffee) && (
+              (offer === "overtime" || (offer === "coffee" && !tookFreeCoffee)) && (
                 <button
                   className="offer-free"
                   disabled={watching}

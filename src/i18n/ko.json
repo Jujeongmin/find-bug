@@ -554,5 +554,13 @@
   "office.dev.shipGood": "\"나갔어. 이번 건 자신 있게 나갔다.\"",
   "office.dev.shipOk": "\"나갔어. 몇 개는 그냥 나갔지만, 뭐 늘 그렇지.\"",
   "office.dev.shipBad": "\"나가긴 나갔어. 다음 주엔 전화 좀 받겠다.\"",
-  "office.dev.shipWarm": "\"네가 잡아준 것들, 이번엔 전부 고쳐서 나갔어. 밥 사기로 한 거 안 잊었다.\""
+  "office.dev.shipWarm": "\"네가 잡아준 것들, 이번엔 전부 고쳐서 나갔어. 밥 사기로 한 거 안 잊었다.\"",
+  "event.hotfix.morning": "5일차. 새벽 세 시에 메시지가 왔다. 지난 릴리스에서 뭐가 터졌다고. 잠은 다 잔 셈이다.",
+  "office.dev.hotfix": "\"지난 릴리스 터졌어. A기기에 핫픽스 올려놨으니까 그것부터 봐줘.\"",
+  "offer.dinner.title": "회식",
+  "offer.dinner.body": "\"다들 한잔하러 간다는데, 갈래? 회사가 낸대.\"\n\n마음이 오른다. 대신 늦게 들어가면 내일 아침이 짧아진다.",
+  "offer.dinner.yes": "따라간다",
+  "offer.dinner.no": "그냥 집에 간다",
+  "event.dinner.went": "오랜만에 남의 얘기만 듣다 왔다. 마음이 올랐다. 대신 들어온 시간이 시간이라, 내일 아침은 짧다.",
+  "event.dinner.skipped": "먼저 간다고 하고 나왔다. 골목은 조용하다."
 }

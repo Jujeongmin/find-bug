@@ -27,6 +27,8 @@ export interface DevTalk {
   freeze: boolean;
   /** a weekend you came in on anyway */
   weekend: boolean;
+  /** the morning something that already shipped came back */
+  hotfix: boolean;
   /** how the player is holding up */
   spirit: number;
   /** how many times they have been spoken to */
@@ -59,6 +61,8 @@ export function devLine(s: DevTalk): string {
         : "office.dev.lastFlat";
   }
   if (s.left === 0) return "office.dev.allDone";
+  // today's news before the week's
+  if (s.hotfix) return "office.dev.hotfix";
   // both of these are about the week rather than the person, so they sit above
   // the small talk and below anything happening today
   if (s.weekend) return "office.dev.weekend";
@@ -97,6 +101,7 @@ export function devKeys(): string[] {
     "office.dev.lastKnown",
     "office.dev.lastWarm",
     "office.dev.weekend",
+    "office.dev.hotfix",
     "office.dev.freeze",
     "office.dev.worried",
     "office.dev.shipGood",

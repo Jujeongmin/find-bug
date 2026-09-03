@@ -481,5 +481,13 @@
   "office.dev.shipGood": "「出去了。這次我居然不緊張。」",
   "office.dev.shipOk": "「出去了。有幾個跟著一起走了，不過一向如此。」",
   "office.dev.shipBad": "「算是出去了。下週我大概要一直接電話。」",
-  "office.dev.shipWarm": "「你交給我的都修好才發的。說好的那頓飯我沒忘。」"
+  "office.dev.shipWarm": "「你交給我的都修好才發的。說好的那頓飯我沒忘。」",
+  "event.hotfix.morning": "第5天。凌晨三點來了訊息：上一個版本出事了。這一覺算是沒了。",
+  "office.dev.hotfix": "「上一個版本炸了。A號機上放了熱修，先看那個。」",
+  "offer.dinner.title": "聚餐",
+  "offer.dinner.body": "「大家要去喝一杯，來嗎？公司請客。」\n\n心情會好起來。不過回去晚了，明天早上就短了。",
+  "offer.dinner.yes": "一起去",
+  "offer.dinner.no": "直接回家",
+  "event.dinner.went": "難得整晚只聽別人說話。心情好了些，代價是明天早上會短一截。",
+  "event.dinner.skipped": "說了聲先走，就出來了。巷子很安靜。"
 }

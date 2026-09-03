@@ -554,5 +554,13 @@
   "office.dev.shipGood": "\"It is out. First time I have not been nervous about one.\"",
   "office.dev.shipOk": "\"It is out. A few went with it, but they always do.\"",
   "office.dev.shipBad": "\"It is out, technically. I will be on the phone all next week.\"",
-  "office.dev.shipWarm": "\"Everything you handed me went out fixed. And I still owe you dinner.\""
+  "office.dev.shipWarm": "\"Everything you handed me went out fixed. And I still owe you dinner.\"",
+  "event.hotfix.morning": "Day 5. A message at three in the morning: something in the last release is on fire. So much for the night.",
+  "office.dev.hotfix": "\"The last release blew up. There is a hotfix on machine A — start with that one.\"",
+  "offer.dinner.title": "Team dinner",
+  "offer.dinner.body": "\"Everyone is going for a drink. Coming? The company is paying.\"\n\nIt lifts your spirits. Getting in late shortens tomorrow morning.",
+  "offer.dinner.yes": "Go along",
+  "offer.dinner.no": "Head home",
+  "event.dinner.went": "An evening of listening to other people's problems for once. Your spirits are up, and tomorrow will start short.",
+  "event.dinner.skipped": "You said your goodbyes at the door. The street is quiet."
 }

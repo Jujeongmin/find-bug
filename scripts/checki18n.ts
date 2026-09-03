@@ -17,6 +17,7 @@ import zhHans from "../src/i18n/zh-Hans.json";
 import { PASSERS, passerKeys, passerLine } from "../src/street/passers";
 import { pochaKeys, pochaLine } from "../src/street/pocha";
 import { devKeys, devLine, devShipLine } from "../src/office/devlines";
+import { eventFor, eventKeys } from "../src/office/events";
 
 type Dict = Record<string, string>;
 const dicts: [string, Dict][] = [
@@ -156,6 +157,7 @@ for (const [name, dict] of dicts) {
       left: 2,
       freeze: false,
       weekend: false,
+      hotfix: false,
       spirit: 3,
       talks: 0,
       level: 0,
@@ -174,6 +176,7 @@ for (const [name, dict] of dicts) {
       talk({ day: 12, level: 3 }),
       "office.dev.lastWarm",
     ],
+    ["the day it came back is today's news", talk({ hotfix: true, weekend: true }), "office.dev.hotfix"],
     ["a weekend is remarked on", talk({ weekend: true }), "office.dev.weekend"],
     ["so is the freeze", talk({ freeze: true }), "office.dev.freeze"],
     ["and the state you are in, before small talk", talk({ spirit: 1 }), "office.dev.worried"],
@@ -187,6 +190,33 @@ for (const [name, dict] of dicts) {
       console.log(`PASS  ${label}`);
     } else {
       console.log(`FAIL  ${label}: got ${got}, want ${want}`);
+      bad++;
+    }
+  }
+}
+
+/* the two days that are not like the others */
+{
+  const missing = eventKeys().filter((k) => !(k in (en as Dict)));
+  if (missing.length) {
+    console.log(`FAIL  lines the calendar asks for and English does not have: ${missing.join(", ")}`);
+    bad++;
+  } else {
+    console.log(`PASS  every line the two events can ask for exists (${eventKeys().length})`);
+  }
+  const days: [number, string | null][] = [
+    [4, null],
+    [5, "hotfix"],
+    [6, null],
+    [9, "dinner"],
+    [12, null],
+  ];
+  for (const [day, want] of days) {
+    const got = eventFor(day);
+    if (got === want) {
+      console.log(`PASS  day ${day} is ${want ?? "an ordinary day"}`);
+    } else {
+      console.log(`FAIL  day ${day}: got ${got}, want ${want}`);
       bad++;
     }
   }
