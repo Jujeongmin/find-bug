@@ -235,7 +235,7 @@ a desk (two by two), a monitor, the same monitor from behind, a keyboard, the
 seat with its backrest towards the player, a bookshelf and a filing cabinet.
 
 With the cabinet drawn, the Fantasy Interior desk, bookcase and chairs have
-nothing left pointing at them, and are gone from  and from the
+nothing left pointing at them, and are gone from `props.ts` and from the
 repository. What is still borrowed from that pack is the door, the crate, the
 barrel and the rug.
 
