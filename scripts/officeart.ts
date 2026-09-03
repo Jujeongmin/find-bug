@@ -14,19 +14,21 @@
  *
  * Run: npm run officeart
  *
- * Output: src/assets/sheets/office.png — a 4x2 grid of 16px tiles.
+ * Output: src/assets/sheets/office.png — a 4x4 grid of 16px tiles.
  *
  *   (0,0)-(1,1)  desk, two tiles by two
  *   (2,0)        monitor, screen towards the player
  *   (3,0)        monitor from behind, for the developer's bench
  *   (2,1)        keyboard
  *   (3,1)        the seat, backrest towards the player
+ *   (0,2)-(0,3)  bookshelf, one tile by two
+ *   (1,2)-(1,3)  filing cabinet, one tile by two
  */
 import { blank, box, encode, rect } from "./png";
 
 const TILE = 16;
 const COLS = 4;
-const ROWS = 2;
+const ROWS = 4;
 
 /* the room's palette: warm wood, and a beige machine with a green screen */
 const EDGE = "#3a2a1e";
@@ -42,6 +44,17 @@ const SEAT = "#4f5763";
 const SEAT_LIT = "#657084";
 const SEAT_EDGE = "#272c34";
 const POST = "#9a958a";
+
+const SHELF = "#8a6540";
+const SHELF_LIT = "#a37b52";
+const SHELF_DARK = "#5c4028";
+const BOOKS = ["#b5483c", "#3f7fa8", "#d9a441", "#4f7a44", "#7a4f8f", "#c96a3a"];
+
+const STEEL = "#b9bcc2";
+const STEEL_LIT = "#d2d5da";
+const STEEL_DARK = "#8d9096";
+const STEEL_EDGE = "#43464b";
+const LABEL = "#e8e5d8";
 
 const CASE = "#d8d2c0";
 const CASE_DARK = "#b3ad9b";
@@ -138,6 +151,41 @@ const img = blank(COLS * TILE, ROWS * TILE);
   rect(img, x + 3, y + 14, 1, 1, SEAT_EDGE);
   rect(img, x + 12, y + 14, 1, 1, SEAT_EDGE);
   rect(img, x + 7, y + 14, 2, 1, SEAT_EDGE);
+}
+
+/* ---------- the bookshelf, at (0,2), one tile by two ---------- */
+{
+  const x = 0;
+  const y = 2 * TILE;
+  box(img, x + 1, y + 2, 14, 29, SHELF, EDGE);
+  rect(img, x + 2, y + 3, 12, 1, SHELF_LIT);
+  // three shelves, and what is standing on each of them
+  const shelves = [10, 18, 26];
+  shelves.forEach((sy, row) => {
+    rect(img, x + 2, y + sy, 12, 1, SHELF_DARK);
+    // books lean along the shelf above the board, in a different order on each
+    for (let i = 0; i < 5; i++) {
+      const h = 5 - ((i + row) % 3);
+      rect(img, x + 3 + i * 2, y + sy - h, 2, h, BOOKS[(i + row * 2) % BOOKS.length]);
+    }
+  });
+  rect(img, x + 2, y + 30, 12, 1, SHELF_DARK);
+}
+
+/* ---------- the filing cabinet, at (1,2), one tile by two ---------- */
+{
+  const x = TILE;
+  const y = 2 * TILE;
+  box(img, x + 1, y + 4, 14, 27, STEEL, STEEL_EDGE);
+  // the top, catching the light, and the shadow down the right side
+  rect(img, x + 2, y + 5, 12, 2, STEEL_LIT);
+  rect(img, x + 13, y + 7, 1, 23, STEEL_DARK);
+  // three drawers, each with a handle and a label in its holder
+  for (const dy of [9, 17, 25]) {
+    box(img, x + 2, y + dy, 12, 6, STEEL, STEEL_EDGE);
+    rect(img, x + 4, y + dy + 1, 4, 2, LABEL);
+    rect(img, x + 9, y + dy + 2, 4, 1, STEEL_DARK);
+  }
 }
 
 encode("src/assets/sheets/office.png", img);

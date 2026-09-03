@@ -231,8 +231,13 @@ public domain.
 
 `src/assets/sheets/office.png` is built by `npm run officeart`
 ([scripts/officeart.ts](../scripts/officeart.ts)) — a 4x2 grid of 16px tiles:
-a desk (two by two), a monitor, the same monitor from behind, a keyboard, and
-the seat, backrest towards the player.
+a desk (two by two), a monitor, the same monitor from behind, a keyboard, the
+seat with its backrest towards the player, a bookshelf and a filing cabinet.
+
+With the cabinet drawn, the Fantasy Interior desk, bookcase and chairs have
+nothing left pointing at them, and are gone from  and from the
+repository. What is still borrowed from that pack is the door, the crate, the
+barrel and the rug.
 
 Every sheet here was searched for a desk and a screen first. The city pack is a
 city from above and has no interiors; Roguelike Indoors is a tavern; Messy

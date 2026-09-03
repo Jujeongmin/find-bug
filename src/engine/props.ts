@@ -14,13 +14,16 @@ export interface PropSpec {
   h: number;
 }
 
+/*
+ * What is left of the pack.
+ *
+ * The desk, the bookcase and the two chairs went when the office furniture was
+ * drawn for the room instead of borrowed from a fantasy interior; the open
+ * door was never used. Only the pieces no sheet has and the room still wants
+ * are here.
+ */
 export const PROPS = {
-  desk: { w: 38, h: 29 },
-  bookshelf: { w: 33, h: 33 },
-  chair: { w: 13, h: 23 },
-  chairSide: { w: 14, h: 21 },
   door: { w: 24, h: 30 },
-  doorOpen: { w: 24, h: 30 },
   crate: { w: 16, h: 23 },
   barrel: { w: 17, h: 22 },
   rug: { w: 72, h: 50 },

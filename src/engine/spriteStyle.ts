@@ -14,12 +14,7 @@ import citySrc from "../assets/sheets/city.png";
 import officeSrc from "../assets/sheets/office.png";
 import indoorSrc from "../assets/sheets/indoor.png";
 import foodSrc from "../assets/sheets/food.png";
-import deskSrc from "../assets/props/desk.png";
-import bookshelfSrc from "../assets/props/bookshelf.png";
-import chairSrc from "../assets/props/chair.png";
-import chairSideSrc from "../assets/props/chairSide.png";
 import doorSrc from "../assets/props/door.png";
-import doorOpenSrc from "../assets/props/doorOpen.png";
 import crateSrc from "../assets/props/crate.png";
 import barrelSrc from "../assets/props/barrel.png";
 import rugSrc from "../assets/props/rug.png";
@@ -67,12 +62,7 @@ export function spriteStyle(s: SpriteSpec): React.CSSProperties {
 }
 
 const PROP_SRC: Record<PropId, string> = {
-  desk: deskSrc,
-  bookshelf: bookshelfSrc,
-  chair: chairSrc,
-  chairSide: chairSideSrc,
   door: doorSrc,
-  doorOpen: doorOpenSrc,
   crate: crateSrc,
   barrel: barrelSrc,
   rug: rugSrc,

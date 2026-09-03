@@ -232,12 +232,16 @@ export const officeScene: SceneSpec = {
 
     /* dressing, and something to walk around */
     {
+      // it is called a filing cabinet in every language the game speaks, and
+      // was drawn as a bookcase full of paperbacks
       id: "bookshelf",
       nameKey: "object.cabinet",
       kind: "decor",
       x: 36,
       y: 340,
-      render: { prop: { id: "bookshelf" as const, scale: 1.4 } },
+      render: {
+        sprite: { sheet: "office" as const, col: 1, row: 2, spanY: 2, scale: 1.7 },
+      },
       behaviors: [{ t: "blocker", radius: 24 }],
     },
     {

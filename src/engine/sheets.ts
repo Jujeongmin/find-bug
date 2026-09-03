@@ -29,7 +29,7 @@ export const SHEETS = {
   worker2: { tile: 32, margin: 0, cols: 24, rows: 8 },
   // Drawn here rather than downloaded: no pack in the repo has an office
   // desk or a monitor. scripts/officeart.ts builds it.
-  office: { tile: 16, margin: 0, cols: 4, rows: 2 },
+  office: { tile: 16, margin: 0, cols: 4, rows: 4 },
   // The same 32px frames as worker, palette-swapped by scripts/recolor.ts:
   // three people who are not each other and not the player.
   personA: { tile: 32, margin: 0, cols: 24, rows: 8 },

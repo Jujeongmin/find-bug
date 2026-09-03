@@ -144,7 +144,9 @@ export const homeScene: SceneSpec = {
       kind: "sprite" as const,
       x: 44,
       y: 400,
-      render: { prop: { id: "bookshelf", scale: 1.4 } },
+      render: {
+        sprite: { sheet: "office", col: 0, row: 2, spanY: 2, scale: 1.6 },
+      },
       behaviors: [
         { t: "blocker" as const, radius: 24 },
         { t: "station" as const, radius: 56, labelKey: "home.journal" },
