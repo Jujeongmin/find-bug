@@ -1262,3 +1262,75 @@
   line-height: 1.5;
   color: #c9b98f;
 }
+
+/* ---- the screen the game opens on ---- */
+/*
+ * The walk to work in miniature. The bar is the pavement and the figure on it
+ * is the one you are about to play, from the same sheet at the same scale the
+ * street draws them — a loading screen in a different style than the game is a
+ * promise the game does not keep.
+ */
+.loading {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(#151824, #1d2130 60%, #262b3a);
+  border-radius: 10px;
+}
+.loading-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #f2e3c0;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+.loading-sub {
+  margin: 0 0 26px;
+  font-size: 12px;
+  color: #9aa2b8;
+}
+/* the pavement: a kerb line under a strip of it, same greys as the street */
+.loading-track {
+  position: relative;
+  width: 62%;
+  max-width: 220px;
+  height: 10px;
+  border-radius: 2px;
+  background: #2f3341;
+  border: 2px solid #12141c;
+  box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+.loading-fill {
+  height: 100%;
+  border-radius: 1px;
+  background: linear-gradient(#9a948a, #7d786f);
+  transition: width 0.18s linear;
+}
+/* One frame of the walk cycle: 32px cells at 1.5, the size the street draws
+   people at. Row two is the right-facing row; columns one to four are the
+   step, and column zero is standing still, which is not what this is. */
+.loading-walker {
+  position: absolute;
+  /* the sheet leaves padding under the feet — a 32px cell around a shorter
+     character — so the sprite hangs past the bar to stand on it */
+  bottom: -4px;
+  width: 48px;
+  height: 48px;
+  margin-left: -24px;
+  background-image: var(--walk);
+  background-size: 1152px 384px;
+  background-position: -48px -96px;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  transition: left 0.18s linear;
+  animation: loading-walk 0.55s steps(4) infinite;
+}
+@keyframes loading-walk {
+  from { background-position-x: -48px; }
+  to { background-position-x: -240px; }
+}

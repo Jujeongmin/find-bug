@@ -575,5 +575,7 @@
   "mutter.dev0": "…why does that work.",
   "mutter.dev1": "It will not reproduce.",
   "mutter.dev2": "If this goes out as it is, we are finished.",
-  "mutter.dev3": "What do I even write in the commit."
+  "mutter.dev3": "What do I even write in the commit.",
+  "loading.title": "Getting ready",
+  "loading.sub": "Fetching the builds and the art"
 }

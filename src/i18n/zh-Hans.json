@@ -575,5 +575,7 @@
   "rp.unstableBody": "少了一个条件。开发者照步骤做，什么都没发生。",
   "rp.noisy": "条件太多",
   "rp.noisyBody": "里面有不需要的。开发者挖错了地方。",
-  "rp.keepTesting": "继续测试"
+  "rp.keepTesting": "继续测试",
+  "loading.title": "准备上班",
+  "loading.sub": "正在下载版本和素材"
 }

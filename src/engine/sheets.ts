@@ -40,11 +40,6 @@ export const SHEETS = {
   // pavement and street furniture, drawn with the same outline weight as Tiny
   // Town and Tiny Dungeon.
   city: { tile: 16, margin: 0, cols: 37, rows: 28 },
-  // Roguelike Indoors, which does keep the pack's 1px margin. Desks, screens,
-  // chairs and the rest of an office seen from the front.
-  indoor: { tile: 16, margin: 1, cols: 27, rows: 18 },
-  // 64 food sprites on an 8x8 grid: what a stall sells.
-  food: { tile: 16, margin: 0, cols: 8, rows: 8 },
   // Messy Furniture (32px grid). Pieces span more than one cell — a bed is one
   // column by two rows, a sofa two by two — so they are drawn with spanX/spanY.
   furniture: { tile: 32, margin: 0, cols: 13, rows: 14 },

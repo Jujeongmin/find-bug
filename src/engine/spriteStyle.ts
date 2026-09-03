@@ -12,8 +12,6 @@ import personBSrc from "../assets/sheets/personB.png";
 import personCSrc from "../assets/sheets/personC.png";
 import citySrc from "../assets/sheets/city.png";
 import officeSrc from "../assets/sheets/office.png";
-import indoorSrc from "../assets/sheets/indoor.png";
-import foodSrc from "../assets/sheets/food.png";
 import doorSrc from "../assets/props/door.png";
 import crateSrc from "../assets/props/crate.png";
 import barrelSrc from "../assets/props/barrel.png";
@@ -39,8 +37,6 @@ const SHEET_SRC: Record<SheetId, string> = {
   personC: personCSrc,
   city: citySrc,
   office: officeSrc,
-  indoor: indoorSrc,
-  food: foodSrc,
 };
 
 /** CSS needed to show one sprite, scaled and pixel-crisp */
@@ -67,6 +63,20 @@ const PROP_SRC: Record<PropId, string> = {
   barrel: barrelSrc,
   rug: rugSrc,
 };
+
+/**
+ * Every image the game draws, for the loading screen to fetch before it opens.
+ *
+ * Taken from the same two tables the renderer reads rather than written out
+ * again, so a sheet added to the game is a sheet the loading screen waits for.
+ */
+export const ART: string[] = [
+  ...Object.values(SHEET_SRC),
+  ...Object.values(PROP_SRC),
+];
+
+/** the player's own sheet, which the loading screen walks along its bar */
+export const WALK_SHEET = workerSrc;
 
 /** CSS for a standalone prop image, drawn at its authored aspect ratio */
 export function propStyle(p: PropRef): React.CSSProperties {

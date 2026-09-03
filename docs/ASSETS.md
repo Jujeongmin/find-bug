@@ -188,6 +188,13 @@ grammar is (which columns carry the rim) has to be read off
 `dev/atlas.html?sheet=city`, not guessed: the first pass drew a house with a
 drainpipe up the middle of it.
 
+## Dropped again: Roguelike Indoors, and the food sheet
+
+Both were registered and neither was ever drawn from, so both were costing
+forty-five kilobytes of every visit. They are out of  and out of the
+repository; the links below are how they come back if the stall ever needs a
+menu or a build needs a room dressed.
+
 ## Kenney — Roguelike Indoors (CC0)
 
 https://kenney.nl/assets/roguelike-indoors

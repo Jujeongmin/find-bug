@@ -575,5 +575,7 @@
   "mutter.dev0": "…이게 왜 되지.",
   "mutter.dev1": "재현이 안 되는데.",
   "mutter.dev2": "이거 그대로 나가면 큰일인데.",
-  "mutter.dev3": "커밋 메시지 뭐라고 쓰지."
+  "mutter.dev3": "커밋 메시지 뭐라고 쓰지.",
+  "loading.title": "출근 준비",
+  "loading.sub": "빌드와 리소스를 내려받는 중"
 }

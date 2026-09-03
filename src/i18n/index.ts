@@ -1,9 +1,5 @@
 import { createContext, useContext } from "react";
-import ko from "./ko.json";
 import en from "./en.json";
-import ja from "./ja.json";
-import zhHant from "./zh-Hant.json";
-import zhHans from "./zh-Hans.json";
 
 export type Lang = "ko" | "en" | "ja" | "zh-Hant" | "zh-Hans";
 
@@ -16,13 +12,45 @@ export const LANGS: { id: Lang; label: string }[] = [
   { id: "zh-Hans", label: "简体" },
 ];
 
-const dictionaries: Record<Lang, Record<string, string>> = {
-  ko,
-  en,
-  ja,
-  "zh-Hant": zhHant,
-  "zh-Hans": zhHans,
+type Dict = Record<string, string>;
+
+/**
+ * One language is fetched, not five.
+ *
+ * All five dictionaries used to be imported here, which put a hundred and
+ * fifty kilobytes of text nobody was going to read into the file that has to
+ * arrive before the first frame. English stays: it is the floor under every
+ * other language, so every screen may need it. The rest come when they are
+ * chosen — during the loading screen, which is what that screen is for.
+ */
+const LOADERS: Record<Lang, () => Promise<{ default: Dict }>> = {
+  ko: () => import("./ko.json"),
+  en: () => Promise.resolve({ default: en as Dict }),
+  ja: () => import("./ja.json"),
+  "zh-Hant": () => import("./zh-Hant.json"),
+  "zh-Hans": () => import("./zh-Hans.json"),
 };
+
+/** English, as a plain table rather than the shape its literal happens to be */
+const base = en as Dict;
+
+const dictionaries: Partial<Record<Lang, Dict>> = { en: base };
+
+/**
+ * Fetch one, if it is not already here.
+ *
+ * Resolves either way: a dictionary that fails to arrive leaves the language
+ * reading English, which is the same thing a missing key already does and is
+ * a great deal better than a game that will not open.
+ */
+export async function loadLang(lang: Lang): Promise<void> {
+  if (dictionaries[lang]) return;
+  try {
+    dictionaries[lang] = (await LOADERS[lang]()).default;
+  } catch {
+    /* English is the floor */
+  }
+}
 
 /**
  * Which language the browser is asking for.
@@ -104,7 +132,7 @@ export function translate(lang: Lang, key: string): string {
    * translation and looks like a crash rather than a gap. A language being
    * partly done is a normal state for a game that is still being written.
    */
-  const hit = dictionaries[lang][key] ?? dictionaries.en[key] ?? key;
+  const hit = dictionaries[lang]?.[key] ?? base[key] ?? key;
   return bind(hit, lang);
 }
 

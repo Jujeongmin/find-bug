@@ -575,5 +575,7 @@
   "rp.unstableBody": "条件が足りない。手順どおりにやっても何も起きなかった。",
   "rp.noisy": "条件が多すぎる",
   "rp.noisyBody": "要らないものが混ざっている。開発者は見当違いの場所を掘った。",
-  "rp.keepTesting": "テストを続ける"
+  "rp.keepTesting": "テストを続ける",
+  "loading.title": "出勤の準備",
+  "loading.sub": "ビルドと素材を読み込み中"
 }
