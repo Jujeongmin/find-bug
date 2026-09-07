@@ -97,6 +97,23 @@ for (const scene of ENGINE_SCENES) {
   ok("stage06: targets ride their rails", base.state.objects.targetC.x > stage06Scene.objects.find(o => o.id === "targetC")!.x);
 }
 
+/*
+ * Every judged scene opens on a briefing, so every judged scene needs the line
+ * at the top of it.
+ *
+ * introKey is optional on SceneSpec because the rooms you walk around in have
+ * no briefing, and four of them used to carry a line that was translated into
+ * five languages and never once drawn. Optional is right for the type and
+ * useless as a guarantee, so the guarantee lives here: a build the player has
+ * to sign off on must be able to say what it is.
+ */
+for (const scene of ENGINE_SCENES) {
+  ok(
+    `${scene.id}: has an intro line to open the briefing with`,
+    typeof scene.introKey === "string" && scene.introKey.length > 0
+  );
+}
+
 console.log(fails === 0 ? "\nALL PASS" : `\n${fails} FAILURES`);
 
 /* death: running out of health ends the run instead of respawning */

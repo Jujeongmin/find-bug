@@ -30,7 +30,6 @@ const actor = (sheet: "worker" | "worker2"): ActorSpec => ({
 export const homeScene: SceneSpec = {
   id: "home",
   nameKey: "home.name",
-  introKey: "home.intro",
   backgroundClass: "home-floor",
   // the four rooms you walk around in: what covers what is decided by where
   // people are standing, not by the order the scene was written

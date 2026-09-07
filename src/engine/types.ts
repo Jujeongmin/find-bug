@@ -317,7 +317,20 @@ export interface TimerSpec {
 export interface SceneSpec {
   id: string;
   nameKey: string;
-  introKey: string;
+  /**
+   * The line at the top of the briefing, for scenes that get one.
+   *
+   * Only a scene the player is judging opens on a briefing — EngineStage draws
+   * it in the intro phase, and that phase exists when mode is "judge". The
+   * rooms you walk around in are all mode "play" and reach it never, so four
+   * of them carried an intro line that had a translation in five languages and
+   * had never once been on screen. They no longer carry one.
+   *
+   * Optional here rather than enforced by the type, because one interface
+   * describes both kinds of scene. checkscenes.ts fails if a judged scene is
+   * missing it, which is the part that actually matters.
+   */
+  introKey?: string;
   backgroundClass: string;
   objects: ObjectSpec[];
   counters: CounterSpec[];

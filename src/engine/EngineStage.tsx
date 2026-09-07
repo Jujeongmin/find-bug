@@ -1083,7 +1083,7 @@ export function EngineStage({
         <div className="modal-backdrop">
           <div className="modal">
             <h2>
-              <BugIcon size={16} /> {t(scene.introKey)}
+              <BugIcon size={16} /> {t(scene.introKey ?? scene.nameKey)}
             </h2>
             {scene.goalKey && (
               <p className="intro-goal">{t(scene.goalKey)}</p>

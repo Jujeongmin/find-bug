@@ -43,7 +43,6 @@ export const streetActor = (sheet: SheetId = "worker"): ActorSpec => ({
 export const streetScene: SceneSpec = {
   id: "street",
   nameKey: "street.name",
-  introKey: "street.intro",
   backgroundClass: "street-ground",
   // the four rooms you walk around in: what covers what is decided by where
   // people are standing, not by the order the scene was written

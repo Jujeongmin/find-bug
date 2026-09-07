@@ -22,7 +22,6 @@ import { MUTTERS } from "./passers";
 export const laneScene: SceneSpec = {
   id: "lane",
   nameKey: "lane.name",
-  introKey: "lane.intro",
   backgroundClass: "lane-ground",
   // the four rooms you walk around in: what covers what is decided by where
   // people are standing, not by the order the scene was written
