@@ -19,6 +19,7 @@ import { DINNER_SPIRIT, HOTFIX_CONDITION, isDinner, isHotfix } from "./events";
 import { ENGINE_SCENES } from "../stages/registry";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
+import { music } from "../audio/music";
 import { shipRating, totalStake, type Severity } from "./rating";
 import { Settings } from "../components/Settings";
 import { EyeIcon } from "../components/icons";
@@ -555,6 +556,36 @@ export function Office({ onExit }: { onExit: () => void }) {
    * rather than something that has already happened when they arrive.
    */
   const [place, setPlace] = useState<Place>(START_PLACE);
+
+  /*
+   * Music belongs to the parts of the day that are not work.
+   *
+   * The walk and the flat have it; the floor and the builds opened from it
+   * do not. Looking for a defect means watching for something that stopped
+   * moving or a sound that did not come, and a tune over the top of that is
+   * the game arguing with its own subject. The builds need no case of their
+   * own — they are opened while place is "office", so they are already
+   * silent, and so is the shipping screen, which is why the last cue of the
+   * run lands in the clear.
+   */
+  useEffect(() => {
+    music.wants(place === "home" || place === "lane" || place === "street");
+  }, [place]);
+
+  /*
+   * The first sound a browser allows is one that follows a press. The music
+   * wants to start in a bedroom nobody has touched, so it asks again after
+   * anything the player does.
+   */
+  useEffect(() => {
+    const wake = () => music.nudge();
+    window.addEventListener("pointerdown", wake);
+    window.addEventListener("keydown", wake);
+    return () => {
+      window.removeEventListener("pointerdown", wake);
+      window.removeEventListener("keydown", wake);
+    };
+  }, []);
   /**
    * Which way you came in, so every room puts you back at the door you used.
    *
