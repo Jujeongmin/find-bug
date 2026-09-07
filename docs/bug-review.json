@@ -1899,22 +1899,6 @@
       ]
     },
     {
-      "fullId": "stage04:E6",
-      "scene": "stage04",
-      "sceneName": "카드의 방",
-      "mutator": "(수기)",
-      "category": "physics",
-      "categoryLabel": "물리 오류",
-      "answers": "화분",
-      "desc": "화분: 테이블 모서리 밖 허공에 떠 있었다.",
-      "score": 0,
-      "band": 0,
-      "stages": [
-        8,
-        20
-      ]
-    },
-    {
       "fullId": "stage04:E7",
       "scene": "stage04",
       "sceneName": "카드의 방",

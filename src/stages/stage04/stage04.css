@@ -205,20 +205,6 @@
  * player was being asked to spot something they could not see. The doll and
  * the two things on the wall are one moved object away from the same fault.
  */
-.s4-pot {
-  position: absolute;
-  z-index: 2;
-  right: 18px;
-  image-rendering: pixelated;
-}
-
-.s4-cat {
-  position: absolute;
-  z-index: 2;
-  left: 16px;
-  bottom: 18px;
-  image-rendering: pixelated;
-}
 
 
 
@@ -253,8 +239,6 @@
 }
 
 /* sprite spans need to be block-level for their sizing to apply */
-.s4-cat > span,
-.s4-pot > span,
 .s4-frame > span {
   display: block;
 }

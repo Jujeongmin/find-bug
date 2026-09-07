@@ -65,7 +65,7 @@ UI로 새지 않는다. `types.ts`는 `BugDef` / `Verdict`.
 ## `src/debug/`, `src/repro/`, `src/regression/`
 
 개발용 화면 셋. `App.tsx`에서 지연 로딩되고 `DEV_TOOLS`가 꺼지면 열리지 않는다.
-`DebugLab`은 빌드 7개·결함 119개 목록, `ReproLab`과 `Workbench`는 접어둔 시제품.
+`DebugLab`은 빌드 7개·결함 118개 목록, `ReproLab`과 `Workbench`는 접어둔 시제품.
 
 ## `scripts/`
 

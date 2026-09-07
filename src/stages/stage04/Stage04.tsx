@@ -8,7 +8,6 @@ import { CategorySelect } from "../../components/CategorySelect";
 import { ResultModal } from "../../components/ResultModal";
 import { FieldScaler, FIELD_W, FIELD_H } from "../../components/FieldScaler";
 import { PlaytestBar } from "../../components/PlaytestBar";
-import { spriteStyle } from "../../engine/spriteStyle";
 import { sfx } from "../../audio/sfx";
 import face0 from "../../assets/cards/card_hearts_A.png";
 import face1 from "../../assets/cards/card_spades_02.png";
@@ -266,8 +265,6 @@ export function Stage04({
         ? { className: baseClass }
         : {};
 
-  // E6: the pot hovers past the table edge; normally it sits on the floor by the table
-  const potLift = planted === "E6" ? 34 : 0;
 
   return (
     <div className="stage-frame">
@@ -396,29 +393,6 @@ export function Stage04({
             );
           })}
 
-          {/* floor decorations */}
-          <div
-            className={`s4-pot ${picking ? "pickable" : ""}`}
-            style={{ bottom: 26 + potLift }}
-            onClick={
-              picking
-                ? (e) => {
-                    e.stopPropagation();
-                    onPickObject("pot");
-                  }
-                : undefined
-            }
-            title={picking ? t("object.pot") : undefined}
-          >
-            <span
-              style={spriteStyle({ sheet: "roguelike", col: 24, row: 9, scale: 2 })}
-            />
-          </div>
-          <div {...pickableProps("doll", "s4-cat")}>
-            <span
-              style={spriteStyle({ sheet: "platchars", col: 4, row: 1, scale: 1.5 })}
-            />
-          </div>
 
           {/* shuffle button */}
           <button

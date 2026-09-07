@@ -8,7 +8,6 @@ export const stage04: StageDef = {
     { id: "E2", objectIds: ["cards"], category: "weird-movement", descKey: "bug.E2.desc" },
     { id: "E4", objectIds: ["attemptCounter"], category: "logic", descKey: "bug.E4.desc" },
     { id: "E5", objectIds: ["shuffleBtn"], category: "no-action", descKey: "bug.E5.desc" },
-    { id: "E6", objectIds: ["pot"], category: "physics", descKey: "bug.E6.desc" },
     { id: "E7", objectIds: ["frame"], category: "graphic", descKey: "bug.E7.desc" },
     { id: "E8", objectIds: ["cards"], category: "logic", descKey: "bug.E8.desc" },
   ],
