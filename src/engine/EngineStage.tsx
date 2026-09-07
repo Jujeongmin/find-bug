@@ -580,7 +580,7 @@ export function EngineStage({
           </span>
           <div className="challenge-wrap">
             {phase === "play" && showHint && (
-              <div className="tutorial-hint">⬇ {t("challenge.tutorial")}</div>
+              <div className="tutorial-hint">⬆ {t("challenge.tutorial")}</div>
             )}
             <button
               className="challenge-btn"

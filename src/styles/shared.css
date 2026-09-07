@@ -46,7 +46,17 @@
 
 .tutorial-hint {
   position: absolute;
-  bottom: 110%;
+  /*
+   * Below the button, not above it.
+   *
+   * It was above, and the header it hangs off is flush with the top of the
+   * app frame — which is overflow: hidden. The whole bubble rendered outside
+   * the frame and was clipped to its last row of pixels, so the one thing
+   * that explains the report button showed up as a thin yellow line in the
+   * corner. In a game about spotting things that look wrong, that is the
+   * worst possible way to fail.
+   */
+  top: 110%;
   right: 0;
   white-space: nowrap;
   background: #ffef9e;
