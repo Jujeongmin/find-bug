@@ -7,7 +7,7 @@
  *
  * The game runs entirely on the client. What the account is for is the one
  * thing that is meant to outlive a run and a device: the defect book. A player
- * meets perhaps forty of the hundred and twenty-one faults in twelve days,
+ * meets perhaps forty of the hundred and nineteen faults in twelve days,
  * and the reason to start again is the ones they have not met — which is worth
  * nothing if it lives in the site data of one browser.
  *
@@ -39,7 +39,7 @@ const REMOVE_ADS = "remove-ads";
  * afterwards because the book is full of nothing.
  *
  * The real ones are a stage and a generated bug id, "stage01/floating:tree1"
- * and the like, and the longest of the hundred and twenty-one is forty-five
+ * and the like, and the longest of the hundred and nineteen is forty-five
  * characters. This is a shape, not an identity — a caller determined to fill
  * their own book can still make four hundred well-formed ids that name no
  * real defect. Only the generated pool itself could settle that, and it lives

@@ -298,8 +298,15 @@ const SLEEP_RECOVERY = 3;
  * is for. The good chair is what makes that hour bearable.
  */
 
-/** what a coffee on the way in costs, and what it is worth */
-const COFFEE_MINUTES = 15;
+/**
+ * What a coffee on the way in costs, and what it is worth.
+ *
+ * An hour, not the quarter it was. A quarter of an hour bought a whole extra
+ * build for almost nothing, which made the cup the obvious move every single
+ * morning and therefore not a decision. An hour is a real trade: the fourth
+ * build only fits if the first three went quickly.
+ */
+const COFFEE_MINUTES = 60;
 
 /** how much of the evening a rewarded ad buys back, once a day */
 const OVERTIME_MINUTES = 30;
@@ -390,8 +397,13 @@ const CATALOGUE: {
 
 /** how much faster a decent pair of shoes crosses a room */
 const SHOES_SPEED = 1.4;
-/** what a coffee costs once you are not queueing at the machine for it */
-const THERMOS_MINUTES = 5;
+/**
+ * What a coffee costs once you are not queueing at the machine for it.
+ *
+ * A third of the price, which is the ratio it has always been — the flask
+ * skips the queue, it does not skip the drinking.
+ */
+const THERMOS_MINUTES = 20;
 
 /** the alarm clock starts the day this much earlier */
 const ALARM_MINUTES = 30;
@@ -774,7 +786,7 @@ export function Office({ onExit }: { onExit: () => void }) {
    * The defect book is the only thing that outlives a run, so an empty one is
    * a player who has never finished a day — which is exactly who the long
    * version of the first morning is for. It reads the stored book rather than
-   * codexRows(), which answers with all hundred and twenty-one faults whether
+   * codexRows(), which answers with all hundred and nineteen faults whether
    * they have been met or not and so can never be empty.
    *
    * Read once at mount: it must not change to "returning" underneath a player
@@ -1059,7 +1071,7 @@ export function Office({ onExit }: { onExit: () => void }) {
   };
   goHomeRef.current = endOfDay;
 
-  /** the coffee as it has always been bought: with a quarter of an hour */
+  /** the coffee as it has always been bought: with an hour of the day */
   const payForCoffee = () => {
     setHadCoffee(true);
     setCondition((c) => Math.min(MAX_CONDITION, c + 1));

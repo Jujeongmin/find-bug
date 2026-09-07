@@ -18,7 +18,7 @@ still open). Money exists but is thin on purpose — one run earns less than the
 shop's contents cost, so equipment is a choice rather than a checklist.
 
 Nothing about the run persists. The one thing that does is the **defect book**:
-121 faults across 7 builds, of which a run meets perhaps forty. The reason to
+119 faults across 7 builds, of which a run meets perhaps forty. The reason to
 play again is the ones not met yet.
 
 ## Tech Stack

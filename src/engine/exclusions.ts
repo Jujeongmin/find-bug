@@ -27,6 +27,22 @@ export const EXCLUDED_BUGS: string[] = [
   "stage01:mirrorShadow:tree2",
   "stage01:teleportOnEnd:slimeB:teleport",
   "stage01:teleportOnEnd:slimeC:teleport",
+  /*
+   * The candles. Both of them, so the idea goes rather than one half of it.
+   *
+   * A frozen flame is a fair defect on paper — there are two candles, so the
+   * still one has a moving one beside it to be judged against. In the room it
+   * is not: a flame that flickers on a 0.6s cycle and a flame that does not
+   * look alike for most of any second you spend looking, and the player is
+   * asked to hold two of them in their eye at once, at opposite ends of the
+   * shop, while the clock runs. That is a test of patience rather than of
+   * noticing.
+   *
+   * The other candle defect stays: an offset glow is wrong wherever the flame
+   * happens to be in its cycle, so it can be seen rather than waited out.
+   */
+  "stage02:freezeAnimation:candle1",
+  "stage02:freezeAnimation:candle2",
   "stage02:floating:cat",
   "stage02:floating:potion",
   "stage02:mirrorShadow:merchant",
