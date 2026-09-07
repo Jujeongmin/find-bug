@@ -1,13 +1,47 @@
-# Status — basic-vite-react
+# Status — find-the-bug
 
-## Implemented
+기준: 2026-09-07, `develop` 브랜치.
 
-- React 18 root mount with `StrictMode` (`main.tsx`)
-- Counter demo component with `useState` (`App.tsx`)
-- Tailwind CSS pipeline (directives in `index.css`, PostCSS + autoprefixer)
-- Empty asset manifest (`src/assets.json`)
+## 돌아가는 것
 
-## Installed but not wired
+**하루 루프** — 12일(주말 하나 포함), 09:00–18:00, 실제 1초에 게임 2.3분.
+큐에서 빌드를 꺼내 결함을 찾고 분류를 골라 사인오프. 시계와 컨디션이 유일한 제약.
 
-- `@agent8/gameserver` — no networking / session code
-- `lucide-react` — no icons imported
+**결함 엔진** — 씬 데이터 × mutator 19종으로 결함 풀을 생성, 난이도로 채점,
+밴드 1–4로 30개 스테이지 슬롯에 배분. 손으로 뺀 55개를 제외하고 **121개**가 산다.
+
+**빌드 7종** — `stage01~03`, `05~07`이 엔진 씬, `stage04`(카드 맞추기)는 자체 컴포넌트.
+
+**하루의 나머지** — 출근길 · 퇴근길 · 행인 대사 · 포장마차 · 집 · 옆자리 개발자.
+정해진 날의 사건 둘(5일 핫픽스, 9일 회식), 프리즈와 출시 평점.
+
+**결함 수첩** — localStorage 원본 + 계정 병합. 회차를 넘어 남는 유일한 것.
+
+**서버** — `syncBook` / `reportRun` / `resetSave`. 없어도 게임이 그대로 돈다.
+
+**광고** — 보상형 두 자리(야근 30분, 아침 커피). SDK가 없으면 제안 줄만 사라진다.
+
+**언어 5종** — 한국어 · English · 日本語 · 繁體 · 简体, 579키 전부 번역됨.
+한 언어만 받아온다.
+
+**개발용 화면 셋** — `?debug`(결함 목록) · `?lab` · `?repro`, 전부 `DEV_TOOLS` 뒤.
+
+**회귀 테스트** — `npm run verify` 전항목 통과, `npm run lint` 경고 0,
+`npm run build` / `build:release` 정상.
+
+## 안 한 것 (의도적)
+
+- **결제 없음.** 화폐가 시간과 컨디션이라 VX로 채우면 긴장이 사라진다 —
+  `docs/MONETIZATION.md`.
+- **전면 광고 없음.** 하루 경계는 밤 페이드가 이미 쓰고 있다.
+- **스테이지 그리드 · 타이틀 화면 없음.** 둘 다 제거됨. 사무실이 곧 게임이다.
+- **개발용 화면이 배포본에 살아 있음.** `.env`의 `VITE_DEV_TOOLS=1`이 일부러 켜져 있고,
+  켜진 빌드는 `DEBUG` 표를 단다. 출시는 `npm run build:release`.
+
+## 남은 것
+
+- **`main` 병합 / 배포.** `develop`이 `origin/main`보다 182 커밋 앞서 있다.
+  `main`에는 아직 아무것도 안 올라갔다.
+- **릴리스 빌드 실기기 확인.** `build:release`가 나오는 것까지만 확인됨.
+- 릴리스 번들에 개발용 화면 청크(약 15KB)가 파일로는 남는다. 요청되지 않으므로
+  받아지지는 않지만, 지우려면 조건부 import가 필요하다.
