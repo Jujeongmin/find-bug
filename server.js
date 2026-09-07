@@ -20,6 +20,26 @@ const MAX_ENTRIES = 400;
 const CAUGHT = "caught";
 const MISSED = "missed";
 
+/*
+ * What an entry id is allowed to look like.
+ *
+ * It used to be "a string, under eighty characters, with a slash in it",
+ * which four hundred entries of "a/b" satisfy — and once four hundred are
+ * stored, the cap turns from a guard into a wall: real ids are refused
+ * afterwards because the book is full of nothing.
+ *
+ * The real ones are a stage and a generated bug id, "stage01/floating:tree1"
+ * and the like, and the longest of the hundred and twenty-one is forty-five
+ * characters. This is a shape, not an identity — a caller determined to fill
+ * their own book can still make four hundred well-formed ids that name no
+ * real defect. Only the generated pool itself could settle that, and it lives
+ * on the client. What this does is make the junk have to try, and stop the
+ * obvious version of it, on a record whose blast radius is the caller's own
+ * save either way.
+ */
+const ENTRY_ID = /^stage\d{2}\/[A-Za-z0-9_-]+(:[A-Za-z0-9_-]+)*$/;
+const MAX_ID_LEN = 64;
+
 // oxlint-disable-next-line no-unused-vars -- the platform picks it up by name
 class Server {
   
@@ -89,7 +109,8 @@ function sanitise(raw) {
   for (const [id, state] of Object.entries(raw)) {
     if (n >= MAX_ENTRIES) break;
     if (state !== CAUGHT && state !== MISSED) continue;
-    if (typeof id !== "string" || id.length > 80 || !id.includes("/")) continue;
+    if (typeof id !== "string" || id.length > MAX_ID_LEN) continue;
+    if (!ENTRY_ID.test(id)) continue;
     out[id] = state;
     n++;
   }

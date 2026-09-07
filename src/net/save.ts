@@ -24,13 +24,60 @@ type Remote = Pick<GameServer, "remoteFunction">;
 
 let pending: number | null = null;
 
+/*
+ * A wipe that has not reached the account yet.
+ *
+ * Erasing is the one thing here that a merge cannot carry. Every other call
+ * may fail quietly because the next one says the same thing again — the local
+ * book is whole, so sending it late loses nothing. A wipe is the opposite: the
+ * local book is gone, the account still has it, and the very next sync folds
+ * the account's copy back in and undoes what the player asked for. Offline,
+ * that is not an edge case; it is what happens.
+ *
+ * So the intent outlives the attempt. It is written down before the call, it
+ * survives a reload, and nothing is pulled down until it has been carried out.
+ */
+const RESET_KEY = "fb_reset_owed";
+
+function resetOwed(): boolean {
+  try {
+    return localStorage.getItem(RESET_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function setResetOwed(owed: boolean): void {
+  try {
+    if (owed) localStorage.setItem(RESET_KEY, "1");
+    else localStorage.removeItem(RESET_KEY);
+  } catch {
+    /* a browser that will not store it will not remember the book either */
+  }
+}
+
+/**
+ * Which book the answers in flight belong to.
+ *
+ * A sync sent before a wipe is still on its way back after it, carrying the
+ * very entries that were just erased. Bumping this on a wipe makes those
+ * answers stale, and a stale answer is dropped rather than merged.
+ */
+let epoch = 0;
+
 /** pull the account's copy down and fold both ways */
 export async function syncBook(server: Remote): Promise<void> {
+  // a wipe still owed is carried out first, and nothing is pulled until it is
+  if (resetOwed()) {
+    await resetSave(server);
+    if (resetOwed()) return;
+  }
+  const sent = epoch;
   try {
     const merged = (await server.remoteFunction("syncBook", [
       loadCodex(),
     ])) as Book | null;
-    if (merged) mergeCodex(merged);
+    if (merged && sent === epoch) mergeCodex(merged);
   } catch {
     /* no server, or it said no. The local book is still the book. */
   }
@@ -65,14 +112,32 @@ export async function reportRun(
   }
 }
 
-/** wipe the account's copy as well, so the two do not disagree */
+/**
+ * Wipe the account's copy as well, so the two do not disagree.
+ *
+ * Safe to call with no server: the intent is recorded either way, and the
+ * next sync that finds a connection carries it out before it pulls anything
+ * down. That is what the old comment here promised and did not do — offline,
+ * it returned at the first line and the account kept a book that came back on
+ * the next connection.
+ */
 export async function resetSave(
   server: Remote | null | undefined
 ): Promise<void> {
+  setResetOwed(true);
+  epoch++;
+  // a push scheduled before the wipe would send the emptied book and merge the
+  // account's answer straight back over it
+  if (pending !== null) {
+    clearTimeout(pending);
+    pending = null;
+  }
   if (!server) return;
   try {
     await server.remoteFunction("resetSave", []);
+    setResetOwed(false);
   } catch {
-    /* the local book is already gone; this one goes on the next connection */
+    /* the local book is already gone; this one goes on the next connection,
+       which is now something that actually happens */
   }
 }
