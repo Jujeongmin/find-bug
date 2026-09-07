@@ -255,3 +255,17 @@ last thing in it that was not pixel art.
 Drawn in code rather than in a paint program, for the same reason the chair
 back is CSS: the shapes are rectangles, and a rectangle written down is one
 anybody can move a pixel later.
+
+## 오디오
+
+효과음은 파일이 아니라 `src/audio/sfx.ts`에서 WebAudio로 합성한다. 저장소에 있는
+음원 파일은 배경음악 하나뿐이다.
+
+| 파일 | 곡 | 제작자 | 라이선스 | 원본 링크 |
+|---|---|---|---|---|
+| `public/audio/jrpg-piano.mp3` | JRPG Piano | Joth | CC0 1.0 | https://opengameart.org/content/jrpg-piano |
+
+24.89초 · MPEG1 Layer III · 44100 Hz · 160 kbps · joint stereo · 501,990 바이트.
+받은 파일 이름의 공백만 없앴고 내용은 건드리지 않았다.
+
+CC0라 표기 의무는 없지만 시각 에셋과 같은 이유로 남긴다.
