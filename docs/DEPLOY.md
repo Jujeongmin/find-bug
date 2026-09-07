@@ -28,13 +28,28 @@ find-the-bug/
 
 ## 배포 절차
 
+**이 프로젝트는 플랫폼이 git에서 직접 빌드한다.** push하면 Verse8이 그 커밋을
+받아 `npm run build`를 돌리고 결과를 올린다. 손으로 할 일이 없다.
+
+확인한 근거: 배포된 페이지의 iframe 주소에 커밋 SHA가 박혀 있는데
+(`?sha=7c96bf65...`) `@agent8/deploy` CLI는 git을 전혀 모른다. push 1분 41초 뒤에
+빌드가 돌았고(`buildAt`), CLI가 성공했으면 남겼을 `.deployed` 파일이 프로젝트에
+없다.
+
+**따라서 로컬에서 `npm run build:release`를 해도 배포본은 안 바뀐다.** 플랫폼은
+`build:release`를 모르고 `build`만 돌린다. 개발도구를 끄고 켜는 것은
+`.env`의 `VITE_DEV_TOOLS`이고, 그 파일이 `build`가 읽는 파일이다.
+
+CLI로 직접 올려야 할 때만:
+
 ```bash
 npm install
-npm run build
+npm run build        # 또는 build:release
 npx -y @agent8/deploy
 ```
 
-`@agent8/deploy`가 `server.js`를 업로드하고 `.env`에 `VITE_AGENT8_VERSE`를 넣어준다.
+`@agent8/deploy`는 빌드하지 않는다 — `dist/`에 있는 것을 올릴 뿐이고, 해시가 같은
+파일은 건너뛴다(`--prod`로 강제 전체 업로드). `server.js`도 같이 올라간다.
 서버 함수만 따로 확인하려면:
 
 ```bash
@@ -122,13 +137,14 @@ npm run preview  # 프로덕션 번들 로컬 확인
 | `?day=N` `?place=office\|street` `?at=HHMM` | 원하는 날 · 장소 · 시각에서 시작 |
 | `?lab` `?repro` | 접어둔 시제품 둘 |
 
-**진짜 출시할 때는 이걸로 빌드한다:**
+**끄는 것은 `.env`의 `VITE_DEV_TOOLS=0`이다.** 플랫폼이 `npm run build`를 돌리고
+그 명령이 읽는 파일이 `.env`이므로, 여기가 실제로 효력이 있는 유일한 자리다.
 
-```
-npm run build:release
-```
+`.env.release`와 `npm run build:release`는 CLI로 손수 올릴 때만 쓰인다. 한동안
+이것이 출시용 경로라고 적혀 있었는데, 플랫폼 빌드에는 닿지 않으므로 틀린 말이었다.
 
-`.env.release`가 스위치를 끄고, 위 주소들은 전부 평범한 게임 화면을 돌려준다.
+개발 서버는 영향을 받지 않는다 — `import.meta.env.DEV`가 도구를 켜므로
+`npm run dev`에서는 `VITE_DEV_TOOLS`와 무관하게 전부 살아 있다.
 
 켜진 채로 빌드하면 **모든 화면 우상단에 `DEBUG` 표가 붙는다.** 개발 서버에는 안 붙는다 —
 거기서는 그게 정상이라 표가 잡음이다. 배포한 화면에 저게 보이면 잘못 빌드한 것이다.
