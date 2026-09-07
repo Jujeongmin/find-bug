@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { useGameServer } from "@agent8/gameserver";
 import { sfx } from "../audio/sfx";
+import { music } from "../audio/music";
 import { clearCodex } from "../office/codex";
 import { resetSave } from "../net/save";
 import { useI18n, LANGS, type Lang } from "../i18n";
@@ -28,6 +29,10 @@ export function Settings() {
   const [open, setOpen] = useState(false);
   const [muted, setMuted] = useState(() => sfx.isMuted());
   const [vol, setVol] = useState(() => sfx.getVolume());
+  const [mvol, setMvol] = useState(() => music.getVolume());
+  const [mmuted, setMmuted] = useState(() => music.isMuted());
+  /* the same rule the effects use: all the way down is off */
+  const mSilent = mmuted || mvol === 0;
   const panel = useRef<HTMLDivElement>(null);
   const { server, connected } = useGameServer();
   /*
@@ -118,6 +123,49 @@ export function Settings() {
               }}
               /* one blip on release, not one per pixel of the drag */
               onPointerUp={() => sfx.play("click")}
+            />
+          </div>
+
+          <label>
+            {t("settings.music")}
+            <b>{mSilent ? "—" : `${Math.round(mvol * 100)}%`}</b>
+          </label>
+          <div className="settings-sound">
+            <button
+              className={`settings-mute ${mSilent ? "off" : ""}`}
+              aria-pressed={mSilent}
+              title={mSilent ? t("sound.on") : t("sound.off")}
+              onClick={() => {
+                // pressing the speaker while the slider is at nothing has to
+                // bring the music back, not toggle a flag nobody can hear
+                if (mSilent) {
+                  if (mvol === 0) {
+                    music.setVolume(0.3);
+                    setMvol(0.3);
+                  }
+                  music.setMuted(false);
+                  setMmuted(false);
+                  sfx.play("click");
+                  return;
+                }
+                music.setMuted(true);
+                setMmuted(true);
+              }}
+            >
+              {mSilent ? <SpeakerMutedIcon /> : <SpeakerIcon />}
+            </button>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={Math.round(mvol * 100)}
+              aria-label={t("settings.music")}
+              onChange={(e) => {
+                const next = Number(e.target.value) / 100;
+                music.setVolume(next);
+                setMvol(next);
+                setMmuted(music.isMuted());
+              }}
             />
           </div>
 

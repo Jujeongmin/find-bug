@@ -39,9 +39,20 @@
  * and read as a ghost over the floor — and it only came back on hover, which
  * on a phone is never.
  */
+/*
+ * Faint, but not invisible.
+ *
+ * Half opacity was the resting state and full only arrived on hover — and
+ * the note above already knew what that costs on a phone, where hover never
+ * comes. So the resting state carries most of the way, and a chip behind it
+ * keeps it legible over a floor that is sometimes wood and sometimes tarmac.
+ */
 .settings-btn {
-  opacity: 0.5;
+  opacity: 0.85;
   transition: opacity 0.15s;
+  background: rgba(20, 22, 30, 0.7);
+  border: 1px solid #556;
+  border-radius: 6px;
 }
 .settings-btn:hover,
 .settings-btn.on {
@@ -1147,7 +1158,7 @@
   position: absolute;
   left: 0;
   bottom: 28px;
-  width: 186px;
+  width: 210px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -1160,9 +1171,9 @@
 .settings-panel label {
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 1px;
-  color: #7e879a;
+  color: #98a1b4;
 }
 .settings-panel label b { color: #e0a03f; font-variant-numeric: tabular-nums; }
 .settings-langs { display: flex; flex-wrap: wrap; gap: 4px; }
