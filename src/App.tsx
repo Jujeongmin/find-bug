@@ -46,7 +46,7 @@ const DebugLab = lazy(() =>
  *
  * ?debug lists every build and every defect in it, and opens any one of them
  * with the answer showing. The office deals one fault at random out of a
- * hundred and twenty, which is fine to play and useless to check against — the
+ * hundred and twenty-one, which is fine to play and useless to check against — the
  * defects worth checking are the ones too quiet to come round often.
  */
 const LAB = devFlag("lab");

@@ -7,7 +7,7 @@
  *
  * The game runs entirely on the client. What the account is for is the one
  * thing that is meant to outlive a run and a device: the defect book. A player
- * meets perhaps forty of the hundred and twenty-eight faults in twelve days,
+ * meets perhaps forty of the hundred and twenty-one faults in twelve days,
  * and the reason to start again is the ones they have not met — which is worth
  * nothing if it lives in the site data of one browser.
  *
@@ -20,6 +20,7 @@ const MAX_ENTRIES = 400;
 const CAUGHT = "caught";
 const MISSED = "missed";
 
+// oxlint-disable-next-line no-unused-vars -- the platform picks it up by name
 class Server {
   
   

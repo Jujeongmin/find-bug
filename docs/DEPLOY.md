@@ -8,10 +8,14 @@ Verse8(Agent8) 공식 문서 구조를 따른다.
 find-the-bug/
 ├── src/              # React 클라이언트
 │   ├── main.tsx      # GameServerProvider로 App을 감싼다
-│   ├── App.tsx
-│   ├── engine/       # 씬 엔진 · mutator · 커리큘럼
-│   ├── stages/       # 씬 데이터
-│   ├── net/          # 서버 연동 훅
+│   ├── App.tsx       # 로딩 화면 · 언어 · 개발용 화면 분기
+│   ├── office/       # 하루 루프 (사무실 · 결함 수첩 · 이벤트 · 평점)
+│   ├── street/       # 출퇴근 · 행인 · 포장마차, home/ 은 집
+│   ├── engine/       # 씬 엔진 · mutator · 점수 · 커리큘럼
+│   ├── stages/       # 씬 데이터 (stage01~07, stage04는 수기)
+│   ├── core/         # 판정
+│   ├── net/          # 서버 연동 (save.ts) · 광고 (ads.ts)
+│   ├── debug/ repro/ regression/   # 개발용 화면 셋, 지연 로딩
 │   ├── components/
 │   ├── i18n/
 │   └── styles/
@@ -40,27 +44,28 @@ npx -y @agent8/cli call ping '[]'
 ## 서버 (`server.js`)
 
 문서 규칙대로 **클래스를 정의만 하고 export 하지 않는다.** 게임 로직은 전부
-클라이언트에서 돌고, 서버는 플레이어의 검증 완료 스테이지 번호만 보관한다.
+클라이언트에서 돌고, 서버는 **회차 바깥까지 남는 것**만 보관한다 — 결함 수첩과
+최고 평점. 하루·시간·컨디션·돈은 회차와 함께 사라지므로 올라가지 않는다.
 
 | 함수 | 설명 |
 |---|---|
-| `ping()` | 연결 확인 |
-| `getProgress()` | 저장된 진행도 조회 |
-| `reportClear(stageNo)` | 클리어 기록. 값은 **앞으로만** 이동하므로 오래된 클라이언트가 진행도를 되돌릴 수 없다 |
-| `resetProgress()` | 본인 기록 초기화 |
+| `syncBook(incoming)` | 결함 수첩을 양방향으로 병합하고 합집합을 돌려준다. `caught`는 `missed`를 항상 이기므로 나중 쓰기가 앞선 기록을 지우지 않는다 |
+| `reportRun(rating)` | 회차가 끝날 때의 평점. 최고 기록과 회차 수만 남긴다 |
+| `resetSave()` | 본인 기록 초기화 |
 
 저장은 `$global.updateMyState()`, 조회는 `$global.getMyState()`를 쓴다.
 
 ## 클라이언트 연동
 
-[src/net/useProgress.ts](../src/net/useProgress.ts) 한 곳에서만 서버를 만진다.
+[src/net/save.ts](../src/net/save.ts) 한 곳에서만 서버를 만진다.
 
-- 진행도는 **localStorage에 항상 저장**되고, 서버가 붙으면 그쪽에도 기록한다
-- 접속 시 서버 값과 로컬 값 중 **큰 쪽을 채택**하고, 로컬이 앞서면 서버로 밀어 올린다
+- 수첩은 **localStorage가 원본**이고, 서버가 붙으면 그쪽에도 병합해 둔다
+- 접속 시 양쪽을 **합집합으로 병합**한다. 잡은 것은 못 잡은 것으로 돌아가지 않으므로
+  어느 쪽이 최신인지 따질 필요가 없다
 - 서버가 없거나 실패해도 게임은 그대로 돌아간다 (`npm run dev` 로컬 실행 포함)
 
 이 구조라서 verse8 밖에서도 테스트할 수 있고, verse8 위에서는 기기가 바뀌어도
-진행도가 따라온다.
+수첩이 따라온다.
 
 ## Vite 설정 주의
 
@@ -93,12 +98,6 @@ npm run build    # 타입 체크 + 번들
 npm run preview  # 프로덕션 번들 로컬 확인
 ```
 
-## 개발용 플래그
-
-`?playtest=1`을 붙이면 30스테이지 전체 해금 + 정답 공개 + 버그 재추첨이 켜진다.
-**배포 후 공개 URL에서도 동작하므로**, 정식 공개 전에 제거할지 판단할 것
-(제거하려면 [src/App.tsx](../src/App.tsx)의 `PLAYTEST` 상수를 `false`로 고정).
-
 ## 출시 전 한 가지
 
 지금은 **테스트용 화면이 배포본에도 들어간다.** 만드는 중이라 일부러 그렇게 해뒀다 —
@@ -109,7 +108,7 @@ npm run preview  # 프로덕션 번들 로컬 확인
 
 | 주소 | 하는 일 |
 |---|---|
-| `?debug` | 빌드 7개 · 결함 128개 목록. 누르면 그 결함이 심긴 채로 열린다 |
+| `?debug` | 빌드 7개 · 결함 121개 목록. 누르면 그 결함이 심긴 채로 열린다 |
 | `?playtest=1` | 지금 심긴 결함의 정답을 화면에 띄운다. 광고는 1.2초 스텁 |
 | `?day=N` `?place=office\|street` `?at=HHMM` | 원하는 날 · 장소 · 시각에서 시작 |
 | `?lab` `?repro` | 접어둔 시제품 둘 |
