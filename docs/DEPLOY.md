@@ -51,7 +51,9 @@ npx -y @agent8/cli call ping '[]'
 |---|---|
 | `syncBook(incoming)` | 결함 수첩을 양방향으로 병합하고 합집합을 돌려준다. `caught`는 `missed`를 항상 이기므로 나중 쓰기가 앞선 기록을 지우지 않는다 |
 | `reportRun(rating)` | 회차가 끝날 때의 평점. 최고 기록과 회차 수만 남긴다 |
-| `resetSave()` | 본인 기록 초기화 |
+| `resetSave()` | 본인 기록 초기화. **구매는 지우지 않는다** |
+| `getEntitlements()` | 이 계정이 산 것 조회 (`{ adsRemoved }`) |
+| `$onItemPurchased(...)` | VXShop이 결제 완료 시 호출. 알 수 없는 productId는 거부한다 |
 
 저장은 `$global.updateMyState()`, 조회는 `$global.getMyState()`를 쓴다.
 
@@ -89,6 +91,13 @@ CJS 의존성(`lz4js`)이 로드되지 않으니 **제외가 아니라 함께 �
 
 `@agent8/gameserver@1.10.2`의 peerDependency가 `react@^18.2.0`이라 **React 18에
 고정**돼 있다. React 19로 올리면 설치가 실패한다.
+
+## VXShop 상품 등록
+
+코드는 붙어 있지만 상품은 **Verse8 대시보드에서 직접 등록해야 한다.** 등록 전에는
+설정 패널의 상점 줄이 뜨지 않는다.
+
+Product ID는 `remove-ads`, 구매 제한은 **평생 1회**. 자세한 건 [MONETIZATION.md](MONETIZATION.md).
 
 ## 배포 전 확인
 

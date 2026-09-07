@@ -1,6 +1,7 @@
 import { devParam, devFlag } from "../dev";
 import { recordBug, codexRows, codexTally } from "./codex";
 import { syncBook, queueSync, reportRun } from "../net/save";
+import { loadEntitlements, useAdsRemoved } from "../net/shop";
 import { useGameServer } from "@agent8/gameserver";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
@@ -523,6 +524,15 @@ export function Office({ onExit }: { onExit: () => void }) {
     if (connected) void syncBook(server);
   }, [connected, server]);
 
+  /*
+   * What the account has bought. Read separately from the book, because a
+   * failed sync must not be able to lose a purchase.
+   */
+  const adsRemoved = useAdsRemoved();
+  useEffect(() => {
+    if (connected) void loadEntitlements(server);
+  }, [connected, server]);
+
   /** so a re-render of the terminal screen does not count the run twice */
   const runReported = useRef(false);
   const [codexAtStart] = useState(() => codexTally(codexRows()).caught);
@@ -1027,8 +1037,39 @@ export function Office({ onExit }: { onExit: () => void }) {
     setNote(tp("office.stayedLate", { n: String(OVERTIME_MINUTES) }));
   };
 
+  /**
+   * The half hour, or the cup, given for nothing.
+   *
+   * The same grant whether it was paid for with thirty seconds of advert or
+   * bought outright — one place, so the two routes cannot drift into being
+   * two different rewards. Neither touches the daily limit: the flags below
+   * are what stop a second one, and owning the shop item does not clear them.
+   */
+  const grantFree = (kind: "overtime" | "coffee") => {
+    if (kind === "overtime") {
+      setTookOvertime(true);
+      setOvertime((o) => o + OVERTIME_MINUTES);
+      sfx.play("success");
+      return;
+    }
+    setTookFreeCoffee(true);
+    setHadCoffee(true);
+    setCondition((c) => Math.min(MAX_CONDITION, c + 1));
+    sfx.play("pick");
+    setNote(t("street.freeCoffee"));
+  };
+
   /** the reward, once the ad has actually run to the end */
   const takeOffer = async (kind: "overtime" | "coffee") => {
+    /*
+     * Bought out of the wait. The grant below is the same one the advert
+     * leads to — this skips the thirty seconds, not the conditions.
+     */
+    if (adsRemoved) {
+      setOffer(null);
+      grantFree(kind);
+      return;
+    }
     setWatching(true);
     const out = await showRewarded(kind);
     setWatching(false);
@@ -1048,17 +1089,7 @@ export function Office({ onExit }: { onExit: () => void }) {
       if (out.kind === "none" && out.failed) setNote(t("offer.adFailed"));
       return;
     }
-    if (kind === "overtime") {
-      setTookOvertime(true);
-      setOvertime((o) => o + OVERTIME_MINUTES);
-      sfx.play("success");
-      return;
-    }
-    setTookFreeCoffee(true);
-    setHadCoffee(true);
-    setCondition((c) => Math.min(MAX_CONDITION, c + 1));
-    sfx.play("pick");
-    setNote(t("street.freeCoffee"));
+    grantFree(kind);
   };
 
   /**
@@ -1808,14 +1839,18 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
             */}
             {/* the advert buys the half hour or the cup; nobody sells you a
                 dinner the company is already paying for */}
-            {adsAvailable() &&
+            {(adsRemoved || adsAvailable()) &&
               (offer === "overtime" || (offer === "coffee" && !tookFreeCoffee)) && (
                 <button
                   className="offer-free"
                   disabled={watching}
                   onClick={() => takeOffer(offer)}
                 >
-                  {watching ? t("offer.watching") : t(`offer.${offer}.free`)}
+                  {/* bought, so there is no advert to sit through and no
+                      reason to say there is — the same line without the wait */}
+                  {watching
+                    ? t("offer.watching")
+                    : t(`offer.${offer}.${adsRemoved ? "owned" : "free"}`)}
                 </button>
               )}
           </div>

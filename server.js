@@ -20,6 +20,16 @@ const MAX_ENTRIES = 400;
 const CAUGHT = "caught";
 const MISSED = "missed";
 
+/**
+ * The one thing on sale, and the id it has to be registered under.
+ *
+ * It sells the wait, not the reward. Watching the advert and owning this give
+ * exactly the same half hour and the same cup of coffee — the daily limits
+ * are untouched — so nothing here can be bought that the game does not already
+ * hand out for free to anyone willing to sit through thirty seconds.
+ */
+const REMOVE_ADS = "remove-ads";
+
 /*
  * What an entry id is allowed to look like.
  *
@@ -91,6 +101,42 @@ class Server {
       updatedAt: Date.now(),
     });
     return true;
+  }
+
+  /**
+   * What this account has bought.
+   *
+   * Deliberately not part of syncBook. The book is a merge in both directions
+   * and is allowed to fail quietly; this is a fact the account owns outright
+   * and the client only ever reads. Keeping them apart means a failed sync
+   * cannot lose a purchase and a purchase cannot be spoofed into the book.
+   *
+   * Note that a wipe does not clear it. resetSave is the player throwing away
+   * what they recorded, not what they paid for.
+   */
+  async getEntitlements() {
+    const state = (await $global.getMyState()) || {};
+    return { adsRemoved: state.adsRemoved === true };
+  }
+
+  /**
+   * VXShop calls this when a purchase completes. The client is not involved
+   * and cannot be: it is told what it owns afterwards, by getEntitlements.
+   *
+   * An unknown productId is refused rather than ignored. Something was paid
+   * for and nothing was granted, and that is a dispute — which the platform
+   * counts, and enough of them cost the shop.
+   */
+  async $onItemPurchased({ account, purchaseId, productId }) {
+    if (productId !== REMOVE_ADS) {
+      return { success: false, error: `unknown product: ${productId}` };
+    }
+    await $global.updateUserState(account, {
+      adsRemoved: true,
+      adsRemovedAt: Date.now(),
+      adsRemovedBy: purchaseId,
+    });
+    return { success: true };
   }
 }
 

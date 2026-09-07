@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { useGameServer } from "@agent8/gameserver";
 import { sfx } from "../audio/sfx";
 import { clearCodex } from "../office/codex";
@@ -18,6 +18,11 @@ import { SettingsIcon, SpeakerIcon, SpeakerMutedIcon } from "./icons";
  * it. That is also where the volume slider goes: a control that wants a drag
  * has no business on top of a scene the player is dragging to walk around.
  */
+/* thirty kilobytes of payment SDK, fetched when the panel that holds it opens */
+const ShopRow = lazy(() =>
+  import("./ShopRow").then((m) => ({ default: m.ShopRow }))
+);
+
 export function Settings() {
   const { t, lang, setLang } = useI18n();
   const [open, setOpen] = useState(false);
@@ -115,6 +120,12 @@ export function Settings() {
               onPointerUp={() => sfx.play("click")}
             />
           </div>
+
+          {/* nothing rendered until it arrives; it is one row in a panel and
+              a spinner for it would be louder than the row */}
+          <Suspense fallback={null}>
+            <ShopRow />
+          </Suspense>
 
           <label>{t("settings.data")}</label>
           <button
