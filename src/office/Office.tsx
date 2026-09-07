@@ -786,7 +786,7 @@ export function Office({ onExit }: { onExit: () => void }) {
    * The defect book is the only thing that outlives a run, so an empty one is
    * a player who has never finished a day — which is exactly who the long
    * version of the first morning is for. It reads the stored book rather than
-   * codexRows(), which answers with all hundred and eighteen faults whether
+   * codexRows(), which answers with all hundred and fifteen faults whether
    * they have been met or not and so can never be empty.
    *
    * Read once at mount: it must not change to "returning" underneath a player

@@ -16,6 +16,23 @@ export const EXCLUDED_BUGS: string[] = [
   "stage01:bounceOnEnd:slimeB:bounce",
   "stage01:counterSkew:slimeB:score",
   "stage01:counterSkew:slimeC:score",
+  /*
+   * Floating, on the three trees.
+   *
+   * The tell is the gap the lift opens between a thing and the shadow it
+   * leaves on the ground, and the lift is a flat twenty-eight pixels however
+   * big the thing is. On a shop counter's bread that is ninety-two per cent
+   * of the loaf and unmissable. On a tree it is fifty-five, under a canopy
+   * that is most of what the eye is looking at, and in the forest it is a
+   * dark shadow on dark grass as well.
+   *
+   * Reported as not reading at all, and the measurements agree: the trees are
+   * the three largest things floating can be planted on, and there is a clear
+   * gap between them and everything else it can reach.
+   */
+  "stage01:floating:tree1",
+  "stage01:floating:tree2",
+  "stage05:floating:tree3",
   "stage01:floating:slimeA",
   "stage01:floating:slimeB",
   "stage01:floating:slimeC",
