@@ -19,6 +19,19 @@ body {
   background: #14141f;
   color: #eef;
   -webkit-font-smoothing: antialiased;
+  /*
+   * Nothing here is text to take away.
+   *
+   * Dragging across the floor to walk was selecting the quest line and the
+   * clock on the way past, and a half-highlighted sentence over a room is
+   * the browser insisting this is a document. The game has no field to type
+   * in and nothing worth copying, so the selection is loss without a use —
+   * on a phone it is worse, where the same gesture held a moment too long
+   * raises the copy menu over the game.
+   */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 button {
