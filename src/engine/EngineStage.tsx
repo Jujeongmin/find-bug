@@ -152,7 +152,7 @@ export function EngineStage({
     const banded = poolFor(scene, minBand, maxBand);
     // never leave a stage with nothing to show
     return banded.length >= 1 ? banded : generateMutations(scene);
-  }, [scene, minBand, maxBand]);
+  }, [judging, scene, minBand, maxBand]);
   const [mutation, setMutation] = useState<Mutation | null>(() => {
     if (!mutations.length) return null;
     return mutations.find((m) => m.bug.id === bugId) ?? pickMutation(mutations);
