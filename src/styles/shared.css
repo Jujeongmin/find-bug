@@ -132,7 +132,21 @@
 .sword {
   position: absolute;
   right: -26px;
-  top: 2px;
+  /*
+   * Held, not worn on the head.
+   *
+   * Two pixels from the top of the entity is the top of the entity, and the
+   * entity box is exactly the sprite box — so the blade sat on the crown of a
+   * fifty-six pixel character, and the swing carried it twenty-three pixels
+   * clear of it. Players read that as the defect they were sent to find.
+   *
+   * The pivot was never the problem — transform-origin already put it at the
+   * hilt. The blade swung correctly about a hand that was drawn on the scalp.
+   *
+   * A share of the height rather than a count of pixels, because the entity is
+   * as tall as whatever sprite is in it and this scene draws its player at 1.9.
+   */
+  top: 55%;
   width: 26px;
   height: 5px;
   border-radius: 2px;
