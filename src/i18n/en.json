@@ -404,6 +404,7 @@
   "offer.coffee.yes": "Drink it · +15 min",
   "offer.coffee.no": "Walk on",
   "offer.watching": "Playing…",
+  "offer.adFailed": "Ad unavailable. Try again in a moment.",
   "street.freeCoffee": "A coffee for the price of an ad. The time is still yours.",
   "week.d0": "Mon",
   "week.d1": "Tue",

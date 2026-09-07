@@ -1030,14 +1030,22 @@ export function Office({ onExit }: { onExit: () => void }) {
   /** the reward, once the ad has actually run to the end */
   const takeOffer = async (kind: "overtime" | "coffee") => {
     setWatching(true);
-    const done = await showRewarded(kind);
+    const out = await showRewarded(kind);
     setWatching(false);
     setOffer(null);
-    if (!done) {
-      // A dismissed advert earns nothing and decides nothing. It used to send
-      // the player home, from a prompt whose whole point is that going home is
-      // one of three answers — so the prompt comes back instead.
+    if (out.kind !== "granted") {
+      /*
+       * Nothing was earned and nothing was decided. It used to send the player
+       * home, from a prompt whose whole point is that going home is one of
+       * three answers — so the prompt comes back instead.
+       *
+       * Unless there are no adverts in this session at all, in which case the
+       * prompt comes back without its third line and the player is choosing
+       * between the two that were always there. Saying why would mean
+       * explaining an ad network to someone at their desk at six o'clock.
+       */
       setOffer(kind);
+      if (out.kind === "none" && out.failed) setNote(t("offer.adFailed"));
       return;
     }
     if (kind === "overtime") {

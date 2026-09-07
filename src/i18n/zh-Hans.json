@@ -44,6 +44,7 @@
   "offer.coffee.no": "不喝了",
   "offer.coffee.free": "看广告，免费",
   "offer.watching": "播放中…",
+  "offer.adFailed": "广告加载失败。稍后再试一次。",
   "office.tooTired": "看不下去了。要么喝咖啡，要么下班。",
   "office.whatCondition": "今天还能看 {n} 个版本。每看一个就少一个，睡一觉回到三个。第四个要喝咖啡才有。",
   "office.whatChip": "{machine}，严重度 {sev}。没检查就出去，评分会掉；点越多掉越多。",

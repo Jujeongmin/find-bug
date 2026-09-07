@@ -44,6 +44,7 @@
   "offer.coffee.no": "やめておく",
   "offer.coffee.free": "広告を見て、ただで",
   "offer.watching": "再生中…",
+  "offer.adFailed": "広告を読み込めなかった。少し後でもう一度。",
   "office.tooTired": "もう見られない。コーヒーを飲むか、退勤するかだ。",
   "office.whatCondition": "今日見られるビルドはあと{n}本。一本見るごとに一つ減り、寝ると三つに戻る。四本目はコーヒーを飲まないと出ない。",
   "office.whatChip": "{machine}。深刻度{sev}。検証せずに出ると評価が下がる。点が多いほど大きく下がる。",
