@@ -87,6 +87,15 @@ interface Props {
   onBugPicked?: (bugId: string) => void;
   /** what a wrong report means; without it the player gets another go */
   onFail?: () => void;
+  /**
+   * Point at the report button and say it is the only one.
+   *
+   * The engine builds carry the same arrow. This build is drawn by its own
+   * component rather than by EngineStage, so without its own copy the hint
+   * simply would not appear on the days the card build comes up first —
+   * which on day one is one machine in four.
+   */
+  tutorial?: boolean;
 }
 
 export function Stage04({
@@ -98,10 +107,16 @@ export function Stage04({
   bugId,
   onBugPicked,
   onFail,
+  tutorial = false,
 }: Props) {
   const { t } = useI18n();
   // a build already opened does not read you its briefing again
   const [phase, setPhase] = useState<Phase>(bugId ? "play" : "intro");
+  // the same flag EngineStage writes, so the arrow is shown once per
+  // player rather than once per component
+  const [showHint, setShowHint] = useState(
+    () => tutorial && !localStorage.getItem("fb_seen_tutorial")
+  );
   const [bug, setBug] = useState<BugDef>(
     () => stage04.bugPool.find((b) => b.id === bugId) ?? pickBug(stage04.bugPool)
   );
@@ -265,10 +280,19 @@ export function Stage04({
           {title ?? t("stage.stage04.name")}
         </span>
         <div className="challenge-wrap">
+          {phase === "play" && showHint && (
+            <div className="tutorial-hint">⬇ {t("challenge.tutorial")}</div>
+          )}
           <button
             className="challenge-btn"
             disabled={phase !== "play"}
-            onClick={() => setPhase("picking")}
+            onClick={() => {
+              if (showHint) {
+                localStorage.setItem("fb_seen_tutorial", "1");
+                setShowHint(false);
+              }
+              setPhase("picking");
+            }}
           >
             <AlertIcon size={13} /> {t("challenge.button")}
           </button>

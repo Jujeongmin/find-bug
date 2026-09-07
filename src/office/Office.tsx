@@ -1598,6 +1598,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
           stageNo={day}
           title={build.title}
           playtest={PLAYTEST}
+          tutorial={day === 1}
           bugId={build.bugId}
           onBugPicked={build.onBugPicked}
           onClear={build.onClear}
@@ -1615,6 +1616,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
         title={build.title}
         canZoom={owned.includes("magnifier")}
         playtest={PLAYTEST}
+        tutorial={day === 1}
         bugId={build.bugId}
         onBugPicked={build.onBugPicked}
         onClear={build.onClear}
