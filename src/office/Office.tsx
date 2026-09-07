@@ -1455,6 +1455,19 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
      */
     if (!runReported.current) {
       runReported.current = true;
+      /*
+       * Twelve days end here, and until now they ended in silence: sleep()
+       * returns before its own click on the last night, and this screen
+       * played nothing. It is the one moment in the run that is only a
+       * result, so it gets a sound — and a different one either way, because
+       * the same noise for a build that shipped clean and one that shipped
+       * broken is a page turning, not an answer.
+       *
+       * It lives here rather than in sleep() because this is where the
+       * rating exists. Computing it early would mean copying the stake sum
+       * out of the render, and two copies of that can disagree.
+       */
+      sfx.play(rating >= 3 ? "success" : "fail");
       void reportRun(connected ? server : null, rating);
       void syncBook(server);
     }
