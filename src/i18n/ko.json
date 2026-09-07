@@ -426,6 +426,7 @@
   "result.retryFinal": "사무실로",
   "home.nothingOwed": "오늘은 야근을 안 했다. 쉬지 않고 바로 자도 된다.",
   "office.whatCondition": "오늘 볼 수 있는 빌드가 {n}개 남았다. 하나 볼 때마다 1개씩 줄고, 자고 나면 3개로 돌아온다. 4번째는 커피를 마셔야 생긴다.",
+  "office.firstBuildDone": "빌드 하나를 봤고, 컨디션이 1 줄었다.\n하루에 3개까지. 자고 나면 돌아온다. 4번째는 출근길에 커피를 사야 생긴다.",
   "office.whatChip": "{machine}. 심각도 {sev}. 검사 안 하고 출시되면 출시 등급이 깎인다. 점이 많을수록 많이 깎인다.",
   "office.whatChipDone": "{machine} · {sev}. 이건 봤다.",
   "office.dayShip": "{n}일차 · D-{left}",

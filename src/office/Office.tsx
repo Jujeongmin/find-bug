@@ -879,6 +879,30 @@ export function Office({ onExit }: { onExit: () => void }) {
       setRetestUsed(true);
       setNote(t("office.retested"));
     }
+    /*
+     * The day explains itself the first time it costs anything.
+     *
+     * What the pips mean, that sleep refills them, and what the coffee on
+     * the walk in is for are all written down already — on the condition
+     * meter, behind a tap whose only advertisement is a dotted underline,
+     * which on a phone is no advertisement at all. So the sentence comes
+     * here instead, at the moment the player has just watched three become
+     * two and has a reason to want it explained.
+     *
+     * Counted in builds signed off rather than in condition: a player who
+     * bought a coffee on the way in starts the day at four, so a test
+     * against the starting value would skip the first build and fire on the
+     * second. caught and missed are still pre-increment here, so this is
+     * exactly the first one.
+     *
+     * After the retest branch, which is the other thing in here that can set
+     * a note. On day one there is no money for the retest item, so the two
+     * never actually meet — but ordering says so without relying on the
+     * economy.
+     */
+    if (day === 1 && caught + missed === 0) {
+      setNote(t("office.firstBuildDone"));
+    }
     setAssignments((as) =>
       as.map((a) =>
         a.machine === running.machine

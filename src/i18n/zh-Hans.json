@@ -48,6 +48,7 @@
   "offer.adFailed": "广告加载失败。稍后再试一次。",
   "office.tooTired": "看不下去了。要么喝咖啡，要么下班。",
   "office.whatCondition": "今天还能看 {n} 个版本。每看一个就少一个，睡一觉回到三个。第四个要喝咖啡才有。",
+  "office.firstBuildDone": "看完一个版本，状态少了一格。\n一天三个。睡一觉就回来。第四个只能靠上班路上那杯咖啡。",
   "office.whatChip": "{machine}，严重度 {sev}。没检查就出去，评分会掉；点越多掉越多。",
   "office.whatChipDone": "{machine} · {sev}。这个看过了。",
   "office.dayShip": "第 {n} 天 · 剩 {left} 天",

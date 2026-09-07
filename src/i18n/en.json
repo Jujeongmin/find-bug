@@ -426,6 +426,7 @@
   "result.retryFinal": "Back to the office",
   "home.nothingOwed": "No overtime today. You can go straight to bed.",
   "office.whatCondition": "{n} builds left in you today. Each one you sign off spends one. Sleep brings you back to three; the fourth only comes from a coffee.",
+  "office.firstBuildDone": "That is one build looked at, and one point of condition gone.\nThree a day. Sleep brings them back. A fourth only comes from a coffee on the way in.",
   "office.whatChip": "{machine}, severity {sev}. If it ships without being checked, the star rating drops — the more pips, the further.",
   "office.whatChipDone": "{machine} · {sev}. Seen.",
   "office.dayShip": "Day {n} · {left} to ship",

@@ -48,6 +48,7 @@
   "offer.adFailed": "広告を読み込めなかった。少し後でもう一度。",
   "office.tooTired": "もう見られない。コーヒーを飲むか、退勤するかだ。",
   "office.whatCondition": "今日見られるビルドはあと{n}本。一本見るごとに一つ減り、寝ると三つに戻る。四本目はコーヒーを飲まないと出ない。",
+  "office.firstBuildDone": "ビルドを一本見て、コンディションが一つ減った。\n一日に三本まで。寝れば戻る。四本目は出勤途中のコーヒーからしか出ない。",
   "office.whatChip": "{machine}。深刻度{sev}。検証せずに出ると評価が下がる。点が多いほど大きく下がる。",
   "office.whatChipDone": "{machine} · {sev}。これは見た。",
   "office.dayShip": "{n}日目 · 残り{left}日",
