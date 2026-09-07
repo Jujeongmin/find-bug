@@ -1,5 +1,5 @@
 import { devParam, devFlag } from "../dev";
-import { recordBug, codexRows, codexTally } from "./codex";
+import { recordBug, codexRows, codexTally, loadCodex } from "./codex";
 import { syncBook, queueSync, reportRun } from "../net/save";
 import { loadEntitlements, useAdsRemoved } from "../net/shop";
 import { useGameServer } from "@agent8/gameserver";
@@ -737,6 +737,20 @@ export function Office({ onExit }: { onExit: () => void }) {
    * not, so the first screen of a Saturday told the player to get to work.
    * Two places deciding what today is will always end up disagreeing about it.
    */
+  /*
+   * Whether this is anyone's first run.
+   *
+   * The defect book is the only thing that outlives a run, so an empty one is
+   * a player who has never finished a day — which is exactly who the long
+   * version of the first morning is for. It reads the stored book rather than
+   * codexRows(), which answers with all hundred and twenty-one faults whether
+   * they have been met or not and so can never be empty.
+   *
+   * Read once at mount: it must not change to "returning" underneath a player
+   * halfway through the run that is making it true.
+   */
+  const [firstEverRun] = useState(() => Object.keys(loadCodex()).length === 0);
+
   const morningFor = (d: number) =>
     isWeekend(d)
       ? t("home.morningWeekend")
@@ -745,7 +759,7 @@ export function Office({ onExit }: { onExit: () => void }) {
         : isHotfix(d)
           ? t("event.hotfix.morning")
           : d === 1
-          ? t("home.morningFirst")
+          ? t(firstEverRun ? "home.morningFirst" : "home.morningFirstAgain")
           : tp(
               // the same day, in the voice of whoever is having it
               spirit >= MAX_SPIRIT - 1
