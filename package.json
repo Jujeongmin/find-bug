@@ -15,7 +15,8 @@
     "sprites": "tsx scripts/spritesheet.ts && tsx scripts/spritelist.ts",
     "build:release": "vite build --mode release",
     "recolor": "tsx scripts/recolor.ts",
-    "officeart": "tsx scripts/officeart.ts"
+    "officeart": "tsx scripts/officeart.ts",
+    "storeart": "tsx scripts/storeart.ts"
   },
   "dependencies": {
     "@agent8/gameserver": "^1.10.2",
