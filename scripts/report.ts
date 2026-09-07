@@ -3,9 +3,18 @@ import * as path from "path";
 import { generateMutations } from "../src/engine/generate";
 import { scoreMutations } from "../src/engine/score";
 import { buildCurriculum } from "../src/engine/curriculum";
-import { ENGINE_SCENES, SCENE_BY_ID } from "../src/stages/registry";
-import { translateParams, translate } from "../src/i18n";
+import { ENGINE_SCENES } from "../src/stages/registry";
+import { translateParams, translate, loadLang } from "../src/i18n";
 import { stage04 } from "../src/stages/stage04/bugs";
+
+/*
+ * The report is written in Korean, and Korean is no longer sitting in memory
+ * waiting to be asked for. Since the dictionaries went lazy — one language is
+ * fetched, not five — a language nobody loaded reads English, which is the
+ * right floor for a screen with a gap in it and the wrong one for a document
+ * whose headings stay Korean while every row quietly turns out English.
+ */
+await loadLang("ko");
 
 const cur = buildCurriculum(ENGINE_SCENES, 30);
 

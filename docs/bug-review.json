@@ -8,7 +8,7 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "나무 (왼쪽)",
-      "desc": "나무 (왼쪽): 캐릭터가 그대로 통과할 수 있었다.",
+      "desc": "나무 (왼쪽): 캐릭터가 그대로 통과할 수 있었다.",
       "score": 1.37,
       "band": 1,
       "stages": [
@@ -23,7 +23,7 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "나무 (왼쪽)",
-      "desc": "나무 (왼쪽): 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "나무 (왼쪽): 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.37,
       "band": 1,
       "stages": [
@@ -38,7 +38,7 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "나무 (오른쪽)",
-      "desc": "나무 (오른쪽): 캐릭터가 그대로 통과할 수 있었다.",
+      "desc": "나무 (오른쪽): 캐릭터가 그대로 통과할 수 있었다.",
       "score": 1.38,
       "band": 1,
       "stages": [
@@ -53,7 +53,7 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "나무 (오른쪽)",
-      "desc": "나무 (오른쪽): 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "나무 (오른쪽): 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.38,
       "band": 1,
       "stages": [
@@ -98,13 +98,13 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "물약",
-      "desc": "물약: 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "물약: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.53,
       "band": 2,
       "stages": [
         6,
-        12,
-        17
+        11,
+        16
       ]
     },
     {
@@ -115,13 +115,13 @@
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
       "answers": "젤리 몬스터 B",
-      "desc": "젤리 몬스터 B: 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
+      "desc": "젤리 몬스터 B: 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
       "score": 1.74,
       "band": 2,
       "stages": [
         6,
-        12,
-        17
+        11,
+        16
       ]
     },
     {
@@ -137,8 +137,8 @@
       "band": 2,
       "stages": [
         6,
-        12,
-        17
+        11,
+        16
       ]
     },
     {
@@ -149,11 +149,11 @@
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
       "answers": "젤리 몬스터 C",
-      "desc": "젤리 몬스터 C: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
+      "desc": "젤리 몬스터 C: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
       "score": 2.43,
       "band": 3,
       "stages": [
-        17,
+        16,
         23,
         28
       ]
@@ -170,7 +170,7 @@
       "score": 2.44,
       "band": 3,
       "stages": [
-        17,
+        16,
         23,
         28
       ]
@@ -187,7 +187,7 @@
       "score": 2.53,
       "band": 3,
       "stages": [
-        17,
+        16,
         23,
         28
       ]
@@ -200,11 +200,11 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "젤리 몬스터 B",
-      "desc": "젤리 몬스터 B: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
+      "desc": "젤리 몬스터 B: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
       "score": 2.74,
       "band": 3,
       "stages": [
-        17,
+        16,
         23,
         28
       ]
@@ -217,11 +217,11 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "젤리 몬스터 C",
-      "desc": "젤리 몬스터 C: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
+      "desc": "젤리 몬스터 C: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
       "score": 2.78,
       "band": 3,
       "stages": [
-        17,
+        16,
         23,
         28
       ]
@@ -234,11 +234,11 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "젤리 몬스터 A",
-      "desc": "젤리 몬스터 A: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
+      "desc": "젤리 몬스터 A: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
       "score": 2.84,
       "band": 3,
       "stages": [
-        17,
+        16,
         23,
         28
       ]
@@ -255,7 +255,7 @@
       "score": 2.87,
       "band": 3,
       "stages": [
-        17,
+        16,
         23,
         28
       ]
@@ -283,23 +283,8 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "두루마리",
-      "desc": "두루마리: 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "두루마리: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.31,
-      "band": 1,
-      "stages": [
-        2
-      ]
-    },
-    {
-      "fullId": "stage02:floating:merchant",
-      "scene": "stage02",
-      "sceneName": "마법 상점",
-      "mutator": "floating",
-      "category": "physics",
-      "categoryLabel": "물리 오류",
-      "answers": "상인",
-      "desc": "상인: 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.37,
       "band": 1,
       "stages": [
         2
@@ -328,38 +313,8 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "말린 고기",
-      "desc": "말린 고기: 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "말린 고기: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.41,
-      "band": 1,
-      "stages": [
-        2
-      ]
-    },
-    {
-      "fullId": "stage02:floating:door",
-      "scene": "stage02",
-      "sceneName": "마법 상점",
-      "mutator": "floating",
-      "category": "physics",
-      "categoryLabel": "물리 오류",
-      "answers": "문",
-      "desc": "문: 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.42,
-      "band": 1,
-      "stages": [
-        2
-      ]
-    },
-    {
-      "fullId": "stage02:teleportOnEnd:cat:teleport",
-      "scene": "stage02",
-      "sceneName": "마법 상점",
-      "mutator": "teleportOnEnd",
-      "category": "weird-movement",
-      "categoryLabel": "이상한 움직임",
-      "answers": "점원",
-      "desc": "점원: 끝에 닿으면 반대편으로 순간이동해서 되돌아갔다.",
-      "score": 1.5,
       "band": 1,
       "stages": [
         2
@@ -379,8 +334,8 @@
       "stages": [
         2,
         7,
-        13,
-        18
+        12,
+        17
       ]
     },
     {
@@ -397,8 +352,8 @@
       "stages": [
         2,
         7,
-        13,
-        18
+        12,
+        17
       ]
     },
     {
@@ -409,14 +364,14 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "책",
-      "desc": "책: 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "책: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.52,
       "band": 2,
       "stages": [
         2,
         7,
-        13,
-        18
+        12,
+        17
       ]
     },
     {
@@ -427,68 +382,14 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "빵",
-      "desc": "빵: 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "빵: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.52,
       "band": 2,
       "stages": [
         2,
         7,
-        13,
-        18
-      ]
-    },
-    {
-      "fullId": "stage02:flipSprite:merchant",
-      "scene": "stage02",
-      "sceneName": "마법 상점",
-      "mutator": "flipSprite",
-      "category": "graphic",
-      "categoryLabel": "그래픽 오류",
-      "answers": "상인",
-      "desc": "상인: 위아래가 뒤집힌 채로 있었다.",
-      "score": 1.79,
-      "band": 2,
-      "stages": [
-        2,
-        7,
-        13,
-        18
-      ]
-    },
-    {
-      "fullId": "stage02:reverseDirection:cat",
-      "scene": "stage02",
-      "sceneName": "마법 상점",
-      "mutator": "reverseDirection",
-      "category": "weird-movement",
-      "categoryLabel": "이상한 움직임",
-      "answers": "점원",
-      "desc": "점원: 이동 방향과 반대로 몸이 향해 있었다.",
-      "score": 1.91,
-      "band": 2,
-      "stages": [
-        2,
-        7,
-        13,
-        18
-      ]
-    },
-    {
-      "fullId": "stage02:flipSprite:cat",
-      "scene": "stage02",
-      "sceneName": "마법 상점",
-      "mutator": "flipSprite",
-      "category": "graphic",
-      "categoryLabel": "그래픽 오류",
-      "answers": "점원",
-      "desc": "점원: 위아래가 뒤집힌 채로 있었다.",
-      "score": 1.91,
-      "band": 2,
-      "stages": [
-        2,
-        7,
-        13,
-        18
+        12,
+        17
       ]
     },
     {
@@ -499,14 +400,14 @@
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
       "answers": "촛불 (오른쪽)",
-      "desc": "촛불 (오른쪽): 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
+      "desc": "촛불 (오른쪽): 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
       "score": 2.2,
       "band": 2,
       "stages": [
         2,
         7,
-        13,
-        18
+        12,
+        17
       ]
     },
     {
@@ -517,14 +418,14 @@
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
       "answers": "촛불 (왼쪽)",
-      "desc": "촛불 (왼쪽): 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
+      "desc": "촛불 (왼쪽): 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
       "score": 2.21,
       "band": 2,
       "stages": [
         2,
         7,
-        13,
-        18
+        12,
+        17
       ]
     },
     {
@@ -539,7 +440,7 @@
       "score": 2.31,
       "band": 3,
       "stages": [
-        18,
+        17,
         24,
         29
       ]
@@ -556,7 +457,7 @@
       "score": 2.31,
       "band": 3,
       "stages": [
-        18,
+        17,
         24,
         29
       ]
@@ -573,7 +474,7 @@
       "score": 2.41,
       "band": 3,
       "stages": [
-        18,
+        17,
         24,
         29
       ]
@@ -590,7 +491,7 @@
       "score": 2.41,
       "band": 3,
       "stages": [
-        18,
+        17,
         24,
         29
       ]
@@ -607,7 +508,7 @@
       "score": 2.41,
       "band": 3,
       "stages": [
-        18,
+        17,
         24,
         29
       ]
@@ -624,24 +525,7 @@
       "score": 2.41,
       "band": 3,
       "stages": [
-        18,
-        24,
-        29
-      ]
-    },
-    {
-      "fullId": "stage02:bounceOnEnd:cat:bounce",
-      "scene": "stage02",
-      "sceneName": "마법 상점",
-      "mutator": "bounceOnEnd",
-      "category": "weird-movement",
-      "categoryLabel": "이상한 움직임",
-      "answers": "점원",
-      "desc": "점원: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
-      "score": 2.5,
-      "band": 3,
-      "stages": [
-        18,
+        17,
         24,
         29
       ]
@@ -658,7 +542,7 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        18,
+        17,
         24,
         29
       ]
@@ -675,7 +559,7 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        18,
+        17,
         24,
         29
       ]
@@ -692,7 +576,7 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        18,
+        17,
         24,
         29
       ]
@@ -709,7 +593,7 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        18,
+        17,
         24,
         29
       ]
@@ -782,7 +666,7 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "코인",
-      "desc": "코인: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
+      "desc": "코인: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
       "score": 1.37,
       "band": 1,
       "stages": [
@@ -827,14 +711,14 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "코인",
-      "desc": "코인: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
+      "desc": "코인: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
       "score": 1.51,
       "band": 2,
       "stages": [
         3,
         9,
-        14,
-        19
+        13,
+        18
       ]
     },
     {
@@ -845,14 +729,14 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "코인",
-      "desc": "코인: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
+      "desc": "코인: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
       "score": 1.54,
       "band": 2,
       "stages": [
         3,
         9,
-        14,
-        19
+        13,
+        18
       ]
     },
     {
@@ -863,14 +747,14 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "코인",
-      "desc": "코인: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
+      "desc": "코인: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
       "score": 1.57,
       "band": 2,
       "stages": [
         3,
         9,
-        14,
-        19
+        13,
+        18
       ]
     },
     {
@@ -887,8 +771,8 @@
       "stages": [
         3,
         9,
-        14,
-        19
+        13,
+        18
       ]
     },
     {
@@ -905,8 +789,8 @@
       "stages": [
         3,
         9,
-        14,
-        19
+        13,
+        18
       ]
     },
     {
@@ -917,14 +801,14 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "벽난로 (왼쪽)",
-      "desc": "벽난로 (왼쪽): 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "벽난로 (왼쪽): 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.64,
       "band": 2,
       "stages": [
         3,
         9,
-        14,
-        19
+        13,
+        18
       ]
     },
     {
@@ -935,14 +819,14 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "벽난로 (오른쪽)",
-      "desc": "벽난로 (오른쪽): 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "벽난로 (오른쪽): 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.64,
       "band": 2,
       "stages": [
         3,
         9,
-        14,
-        19
+        13,
+        18
       ]
     },
     {
@@ -953,14 +837,14 @@
       "category": "graphic",
       "categoryLabel": "그래픽 오류",
       "answers": "박쥐 A",
-      "desc": "박쥐 A: 위아래가 뒤집힌 채로 있었다.",
+      "desc": "박쥐 A: 위아래가 뒤집힌 채로 있었다.",
       "score": 1.91,
       "band": 2,
       "stages": [
         3,
         9,
-        14,
-        19
+        13,
+        18
       ]
     },
     {
@@ -971,14 +855,14 @@
       "category": "graphic",
       "categoryLabel": "그래픽 오류",
       "answers": "박쥐 B",
-      "desc": "박쥐 B: 위아래가 뒤집힌 채로 있었다.",
+      "desc": "박쥐 B: 위아래가 뒤집힌 채로 있었다.",
       "score": 1.97,
       "band": 2,
       "stages": [
         3,
         9,
-        14,
-        19
+        13,
+        18
       ]
     },
     {
@@ -989,11 +873,11 @@
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
       "answers": "벽난로 (왼쪽)",
-      "desc": "벽난로 (왼쪽): 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
+      "desc": "벽난로 (왼쪽): 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
       "score": 2.34,
       "band": 3,
       "stages": [
-        19,
+        18,
         25,
         30
       ]
@@ -1010,7 +894,7 @@
       "score": 2.37,
       "band": 3,
       "stages": [
-        19,
+        18,
         25,
         30
       ]
@@ -1023,11 +907,11 @@
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
       "answers": "이동 발판",
-      "desc": "이동 발판: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
+      "desc": "이동 발판: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
       "score": 2.37,
       "band": 3,
       "stages": [
-        19,
+        18,
         25,
         30
       ]
@@ -1040,11 +924,11 @@
       "category": "logic",
       "categoryLabel": "논리 오류",
       "answers": "코인",
-      "desc": "코인: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
+      "desc": "코인: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
       "score": 2.62,
       "band": 3,
       "stages": [
-        19,
+        18,
         25,
         30
       ]
@@ -1057,11 +941,11 @@
       "category": "logic",
       "categoryLabel": "논리 오류",
       "answers": "코인",
-      "desc": "코인: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
+      "desc": "코인: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
       "score": 2.76,
       "band": 3,
       "stages": [
-        19,
+        18,
         25,
         30
       ]
@@ -1074,11 +958,11 @@
       "category": "logic",
       "categoryLabel": "논리 오류",
       "answers": "코인",
-      "desc": "코인: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
+      "desc": "코인: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
       "score": 2.87,
       "band": 3,
       "stages": [
-        19,
+        18,
         25,
         30
       ]
@@ -1091,11 +975,11 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "박쥐 A",
-      "desc": "박쥐 A: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
+      "desc": "박쥐 A: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
       "score": 2.91,
       "band": 3,
       "stages": [
-        19,
+        18,
         25,
         30
       ]
@@ -1108,11 +992,11 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "박쥐 B",
-      "desc": "박쥐 B: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
+      "desc": "박쥐 B: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
       "score": 2.97,
       "band": 3,
       "stages": [
-        19,
+        18,
         25,
         30
       ]
@@ -1125,11 +1009,11 @@
       "category": "logic",
       "categoryLabel": "논리 오류",
       "answers": "코인",
-      "desc": "코인: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
+      "desc": "코인: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
       "score": 3,
       "band": 3,
       "stages": [
-        19,
+        18,
         25,
         30
       ]
@@ -1167,13 +1051,13 @@
     {
       "fullId": "stage05:noCollision:tree3",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "noCollision",
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "나무 (가운데)",
-      "desc": "나무 (가운데): 캐릭터가 그대로 통과할 수 있었다.",
-      "score": 1.31,
+      "desc": "나무 (가운데): 캐릭터가 그대로 통과할 수 있었다.",
+      "score": 1.23,
       "band": 1,
       "stages": [
         4
@@ -1182,13 +1066,13 @@
     {
       "fullId": "stage05:floating:tree3",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "floating",
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "나무 (가운데)",
-      "desc": "나무 (가운데): 공중에 뜬 채 떨어지지 않았다.",
-      "score": 1.31,
+      "desc": "나무 (가운데): 공중에 뜬 채 떨어지지 않았다.",
+      "score": 1.23,
       "band": 1,
       "stages": [
         4
@@ -1197,13 +1081,43 @@
     {
       "fullId": "stage05:floating:toad2",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "floating",
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "독버섯 2",
-      "desc": "독버섯 2: 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "독버섯 2: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.35,
+      "band": 1,
+      "stages": [
+        4
+      ]
+    },
+    {
+      "fullId": "stage05:teleportOnEnd:bug1:teleport",
+      "scene": "stage05",
+      "sceneName": "숲 채집",
+      "mutator": "teleportOnEnd",
+      "category": "weird-movement",
+      "categoryLabel": "이상한 움직임",
+      "answers": "말벌 1",
+      "desc": "말벌 1: 끝에 닿으면 반대편으로 순간이동해서 되돌아갔다.",
+      "score": 1.36,
+      "band": 1,
+      "stages": [
+        4
+      ]
+    },
+    {
+      "fullId": "stage05:noCollision:tree2",
+      "scene": "stage05",
+      "sceneName": "숲 채집",
+      "mutator": "noCollision",
+      "category": "physics",
+      "categoryLabel": "물리 오류",
+      "answers": "나무 (오른쪽)",
+      "desc": "나무 (오른쪽): 캐릭터가 그대로 통과할 수 있었다.",
+      "score": 1.39,
       "band": 1,
       "stages": [
         4
@@ -1212,12 +1126,12 @@
     {
       "fullId": "stage05:noPickup:herb2",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "noPickup",
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "약초 2",
-      "desc": "약초 2: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
+      "desc": "약초 2: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
       "score": 1.41,
       "band": 1,
       "stages": [
@@ -1227,12 +1141,12 @@
     {
       "fullId": "stage05:noPickup:herb1",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "noPickup",
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "약초 1",
-      "desc": "약초 1: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
+      "desc": "약초 1: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
       "score": 1.41,
       "band": 1,
       "stages": [
@@ -1240,225 +1154,177 @@
       ]
     },
     {
-      "fullId": "stage05:noCollision:tree2",
+      "fullId": "stage05:teleportOnEnd:bug2:teleport",
       "scene": "stage05",
-      "sceneName": "숲 채집",
-      "mutator": "noCollision",
-      "category": "physics",
-      "categoryLabel": "물리 오류",
-      "answers": "나무 (오른쪽)",
-      "desc": "나무 (오른쪽): 캐릭터가 그대로 통과할 수 있었다.",
-      "score": 1.47,
+      "sceneName": "숲 채집",
+      "mutator": "teleportOnEnd",
+      "category": "weird-movement",
+      "categoryLabel": "이상한 움직임",
+      "answers": "말벌 2",
+      "desc": "말벌 2: 끝에 닿으면 반대편으로 순간이동해서 되돌아갔다.",
+      "score": 1.42,
       "band": 1,
       "stages": [
         4
       ]
     },
     {
-      "fullId": "stage05:teleportOnEnd:bug1:teleport",
-      "scene": "stage05",
-      "sceneName": "숲 채집",
-      "mutator": "teleportOnEnd",
-      "category": "weird-movement",
-      "categoryLabel": "이상한 움직임",
-      "answers": "숲벌레 1",
-      "desc": "숲벌레 1: 끝에 닿으면 반대편으로 순간이동해서 되돌아갔다.",
-      "score": 1.52,
-      "band": 2,
-      "stages": [
-        4,
-        10,
-        15,
-        21
-      ]
-    },
-    {
-      "fullId": "stage05:teleportOnEnd:bug2:teleport",
-      "scene": "stage05",
-      "sceneName": "숲 채집",
-      "mutator": "teleportOnEnd",
-      "category": "weird-movement",
-      "categoryLabel": "이상한 움직임",
-      "answers": "숲벌레 2",
-      "desc": "숲벌레 2: 끝에 닿으면 반대편으로 순간이동해서 되돌아갔다.",
-      "score": 1.58,
-      "band": 2,
-      "stages": [
-        4,
-        10,
-        15,
-        21
-      ]
-    },
-    {
       "fullId": "stage05:freezeAnimation:bug1",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "freezeAnimation",
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
-      "answers": "숲벌레 1",
-      "desc": "숲벌레 1: 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
-      "score": 2.22,
+      "answers": "말벌 1",
+      "desc": "말벌 1: 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
+      "score": 2.06,
       "band": 2,
       "stages": [
         4,
-        10,
-        15,
-        21
+        19
       ]
     },
     {
       "fullId": "stage05:freezeAnimation:bug2",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "freezeAnimation",
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
-      "answers": "숲벌레 2",
-      "desc": "숲벌레 2: 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
-      "score": 2.28,
+      "answers": "말벌 2",
+      "desc": "말벌 2: 애니메이션이 멈춰 굳어 있었다. 같은 종류의 다른 것은 계속 움직였다.",
+      "score": 2.12,
       "band": 2,
       "stages": [
         4,
-        10,
-        15,
-        21
+        19
+      ]
+    },
+    {
+      "fullId": "stage05:bounceOnEnd:bug1:bounce",
+      "scene": "stage05",
+      "sceneName": "숲 채집",
+      "mutator": "bounceOnEnd",
+      "category": "weird-movement",
+      "categoryLabel": "이상한 움직임",
+      "answers": "말벌 1",
+      "desc": "말벌 1: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
+      "score": 2.36,
+      "band": 3,
+      "stages": [
+        19,
+        26
       ]
     },
     {
       "fullId": "stage05:counterSkew:herb2:herbs",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "counterSkew",
       "category": "logic",
       "categoryLabel": "논리 오류",
-      "answers": "약초 수 / 약초 2",
-      "desc": "약초 수: 표시된 값과 실제로 오르내린 양이 달랐다. (약초 2)",
+      "answers": "약초 수 / 약초 2",
+      "desc": "약초 수: 표시된 값과 실제로 오르내린 양이 달랐다. (약초 2)",
       "score": 2.41,
       "band": 3,
       "stages": [
-        15,
-        21,
+        19,
         26
       ]
     },
     {
       "fullId": "stage05:counterSkew:herb1:herbs",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "counterSkew",
       "category": "logic",
       "categoryLabel": "논리 오류",
-      "answers": "약초 수 / 약초 1",
-      "desc": "약초 수: 표시된 값과 실제로 오르내린 양이 달랐다. (약초 1)",
+      "answers": "약초 수 / 약초 1",
+      "desc": "약초 수: 표시된 값과 실제로 오르내린 양이 달랐다. (약초 1)",
       "score": 2.41,
       "band": 3,
       "stages": [
-        15,
-        21,
-        26
-      ]
-    },
-    {
-      "fullId": "stage05:bounceOnEnd:bug1:bounce",
-      "scene": "stage05",
-      "sceneName": "숲 채집",
-      "mutator": "bounceOnEnd",
-      "category": "weird-movement",
-      "categoryLabel": "이상한 움직임",
-      "answers": "숲벌레 1",
-      "desc": "숲벌레 1: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
-      "score": 2.52,
-      "band": 3,
-      "stages": [
-        15,
-        21,
+        19,
         26
       ]
     },
     {
       "fullId": "stage05:bounceOnEnd:bug2:bounce",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "bounceOnEnd",
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
-      "answers": "숲벌레 2",
-      "desc": "숲벌레 2: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
-      "score": 2.58,
+      "answers": "말벌 2",
+      "desc": "말벌 2: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
+      "score": 2.42,
       "band": 3,
       "stages": [
-        15,
-        21,
+        19,
         26
       ]
     },
     {
       "fullId": "stage05:noDamage:toad2",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "noDamage",
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "독버섯 2",
-      "desc": "독버섯 2: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
+      "desc": "독버섯 2: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
       "score": 2.65,
       "band": 3,
       "stages": [
-        15,
-        21,
+        19,
         26
       ]
     },
     {
       "fullId": "stage05:noDamage:toad1",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "noDamage",
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "독버섯 1",
-      "desc": "독버섯 1: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
+      "desc": "독버섯 1: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
       "score": 2.67,
       "band": 3,
       "stages": [
-        15,
-        21,
+        19,
         26
       ]
     },
     {
       "fullId": "stage05:noRespawn:herb2",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "noRespawn",
       "category": "logic",
       "categoryLabel": "논리 오류",
       "answers": "약초 2",
-      "desc": "약초 2: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
+      "desc": "약초 2: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
       "score": 2.74,
       "band": 3,
       "stages": [
-        15,
-        21,
+        19,
         26
       ]
     },
     {
       "fullId": "stage05:noRespawn:herb1",
       "scene": "stage05",
-      "sceneName": "숲 채집",
+      "sceneName": "숲 채집",
       "mutator": "noRespawn",
       "category": "logic",
       "categoryLabel": "논리 오류",
       "answers": "약초 1",
-      "desc": "약초 1: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
+      "desc": "약초 1: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
       "score": 2.74,
       "band": 3,
       "stages": [
-        15,
-        21,
+        19,
         26
       ]
     },
@@ -1470,14 +1336,14 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "표적 B (가운데)",
-      "desc": "표적 B (가운데): 눌러도 맞지 않았다. 다른 것들은 잘 맞는데.",
+      "desc": "표적 B (가운데): 눌러도 맞지 않았다. 다른 것들은 잘 맞는데.",
       "score": 1.51,
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1488,14 +1354,14 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "표적 B (가운데)",
-      "desc": "표적 B (가운데): 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "표적 B (가운데): 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.51,
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1511,9 +1377,9 @@
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1524,14 +1390,14 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "표적 A (위)",
-      "desc": "표적 A (위): 눌러도 맞지 않았다. 다른 것들은 잘 맞는데.",
+      "desc": "표적 A (위): 눌러도 맞지 않았다. 다른 것들은 잘 맞는데.",
       "score": 1.52,
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1542,14 +1408,14 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "표적 A (위)",
-      "desc": "표적 A (위): 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "표적 A (위): 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.52,
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1565,9 +1431,9 @@
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1578,14 +1444,14 @@
       "category": "no-action",
       "categoryLabel": "동작 안 함",
       "answers": "표적 C (아래)",
-      "desc": "표적 C (아래): 눌러도 맞지 않았다. 다른 것들은 잘 맞는데.",
+      "desc": "표적 C (아래): 눌러도 맞지 않았다. 다른 것들은 잘 맞는데.",
       "score": 1.55,
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1596,14 +1462,14 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "표적 C (아래)",
-      "desc": "표적 C (아래): 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "표적 C (아래): 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.55,
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1619,9 +1485,9 @@
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1632,14 +1498,14 @@
       "category": "physics",
       "categoryLabel": "물리 오류",
       "answers": "사격장 주인",
-      "desc": "사격장 주인: 공중에 뜬 채 떨어지지 않았다.",
+      "desc": "사격장 주인: 공중에 뜬 채 떨어지지 않았다.",
       "score": 1.56,
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1650,14 +1516,14 @@
       "category": "graphic",
       "categoryLabel": "그래픽 오류",
       "answers": "표적 B (가운데)",
-      "desc": "표적 B (가운데): 위아래가 뒤집힌 채로 있었다.",
+      "desc": "표적 B (가운데): 위아래가 뒤집힌 채로 있었다.",
       "score": 1.77,
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1668,14 +1534,14 @@
       "category": "graphic",
       "categoryLabel": "그래픽 오류",
       "answers": "표적 A (위)",
-      "desc": "표적 A (위): 위아래가 뒤집힌 채로 있었다.",
+      "desc": "표적 A (위): 위아래가 뒤집힌 채로 있었다.",
       "score": 1.78,
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1686,14 +1552,14 @@
       "category": "graphic",
       "categoryLabel": "그래픽 오류",
       "answers": "표적 C (아래)",
-      "desc": "표적 C (아래): 위아래가 뒤집힌 채로 있었다.",
+      "desc": "표적 C (아래): 위아래가 뒤집힌 채로 있었다.",
       "score": 1.81,
       "band": 2,
       "stages": [
         5,
-        11,
-        16,
-        22
+        10,
+        14,
+        21
       ]
     },
     {
@@ -1704,12 +1570,11 @@
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
       "answers": "표적 B (가운데)",
-      "desc": "표적 B (가운데): 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
+      "desc": "표적 B (가운데): 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
       "score": 2.51,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1725,8 +1590,7 @@
       "score": 2.51,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1742,8 +1606,7 @@
       "score": 2.51,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1755,12 +1618,11 @@
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
       "answers": "표적 A (위)",
-      "desc": "표적 A (위): 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
+      "desc": "표적 A (위): 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
       "score": 2.52,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1776,8 +1638,7 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1793,8 +1654,7 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1806,12 +1666,11 @@
       "category": "weird-movement",
       "categoryLabel": "이상한 움직임",
       "answers": "표적 C (아래)",
-      "desc": "표적 C (아래): 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
+      "desc": "표적 C (아래): 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
       "score": 2.55,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1827,8 +1686,7 @@
       "score": 2.55,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1844,8 +1702,7 @@
       "score": 2.55,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1861,8 +1718,7 @@
       "score": 2.56,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1878,8 +1734,7 @@
       "score": 2.77,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1895,8 +1750,7 @@
       "score": 2.78,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
     },
@@ -1912,10 +1766,109 @@
       "score": 2.81,
       "band": 3,
       "stages": [
-        16,
-        22,
+        21,
         27
       ]
+    },
+    {
+      "fullId": "stage07:noAction:btnSoda",
+      "scene": "stage07",
+      "sceneName": "자판기",
+      "mutator": "noAction",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "사이다 버튼 / 사이다",
+      "desc": "사이다 버튼: 눌러도 아무 반응이 없었다.",
+      "score": 1.2,
+      "band": 1,
+      "stages": []
+    },
+    {
+      "fullId": "stage07:noAction:btnJuice",
+      "scene": "stage07",
+      "sceneName": "자판기",
+      "mutator": "noAction",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "주스 버튼 / 주스",
+      "desc": "주스 버튼: 눌러도 아무 반응이 없었다.",
+      "score": 1.28,
+      "band": 1,
+      "stages": []
+    },
+    {
+      "fullId": "stage07:noAction:btnCola",
+      "scene": "stage07",
+      "sceneName": "자판기",
+      "mutator": "noAction",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "콜라 버튼 / 콜라",
+      "desc": "콜라 버튼: 눌러도 아무 반응이 없었다.",
+      "score": 1.37,
+      "band": 1,
+      "stages": []
+    },
+    {
+      "fullId": "stage07:counterSkew:btnSoda:served",
+      "scene": "stage07",
+      "sceneName": "자판기",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "뽑은 개수 / 사이다 버튼 / 사이다",
+      "desc": "뽑은 개수: 표시된 값과 실제로 오르내린 양이 달랐다. (사이다 버튼)",
+      "score": 2.2,
+      "band": 2,
+      "stages": [
+        15,
+        22
+      ]
+    },
+    {
+      "fullId": "stage07:counterSkew:btnJuice:served",
+      "scene": "stage07",
+      "sceneName": "자판기",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "뽑은 개수 / 주스 버튼 / 주스",
+      "desc": "뽑은 개수: 표시된 값과 실제로 오르내린 양이 달랐다. (주스 버튼)",
+      "score": 2.28,
+      "band": 2,
+      "stages": [
+        15,
+        22
+      ]
+    },
+    {
+      "fullId": "stage07:counterSkew:btnCola:served",
+      "scene": "stage07",
+      "sceneName": "자판기",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "뽑은 개수 / 콜라 버튼 / 콜라",
+      "desc": "뽑은 개수: 표시된 값과 실제로 오르내린 양이 달랐다. (콜라 버튼)",
+      "score": 2.37,
+      "band": 3,
+      "stages": [
+        15,
+        22
+      ]
+    },
+    {
+      "fullId": "stage07:wiringSwap:btnCola:btnSoda",
+      "scene": "stage07",
+      "sceneName": "자판기",
+      "mutator": "wiringSwap",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "콜라 버튼 / 사이다 버튼",
+      "desc": "콜라 버튼: 연결이 서로 뒤바뀌어 엉뚱한 대상을 작동시켰다.",
+      "score": 3.37,
+      "band": 4,
+      "stages": []
     },
     {
       "fullId": "stage04:E1",
@@ -2116,8 +2069,8 @@
     {
       "n": 10,
       "nameKey": "stage.build.10",
-      "id": "s10-stage05",
-      "sceneId": "stage05",
+      "id": "s10-stage06",
+      "sceneId": "stage06",
       "minBand": 2,
       "maxBand": 2,
       "stars": 1
@@ -2125,8 +2078,8 @@
     {
       "n": 11,
       "nameKey": "stage.build.11",
-      "id": "s11-stage06",
-      "sceneId": "stage06",
+      "id": "s11-stage01",
+      "sceneId": "stage01",
       "minBand": 2,
       "maxBand": 2,
       "stars": 1
@@ -2134,8 +2087,8 @@
     {
       "n": 12,
       "nameKey": "stage.build.12",
-      "id": "s12-stage01",
-      "sceneId": "stage01",
+      "id": "s12-stage02",
+      "sceneId": "stage02",
       "minBand": 2,
       "maxBand": 2,
       "stars": 1
@@ -2143,8 +2096,8 @@
     {
       "n": 13,
       "nameKey": "stage.build.13",
-      "id": "s13-stage02",
-      "sceneId": "stage02",
+      "id": "s13-stage03",
+      "sceneId": "stage03",
       "minBand": 2,
       "maxBand": 2,
       "stars": 1
@@ -2152,8 +2105,8 @@
     {
       "n": 14,
       "nameKey": "stage.build.14",
-      "id": "s14-stage03",
-      "sceneId": "stage03",
+      "id": "s14-stage06",
+      "sceneId": "stage06",
       "minBand": 2,
       "maxBand": 2,
       "stars": 1
@@ -2161,8 +2114,8 @@
     {
       "n": 15,
       "nameKey": "stage.build.15",
-      "id": "s15-stage05",
-      "sceneId": "stage05",
+      "id": "s15-stage07",
+      "sceneId": "stage07",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -2170,8 +2123,8 @@
     {
       "n": 16,
       "nameKey": "stage.build.16",
-      "id": "s16-stage06",
-      "sceneId": "stage06",
+      "id": "s16-stage01",
+      "sceneId": "stage01",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -2179,8 +2132,8 @@
     {
       "n": 17,
       "nameKey": "stage.build.17",
-      "id": "s17-stage01",
-      "sceneId": "stage01",
+      "id": "s17-stage02",
+      "sceneId": "stage02",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -2188,8 +2141,8 @@
     {
       "n": 18,
       "nameKey": "stage.build.18",
-      "id": "s18-stage02",
-      "sceneId": "stage02",
+      "id": "s18-stage03",
+      "sceneId": "stage03",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -2197,8 +2150,8 @@
     {
       "n": 19,
       "nameKey": "stage.build.19",
-      "id": "s19-stage03",
-      "sceneId": "stage03",
+      "id": "s19-stage05",
+      "sceneId": "stage05",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -2216,8 +2169,8 @@
     {
       "n": 21,
       "nameKey": "stage.build.21",
-      "id": "s21-stage05",
-      "sceneId": "stage05",
+      "id": "s21-stage06",
+      "sceneId": "stage06",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -2225,8 +2178,8 @@
     {
       "n": 22,
       "nameKey": "stage.build.22",
-      "id": "s22-stage06",
-      "sceneId": "stage06",
+      "id": "s22-stage07",
+      "sceneId": "stage07",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
