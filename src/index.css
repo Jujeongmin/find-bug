@@ -1,3 +1,29 @@
+/*
+ * The game's own letters.
+ *
+ * Everything on screen is drawn from 16px pixel sheets, and the text over it
+ * was the system UI font — the picture was a game and the writing was a web
+ * page. This is 둥근모꼴, the Korean bitmap face DOS software used in the
+ * nineties, redrawn as outlines: the same grid the sprites are on.
+ *
+ * Bundled rather than linked. Verse8 serves the game from a sub-path and the
+ * bundler is what rewrites asset URLs for it — the same reason the sprite
+ * sheets are imported in spriteStyle.ts instead of sitting in public/.
+ */
+@font-face {
+  font-family: "NeoDunggeunmoPro";
+  src: url("./assets/fonts/neodgm_pro.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  /*
+   * Swap, not block. The face is 38KB and usually arrives before the first
+   * frame, but a slow phone should show the game in the fallback rather than
+   * show nothing — and because the fallback is what every layout here was
+   * measured against, the swap can only ever make lines shorter.
+   */
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -15,7 +41,11 @@ body {
      escape hatch for a single token wider than its box. */
   word-break: keep-all;
   overflow-wrap: break-word;
-  font-family: "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  /* the fallback is not decoration: this face has little simplified-Chinese
+     hanja, and a glyph it lacks has to land on a system font rather than on
+     an empty box */
+  font-family: "NeoDunggeunmoPro", "Segoe UI", "Apple SD Gothic Neo",
+    "Noto Sans KR", sans-serif;
   background: #14141f;
   color: #eef;
   -webkit-font-smoothing: antialiased;

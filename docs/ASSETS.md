@@ -1,7 +1,10 @@
 # 사용 에셋 정리
 
-모든 에셋 **CC0 (Creative Commons Zero)** — 저작자 표시 의무 없음, 상업적 이용·수정·재배포 자유.
-법적으로 크레딧이 필요하진 않지만 관례상 아래에 출처를 남긴다.
+그림 에셋은 대부분 **CC0 (Creative Commons Zero)** — 저작자 표시 의무 없음, 상업적
+이용·수정·재배포 자유. 예외는 둘이고 각각 아래에 따로 적었다: Messy Furniture(무료,
+재배포 금지)와 Neo둥근모 Pro(OFL 1.1, 라이선스 전문 동봉 의무).
+
+법적으로 크레딧이 필요하지 않은 것들도 관례상 아래에 출처를 남긴다.
 
 ## 출처
 
@@ -269,3 +272,34 @@ anybody can move a pixel later.
 받은 파일 이름의 공백만 없앴고 내용은 건드리지 않았다.
 
 CC0라 표기 의무는 없지만 시각 에셋과 같은 이유로 남긴다.
+
+## 글꼴 — Neo둥근모 Pro (OFL 1.1)
+
+https://github.com/neodgm/neodgm-pro
+
+`src/assets/fonts/neodgm_pro.woff2` — 38,144 바이트. npm `neodgm-pro@0.1.1`에서
+받았고 내용은 건드리지 않았다.
+
+1990년대 DOS 비트맵 서체 '둥근모꼴'을 아웃라인으로 옮긴 것의 **가변폭** 판. 같은
+프로젝트의 고정폭 판(Neo둥근모, 44KB)은 긴 한글 문장이 늘어져서 쓰지 않는다.
+
+한글 11,172자 전부와 가나·한자·라틴을 담고 있다. 없는 글자 — 간체 한자가 주로 —는
+`src/index.css`의 스택 뒷부분, 즉 시스템 폰트로 떨어진다. 그래서 그 스택을 지우면
+안 된다.
+
+전진폭이 전부 폰트 크기의 1/16 정수배다. 16유닛 격자 위에 그려진 비트맵 출신이라
+그렇고, [scripts/checkquest.ts](../scripts/checkquest.ts)가 그 표로 글자 폭을
+추정이 아니라 계산한다.
+
+### CC0와 다른 점
+
+OFL은 **의무가 있다.** 폰트를 번들에 담아 배포하므로 라이선스 전문이 같이 가야 하고,
+[src/assets/fonts/OFL.txt](../src/assets/fonts/OFL.txt)가 그것이다.
+
+예약 서체 이름(Reserved Font Name)은 "NeoDunggeunmo Pro"다. 이 조항은 **고친 판**이
+원래 이름을 쓰는 것을 막는 것이고, 여기서는 파일을 손대지 않았으므로 CSS의
+`font-family: "NeoDunggeunmoPro"`는 문제가 없다. 나중에 서브셋을 뜨거나 글리프를
+고치게 되면 그때는 이름을 바꿔야 한다.
+
+고를 때 잰 값과 후보 넷의 비교는
+[스펙 문서](superpowers/specs/2026-09-08-neodgm-pro-design.md)에 있다.
