@@ -342,7 +342,26 @@ function sanitiseRun(raw) {
   if (!raw || typeof raw !== "object") return null;
   if (raw.v !== RUN_VERSION) return null;
   if (JSON.stringify(raw).length > MAX_RUN_BYTES) return null;
-  const out = { v: RUN_VERSION, updatedAt: Date.now() };
+  /*
+   * The client's own timestamp is kept, not replaced with this machine's.
+   *
+   * It is the client that compares the two copies on the next boot — the one
+   * on the device against the one here — and stamping this with server time
+   * would make that a comparison between a phone's clock and a data centre's.
+   * A laptop running a few minutes fast would then beat a phone that had
+   * played four days more, and the player would lose those four days to a
+   * clock. Both sides written by the player's own devices is the only version
+   * of that comparison that means anything.
+   *
+   * A day's grace on the future is there so a badly-set clock cannot park a
+   * run permanently ahead of every later one. The blast radius either way is
+   * the caller's own save.
+   */
+  const ceiling = Date.now() + 86400000;
+  const out = {
+    v: RUN_VERSION,
+    updatedAt: isInt(raw.updatedAt, 0, ceiling) ? raw.updatedAt : Date.now(),
+  };
   for (const [key, rule] of Object.entries(RUN_FIELDS)) {
     const value = runField(rule, raw[key]);
     if (value !== undefined) out[key] = value;

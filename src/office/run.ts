@@ -341,6 +341,12 @@ export function dropRun(): void {
  * The rule has to be a single rule, because nobody is going to be asked. A tie
  * goes to the first argument, which is always the local one: same instant,
  * same run, no reason to prefer the copy that came over a wire.
+ *
+ * Both timestamps are put on by the device that was played on — the server
+ * keeps what it was sent rather than stamping its own. That matters more than
+ * it looks: stamped by the server, this would be comparing a phone's clock
+ * against a data centre's, and a laptop running a few minutes fast would beat
+ * a phone that had played four days more.
  */
 export function newer(
   a: RunSnapshot | null,
@@ -376,43 +382,127 @@ const tell = (server: Remote, name: string, args: unknown[]) => {
  * How long the run is left alone before it goes up the wire.
  *
  * A day's worth of state changes arrive in bursts — a build is signed off, the
- * developer takes it, the pay lands, the clock moves — and one account write
- * per change is several a second for a record nothing reads until the next
- * time the game opens. queueSync makes the same trade for the book, at four
- * seconds; this is shorter because what it protects against is the tab dying,
- * and four seconds of a working day is a build.
+ * developer takes it, the pay lands — and one account write per change is
+ * several a second for a record nothing reads until the next time the game
+ * opens. queueSync makes the same trade for the book, at four seconds; this is
+ * shorter because what it protects against is the tab dying, and four seconds
+ * of a working day is a build.
  */
 export const RUN_PUSH_MS = 1500;
 
-let pushing: ReturnType<typeof setTimeout> | null = null;
+/**
+ * ...but a quiet gap is not something this game can count on having.
+ *
+ * The office clock ticks four times a second for the whole working day, and
+ * the minute it moves is part of the run — so "write it down once the player
+ * stops changing it" describes a moment that never arrives between nine and
+ * six. A plain debounce is reset on every tick and fires never, and the first
+ * version of this pushed nothing to the account for an entire day: exactly the
+ * copy that a new phone depends on, and the only one that cannot be rebuilt
+ * from what is on this device.
+ *
+ * So the wait is capped. Quiet still gets a write in a second and a half; a
+ * day that is never quiet gets one every six seconds regardless. Six seconds
+ * of the office clock is a quarter of an hour of the day, and it is only ever
+ * lost by moving to another device mid-run — the copy on this one is a second
+ * behind at worst.
+ */
+export const RUN_PUSH_MAX_MS = 6000;
+
+/**
+ * And the device is not written four times a second either.
+ *
+ * A kilobyte of JSON stringified and stored on every tick, all day, is work
+ * nobody asked for on a battery. One a second is enough: what it risks is a
+ * second of a day, and the first write after a quiet moment still happens on
+ * the spot, so a purchase or a signed-off build is on disk immediately.
+ */
+export const RUN_LOCAL_MS = 1000;
+
+let latest: RunFields | null = null;
+let latestServer: Remote | null = null;
+let lastSnap: RunSnapshot | null = null;
+
+let localTimer: ReturnType<typeof setTimeout> | null = null;
+let lastLocalAt = 0;
+let pushTimer: ReturnType<typeof setTimeout> | null = null;
+let pushSince = 0;
+
+const writeLocal = () => {
+  localTimer = null;
+  if (!latest) return;
+  lastSnap = writeRun(latest);
+  lastLocalAt = Date.now();
+};
+
+const scheduleLocal = () => {
+  if (localTimer !== null) return;
+  const due = lastLocalAt + RUN_LOCAL_MS - Date.now();
+  if (due <= 0) {
+    writeLocal();
+    return;
+  }
+  localTimer = setTimeout(writeLocal, due);
+};
+
+const push = () => {
+  pushTimer = null;
+  pushSince = 0;
+  // send what is on disk, not something newer: the two copies disagreeing
+  // about which run is the run is the one thing newer() cannot sort out
+  if (localTimer !== null) {
+    clearTimeout(localTimer);
+    writeLocal();
+  }
+  if (latestServer && lastSnap) tell(latestServer, "saveRun", [lastSnap]);
+};
+
+const schedulePush = () => {
+  if (!latestServer) return;
+  const now = Date.now();
+  if (!pushSince) pushSince = now;
+  if (pushTimer !== null) clearTimeout(pushTimer);
+  const wait = Math.min(
+    RUN_PUSH_MS,
+    Math.max(0, pushSince + RUN_PUSH_MAX_MS - now)
+  );
+  pushTimer = setTimeout(push, wait);
+};
 
 const unqueue = () => {
-  if (pushing !== null) {
-    clearTimeout(pushing);
-    pushing = null;
+  if (localTimer !== null) {
+    clearTimeout(localTimer);
+    localTimer = null;
   }
+  if (pushTimer !== null) {
+    clearTimeout(pushTimer);
+    pushTimer = null;
+  }
+  latest = null;
+  lastSnap = null;
+  pushSince = 0;
 };
 
 /**
- * Write the run down: on this device now, on the account shortly.
+ * Write the run down: on this device shortly, on the account soon after.
  *
- * The local write is synchronous and unconditional, because it is the copy
- * that answers on the next load and it costs nothing. The account write is the
- * one that survives a new phone, and it can fail as often as it likes — the
- * next change sends the whole run again, so a dropped push loses nothing but
- * the seconds until the next one.
+ * Neither write is guaranteed to have happened when this returns. What is
+ * guaranteed is that the newest run handed to it is the one both copies end up
+ * with, and that neither cadence can be starved by a caller that never stops
+ * calling — which, with a clock on the wall, is every caller.
+ *
+ * The account write can fail as often as it likes. The next change sends the
+ * whole run again, so a dropped push loses nothing but the seconds until the
+ * next one.
  */
 export function saveRun(
   fields: RunFields,
   server: Remote | null | undefined
 ): void {
-  const snap = writeRun(fields);
-  if (!server) return;
-  unqueue();
-  pushing = setTimeout(() => {
-    pushing = null;
-    tell(server, "saveRun", [snap]);
-  }, RUN_PUSH_MS);
+  latest = fields;
+  latestServer = server ?? null;
+  scheduleLocal();
+  schedulePush();
 }
 
 /** the account's copy, or nothing at all if it cannot be had */

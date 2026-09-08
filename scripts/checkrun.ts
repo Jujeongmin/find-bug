@@ -18,6 +18,8 @@ import {
   fetchRun,
   RUN_VERSION,
   RUN_PUSH_MS,
+  RUN_PUSH_MAX_MS,
+  RUN_LOCAL_MS,
   type RunFields,
   type Remote,
 } from "../src/office/run";
@@ -186,6 +188,21 @@ console.log("\nthe server knows the same run the client does");
     );
   }
 
+  // both copies have to be stamped by the player's own devices, or newer()
+  // is comparing a phone's clock against a data centre's
+  const stamp = Date.now() - 60_000;
+  is(
+    sanitiseRun({ v: RUN_VERSION, updatedAt: stamp, day: 4 })?.updatedAt ===
+      stamp,
+    "the client's own timestamp is kept, not replaced with the server's"
+  );
+  const absurd = Date.now() + 400 * 86400000;
+  is(
+    (sanitiseRun({ v: RUN_VERSION, updatedAt: absurd, day: 4 })
+      ?.updatedAt as number) < absurd,
+    "but a clock a year fast cannot park a run ahead of every later one"
+  );
+
   is(sanitiseRun(null) === null, "nothing is not a run");
   is(sanitiseRun({ v: 99, updatedAt: 1 }) === null, "nor is a future version");
   is(
@@ -251,10 +268,36 @@ console.log("\nthe account is written to once, not once per change");
   is(sent.day === 5, "and what it sends is the last of them");
 }
 
+console.log("\na clock that never stops does not starve the account");
+{
+  // the office clock calls setMinutes every 250ms all working day, so the run
+  // never has the quiet second and a half a plain debounce waits for. This is
+  // that day, at speed: the first version of saveRun pushed nothing at all.
+  store.clear();
+  const srv = fakeServer();
+  const started = Date.now();
+  let day = 1;
+  const ticking = setInterval(() => {
+    saveRun({ ...FULL, minutes: 540 + day++ }, srv as unknown as Remote);
+  }, 250);
+  await wait(RUN_PUSH_MAX_MS + 800);
+  clearInterval(ticking);
+  const ticks = Math.round((Date.now() - started) / 250);
+  is(
+    srv.calls.length >= 1,
+    `${ticks} ticks with no gap still reach the account (${srv.calls.length} writes)`
+  );
+  is(
+    store.get("fb_run") !== undefined,
+    "and the device is written too, without one write per tick"
+  );
+}
+
 console.log("\na run with no server still reaches the device");
 {
   store.clear();
   saveRun({ ...FULL, day: 3 }, null);
+  await wait(RUN_LOCAL_MS + 200);
   const back = parseRun(JSON.parse(store.get("fb_run") as string));
   is(back?.day === 3, "offline, localStorage is the whole of it");
 }
