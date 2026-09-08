@@ -351,6 +351,19 @@ console.log("\nthe run writes itself down, and knows when not to");
   );
 }
 
+console.log("\nwiping the record throws the run away with it");
+{
+  const src = readFileSync("src/components/Settings.tsx", "utf8");
+  const at = src.indexOf("clearCodex()");
+  is(at !== -1, "the wipe button is where it was");
+  const block = src.slice(at, at + 1400);
+  is(/clearRun\(/.test(block), "the run goes when the book does");
+  is(
+    /location\.reload\(\)/.test(block),
+    "and the page is reopened, so the run in memory cannot write itself back"
+  );
+}
+
 if (bad) {
   console.log(`\n${bad} failed`);
   process.exit(1);

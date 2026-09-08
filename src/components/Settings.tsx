@@ -4,6 +4,7 @@ import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
 import { clearCodex } from "../office/codex";
 import { resetSave } from "../net/save";
+import { clearRun } from "../office/run";
 import { useI18n, LANGS, type Lang } from "../i18n";
 import { SettingsIcon, SpeakerIcon, SpeakerMutedIcon } from "./icons";
 
@@ -184,10 +185,26 @@ export function Settings() {
                 return;
               }
               clearCodex();
+              clearRun(connected ? server : null);
               void resetSave(connected ? server : null);
-              setConfirming(false);
-              setOpen(false);
               sfx.play("fail");
+              /*
+               * Reopen the page rather than tidy up in place.
+               *
+               * The run is thirty-six pieces of state in a component that is
+               * still mounted and still writing itself down every time one of
+               * them moves. Clear the stores and leave the screen alone and
+               * the eighth day is back on disk a second and a half later,
+               * from memory, over the top of the wipe. Putting all thirty-six
+               * back by hand is the other way, and forgetting one leaves a run
+               * that is half erased.
+               *
+               * The stores are emptied synchronously above, so the reload
+               * finds nothing and starts a new run. The account is carried by
+               * the reset that is already owed, which survives a reload for
+               * exactly this reason.
+               */
+              location.reload();
             }}
           >
             {t(confirming ? "settings.wipeSure" : "settings.wipe")}
