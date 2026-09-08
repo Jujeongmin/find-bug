@@ -11,7 +11,24 @@
  * fields invite.
  */
 import { readFileSync } from "node:fs";
-import { parseRun, RUN_VERSION, type RunFields } from "../src/office/run";
+import {
+  parseRun,
+  saveRun,
+  clearRun,
+  fetchRun,
+  RUN_VERSION,
+  RUN_PUSH_MS,
+  type RunFields,
+  type Remote,
+} from "../src/office/run";
+
+/** a localStorage that exists, because node has none */
+const store = new Map<string, string>();
+(globalThis as { localStorage?: unknown }).localStorage = {
+  getItem: (k: string) => store.get(k) ?? null,
+  setItem: (k: string, v: string) => void store.set(k, v),
+  removeItem: (k: string) => void store.delete(k),
+};
 
 let bad = 0;
 const ok = (msg: string) => console.log(`PASS  ${msg}`);
@@ -202,6 +219,74 @@ console.log("\nthe server knows the same run the client does");
     }) === null,
     "and a run too big to be real is refused outright"
   );
+}
+
+const fakeServer = () => {
+  const calls: { name: string; args: unknown[] }[] = [];
+  return {
+    calls,
+    remoteFunction: async (name: string, args: unknown[]) => {
+      calls.push({ name, args });
+      if (name === "getRun") return null;
+      return { ok: true };
+    },
+  };
+};
+
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+console.log("\nthe account is written to once, not once per change");
+{
+  const srv = fakeServer();
+  for (let day = 1; day <= 5; day++)
+    saveRun({ ...FULL, day }, srv as unknown as Remote);
+  is(
+    store.get("fb_run") !== undefined,
+    "the device has it immediately, before any wire"
+  );
+  is(srv.calls.length === 0, "and the account has not been called yet");
+  await wait(RUN_PUSH_MS + 300);
+  is(srv.calls.length === 1, "five changes become one account write");
+  const sent = srv.calls[0].args[0] as { day: number };
+  is(sent.day === 5, "and what it sends is the last of them");
+}
+
+console.log("\na run with no server still reaches the device");
+{
+  store.clear();
+  saveRun({ ...FULL, day: 3 }, null);
+  const back = parseRun(JSON.parse(store.get("fb_run") as string));
+  is(back?.day === 3, "offline, localStorage is the whole of it");
+}
+
+console.log("\nclearing takes both copies");
+{
+  const srv = fakeServer();
+  saveRun(FULL, srv as unknown as Remote);
+  clearRun(srv as unknown as Remote);
+  is(store.get("fb_run") === undefined, "the device forgets at once");
+  await wait(RUN_PUSH_MS + 300);
+  const names = srv.calls.map((c) => c.name);
+  is(names.includes("clearRun"), "the account is told to forget");
+  is(!names.includes("saveRun"), "and the queued write is dropped, not sent");
+}
+
+console.log("\na server that says no does not take the run with it");
+{
+  store.clear();
+  // it throws where it stands, rather than returning a rejected promise —
+  // the harsher of the two, and the one a naive `.catch()` does not survive
+  const angry = {
+    remoteFunction: () => {
+      throw new Error("no");
+    },
+  } as unknown as Remote;
+  saveRun({ ...FULL, day: 6 }, angry);
+  await wait(RUN_PUSH_MS + 300);
+  const back = parseRun(JSON.parse(store.get("fb_run") as string));
+  is(back?.day === 6, "the device's copy is untouched by a failed push");
+  const got = await fetchRun(angry);
+  is(got === null, "and a failed read is nothing, not an exception");
 }
 
 console.log("\nwiping the account takes the run and leaves the purchase");

@@ -1,3 +1,4 @@
+import type { GameServer } from "@agent8/gameserver";
 import type { Severity } from "./rating";
 import type { MachineId } from "./scene";
 
@@ -348,4 +349,93 @@ export function newer(
   if (!a) return b;
   if (!b) return a;
   return b.updatedAt > a.updatedAt ? b : a;
+}
+
+export type Remote = Pick<GameServer, "remoteFunction">;
+
+/**
+ * Call the server and care about nothing that comes back.
+ *
+ * Both writes below are fire-and-forget, and both have to survive a server
+ * that fails in either of the two ways: a rejected promise, or a throw where
+ * it stands. `.catch()` alone only covers the first, and the second would take
+ * down the timer callback it was called from — which on a phone with a bad
+ * connection is an uncaught error every second and a half.
+ */
+const tell = (server: Remote, name: string, args: unknown[]) => {
+  void (async () => {
+    try {
+      await server.remoteFunction(name, args);
+    } catch {
+      /* the device already has the truth; the next change sends it again */
+    }
+  })();
+};
+
+/**
+ * How long the run is left alone before it goes up the wire.
+ *
+ * A day's worth of state changes arrive in bursts — a build is signed off, the
+ * developer takes it, the pay lands, the clock moves — and one account write
+ * per change is several a second for a record nothing reads until the next
+ * time the game opens. queueSync makes the same trade for the book, at four
+ * seconds; this is shorter because what it protects against is the tab dying,
+ * and four seconds of a working day is a build.
+ */
+export const RUN_PUSH_MS = 1500;
+
+let pushing: ReturnType<typeof setTimeout> | null = null;
+
+const unqueue = () => {
+  if (pushing !== null) {
+    clearTimeout(pushing);
+    pushing = null;
+  }
+};
+
+/**
+ * Write the run down: on this device now, on the account shortly.
+ *
+ * The local write is synchronous and unconditional, because it is the copy
+ * that answers on the next load and it costs nothing. The account write is the
+ * one that survives a new phone, and it can fail as often as it likes — the
+ * next change sends the whole run again, so a dropped push loses nothing but
+ * the seconds until the next one.
+ */
+export function saveRun(
+  fields: RunFields,
+  server: Remote | null | undefined
+): void {
+  const snap = writeRun(fields);
+  if (!server) return;
+  unqueue();
+  pushing = setTimeout(() => {
+    pushing = null;
+    tell(server, "saveRun", [snap]);
+  }, RUN_PUSH_MS);
+}
+
+/** the account's copy, or nothing at all if it cannot be had */
+export async function fetchRun(server: Remote): Promise<RunSnapshot | null> {
+  try {
+    return parseRun(await server.remoteFunction("getRun", []));
+  } catch {
+    /* no server, or it said no. Whatever is on the device stands. */
+    return null;
+  }
+}
+
+/**
+ * Throw the run away, on both copies.
+ *
+ * The queued push is cancelled first. Without that, a run cleared at the end
+ * of the twelfth day is still sitting in the timer, and a second and a half
+ * later it lands back on the account — so the next opening resumes a run the
+ * player has already finished.
+ */
+export function clearRun(server: Remote | null | undefined): void {
+  unqueue();
+  dropRun();
+  if (!server) return;
+  tell(server, "clearRun", []);
 }
