@@ -98,6 +98,15 @@ export function insideBlocker(
   return Math.hypot(x - centre.x, y - centre.y) < b.radius;
 }
 
+/**
+ * How much room a person takes up, for anything else that is walking.
+ *
+ * Smaller than the sixteen a passer-by blocks with, on purpose: two people
+ * edging past each other on a pavement should brush, not bounce, and the
+ * point of this is only that nobody ends up standing in the same place.
+ */
+const BODY_RADIUS = 13;
+
 export function hitCentre(
   o: ObjectSpec,
   s: { x: number; y: number }
@@ -211,6 +220,44 @@ export class SceneRuntime {
       if (insideBlocker(bl, c, x, y)) return true;
     }
     return false;
+  }
+
+  /**
+   * Would this step put a walker on top of the player?
+   *
+   * The player is the one thing that walks about and is not a blocker, which
+   * for a long time only meant that people could be walked through. It also
+   * meant they could be walked *onto*: a passer-by is a blocker as well as a
+   * wanderer, and the wandering half stepped onto the player's own square with
+   * nothing to say it should not. From inside a circle there is no way out
+   * that the movement code recognises — the diagonal, each axis alone, and the
+   * tangent past the edge are all still inside — so the player stood there
+   * until the passer chose to walk off, which it does after pausing for up to
+   * four and a half seconds.
+   *
+   * Making the player a blocker outright would be wrong: the whole street is
+   * y-sorted around them and a station's radius is measured from where they
+   * stand. What is needed is only this — the room a person takes up, for the
+   * benefit of anything else that is walking.
+   */
+  stepsOntoPlayer(
+    fromX: number,
+    fromY: number,
+    toX: number,
+    toY: number,
+    self?: string
+  ): boolean {
+    const p = this.player();
+    if (!p || p.id === self) return false;
+    const ps = this.state.objects[p.id];
+    if (!ps) return false;
+    const c = hitCentre(p, ps);
+    const to = Math.hypot(toX - c.x, toY - c.y);
+    if (to >= BODY_RADIUS) return false;
+    // Already overlapping — a scene can open that way, and a walker with no
+    // way out of it is a walker rooted to the spot. A step that puts daylight
+    // between the two of them is the opposite of a collision, so it is taken.
+    return to <= Math.hypot(fromX - c.x, fromY - c.y);
   }
 
   /**
@@ -427,7 +474,29 @@ export class SceneRuntime {
               }
               return null;
             };
-            const free = (x: number, y: number) => !blocking(x, y);
+            /*
+             * The way out of something you are already inside.
+             *
+             * Every test below asks "is this clear?", and from inside a circle
+             * the answer is no everywhere near you — so the player pressed
+             * into one stood still with nothing on screen holding them. It is
+             * reachable however careful the blockers are: somebody walks onto
+             * you, a scene opens with the two of you overlapping, a mutation
+             * moves a barrel onto where you were standing.
+             *
+             * So when there is already something holding you, the question
+             * changes. It is no longer "is this clear" but "is this further
+             * out than where I am", which is what pushing away from something
+             * is, and which is always answerable.
+             */
+            const here = blocking(os.x, os.y);
+            const out = here
+              ? Math.hypot(os.x - here.x, os.y - here.y)
+              : 0;
+            const free = here
+              ? (x: number, y: number) =>
+                  Math.hypot(x - here.x, y - here.y) > out
+              : (x: number, y: number) => !blocking(x, y);
             /*
              * Slide along what you are pressed against.
              *
@@ -505,7 +574,10 @@ export class SceneRuntime {
              * person; one that slides along a wall towards a fixed point reads
              * as a bug, and the sliding is the part that is hard to get right.
              */
-            if (this.blockedAt(nx, ny, o.id)) {
+            if (
+              this.blockedAt(nx, ny, o.id) ||
+              this.stepsOntoPlayer(os.x, os.y, nx, ny, o.id)
+            ) {
               os.goal = undefined;
               os.moving = false;
               os.waitUntil = st.now + b.pause * 0.5;

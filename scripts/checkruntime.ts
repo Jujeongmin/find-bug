@@ -354,3 +354,57 @@ const ok = (label: string, cond: boolean) =>
 
   console.log("PASS  ship rating: clean 5.0, all out 1.0, and the middle spreads");
 }
+
+/*
+ * Nobody on the pavement gets to stand on you.
+ *
+ * A passer-by is a blocker as well as a wanderer, and the player is neither —
+ * so the wandering half walked straight onto the player's own square, and the
+ * blocking half then had the player inside a circle rather than pressed up
+ * against one. Inside it, every escape the movement code knows how to try —
+ * the diagonal, each axis on its own, and the tangent past the edge — is still
+ * inside it, so all four failed and the player stood there until the passer
+ * happened to wander off. It pauses for up to four and a half seconds at a
+ * time, so "happened to" was most of a morning.
+ *
+ * Two things are checked, because either alone leaves the fault reachable: a
+ * walker does not step onto the player, and a player who is inside a blocker
+ * anyway can always get back out of it.
+ */
+{
+  const rt = new SceneRuntime(streetScene);
+  const p = rt.state.objects.player;
+  const q = rt.state.objects.passer0;
+  // stand the player in the middle of where passer0 walks, and hold still.
+  // Not on its starting square: the check is whether a minute of wandering
+  // ever arrives on the player, not whether it can leave a spot it was
+  // already sharing.
+  p.x = 150;
+  p.y = 380;
+  let landedOn = 0;
+  for (let i = 0; i < 60 * 60; i++) {
+    rt.tick(1 / 60);
+    if (Math.hypot(q.x - p.x, q.y - p.y) < 8) landedOn++;
+  }
+  ok("a passer-by never walks onto the player", landedOn === 0);
+}
+
+{
+  const rt = new SceneRuntime(streetScene);
+  const p = rt.state.objects.player;
+  // The same trap, held still. A passer-by walks off in half a second and
+  // frees the player by accident, which is not the property being checked —
+  // the crate by the wall never moves, so being inside it stays being inside
+  // it until the movement code itself does something about it.
+  const c = rt.state.objects.crateStreet;
+  p.x = c.x;
+  p.y = c.y;
+  const from = { x: p.x, y: p.y };
+  rt.keys.add("arrowdown");
+  for (let i = 0; i < 30; i++) rt.tick(1 / 60);
+  rt.keys.clear();
+  ok(
+    "and a player caught inside one can always walk out",
+    Math.hypot(p.x - from.x, p.y - from.y) > 4
+  );
+}
