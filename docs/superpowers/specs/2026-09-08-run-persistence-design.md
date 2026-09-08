@@ -59,7 +59,7 @@
 직렬화와 검증과 두 곳에 대한 입출력을 거기 더 넣으면 읽을 수 없어진다.
 
 ```
-loadRun()            localStorage에서 동기 읽기 (첫 렌더가 옳으려면 동기여야 한다)
+readRun()            localStorage에서 동기 읽기 (첫 렌더가 옳으려면 동기여야 한다)
 saveRun(snap, srv)   localStorage 즉시, 계정은 1.5초 디바운스
 clearRun(srv)        양쪽
 fetchRun(srv)        계정 사본
