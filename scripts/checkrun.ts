@@ -328,6 +328,29 @@ console.log("\nscreen state stays out of the run");
   );
 }
 
+console.log("\nthe run writes itself down, and knows when not to");
+{
+  const src = readFileSync("src/office/Office.tsx", "utf8");
+  const start = src.indexOf("const wire = JSON.stringify(");
+  is(start !== -1, "the run is built as one string");
+  const block = src.slice(start, start + 3000);
+  const missing = (Object.keys(FULL) as string[]).filter(
+    (k) => !new RegExp(`(^|[^A-Za-z_])${k}(,|\\s*\\})`, "m").test(block)
+  );
+  is(
+    missing.length === 0,
+    `and every field goes into it${missing.length ? ` — missing ${missing.join(", ")}` : ""}`
+  );
+  is(
+    /if \(running\) return;/.test(block),
+    "nothing is written while a build is running"
+  );
+  is(
+    /if \(shipped\)[\s\S]{0,80}clearRun\(/.test(block),
+    "and a finished run is cleared rather than kept"
+  );
+}
+
 if (bad) {
   console.log(`\n${bad} failed`);
   process.exit(1);

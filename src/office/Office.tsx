@@ -25,11 +25,14 @@ import {
   readRun,
   fetchRun,
   newer,
+  saveRun,
+  clearRun,
   type Assignment,
   type ItemId,
   type Place,
   type Arrival,
   type RunSnapshot,
+  type RunFields,
 } from "./run";
 import { Loading } from "../components/Loading";
 import { Settings } from "../components/Settings";
@@ -737,6 +740,73 @@ function OfficeRun({
   const [officeAt, setOfficeAt] = useState<{ x: number; y: number } | null>(
     boot?.officeAt ?? null
   );
+
+  /*
+   * The run, written down whenever it changes and no build is open.
+   *
+   * A list of places to call save from is a list somebody has to remember to
+   * add to, and the day it is not added to is the day a field quietly stops
+   * being saved. So there is no list: the run is built as one string, and the
+   * string changing is what a change is. React compares it by value, so a
+   * re-render that alters nothing writes nothing.
+   *
+   * Two moments are excepted. A build in progress is not a state worth
+   * restoring into — the player would come back to a half-played build with a
+   * clock that had moved on — so nothing is written while one is open, and
+   * what that costs is the build, not the day: its bugId is already in the
+   * assignment, so reopening the machine finds the same defect waiting. And a
+   * run that has shipped is not a run to come back to at all, so the twelfth
+   * evening throws the snapshot away instead, and the next opening is a new
+   * one.
+   */
+  const wire = JSON.stringify({
+    day,
+    assignments,
+    pending,
+    delivered,
+    late,
+    shipped_,
+    caught,
+    missed,
+    minutes,
+    condition,
+    spirit,
+    borrowed,
+    pay,
+    owned,
+    place,
+    from,
+    officeAt,
+    dayOver,
+    hadCoffee,
+    greeted,
+    talks,
+    lastResult,
+    overtime,
+    tookOvertime,
+    tookFreeCoffee,
+    workedWeekend,
+    hobbyDone,
+    ateOut,
+    devCoffee,
+    devCame,
+    retestUsed,
+    restedTonight,
+    earlyTomorrow,
+    pochaNights,
+    dinnerAsked,
+    codexAtStart,
+  } satisfies RunFields);
+
+  useEffect(() => {
+    const srv = connected ? server : null;
+    if (shipped) {
+      clearRun(srv);
+      return;
+    }
+    if (running) return;
+    saveRun(JSON.parse(wire) as RunFields, srv);
+  }, [wire, running, shipped, connected, server]);
 
   // one clock for the whole day, ticking through the office and the builds
   // alike; goHomeRef keeps the timer from closing over a stale day
