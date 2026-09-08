@@ -365,10 +365,28 @@
 /* ---- regression workbench (prototype) ---- */
 .wb-root { display: flex; flex-direction: column; flex: 1; min-height: 0; width: 100%; }
 
+/*
+ * Six things across the top of a phone, and sometimes they do not fit.
+ *
+ * The day and the deadline, the clock, the condition pips, the hearts, the
+ * money and four machine chips. On a 360px frame that has always been more
+ * than one row holds — and what a flex row does when it is over-full is let
+ * an item wrap inside itself, so the one item with spaces in it took the
+ * damage: "2일차 · D-10" broke across two lines in its own bordered box, and
+ * across three once the typeface got wider.
+ *
+ * Wrapping the row instead puts the machine chips on a line of their own,
+ * whole. It costs about thirteen pixels of the field's height on the phones
+ * where it happens, and buys a bar that reads as laid out rather than as
+ * broken.
+ */
 .wb-header {
   display: flex; align-items: center; gap: 8px; width: 100%; flex: none;
   font-size: 13px;
+  flex-wrap: wrap; row-gap: 4px;
 }
+/* each of them stays in one piece; the row is what gives */
+.wb-header > * { white-space: nowrap; }
 .wb-build { font-weight: 800; }
 .wb-budget { margin-left: auto; color: #9ab; font-variant-numeric: tabular-nums; }
 
