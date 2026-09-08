@@ -10,6 +10,7 @@
  * that nothing has ever asked for, which is exactly the mistake thirty-five
  * fields invite.
  */
+import { readFileSync } from "node:fs";
 import { parseRun, RUN_VERSION, type RunFields } from "../src/office/run";
 
 let bad = 0;
@@ -121,6 +122,95 @@ console.log("\na wrong field is dropped, and the rest of the run is kept");
   is(back?.owned === undefined, "a list holding an unknown item is dropped");
   is(back?.condition === 2, "the fields either side of it survive");
   is(back?.place === "street", "and so does the room");
+}
+
+/** the server's own helpers, pulled out of the file the platform loads */
+const serverBits = () => {
+  const src = readFileSync("server.js", "utf8");
+  const load = new Function(
+    `${src}\nreturn { sanitiseRun, RUN_FIELDS, RUN_VERSION };`
+  ) as () => {
+    sanitiseRun: (raw: unknown) => Record<string, unknown> | null;
+    RUN_FIELDS: Record<string, unknown[]>;
+    RUN_VERSION: number;
+  };
+  return load();
+};
+
+console.log("\nthe server knows the same run the client does");
+{
+  const { sanitiseRun, RUN_FIELDS, RUN_VERSION: SV } = serverBits();
+  is(SV === RUN_VERSION, "both sides are on the same snapshot version");
+
+  const mine = Object.keys(FULL).sort();
+  const theirs = Object.keys(RUN_FIELDS).sort();
+  const missing = mine.filter((k) => !theirs.includes(k));
+  const extra = theirs.filter((k) => !mine.includes(k));
+  is(
+    missing.length === 0,
+    `the server validates every field the client saves${missing.length ? ` — missing ${missing.join(", ")}` : ""}`
+  );
+  is(
+    extra.length === 0,
+    `and validates nothing the client does not send${extra.length ? ` — extra ${extra.join(", ")}` : ""}`
+  );
+
+  const stored = sanitiseRun({ v: RUN_VERSION, updatedAt: 1, ...FULL });
+  if (!stored) {
+    fail("a complete run is accepted");
+  } else {
+    ok("a complete run is accepted");
+    const lost = (Object.keys(FULL) as (keyof RunFields)[]).filter(
+      (k) => JSON.stringify(stored[k]) !== JSON.stringify(FULL[k])
+    );
+    is(
+      lost.length === 0,
+      `and stored unchanged${lost.length ? ` — lost ${lost.join(", ")}` : ""}`
+    );
+  }
+
+  is(sanitiseRun(null) === null, "nothing is not a run");
+  is(sanitiseRun({ v: 99, updatedAt: 1 }) === null, "nor is a future version");
+  is(
+    sanitiseRun({
+      v: RUN_VERSION,
+      updatedAt: 1,
+      day: 400,
+      pay: -5,
+      owned: ["rocket"],
+      condition: 3,
+    })?.day === undefined,
+    "a day of 400 is refused"
+  );
+  is(
+    sanitiseRun({ v: RUN_VERSION, updatedAt: 1, condition: 3, pay: -5 })?.pay ===
+      undefined,
+    "and negative pay is refused"
+  );
+  is(
+    sanitiseRun({ v: RUN_VERSION, updatedAt: 1, condition: 3, pay: -5 })
+      ?.condition === 3,
+    "while the fields around them are kept"
+  );
+  is(
+    sanitiseRun({
+      v: RUN_VERSION,
+      updatedAt: 1,
+      greeted: Object.fromEntries(
+        Array.from({ length: 5000 }, (_, i) => [`p${i}`, 1])
+      ),
+    }) === null,
+    "and a run too big to be real is refused outright"
+  );
+}
+
+console.log("\nwiping the account takes the run and leaves the purchase");
+{
+  const src = readFileSync("server.js", "utf8");
+  const body = src.slice(src.indexOf("async resetSave()"));
+  const reset = body.slice(0, body.indexOf("\n  }"));
+  is(/run:\s*null/.test(reset), "resetSave clears the run");
+  is(!/adsRemoved/.test(reset), "and does not touch adsRemoved");
 }
 
 if (bad) {

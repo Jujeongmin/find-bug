@@ -50,6 +50,69 @@ const REMOVE_ADS = "remove-ads";
 const ENTRY_ID = /^stage\d{2}\/[A-Za-z0-9_-]+(:[A-Za-z0-9_-]+)*$/;
 const MAX_ID_LEN = 64;
 
+/**
+ * What a stored run is allowed to look like.
+ *
+ * This repeats the field list in src/office/run.ts, and it has to: the platform
+ * loads this file on its own and it can import nothing out of the client
+ * bundle. The two lists drifting apart is the failure mode — a field added on
+ * the client and not here is dropped silently on every save, and the player
+ * loses it the first time they open the game somewhere else. scripts/checkrun.ts
+ * loads this file and compares them.
+ *
+ * "n" is a whole number in a range, "b" a boolean, "s" one of a set; the four
+ * shaped fields have checkers of their own. Anything that does not check out is
+ * left out rather than corrected — a corrected field is a lie about what the
+ * player did, and the client's own default is the honest replacement.
+ */
+const RUN_VERSION = 1;
+const MAX_RUN_BYTES = 8192;
+const RUN_LIST = 64;
+
+const RUN_FIELDS = {
+  day: ["n", 1, 12],
+  assignments: ["assignments"],
+  pending: ["assignments"],
+  delivered: ["n", 0, 999],
+  late: ["severities"],
+  shipped_: ["severities"],
+  caught: ["n", 0, 999],
+  missed: ["n", 0, 999],
+  minutes: ["n", 0, 1440],
+  condition: ["n", 0, 9],
+  spirit: ["n", 0, 9],
+  borrowed: ["n", 0, 9],
+  pay: ["n", 0, 999999],
+  owned: ["items"],
+  place: ["s", ["office", "home", "lane", "street"]],
+  from: ["s", ["wake", "home", "lane", "street", "office"]],
+  officeAt: ["spot"],
+  dayOver: ["b"],
+  hadCoffee: ["b"],
+  greeted: ["greeted"],
+  talks: ["n", 0, 999],
+  lastResult: ["s", [null, "caught", "missed"]],
+  overtime: ["n", 0, 1440],
+  tookOvertime: ["b"],
+  tookFreeCoffee: ["b"],
+  workedWeekend: ["b"],
+  hobbyDone: ["b"],
+  ateOut: ["b"],
+  devCoffee: ["b"],
+  devCame: ["b"],
+  retestUsed: ["b"],
+  restedTonight: ["b"],
+  earlyTomorrow: ["b"],
+  pochaNights: ["n", 0, 99],
+  dinnerAsked: ["b"],
+  codexAtStart: ["n", 0, 999],
+};
+
+const SEVERITIES = ["low", "normal", "critical"];
+const ITEMS = ["magnifier", "chair", "alarm", "shoes", "thermos", "retest"];
+const MACHINE_IDS = ["machineA", "machineB", "machineC", "machineD"];
+const RESULTS = [null, "caught", "missed"];
+
 // oxlint-disable-next-line no-unused-vars -- the platform picks it up by name
 class Server {
   
@@ -92,14 +155,47 @@ class Server {
     return { best, runs };
   }
 
-  /** lets a player wipe their own save */
+  /**
+   * Lets a player wipe their own save.
+   *
+   * The run goes with the book. Wiping is the player throwing away what they
+   * recorded, and a twelve-day run they no longer want is part of that — but
+   * `adsRemoved` is untouched, here as everywhere: what they paid for is not
+   * theirs to lose by pressing this.
+   */
   async resetSave() {
     await $global.updateMyState({
       book: {},
       best: 0,
       runs: 0,
+      run: null,
       updatedAt: Date.now(),
     });
+    return true;
+  }
+
+  /**
+   * The run in progress, kept for the next device.
+   *
+   * Not folded into syncBook, for the same reason getEntitlements is not: the
+   * book is a merge that is allowed to fail quietly, and this is a
+   * last-one-wins record. Sharing a call would mean a failed book sync could
+   * cost a day of work, and a rejected run could cost the book.
+   */
+  async saveRun(snapshot) {
+    const run = sanitiseRun(snapshot);
+    if (!run) return { ok: false };
+    await $global.updateMyState({ run, updatedAt: Date.now() });
+    return { ok: true };
+  }
+
+  async getRun() {
+    const state = (await $global.getMyState()) || {};
+    return state.run && state.run.v === RUN_VERSION ? state.run : null;
+  }
+
+  async clearRun() {
+    await $global.updateMyState({ run: null, updatedAt: Date.now() });
     return true;
   }
 
@@ -159,6 +255,97 @@ function sanitise(raw) {
     if (!ENTRY_ID.test(id)) continue;
     out[id] = state;
     n++;
+  }
+  return out;
+}
+
+function isInt(v, lo, hi) {
+  return typeof v === "number" && Number.isInteger(v) && v >= lo && v <= hi;
+}
+
+function runAssignment(v) {
+  if (!v || typeof v !== "object") return undefined;
+  if (!MACHINE_IDS.includes(v.machine)) return undefined;
+  if (!SEVERITIES.includes(v.severity)) return undefined;
+  if (typeof v.sceneId !== "string" || v.sceneId.length > 32) return undefined;
+  if (!RESULTS.includes(v.result)) return undefined;
+  if (v.bugId !== null && (typeof v.bugId !== "string" || v.bugId.length > 64))
+    return undefined;
+  const out = {
+    machine: v.machine,
+    sceneId: v.sceneId,
+    severity: v.severity,
+    result: v.result,
+    bugId: v.bugId,
+  };
+  if (v.hotfix === true) out.hotfix = true;
+  return out;
+}
+
+function runList(v, each) {
+  if (!Array.isArray(v) || v.length > RUN_LIST) return undefined;
+  const out = [];
+  for (const x of v) {
+    const one = each(x);
+    if (one === undefined) return undefined;
+    out.push(one);
+  }
+  return out;
+}
+
+function runField(rule, v) {
+  switch (rule[0]) {
+    case "n":
+      return isInt(v, rule[1], rule[2]) ? v : undefined;
+    case "b":
+      return typeof v === "boolean" ? v : undefined;
+    case "s":
+      return rule[1].includes(v) ? v : undefined;
+    case "assignments":
+      return runList(v, runAssignment);
+    case "severities":
+      return runList(v, (x) => (SEVERITIES.includes(x) ? x : undefined));
+    case "items":
+      return runList(v, (x) => (ITEMS.includes(x) ? x : undefined));
+    case "spot":
+      if (v === null) return null;
+      if (!v || typeof v !== "object") return undefined;
+      if (typeof v.x !== "number" || !Number.isFinite(v.x)) return undefined;
+      if (typeof v.y !== "number" || !Number.isFinite(v.y)) return undefined;
+      return { x: v.x, y: v.y };
+    case "greeted": {
+      if (!v || typeof v !== "object" || Array.isArray(v)) return undefined;
+      const out = {};
+      let n = 0;
+      for (const [id, times] of Object.entries(v)) {
+        if (n++ >= RUN_LIST) return undefined;
+        if (id.length > 40) return undefined;
+        if (!isInt(times, 0, 999)) return undefined;
+        out[id] = times;
+      }
+      return out;
+    }
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * A run as sent by a client, reduced to one this server will store.
+ *
+ * The same posture as sanitise: the argument claims a shape and is not believed
+ * about it. The size cap comes before the field walk because the cheapest way
+ * to grow somebody's state without bound is a field this does not know about,
+ * and the whole object is measured whether or not any of it is recognised.
+ */
+function sanitiseRun(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  if (raw.v !== RUN_VERSION) return null;
+  if (JSON.stringify(raw).length > MAX_RUN_BYTES) return null;
+  const out = { v: RUN_VERSION, updatedAt: Date.now() };
+  for (const [key, rule] of Object.entries(RUN_FIELDS)) {
+    const value = runField(rule, raw[key]);
+    if (value !== undefined) out[key] = value;
   }
   return out;
 }
