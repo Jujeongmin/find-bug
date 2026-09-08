@@ -21,6 +21,7 @@ import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
 import { shipRating, totalStake, type Severity } from "./rating";
+import type { Assignment, ItemId, Place, Arrival } from "./run";
 import { Settings } from "../components/Settings";
 import { EyeIcon } from "../components/icons";
 import { available as adsAvailable, showRewarded } from "../net/ads";
@@ -150,13 +151,6 @@ const START_DAY = (() => {
   const asked = Number(devParam("day"));
   return Number.isInteger(asked) && asked >= 1 && asked <= DAYS ? asked : 1;
 })();
-
-/**
- * The four rooms a working day is made of, and the door each was entered by.
- * "wake" is the one arrival with no room behind it.
- */
-type Place = "office" | "home" | "lane" | "street";
-type Arrival = "wake" | "home" | "lane" | "street" | "office";
 
 const START_PLACE = (() => {
   const asked = devParam("place");
@@ -368,20 +362,7 @@ const FREEZE_PAY = 0.5;
 /** how many pips a severity draws on its machine chip */
 const SEVERITY_PIPS: Record<Severity, number> = { low: 1, normal: 2, critical: 3 };
 
-/**
- * Things you can buy, and where. Each one changes a number the player has
- * already felt go against them: the magnifier makes small faults visible, the
- * chair keeps overtime from borrowing against the night, and the alarm hands
- * back half an hour of every morning.
- */
-type ItemId =
-  | "magnifier"
-  | "chair"
-  | "alarm"
-  | "shoes"
-  | "thermos"
-  | "retest";
-
+/** what each thing costs, and which of the two shops has it */
 const CATALOGUE: {
   id: ItemId;
   cost: number;
@@ -408,26 +389,6 @@ const THERMOS_MINUTES = 20;
 /** the alarm clock starts the day this much earlier */
 const ALARM_MINUTES = 30;
 
-interface Assignment {
-  machine: MachineId;
-  sceneId: string;
-  severity: Severity;
-  /** null until the player has verified it */
-  result: null | "caught" | "missed";
-  /**
-   * A weekend build. Catching one takes back the worst thing that already
-   * shipped — but only once the developer has it, because a fix nobody was
-   * told about is not a fix. Half a star for twenty minutes of lie-in was
-   * the wrong price.
-   */
-  hotfix?: boolean;
-  /**
-   * Which defect is in this build. Decided the first time the machine is
-   * opened and kept from then on, so stepping away and coming back finds the
-   * same build rather than a freshly rolled one.
-   */
-  bugId: string | null;
-}
 
 /**
  * Three builds a day, one per machine. Each day holds exactly one of each
