@@ -242,6 +242,26 @@ export function EngineStage({
   const stickDown = (e: React.PointerEvent) => {
     if (!isTouch(e)) return;
     if (stickId.current !== null) return;
+    /*
+     * A press on a control is not a press on the ground.
+     *
+     * The buttons drawn over the field — the station prompt, the
+     * magnifier, the jump key, the in-world machines — are children of it,
+     * so their pointerdown arrives here as well and starts a drag the
+     * player never asked for. A thumb on a button rolls further than the
+     * six units of dead zone, which is enough to set the walk going; and
+     * because touch capture belongs to the element that was pressed, a
+     * button that goes away before the finger lifts takes the matching
+     * pointerup with it. That is what pressing "buy a coffee" did: the
+     * prompt opened, the phantom drag walked the player out of the
+     * machine's radius, the prompt button unmounted, and the release never
+     * arrived — leaving the stick pushed over and stickId set, which
+     * refuses every press made afterwards.
+     *
+     * Only `kind: "button"` objects are buttons; ordinary props are divs,
+     * so the ground a drag can start on is unchanged.
+     */
+    if ((e.target as Element | null)?.closest?.("button")) return;
     const p = fieldPoint(e);
     if (!p) return;
     stickId.current = e.pointerId;
@@ -268,14 +288,39 @@ export function EngineStage({
     setStick({ ox: o.x, oy: o.y, dx: dx * clamp, dy: dy * clamp });
   };
 
-  const stickUp = (e: React.PointerEvent) => {
-    if (!isTouch(e)) return;
-    if (stickId.current !== e.pointerId) return;
+  const releaseStick = useCallback(() => {
     stickId.current = null;
     stickOrigin.current = null;
     runtimeRef.current.stick = null;
     setStick(null);
+  }, []);
+
+  const stickUp = (e: React.PointerEvent) => {
+    if (!isTouch(e)) return;
+    if (stickId.current !== e.pointerId) return;
+    releaseStick();
   };
+
+  /*
+   * The release that does not depend on the press still being there.
+   *
+   * A stick that is never released is worse than a stuck walk: stickDown
+   * refuses to start another one while stickId is set, so the controls are
+   * dead for the rest of the run. The field's own pointerup is the ordinary
+   * path and this is the floor under it — the window hears the finger lift
+   * wherever it happens, including on a modal that opened over the field.
+   */
+  useEffect(() => {
+    const end = (e: PointerEvent) => {
+      if (stickId.current === e.pointerId) releaseStick();
+    };
+    window.addEventListener("pointerup", end);
+    window.addEventListener("pointercancel", end);
+    return () => {
+      window.removeEventListener("pointerup", end);
+      window.removeEventListener("pointercancel", end);
+    };
+  }, [releaseStick]);
 
   /* keyboard */
   useEffect(() => {
