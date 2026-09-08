@@ -1299,11 +1299,22 @@
  */
 .quest {
   position: absolute;
-  left: 50%;
+  /*
+   * Centred by margins rather than by left: 50%.
+   *
+   * An absolutely positioned box with `left` set and `right` auto shrinks to
+   * fit inside what is left of the containing block, which for left: 50% is
+   * half of it — so this chip had 190 pixels of a 380 pixel frame and the
+   * max-width below never applied. It fit anyway, by eleven pixels, until the
+   * typeface changed and it did not.
+   */
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: max-content;
   /* clear of the bar: the bar is numbers and this is the one sentence, and
      the two reading as one row was worse than either alone */
   top: 40px;
-  transform: translateX(-50%);
   max-width: calc(100% - 24px);
   z-index: 6;
   padding: 4px 11px;
