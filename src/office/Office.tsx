@@ -21,7 +21,17 @@ import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
 import { shipRating, totalStake, type Severity } from "./rating";
-import type { Assignment, ItemId, Place, Arrival } from "./run";
+import {
+  readRun,
+  fetchRun,
+  newer,
+  type Assignment,
+  type ItemId,
+  type Place,
+  type Arrival,
+  type RunSnapshot,
+} from "./run";
+import { Loading } from "../components/Loading";
 import { Settings } from "../components/Settings";
 import { EyeIcon } from "../components/icons";
 import { available as adsAvailable, showRewarded } from "../net/ads";
@@ -450,20 +460,81 @@ function assignDay(day: number, machines: readonly MachineId[] = MACHINES): Assi
  * queued on machines you walk to, a day holds only so many, and the ship date
  * arrives whether or not the queue is clear.
  */
+/** how long a boot waits for the account before going with what is here */
+const BOOT_WAIT_MS = 2000;
+
+/**
+ * Which run to start from, decided once, before anything can play.
+ *
+ * It has to happen outside the component that holds the state. A useState
+ * initialiser runs at mount and never again, so a snapshot that arrives later
+ * cannot fill in the thirty-six of them — the choice must already be made by
+ * the time OfficeRun exists, which is why this is a separate component and
+ * not an effect inside it.
+ *
+ * The device's copy is read synchronously and is the answer if nothing better
+ * turns up. The account is asked in parallel and wins only by being newer;
+ * two seconds is the whole of its chance, after which a slow or missing
+ * server costs the player nothing but a wait they were already having. The
+ * decision is made once and never revisited: a date that changes underneath
+ * somebody mid-run reads as a fault whatever the reason for it.
+ *
+ * A dev query string skips all of it. "?day=7" means "show me day seven",
+ * and resuming over the top of that would make the tool useless.
+ */
 export function Office({ onExit }: { onExit: () => void }) {
+  const { server, connected } = useGameServer();
+  const [boot, setBoot] = useState<RunSnapshot | null | undefined>(
+    devParam("day") || devParam("place") || devParam("at") ? null : undefined
+  );
+  const settled = useRef(false);
+
+  useEffect(() => {
+    if (boot !== undefined || settled.current) return;
+    const local = readRun();
+    const done = (found: RunSnapshot | null) => {
+      if (settled.current) return;
+      settled.current = true;
+      setBoot(found);
+    };
+    const timer = window.setTimeout(() => done(local), BOOT_WAIT_MS);
+    if (connected) {
+      void fetchRun(server).then((remote) => {
+        clearTimeout(timer);
+        done(newer(local, remote));
+      });
+    }
+    return () => clearTimeout(timer);
+  }, [boot, connected, server]);
+
+  if (boot === undefined) return <Loading progress={1} />;
+  return <OfficeRun boot={boot} onExit={onExit} />;
+}
+
+function OfficeRun({
+  boot,
+  onExit,
+}: {
+  boot: RunSnapshot | null;
+  onExit: () => void;
+}) {
   const { t, tp } = useI18n();
-  const [day, setDay] = useState(START_DAY);
-  const [assignments, setAssignments] = useState<Assignment[]>(() =>
-    isWeekend(START_DAY) ? [] : assignDay(START_DAY)
+  const [day, setDay] = useState(boot?.day ?? START_DAY);
+  const [assignments, setAssignments] = useState<Assignment[]>(
+    () =>
+      boot?.assignments ??
+      (isWeekend(boot?.day ?? START_DAY)
+        ? []
+        : assignDay(boot?.day ?? START_DAY))
   );
   const [running, setRunning] = useState<Assignment | null>(null);
   const [note, setNote] = useState<string | null>(null);
   /** whether the developer has already made you one today */
-  const [devCoffee, setDevCoffee] = useState(false);
+  const [devCoffee, setDevCoffee] = useState(boot?.devCoffee ?? false);
   /** whether they have already walked over to collect today */
-  const [devCame, setDevCame] = useState(false);
+  const [devCame, setDevCame] = useState(boot?.devCame ?? false);
   /** the one re-test the form buys, spent once in a run */
-  const [retestUsed, setRetestUsed] = useState(false);
+  const [retestUsed, setRetestUsed] = useState(boot?.retestUsed ?? false);
   /** the book of every fault, open on the desk at home */
   const [codex, setCodex] = useState(false);
   /*
@@ -476,9 +547,9 @@ export function Office({ onExit }: { onExit: () => void }) {
    * time passed.
    */
   const [night, setNight] = useState(false);
-  const [spirit, setSpirit] = useState(SPIRIT_START);
+  const [spirit, setSpirit] = useState(boot?.spirit ?? SPIRIT_START);
   /** the stall serves once a night */
-  const [ateOut, setAteOut] = useState(false);
+  const [ateOut, setAteOut] = useState(boot?.ateOut ?? false);
   /*
    * How much of the book was already filled when this run started, so the
    * ship screen can say what the twelve days added to it. The rating is a
@@ -509,26 +580,32 @@ export function Office({ onExit }: { onExit: () => void }) {
 
   /** so a re-render of the terminal screen does not count the run twice */
   const runReported = useRef(false);
-  const [codexAtStart] = useState(() => codexTally(codexRows()).caught);
+  const [codexAtStart] = useState(
+    () => boot?.codexAtStart ?? codexTally(codexRows()).caught
+  );
   const [shipped, setShipped] = useState(false);
-  const [caught, setCaught] = useState(0);
-  const [missed, setMissed] = useState(0);
-  const [minutes, setMinutes] = useState(START_AT ?? DAY_START);
+  const [caught, setCaught] = useState(boot?.caught ?? 0);
+  const [missed, setMissed] = useState(boot?.missed ?? 0);
+  const [minutes, setMinutes] = useState(
+    boot?.minutes ?? START_AT ?? DAY_START
+  );
   /** how many times the developer has been spoken to, so idle lines rotate */
-  const [talks, setTalks] = useState(0);
+  const [talks, setTalks] = useState(boot?.talks ?? 0);
   /** the last build signed off, so the developer can react to it once */
-  const [lastResult, setLastResult] = useState<null | "caught" | "missed">(null);
+  const [lastResult, setLastResult] = useState<null | "caught" | "missed">(
+    boot?.lastResult ?? null
+  );
   /** caught today but not yet handed to the developer */
-  const [pending, setPending] = useState<Assignment[]>([]);
-  const [delivered, setDelivered] = useState(0);
+  const [pending, setPending] = useState<Assignment[]>(boot?.pending ?? []);
+  const [delivered, setDelivered] = useState(boot?.delivered ?? 0);
   /** caught, but the day ended before it reached the developer */
-  const [late, setLate] = useState<Severity[]>([]);
-  const [shipped_, setShipped_] = useState<Severity[]>([]);
+  const [late, setLate] = useState<Severity[]>(boot?.late ?? []);
+  const [shipped_, setShipped_] = useState<Severity[]>(boot?.shipped_ ?? []);
   /**
    * The day opens at home, so leaving for work is something the player does
    * rather than something that has already happened when they arrive.
    */
-  const [place, setPlace] = useState<Place>(START_PLACE);
+  const [place, setPlace] = useState<Place>(boot?.place ?? START_PLACE);
 
   /*
    * Music belongs to the parts of the day that are not work.
@@ -568,32 +645,40 @@ export function Office({ onExit }: { onExit: () => void }) {
    * front door for something you forgot dropped you at the far kerb. The
    * arrival is a fact now, recorded where it happens.
    */
-  const [from, setFrom] = useState<Arrival>("wake");
+  const [from, setFrom] = useState<Arrival>(boot?.from ?? "wake");
   /** one move between rooms: where to, and which door it came out of */
   const go = (to: Place, via: Arrival) => {
     setFrom(via);
     setPlace(to);
   };
   /** true once the day has been signed off, which is what makes the bed work */
-  const [dayOver, setDayOver] = useState(false);
+  const [dayOver, setDayOver] = useState(boot?.dayOver ?? false);
   /** one coffee per commute */
-  const [hadCoffee, setHadCoffee] = useState(false);
+  const [hadCoffee, setHadCoffee] = useState(boot?.hadCoffee ?? false);
   /** how many people on the walk have been spoken to, so their lines rotate */
   /** how many times each of them has been spoken to, by object id */
-  const [greeted, setGreeted] = useState<Record<string, number>>({});
+  const [greeted, setGreeted] = useState<Record<string, number>>(
+    boot?.greeted ?? {}
+  );
   /** minutes bought back today, and whether each offer has been taken */
-  const [overtime, setOvertime] = useState(0);
-  const [tookOvertime, setTookOvertime] = useState(false);
-  const [tookFreeCoffee, setTookFreeCoffee] = useState(false);
+  const [overtime, setOvertime] = useState(boot?.overtime ?? 0);
+  const [tookOvertime, setTookOvertime] = useState(
+    boot?.tookOvertime ?? false
+  );
+  const [tookFreeCoffee, setTookFreeCoffee] = useState(
+    boot?.tookFreeCoffee ?? false
+  );
   /** what the weekend was spent on, one thing per weekend day */
-  const [workedWeekend, setWorkedWeekend] = useState(false);
-  const [hobbyDone, setHobbyDone] = useState(false);
+  const [workedWeekend, setWorkedWeekend] = useState(
+    boot?.workedWeekend ?? false
+  );
+  const [hobbyDone, setHobbyDone] = useState(boot?.hobbyDone ?? false);
   /** an offer waiting on the player, drawn as a two-way prompt */
   const [offer, setOffer] = useState<null | "overtime" | "coffee" | "dinner">(
     null
   );
   /** the ninth evening is offered once, whether or not it is taken */
-  const [dinnerAsked, setDinnerAsked] = useState(false);
+  const [dinnerAsked, setDinnerAsked] = useState(boot?.dinnerAsked ?? false);
   const [watching, setWatching] = useState(false);
   /*
    * The first morning is a morning like the others: a night got you to three
@@ -601,9 +686,11 @@ export function Office({ onExit }: { onExit: () => void }) {
    * and the one day that should teach the player what the coffee is for was
    * the only day they did not need it.
    */
-  const [condition, setCondition] = useState(SLEEP_RECOVERY);
+  const [condition, setCondition] = useState(
+    boot?.condition ?? SLEEP_RECOVERY
+  );
   /** points owed to tonight, from overtime or a weekend shift */
-  const [borrowed, setBorrowed] = useState(0);
+  const [borrowed, setBorrowed] = useState(boot?.borrowed ?? 0);
   /**
    * What one long stint takes out of the night, halved by a decent chair.
    *
@@ -633,17 +720,23 @@ export function Office({ onExit }: { onExit: () => void }) {
         (spirit <= 1 ? 1 : 0)
     );
   /** a weekend spent on something else, cashed in on the next morning */
-  const [earlyTomorrow, setEarlyTomorrow] = useState(false);
+  const [earlyTomorrow, setEarlyTomorrow] = useState(
+    boot?.earlyTomorrow ?? false
+  );
   /** one restful thing per evening */
-  const [restedTonight, setRestedTonight] = useState(false);
+  const [restedTonight, setRestedTonight] = useState(
+    boot?.restedTonight ?? false
+  );
   /** nights eaten at the stall this run, which is what its owner knows of you */
-  const [pochaNights, setPochaNights] = useState(0);
+  const [pochaNights, setPochaNights] = useState(boot?.pochaNights ?? 0);
   /** pay, earned by handing defects over, spent on equipment */
-  const [pay, setPay] = useState(0);
-  const [owned, setOwned] = useState<ItemId[]>([]);
+  const [pay, setPay] = useState(boot?.pay ?? 0);
+  const [owned, setOwned] = useState<ItemId[]>(boot?.owned ?? []);
   const [shop, setShop] = useState<null | "office" | "home">(null);
   /** where the player was standing on the office floor, across a build */
-  const [officeAt, setOfficeAt] = useState<{ x: number; y: number } | null>(null);
+  const [officeAt, setOfficeAt] = useState<{ x: number; y: number } | null>(
+    boot?.officeAt ?? null
+  );
 
   // one clock for the whole day, ticking through the office and the builds
   // alike; goHomeRef keeps the timer from closing over a stale day

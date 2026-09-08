@@ -298,6 +298,36 @@ console.log("\nwiping the account takes the run and leaves the purchase");
   is(!/adsRemoved/.test(reset), "and does not touch adsRemoved");
 }
 
+console.log("\nevery field that is saved is also read back");
+{
+  const src = readFileSync("src/office/Office.tsx", "utf8");
+  const unread = (Object.keys(FULL) as (keyof RunFields)[]).filter(
+    (k) => !new RegExp(`boot\\?\\.${k}\\b`).test(src)
+  );
+  is(
+    unread.length === 0,
+    `Office restores all ${Object.keys(FULL).length} of them${unread.length ? ` — never reads ${unread.join(", ")}` : ""}`
+  );
+}
+
+console.log("\nscreen state stays out of the run");
+{
+  const screen = [
+    "running",
+    "note",
+    "codex",
+    "offer",
+    "shop",
+    "watching",
+    "night",
+  ];
+  const leaked = screen.filter((k) => k in FULL);
+  is(
+    leaked.length === 0,
+    `a modal never comes back with the run${leaked.length ? ` — found ${leaked.join(", ")}` : ""}`
+  );
+}
+
 if (bad) {
   console.log(`\n${bad} failed`);
   process.exit(1);
