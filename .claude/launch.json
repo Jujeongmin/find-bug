@@ -6,9 +6,14 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": [
         "run",
-        "dev"
+        "dev",
+        "--",
+        "--port",
+        "5177",
+        "--strictPort"
       ],
-      "port": 5173
+      "port": 5177,
+      "autoPort": false
     },
     {
       "name": "find-bug-preview",

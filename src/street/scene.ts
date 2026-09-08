@@ -247,6 +247,98 @@ export const streetScene: SceneSpec = {
         { t: "blocker" as const, radius: 12, box: { w: 10, h: 70, dy: -35 } },
       ],
     })),
+    /*
+     * The stop nobody catches a bus from.
+     *
+     * The screen had an office on it and a vending machine, and everything
+     * between the two was empty pavement — which reads as a corridor with a
+     * door at the end rather than as the front of a building somebody works
+     * in. What says "office street" is the furniture nobody looks at: a stop
+     * with a bench, two trees in the pavement, a post box, a bin.
+     *
+     * It is scenery and stays scenery. The stop has no timetable and no bus,
+     * because the commute is the walk — a way to skip it would be a way to
+     * skip the part of the day the coffee is a decision about.
+     *
+     * All of it sits below y=440. The passers wander down to 430 and the five
+     * kerb slices reach up to about 526 with the corner that takes you home,
+     * so this is the one band of the pavement that is neither.
+     */
+    {
+      id: "busStop",
+      nameKey: "object.busStop",
+      kind: "decor",
+      x: 140,
+      y: 470,
+      render: {
+        sprite: { sheet: "city", col: 9, row: 14, spanY: 2, scale: 2.2 },
+      },
+      // only the post is in the way; the sign boards are at head height
+      behaviors: [{ t: "blocker", radius: 8, box: { w: 10, h: 18, dy: -9 } }],
+    },
+    {
+      id: "busBench",
+      nameKey: "object.bench",
+      kind: "decor",
+      x: 84,
+      y: 478,
+      render: {
+        sprite: { sheet: "city", col: 17, row: 15, spanX: 2, scale: 2.2 },
+      },
+      behaviors: [{ t: "blocker", radius: 20, box: { w: 62, h: 20, dy: -10 } }],
+    },
+    /*
+     * Two trees, and two different greens: a pavement planted with one colour
+     * twice reads as the same object copied, which is what the office block
+     * looked like before it was drawn properly.
+     */
+    ...[
+      // The left of the pavement is spoken for — the machine stands from
+      // 300 to 368 and the lamp post from 446 to 516 — so both go to the
+      // right of the stop, where there was nothing at all.
+      { id: "streetTree0", x: 205, y: 462, col: 31 },
+      { id: "streetTree1", x: 292, y: 462, col: 33 },
+    ].map((t) => ({
+      id: t.id,
+      nameKey: "object.streetTree",
+      kind: "decor" as const,
+      x: t.x,
+      y: t.y,
+      render: {
+        sprite: {
+          sheet: "city" as const,
+          col: t.col,
+          row: 10,
+          spanY: 2,
+          scale: 2.2,
+        },
+      },
+      // the trunk, not the crown: walking under a tree is walking under it
+      behaviors: [
+        { t: "blocker" as const, radius: 9, box: { w: 12, h: 22, dy: -11 } },
+      ],
+    })),
+    {
+      id: "postBox",
+      nameKey: "object.postBox",
+      kind: "decor",
+      x: 326,
+      y: 508,
+      render: {
+        sprite: { sheet: "city", col: 12, row: 15, scale: 2.6 },
+      },
+      behaviors: [{ t: "blocker", radius: 14, box: { w: 26, h: 26, dy: -13 } }],
+    },
+    {
+      id: "streetBin",
+      nameKey: "object.bin",
+      kind: "decor",
+      x: 46,
+      y: 430,
+      render: { sprite: { sheet: "city", col: 15, row: 13, scale: 2.2 } },
+      behaviors: [{ t: "blocker", radius: 13 }],
+    },
+
       /* moved up the wall: a crate at the kerb is dressing, a crate in the
          doorway is a mistake */
     {
