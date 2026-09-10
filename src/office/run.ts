@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from "react";
 import type { GameServer } from "@agent8/gameserver";
 import type { Severity } from "./rating";
 import type { MachineId } from "./scene";
@@ -334,13 +335,70 @@ export function readRun(): RunSnapshot | null {
   }
 }
 
+/**
+ * Where the run has actually got to, for the player to read.
+ *
+ * A save system that never says anything is one nobody can trust and nobody
+ * can report a fault in. Both halves of this can fail quietly by design — the
+ * device store throws inside an iframe a browser has decided to wall off, and
+ * the account is allowed to be unreachable — and the player, who may have paid
+ * money for this game, has no way of telling a run that is safe from one that
+ * is about to vanish.
+ *
+ * So the two are tracked as they happen and shown in the settings panel. It is
+ * not instrumentation bolted on for a bug hunt; it is the one fact about a
+ * twelve-day run that the game owes whoever is playing it.
+ */
+export interface SaveStatus {
+  /** whether this device would take the last write */
+  device: "ok" | "blocked";
+  /**
+   * what the account made of the last push. "none" is nothing tried yet — no
+   * server, or too soon; "refused" is the server rejecting the snapshot, which
+   * means the two sides disagree about its shape and is a fault worth naming.
+   */
+  account: "none" | "ok" | "refused" | "failed";
+  /** the day in the last snapshot written down */
+  day: number;
+}
+
+let status: SaveStatus = { device: "ok", account: "none", day: 0 };
+const watchers = new Set<() => void>();
+
+function setStatus(next: Partial<SaveStatus>): void {
+  const merged = { ...status, ...next };
+  if (
+    merged.device === status.device &&
+    merged.account === status.account &&
+    merged.day === status.day
+  ) {
+    return;
+  }
+  status = merged;
+  for (const fn of watchers) fn();
+}
+
+/** the save status, as a value React re-reads */
+export function useSaveStatus(): SaveStatus {
+  return useSyncExternalStore(
+    (fn) => {
+      watchers.add(fn);
+      return () => watchers.delete(fn);
+    },
+    () => status,
+    () => status
+  );
+}
+
 /** write it down here and now; the account copy is somebody else's job */
 export function writeRun(fields: RunFields): RunSnapshot {
   const snap: RunSnapshot = { v: RUN_VERSION, updatedAt: Date.now(), ...fields };
   try {
     localStorage.setItem(KEY, JSON.stringify(snap));
+    setStatus({ device: "ok", day: fields.day });
   } catch {
     /* a full or refusing store still leaves the run playable in memory */
+    setStatus({ device: "blocked", day: fields.day });
   }
   return snap;
 }
@@ -472,7 +530,25 @@ const push = () => {
     clearTimeout(localTimer);
     writeLocal();
   }
-  if (latestServer && lastSnap) tell(latestServer, "saveRun", [lastSnap]);
+  if (!latestServer || !lastSnap) return;
+  /*
+   * Unlike the other two calls here, this one's answer is worth having: it is
+   * the difference between a run the player can carry to another phone and one
+   * that lives in a single browser. A refusal is not the same as a silence,
+   * either — refused means the server looked at the snapshot and did not
+   * recognise it, which is a fault in this code rather than in the network.
+   */
+  const server = latestServer;
+  void (async () => {
+    try {
+      const res = (await server.remoteFunction("saveRun", [lastSnap])) as {
+        ok?: boolean;
+      } | null;
+      setStatus({ account: res?.ok === true ? "ok" : "refused" });
+    } catch {
+      setStatus({ account: "failed" });
+    }
+  })();
 };
 
 const schedulePush = () => {

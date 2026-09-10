@@ -4,7 +4,7 @@ import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
 import { clearCodex } from "../office/codex";
 import { resetSave } from "../net/save";
-import { clearRun } from "../office/run";
+import { clearRun, useSaveStatus } from "../office/run";
 import { useI18n, LANGS, type Lang } from "../i18n";
 import { SettingsIcon, SpeakerIcon, SpeakerMutedIcon } from "./icons";
 
@@ -26,7 +26,30 @@ const ShopRow = lazy(() =>
 );
 
 export function Settings() {
-  const { t, lang, setLang } = useI18n();
+  const { t, tp, lang, setLang } = useI18n();
+  /*
+   * One line for the two ways a run is kept.
+   *
+   * The device comes first because it is the one that can fail outright: if
+   * the browser will not store anything there is nothing else worth saying,
+   * and no amount of account trouble matters beside it. After that the account
+   * is the news, and the three ways it can be missing are told apart on
+   * purpose — not signed in, could not be reached, and refused are three
+   * different problems and only the last one is a bug in this game.
+   */
+  const save = useSaveStatus();
+  const saveLine =
+    save.device === "blocked"
+      ? t("save.blocked")
+      : save.day === 0
+        ? t("save.waiting")
+        : save.account === "ok"
+          ? tp("save.account", { n: String(save.day) })
+          : save.account === "failed"
+            ? t("save.deviceFailed")
+            : save.account === "refused"
+              ? t("save.refused")
+              : t("save.deviceOnly");
   const [open, setOpen] = useState(false);
   const [muted, setMuted] = useState(() => sfx.isMuted());
   const [vol, setVol] = useState(() => sfx.getVolume());
@@ -175,6 +198,18 @@ export function Settings() {
           <Suspense fallback={null}>
             <ShopRow />
           </Suspense>
+
+          {/*
+            Where the twelve days actually are.
+
+            The game used to say nothing about this, and both halves of it can
+            fail without a sound: a browser can refuse storage to a game inside
+            an iframe, and the account is allowed to be unreachable. Somebody
+            who has paid for this deserves to know whether the run they are
+            eight days into is on their account or in one browser's site data.
+          */}
+          <label>{t("save.title")}</label>
+          <p className="settings-save">{saveLine}</p>
 
           <label>{t("settings.data")}</label>
           <button
