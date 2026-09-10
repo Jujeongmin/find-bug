@@ -768,7 +768,9 @@ function OfficeRun({
     shipped_,
     caught,
     missed,
-    minutes,
+    // the clock ticks in fifths of a minute and is only ever shown to the
+    // minute; a fraction here is a fraction the server refuses
+    minutes: Math.round(minutes),
     condition,
     spirit,
     borrowed,

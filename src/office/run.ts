@@ -167,6 +167,24 @@ const int = (v: unknown, lo: number, hi: number): number | undefined =>
 const bool = (v: unknown): boolean | undefined =>
   typeof v === "boolean" ? v : undefined;
 
+/**
+ * The wall clock, which does not run in whole minutes.
+ *
+ * It advances by MINUTES_PER_SECOND / 4 — 0.575 — four times a second, so the
+ * minute in any real snapshot is a fraction. Read back through the whole-number
+ * check the rest of these use, it failed and was dropped in silence, and every
+ * day that was resumed started again at nine o'clock with the afternoon gone.
+ *
+ * Rounded rather than refused, because a snapshot written before this was
+ * noticed is still a snapshot, and the clock only ever shows whole minutes
+ * anyway. Office rounds it on the way out too, so what goes to the account is
+ * a whole number the server's own check will accept.
+ */
+const clockMinutes = (v: unknown): number | undefined =>
+  typeof v === "number" && Number.isFinite(v) && v >= 0 && v <= 24 * 60
+    ? Math.round(v)
+    : undefined;
+
 const oneOf = <T extends string>(
   v: unknown,
   all: readonly T[]
@@ -267,7 +285,7 @@ export function parseRun(raw: unknown): RunSnapshot | null {
   put(out, "shipped_", listOf(r.shipped_, (x) => oneOf(x, SEVERITIES)));
   put(out, "caught", int(r.caught, 0, 999));
   put(out, "missed", int(r.missed, 0, 999));
-  put(out, "minutes", int(r.minutes, 0, 24 * 60));
+  put(out, "minutes", clockMinutes(r.minutes));
   put(out, "condition", int(r.condition, 0, 9));
   put(out, "spirit", int(r.spirit, 0, 9));
   put(out, "borrowed", int(r.borrowed, 0, 9));

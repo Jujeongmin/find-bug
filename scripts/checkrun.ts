@@ -106,6 +106,35 @@ console.log("\na run survives being written down and read back");
   }
 }
 
+console.log("\nthe clock comes back, even though it does not tick in whole minutes");
+{
+  /*
+   * The office clock advances by MINUTES_PER_SECOND / 4 — 0.575 — four times
+   * a second, so the minute in any real snapshot is a fraction. Read back
+   * through a whole-number check it was dropped in silence, and every day
+   * that was resumed started again at nine o'clock.
+   */
+  const back = parseRun({
+    v: RUN_VERSION,
+    updatedAt: 1,
+    day: 8,
+    minutes: 579.1000000000031,
+  });
+  is(
+    back?.minutes === 579,
+    "a fractional minute is kept, rounded to the minute it shows"
+  );
+  is(
+    parseRun({ v: RUN_VERSION, updatedAt: 1, minutes: 870 })?.minutes === 870,
+    "and a whole one is untouched"
+  );
+  is(
+    parseRun({ v: RUN_VERSION, updatedAt: 1, minutes: 99999 })?.minutes ===
+      undefined,
+    "but a clock outside the day is still refused"
+  );
+}
+
 console.log("\na broken save is no run, and never an exception");
 for (const [what, raw] of [
   ["null", null],
@@ -378,7 +407,8 @@ console.log("\nthe run writes itself down, and knows when not to");
   is(start !== -1, "the run is built as one string");
   const block = src.slice(start, start + 3000);
   const missing = (Object.keys(FULL) as string[]).filter(
-    (k) => !new RegExp(`(^|[^A-Za-z_])${k}(,|\\s*\\})`, "m").test(block)
+    // shorthand ("minutes,") or written out ("minutes: Math.round(minutes),")
+    (k) => !new RegExp(`(^|[^A-Za-z_])${k}\\s*(,|:|\\s*\\})`, "m").test(block)
   );
   is(
     missing.length === 0,
