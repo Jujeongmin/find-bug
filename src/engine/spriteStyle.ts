@@ -11,6 +11,7 @@ import personASrc from "../assets/sheets/personA.png";
 import personBSrc from "../assets/sheets/personB.png";
 import personCSrc from "../assets/sheets/personC.png";
 import citySrc from "../assets/sheets/city.png";
+import critterSrc from "../assets/sheets/critter.png";
 import officeSrc from "../assets/sheets/office.png";
 import doorSrc from "../assets/props/door.png";
 import crateSrc from "../assets/props/crate.png";
@@ -36,6 +37,7 @@ const SHEET_SRC: Record<SheetId, string> = {
   personB: personBSrc,
   personC: personCSrc,
   city: citySrc,
+  critter: critterSrc,
   office: officeSrc,
 };
 

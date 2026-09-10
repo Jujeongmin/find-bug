@@ -16,6 +16,7 @@
     "build:release": "vite build --mode release",
     "recolor": "tsx scripts/recolor.ts",
     "officeart": "tsx scripts/officeart.ts",
+    "critterart": "tsx scripts/critterart.ts",
     "storeart": "tsx scripts/storeart.ts"
   },
   "dependencies": {

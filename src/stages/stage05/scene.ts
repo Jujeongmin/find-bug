@@ -99,9 +99,12 @@ export const stage05Scene: SceneSpec = {
       behaviors: [{ t: "damage" as const, counter: "hp", amount: 1, radius: 26 }],
     })),
 
-    /* the two that move, so the field is never safe to cross on memory alone.
-       Not the sheet's mushroom creature, tempting as it was: its cap is drawn
-       past the top of its tile and comes out sliced. */
+    /* The two that move, so the field is never safe to cross on memory alone.
+
+       Drawn rather than found. The goal line promises wasps and every sheet
+       here was searched for one: what these were is platchars (4,1), a small
+       wingless yellow thing that the card room used for a doll. See
+       scripts/critterart.ts. */
     {
       id: "bug1",
       nameKey: "object.bug1",
@@ -110,8 +113,8 @@ export const stage05Scene: SceneSpec = {
       y: 318,
       peerGroup: "critter",
       render: {
-        sprite: { sheet: "platchars" as const, col: 4, row: 1, scale: 2.1 },
-        shadow: { offsetX: 8, width: 22 },
+        sprite: { sheet: "critter" as const, col: 0, row: 0, scale: 2.4 },
+        shadow: { offsetX: 6, width: 18 },
       },
       behaviors: [
         { t: "patrol", axis: "x", min: 40, max: 300, speed: 46, flipSprite: true },
@@ -127,8 +130,8 @@ export const stage05Scene: SceneSpec = {
       y: 512,
       peerGroup: "critter",
       render: {
-        sprite: { sheet: "platchars" as const, col: 4, row: 1, scale: 2.1 },
-        shadow: { offsetX: 8, width: 22 },
+        sprite: { sheet: "critter" as const, col: 0, row: 0, scale: 2.4 },
+        shadow: { offsetX: 6, width: 18 },
       },
       behaviors: [
         { t: "patrol", axis: "x", min: 50, max: 310, speed: 38, flipSprite: true },

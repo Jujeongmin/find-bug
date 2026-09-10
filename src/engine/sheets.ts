@@ -40,6 +40,10 @@ export const SHEETS = {
   // pavement and street furniture, drawn with the same outline weight as Tiny
   // Town and Tiny Dungeon.
   city: { tile: 16, margin: 0, cols: 37, rows: 28 },
+  // Drawn here for the same reason the office desk is: no pack in the
+  // repository has an insect, and the herb field needs the wasp its own goal
+  // line promises. scripts/critterart.ts builds it.
+  critter: { tile: 16, margin: 0, cols: 1, rows: 1 },
   // Messy Furniture (32px grid). Pieces span more than one cell — a bed is one
   // column by two rows, a sofa two by two — so they are drawn with spanX/spanY.
   furniture: { tile: 32, margin: 0, cols: 13, rows: 14 },
