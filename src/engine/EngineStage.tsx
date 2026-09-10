@@ -31,6 +31,21 @@ import type { Band } from "./score";
 import "../styles/shared.css";
 import "./engine.css";
 
+/**
+ * The finger that is on the screen right now, if any.
+ *
+ * Walking into the kerb takes the player to the next room, and a room is a
+ * whole new EngineStage — different scene, different key, so React throws this
+ * component away and builds another. The finger is still down. Nothing sends a
+ * pointerdown for a press that already happened, so the new field had no idea
+ * it was being dragged: the player arrived, stopped dead, and had to lift their
+ * thumb and put it back down to carry on walking.
+ *
+ * Module scope rather than a ref, because the two components never overlap in a
+ * way a ref could be handed across. Cleared when the finger lifts.
+ */
+let carried: number | null = null;
+
 type Phase = "intro" | "play" | "picking" | "category" | "result" | "dead";
 
 interface Props {
@@ -188,6 +203,21 @@ export function EngineStage({
   );
   const stickId = useRef<number | null>(null);
   const stickOrigin = useRef<{ x: number; y: number } | null>(null);
+  /**
+   * A drag that was already under way when this room replaced the last one.
+   *
+   * Held apart from stickId on purpose. stickId being set is what stops a
+   * second stick from starting, so putting a guess in there would block the
+   * controls outright in the one case the guess is wrong — the finger having
+   * lifted during the handover, which sends no event either component is
+   * still around to hear. This only becomes a real stick when a move for
+   * that same finger actually arrives.
+   */
+  const adopting = useRef<number | null>(null);
+  useEffect(() => {
+    adopting.current = carried;
+    carried = null;
+  }, []);
   /** the station the player is standing next to, for the space bar */
   const nearStationRef = useRef<{ id: string; labelKey: string } | null>(null);
   const onStationRef = useRef(onStation);
@@ -264,14 +294,32 @@ export function EngineStage({
     if ((e.target as Element | null)?.closest?.("button")) return;
     const p = fieldPoint(e);
     if (!p) return;
+    adopting.current = null;
     stickId.current = e.pointerId;
+    carried = e.pointerId;
     stickOrigin.current = p;
     setStick({ ox: p.x, oy: p.y, dx: 0, dy: 0 });
   };
 
   const stickMove = (e: React.PointerEvent) => {
     if (!isTouch(e)) return;
-    if (stickId.current !== e.pointerId) return;
+    if (stickId.current !== e.pointerId) {
+      /*
+       * The finger that walked us through the door is still down and still
+       * moving. Take it over, from where it is now rather than from where it
+       * started — the room it started in is gone, and so is the meaning of a
+       * point in it.
+       */
+      if (adopting.current !== e.pointerId) return;
+      const at = fieldPoint(e);
+      if (!at) return;
+      adopting.current = null;
+      stickId.current = e.pointerId;
+      carried = e.pointerId;
+      stickOrigin.current = at;
+      setStick({ ox: at.x, oy: at.y, dx: 0, dy: 0 });
+      return;
+    }
     const p = fieldPoint(e);
     const o = stickOrigin.current;
     if (!p || !o) return;
@@ -289,6 +337,8 @@ export function EngineStage({
   };
 
   const releaseStick = useCallback(() => {
+    carried = null;
+    adopting.current = null;
     stickId.current = null;
     stickOrigin.current = null;
     runtimeRef.current.stick = null;
@@ -1040,15 +1090,23 @@ export function EngineStage({
                   tappable ? "pickable" : ""
                 }`}
                 style={{ left: o.x, top: o.y }}
-                onPointerDown={picking ? undefined : () => onObjectTap(o.id)}
-                onClick={
-                  picking
-                    ? (e) => {
-                        e.stopPropagation();
-                        onObjectTap(o.id);
-                      }
-                    : undefined
-                }
+                /*
+                 * On the press being finished, not on it starting.
+                 *
+                 * Acting on pointerdown looks faster and costs the whole
+                 * interaction on a phone: what this opens is a prompt over the
+                 * field, and the click the same tap goes on to produce is
+                 * hit-tested against the screen as it is *then* — which is the
+                 * prompt's backdrop, whose job is to close it. One tap opened
+                 * and shut it in the same gesture. Holding the finger down
+                 * worked, because Android suppresses that click after a long
+                 * press, which is how this was reported: "it only opens if I
+                 * press and hold".
+                 */
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onObjectTap(o.id);
+                }}
                 title={picking ? t(o.nameKey) : undefined}
               >
                 {o.render.emoji} {t(o.render.labelKey ?? o.nameKey)}
@@ -1076,7 +1134,10 @@ export function EngineStage({
           {nearStation && (
             <button
               className="eng-station-btn"
-              onPointerDown={() => {
+              /* on click, not pointerdown — see the object buttons above:
+                 what this opens is a prompt, and the click that the same tap
+                 produces afterwards lands on that prompt's backdrop */
+              onClick={() => {
                 sfx.play("click");
                 onStation?.(nearStation.id);
               }}
