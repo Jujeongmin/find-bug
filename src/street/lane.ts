@@ -20,25 +20,25 @@ import { MUTTERS } from "./passers";
  */
 
 /**
- * The line the whole house sorts on, and why it is not the bottom of the wall.
+ * Two lines, because a house is two things.
  *
- * The wall is drawn down to 360 and a player pressed against it stops at 361,
- * because that is where the blocker ends. But a player is forty-eight pixels
- * tall and the wall is ninety, so standing at its foot their body covers more
- * than half of it — and sorted in front, that does not read as standing at a
- * front door. It reads as standing on the brick, which is how it was reported.
+ * The brick is something you walk up to and stop at. It sorts on its own foot,
+ * so standing at the door puts you in front of the wall — which is where you
+ * are. What makes that read correctly is the block, not the sort: the brick is
+ * solid to its corners, so the only place to stand is at the bottom edge of it.
  *
- * So the sort line goes a body's height below the art. Anyone whose feet are
- * in the band between the wall and this is drawn behind the house, which is
- * what someone at their own front door looks like. The stall in this same file
- * has done it this way since it was written, and so has the vending machine on
- * the street; the house simply never got it.
+ * The roof is the opposite. It hangs over the top of the block, the pavement
+ * behind the house runs underneath it, and a roof is the one part of a
+ * building nothing is ever drawn in front of. So it goes above everybody, and
+ * the number only has to beat the furthest down anyone can stand: the walk's
+ * own maxY, plus a body, plus a little.
  */
 const BODY = 48;
-const HOUSE_SORT = 360 + BODY;
+const WALL_SORT = 360;
+const ROOF_SORT = 604 + BODY + 8;
 
-/** the same, for the terrace along the top */
-const NEIGHBOUR_SORT = 112 + BODY;
+/** the terrace along the top is all wall and no roof, so it sorts like one */
+const NEIGHBOUR_SORT = 112;
 
 export const laneScene: SceneSpec = {
   id: "lane",
@@ -120,7 +120,7 @@ export const laneScene: SceneSpec = {
      * which is why the roof sits at the top of the wall and not over it.
      */
     /*
-     * Sorted a body below the wall's foot, both halves of it.
+     * Both halves out of the flat layer, on their two different lines.
      *
      * front() draws flat scenery by default — z: 0, out of the y-sort — which
      * is right for every other run in this game, because they are all the far
@@ -128,34 +128,15 @@ export const laneScene: SceneSpec = {
      * the middle of the block: the strip between it and the trees is walkable,
      * the player goes up there, and on the flat layer they were drawn on top
      * of their own house.
-     *
-     * The roof takes the wall's line rather than its own. A roof sorted where
-     * it is drawn would let somebody standing at the side of the house pass in
-     * front of it, and a roof is the one part of a building nothing gets in
-     * front of.
      */
     ...front("houseWall", { left: 1, mid: 2, right: 3 }, 5, 2, 90, 360, 4, 2.8).map(
-      (o) => ({ ...o, sortY: HOUSE_SORT })
+      (o) => ({ ...o, sortY: WALL_SORT })
     ),
     ...front("houseRoof", { left: 0, mid: 2, right: 1 }, 0, 2, 90, 270, 4, 2.8).map(
-      (o) => ({ ...o, sortY: HOUSE_SORT })
+      (o) => ({ ...o, sortY: ROOF_SORT })
     ),
-    /*
-     * Stopped a body short of the wall, not at it.
-     *
-     * The wall is drawn ninety pixels tall and a player is forty-eight, so a
-     * player standing at its foot has their whole body inside its height.
-     * Sorted in front they are standing on the brick; sorted behind they are
-     * gone altogether. Neither is somebody at their own front door, and no
-     * sort line fixes it, because the problem is that they are there at all.
-     *
-     * So the block runs a body further down than the art. The pavement it
-     * takes is the pavement a person would be standing on if they were
-     * against the wall, and with it gone there is nowhere to stand that
-     * overlaps the house. The door still answers from here: its station
-     * reaches sixty-two and the threshold is forty-nine away.
-     */
-    ...solid("house", 91, 272, 178, 88 + BODY),
+    /* the brick, and only the brick: the roof above it is walked under */
+    ...solid("house", 91, 272, 178, 88),
     ...[135, 225].map((x, i) => ({
       id: `houseWindow${i}`,
       nameKey: "object.window",
@@ -164,7 +145,7 @@ export const laneScene: SceneSpec = {
       y: 330,
       // set into the wall, so they take the wall's line: they are in it, not
       // standing in front of it half way up
-      sortY: HOUSE_SORT,
+      sortY: WALL_SORT,
       z: 2,
       render: {
         sprite: { sheet: "city" as const, col: 25, row: 16, scale: 1.8 },
@@ -185,9 +166,8 @@ export const laneScene: SceneSpec = {
       kind: "sprite",
       x: 180,
       y: 360,
-      // on the wall's line, not its own: a door set into a wall is drawn
-      // with it, and a player at the threshold is behind both
-      sortY: HOUSE_SORT,
+      // on the wall's line: a door set into a wall is drawn with it
+      sortY: WALL_SORT,
       z: 2,
       render: { prop: { id: "door", scale: 1.7 } },
       behaviors: [{ t: "station", radius: 62, labelKey: "street.home" }],
