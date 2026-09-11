@@ -86,12 +86,21 @@ export function front(
 }
 
 /**
- * A box the player cannot walk into, out of overlapping circles.
+ * A box the player cannot walk into.
  *
- * Blocking is round — one radius per object — and buildings are not. A row of
- * circles whose ends land exactly on the box's edges blocks the whole face
- * without the invisible wall a single fat circle leaves sticking out of it.
- * The objects are transparent: what the player sees is the run drawn over them.
+ * This was a row of overlapping circles, on the reasoning that blocking is
+ * round and a building is not, so a run of them with their ends on the box's
+ * edges would cover the face. It does not: a circle cannot reach into a
+ * corner, and two circles side by side leave a scallop between them. Measured
+ * on the house — a hundred and seventy-eight across by eighty-eight down, four
+ * circles of radius forty-four — the top corners were open for thirty pixels
+ * each and there were notches between every pair. That is a player standing
+ * inside their own front wall, which is what it was reported as.
+ *
+ * A blocker takes a box, which the vending machine on the street has used all
+ * along, and a box is exactly a box. One object, one blocker, no corners left.
+ *
+ * The object is transparent: what the player sees is the run drawn over it.
  */
 export function solid(
   id: string,
@@ -100,18 +109,26 @@ export function solid(
   w: number,
   h: number
 ): ObjectSpec[] {
-  const r = h / 2;
-  const n = Math.max(2, Math.ceil((w - 2 * r) / r) + 1);
-  return Array.from({ length: n }, (_, i) => {
-    const cx = x + r + ((w - 2 * r) * i) / (n - 1);
-    return {
-      id: `${id}${i}`,
+  return [
+    {
+      id,
       nameKey: `object.${id}`,
       kind: "decor" as const,
-      x: cx - 4,
+      x,
       y,
-      render: { className: "edge-zone", bar: { width: 8, height: h } },
-      behaviors: [{ t: "blocker" as const, radius: r }],
-    };
-  });
+      render: { className: "edge-zone", bar: { width: w, height: h } },
+      /*
+       * The radius is not what does the blocking once a box is given — it is
+       * still what the movement code pushes away from when somebody is already
+       * inside, so it is the box's own half-diagonal rather than a token.
+       */
+      behaviors: [
+        {
+          t: "blocker" as const,
+          radius: Math.hypot(w, h) / 2,
+          box: { w, h },
+        },
+      ],
+    },
+  ];
 }

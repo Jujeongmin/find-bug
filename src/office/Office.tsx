@@ -1364,6 +1364,18 @@ function OfficeRun({
       if (dayOver) return setNote(t("street.shut"));
       if (isWeekend(day) && !workedWeekend) return setNote(t("street.weekend"));
       sfx.play("click");
+      /*
+       * Walking in the front door starts you at the front door.
+       *
+       * officeAt remembers where the player was standing so that opening a
+       * build and stepping back out of it does not cost them the walk to the
+       * machine again. It was being kept across the whole commute as well, so
+       * arriving at work put them wherever they had been when they left the
+       * night before — usually at a machine, which reads as the game having
+       * skipped the morning. Reported as "sometimes I start at the computer
+       * instead of the entrance".
+       */
+      setOfficeAt(null);
       setPlace("office");
       setNote(null);
       return;

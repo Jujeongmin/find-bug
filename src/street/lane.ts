@@ -93,8 +93,27 @@ export const laneScene: SceneSpec = {
      * gradient's. Sprites hang from the bottom edge of where they are put,
      * which is why the roof sits at the top of the wall and not over it.
      */
-    ...front("houseWall", { left: 1, mid: 2, right: 3 }, 5, 2, 90, 360, 4, 2.8),
-    ...front("houseRoof", { left: 0, mid: 2, right: 1 }, 0, 2, 90, 270, 4, 2.8),
+    /*
+     * Sorted on the wall's foot, both halves of it.
+     *
+     * front() draws flat scenery by default — z: 0, out of the y-sort — which
+     * is right for every other run in this game, because they are all the far
+     * wall of a room and nobody stands behind those. This one is a building in
+     * the middle of the block: the strip between it and the trees is walkable,
+     * the player goes up there, and on the flat layer they were drawn on top
+     * of their own house.
+     *
+     * The roof takes the wall's foot rather than its own. A roof sorted where
+     * it is drawn would let somebody standing at the side of the house pass in
+     * front of it, and a roof is the one part of a building nothing gets in
+     * front of.
+     */
+    ...front("houseWall", { left: 1, mid: 2, right: 3 }, 5, 2, 90, 360, 4, 2.8).map(
+      (o) => ({ ...o, sortY: 360 })
+    ),
+    ...front("houseRoof", { left: 0, mid: 2, right: 1 }, 0, 2, 90, 270, 4, 2.8).map(
+      (o) => ({ ...o, sortY: 360 })
+    ),
     ...solid("house", 91, 272, 178, 88),
     ...[135, 225].map((x, i) => ({
       id: `houseWindow${i}`,

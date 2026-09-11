@@ -13,8 +13,25 @@ const find = (id: string) => {
 const tick = (r: SceneRuntime, secs: number) => {
   for (let i = 0; i < secs * 60; i++) r.tick(1 / 60);
 };
-const ok = (label: string, cond: boolean) =>
+/*
+ * A check that cannot fail is not a check.
+ *
+ * This printed FAIL and then exited zero, so every assertion written with it
+ * was decoration as far as `npm run verify` was concerned — the only things in
+ * this file that could actually stop a build were the handful that throw. Found
+ * by deliberately breaking one and watching the suite stay green.
+ */
+let failed = 0;
+const ok = (label: string, cond: boolean) => {
+  if (!cond) failed++;
   console.log(`${cond ? "PASS" : "FAIL"}  ${label}`);
+};
+process.on("exit", () => {
+  if (failed) {
+    console.log(`\n${failed} failed`);
+    process.exitCode = 1;
+  }
+});
 
 /* baseline: no mutation */
 {
@@ -406,5 +423,44 @@ const ok = (label: string, cond: boolean) =>
   ok(
     "and a player caught inside one can always walk out",
     Math.hypot(p.x - from.x, p.y - from.y) > 4
+  );
+}
+
+/*
+ * A wall is a wall all the way to its corners.
+ *
+ * solid() used to lay a row of overlapping circles along a building's face, on
+ * the reasoning that blocking is round and a face is not. A circle cannot
+ * reach into a corner, and two side by side leave a scallop between them: on
+ * the house — 178 by 88, four circles of radius 44 — the top corners were open
+ * for thirty pixels each. What that looked like was a player standing inside
+ * their own front wall, which is how it was reported.
+ *
+ * Every point inside the wall is checked rather than a sample, because the
+ * holes were in the places a sample would miss.
+ */
+{
+  const rt = new SceneRuntime(laneScene);
+  const wall = { x: 91, y: 272, w: 178, h: 88 };
+  let open = 0;
+  let first = "";
+  for (let y = wall.y + 1; y < wall.y + wall.h; y++) {
+    for (let x = wall.x + 1; x < wall.x + wall.w; x++) {
+      if (!rt.blockedAt(x, y)) {
+        if (!open) first = `${x},${y}`;
+        open++;
+      }
+    }
+  }
+  ok(
+    `the house blocks every point inside it${open ? ` — ${open} open, first at ${first}` : ""}`,
+    open === 0
+  );
+
+  // and it is not fatter than the art: the pavement either side is walkable
+  ok(
+    "and the pavement beside it still is not blocked",
+    !rt.blockedAt(wall.x - 2, wall.y + wall.h / 2) &&
+      !rt.blockedAt(wall.x + wall.w + 2, wall.y + wall.h / 2)
   );
 }
