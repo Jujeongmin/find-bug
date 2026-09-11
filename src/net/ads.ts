@@ -151,15 +151,33 @@ export async function showRewarded(placementId: Placement): Promise<AdOutcome> {
   showing = true;
   let res: RewardedAdResult;
   try {
-    res = await bound(mod.showRewarded({ placementId, timeoutMs: WAIT_MS }));
+    res = await bound(mod.showRewarded({ placementId, timeoutMs: AD_WAIT_MS }));
   } finally {
     showing = false;
   }
   return read(res);
 }
 
-/** how long the player is made to wait before the offer comes back to them */
-const WAIT_MS = 20_000;
+/**
+ * How long an advert is given, all in.
+ *
+ * This was twenty seconds, and it was being read as "how long to wait for one
+ * to load". It is not. The SDK arms its timer the moment the request goes out
+ * and only cancels it when the final result comes back, so it covers the load,
+ * the video, and the player sitting through the video. Twenty seconds is less
+ * than a rewarded advert takes — so somebody who watched one to the end was
+ * told it had failed, and got nothing. The reward that did arrive afterwards
+ * was dropped: the SDK had already taken the request out of its own map.
+ *
+ * The host is the one that should decide when to give up, because it is the
+ * one that knows what it is playing, and it allows thirty seconds for an ad
+ * break. Ours sits past that so the host's own answer is always the one that
+ * lands, and this only ever fires for a parent that never answers at all.
+ */
+const AD_WAIT_MS = 45_000;
+
+/** our own last resort, past whatever the SDK and the host settle on */
+const GIVE_UP_MS = AD_WAIT_MS + 5_000;
 
 /**
  * The wait, ended by us if the SDK does not end it.
@@ -169,6 +187,11 @@ const WAIT_MS = 20_000;
  * the promise open past that deadline, and the shape of that failure is a
  * player at six o'clock looking at a button that has stopped meaning anything.
  * Losing the advert is a cost; losing the evening is not one to offer.
+ *
+ * A rejection is handled beside the resolution rather than left to the timer.
+ * The SDK is documented as resolving on every path and does, but "the promise
+ * we were handed behaved" is not something to stake the better part of a
+ * minute of somebody's evening on.
  */
 function bound(p: Promise<RewardedAdResult>): Promise<RewardedAdResult> {
   return new Promise((resolve) => {
@@ -179,12 +202,22 @@ function bound(p: Promise<RewardedAdResult>): Promise<RewardedAdResult> {
           requestId: "",
           error: { code: "timeout", message: "no answer from the host" },
         }),
-      WAIT_MS + 1_000
+      GIVE_UP_MS
     );
-    void p.then((r) => {
+    const done = (r: RewardedAdResult) => {
       clearTimeout(timer);
       resolve(r);
-    });
+    };
+    void p.then(done, (e: unknown) =>
+      done({
+        status: "failed",
+        requestId: "",
+        error: {
+          code: "platform_error",
+          message: e instanceof Error ? e.message : "threw",
+        },
+      })
+    );
   });
 }
 
