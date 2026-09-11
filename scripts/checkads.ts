@@ -1,18 +1,27 @@
 /**
- * Does the game wait long enough for an advert to finish?
+ * Nothing in this game gets to decide an advert is over except the host.
  *
  * `timeoutMs` does not bound the loading of an advert. The SDK arms its timer
  * the moment the request goes out and only cancels it when the final result
- * comes back, so it bounds the whole thing — the load, the video, and the
- * player sitting through it. Ask for less than an advert takes and the player
- * watches it to the end and is told it failed.
+ * comes back, so it covers the load, the video, and the player sitting through
+ * the video. Ask for less than the advert takes and the player watches it to
+ * the end and is told it failed — and the reward that arrives a moment later
+ * is dropped, because the request is already out of the SDK's map.
  *
- * The host has a budget of its own for the same span, and it is the one that
- * should decide: it knows what it is playing. Ours exists only for a parent
- * that never answers at all, so it has to be the longer of the two.
+ * The SDK's own documentation is unambiguous about this, and it is quoted here
+ * so the rule survives whoever reads this file next:
  *
- * Both numbers are read out of the files rather than imported, because
- * src/net/ads.ts reaches for import.meta.env and the SDK ships minified.
+ *   "Per-request timeout in ms. No default — omit it and the request waits for
+ *    the host. Supply one only to bound total time."
+ *   "timeout | The host did not respond within an explicitly supplied
+ *    timeoutMs. Never raised when timeoutMs is omitted."
+ *
+ * So there is no right number, and this checks that none is passed. What is
+ * left is one last resort for a host that never answers at all, which has to
+ * be far longer than any advert could be.
+ *
+ * Everything is read out of the files rather than imported: src/net/ads.ts
+ * reaches for import.meta.env, and the SDK ships minified.
  */
 import { readFileSync } from "node:fs";
 
@@ -24,73 +33,81 @@ const fail = (msg: string) => {
 };
 const is = (cond: boolean, msg: string) => (cond ? ok(msg) : fail(msg));
 
-/** the host's own budget for one ad break, out of the SDK we ship against */
-function hostBudgetMs(): number {
-  const sdk = readFileSync("node_modules/@verse8/ads/dist/index.mjs", "utf8");
-  const m = sdk.match(/adBreakTimeoutMs>0\?[A-Za-z.]+:([0-9]+e?[0-9]*)/);
+const ads = readFileSync("src/net/ads.ts", "utf8");
+
+console.log("\nthe host decides when the advert is over");
+{
+  const at = ads.indexOf("mod.showRewarded(");
+  if (at < 0) {
+    console.log("FAIL  ads.ts does not call mod.showRewarded — this has drifted");
+    process.exit(1);
+  }
+  // the statement, which ends at the first semicolon after the call
+  const rest = ads.slice(at);
+  const call = rest.slice(0, rest.indexOf(";") + 1);
+  is(
+    !/timeoutMs/.test(call),
+    `showRewarded is called without a timeoutMs — ${call.trim()}`
+  );
+  /*
+   * The documented sentence, checked against the SDK actually installed. If a
+   * future version gives timeoutMs a default, omitting it stops meaning "wait
+   * for the host" and this whole approach needs revisiting — so the claim is
+   * pinned to the file rather than to memory.
+   */
+  const readme = readFileSync("node_modules/@verse8/ads/README.md", "utf8");
+  is(
+    /Never raised when `?timeoutMs`? is omitted/.test(readme),
+    "and the SDK still promises never to time out when it is omitted"
+  );
+}
+
+console.log("\nbut a host that never answers does not keep the player");
+{
+  const m = ads.match(/const GIVE_UP_MS\s*=\s*([0-9_]+)/);
   if (!m) {
+    console.log("FAIL  ads.ts has no GIVE_UP_MS — this check has drifted");
+    process.exit(1);
+  }
+  const giveUp = Number(m[1].replace(/_/g, ""));
+
+  /*
+   * The SDK renders the web advert in this frame when the host asks it to, and
+   * caps that ad break itself. Our last resort has to sit well past that cap,
+   * or it becomes the thing deciding an advert is over after all.
+   */
+  const sdk = readFileSync("node_modules/@verse8/ads/dist/index.mjs", "utf8");
+  const h = sdk.match(/adBreakTimeoutMs>0\?[A-Za-z.]+:([0-9]+e?[0-9]*)/);
+  if (!h) {
     console.log(
       "FAIL  cannot find the SDK's adBreakTimeoutMs default — the pattern has drifted"
     );
     process.exit(1);
   }
-  return Number(m[1]);
-}
+  const hostCap = Number(h[1]);
 
-/**
- * A number declared in ads.ts, by name.
- *
- * Either side of the sum may be another of these constants, because that is
- * how the last resort is written — as "the SDK's wait, and then some".
- */
-function ours(name: string, seen: string[] = []): number {
-  if (seen.includes(name)) {
-    console.log(`FAIL  ${name} in ads.ts is defined in terms of itself`);
-    process.exit(1);
-  }
-  const src = readFileSync("src/net/ads.ts", "utf8");
-  const m = src.match(
-    new RegExp(`const ${name}\\s*=\\s*([0-9_A-Za-z]+)\\s*(?:\\+\\s*([0-9_A-Za-z]+))?`)
+  is(
+    giveUp >= hostCap * 3,
+    `the last resort is far past the SDK's own ad-break cap (${giveUp}ms against ${hostCap}ms)`
   );
-  if (!m) {
-    console.log(`FAIL  ads.ts has no ${name} — this check has drifted`);
-    process.exit(1);
-  }
-  const term = (t: string | undefined): number => {
-    if (!t) return 0;
-    if (/^[0-9_]+$/.test(t)) return Number(t.replace(/_/g, ""));
-    return ours(t, [...seen, name]);
-  };
-  return term(m[1]) + term(m[2]);
+  is(
+    giveUp >= 120_000,
+    `and past any advert that could still be playing (${giveUp}ms)`
+  );
 }
-
-const host = hostBudgetMs();
-const asked = ours("AD_WAIT_MS");
-const giveUp = ours("GIVE_UP_MS");
-
-console.log("\nan advert is given time to finish");
-is(
-  asked > host,
-  `we wait longer than the host does (${asked}ms asked, host gives up at ${host}ms)`
-);
-is(
-  giveUp > asked,
-  `and our own last resort is later still (${giveUp}ms)`
-);
 
 /*
- * The half of this that has no number in it: a rejected promise must not be
- * left to the timer. bound() used to attach only a `then`, so an SDK that
- * threw left the player watching a disabled prompt until the clock ran out —
- * and now that the clock is the best part of a minute, that matters more.
+ * The half of this with no number in it: a rejected promise must not be left
+ * to the timer. bound() used to attach only a `then`, so an SDK that threw
+ * left the player watching a disabled prompt until the clock ran out — and the
+ * clock is now three minutes.
  */
-console.log("\nand a broken advert does not hold the player there");
+console.log("\nand a broken advert does not hold them either");
 {
-  const src = readFileSync("src/net/ads.ts", "utf8");
-  const b = src.slice(src.indexOf("function bound("));
+  const b = ads.slice(ads.indexOf("function bound("));
   const body = b.slice(0, b.indexOf("\n}"));
   is(
-    /\.catch\(|,\s*\(\)\s*=>|\.then\([^)]*,/.test(body),
+    /\.catch\(|\.then\([^)]*,|,\s*\(e/.test(body),
     "bound() handles a rejection as well as a resolution"
   );
 }

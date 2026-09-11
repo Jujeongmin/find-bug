@@ -151,7 +151,18 @@ export async function showRewarded(placementId: Placement): Promise<AdOutcome> {
   showing = true;
   let res: RewardedAdResult;
   try {
-    res = await bound(mod.showRewarded({ placementId, timeoutMs: AD_WAIT_MS }));
+    /*
+     * No timeoutMs. The SDK's own words: "No default — omit it and the request
+     * waits for the host. Supply one only to bound total time", and "timeout is
+     * never raised when timeoutMs is omitted."
+     *
+     * Supplying one was the bug. Any number here is a wall in front of the
+     * advert, and the advert is the thing being waited for — a wall at twenty
+     * seconds failed a thirty second advert, and a wall at sixty would fail a
+     * ninety second one. The host is the only party that knows how long what
+     * it is playing runs for, so the host is the one that ends this.
+     */
+    res = await bound(mod.showRewarded({ placementId }));
   } finally {
     showing = false;
   }
@@ -159,25 +170,22 @@ export async function showRewarded(placementId: Placement): Promise<AdOutcome> {
 }
 
 /**
- * How long an advert is given, all in.
+ * The one number left, and what it is for.
  *
- * This was twenty seconds, and it was being read as "how long to wait for one
- * to load". It is not. The SDK arms its timer the moment the request goes out
- * and only cancels it when the final result comes back, so it covers the load,
- * the video, and the player sitting through the video. Twenty seconds is less
- * than a rewarded advert takes — so somebody who watched one to the end was
- * told it had failed, and got nothing. The reward that did arrive afterwards
- * was dropped: the SDK had already taken the request out of its own map.
+ * Not a limit on the advert. The advert is ended by the host, which is the
+ * only party that knows what it is playing. This is the case the host never
+ * answers at all — a Verse8 page whose ad bridge is not there, where the
+ * handshake gets no reply inside its own half second, the SDK carries on
+ * anyway, and without a timeoutMs nothing is ever going to resolve. Left
+ * alone, that is a prompt frozen mid-evening for the rest of the run.
  *
- * The host is the one that should decide when to give up, because it is the
- * one that knows what it is playing, and it allows thirty seconds for an ad
- * break. Ours sits past that so the host's own answer is always the one that
- * lands, and this only ever fires for a parent that never answers at all.
+ * Three minutes because it has to be past any advert that could legitimately
+ * still be running, and no rewarded advert runs three minutes. It is a guess,
+ * and it is only ever reached by something already broken: an advert that is
+ * genuinely playing when this fires has been mistreated, so the number is
+ * deliberately far past where that could happen rather than tuned close to it.
  */
-const AD_WAIT_MS = 45_000;
-
-/** our own last resort, past whatever the SDK and the host settle on */
-const GIVE_UP_MS = AD_WAIT_MS + 5_000;
+const GIVE_UP_MS = 180_000;
 
 /**
  * The wait, ended by us if the SDK does not end it.
