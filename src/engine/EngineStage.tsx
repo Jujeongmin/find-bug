@@ -1031,7 +1031,9 @@ export function EngineStage({
                         ? ({ "--anim-period": `${anim.period}s` } as CSSProperties)
                         : null),
                       fontSize: o.render.fontSize,
-                      bottom: o.render.liftY ?? 0,
+                      // liftY raises, footPad lowers: a floating character is
+                      // still floating the same distance above its own feet
+                      bottom: (o.render.liftY ?? 0) - (o.render.footPad ?? 0),
                       transform: `scaleX(${
                         o.render.actor
                           ? 1

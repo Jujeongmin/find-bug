@@ -1,4 +1,5 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
+import { PLAYER_FOOT_PAD } from "../street/scene";
 
 const WALL_H = 96;
 
@@ -43,7 +44,7 @@ export const homeScene: SceneSpec = {
       x: 180,
       y: 460,
       z: 3,
-      render: { actor: actor("worker") },
+      render: { actor: actor("worker"), footPad: PLAYER_FOOT_PAD },
       behaviors: [
         { t: "playerTopDown", speed: 150, minY: WALL_H + 26, maxY: 610 },
       ],

@@ -1,5 +1,5 @@
 import type { SceneSpec } from "../engine/types";
-import { streetActor } from "./scene";
+import { PLAYER_FOOT_PAD, streetActor } from "./scene";
 import { front, solid } from "./build";
 import { MUTTERS } from "./passers";
 
@@ -56,7 +56,7 @@ export const laneScene: SceneSpec = {
       x: 180,
       y: 424,
       z: 3,
-      render: { actor: streetActor() },
+      render: { actor: streetActor(), footPad: PLAYER_FOOT_PAD },
       behaviors: [{ t: "playerTopDown", speed: 150, minY: 116, maxY: 604 }],
     },
 

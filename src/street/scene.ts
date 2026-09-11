@@ -1,5 +1,5 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
-import type { SheetId } from "../engine/sheets";
+import { footPadPx, type SheetId } from "../engine/sheets";
 import { MUTTERS } from "./passers";
 import { front, glassDoor } from "./build";
 
@@ -25,6 +25,19 @@ export const streetActor = (sheet: SheetId = "worker"): ActorSpec => ({
   fps: 8,
   scale: 1.5,
 });
+
+/**
+ * How far the player's art has to come down to stand where it stands.
+ *
+ * Read off the sheet rather than typed in, so changing the character or its
+ * scale carries it. Every screen the player walks around on uses this one
+ * number: it is the player who gets walked into walls, and the player whose
+ * feet the wall has to meet.
+ */
+export const PLAYER_FOOT_PAD = footPadPx(
+  streetActor().sheet,
+  streetActor().scale
+);
 
 /**
  * The office street.
@@ -55,7 +68,7 @@ export const streetScene: SceneSpec = {
       x: 180,
       y: 540,
       z: 3,
-      render: { actor: streetActor() },
+      render: { actor: streetActor(), footPad: PLAYER_FOOT_PAD },
       behaviors: [{ t: "playerTopDown", speed: 150, minY: 186, maxY: 566 }],
     },
 

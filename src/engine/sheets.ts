@@ -51,6 +51,37 @@ export const SHEETS = {
 
 export type SheetId = keyof typeof SHEETS;
 
+/**
+ * How many empty rows a character sheet leaves under the drawn feet.
+ *
+ * An entity is placed by the bottom edge of its frame, so a sheet that draws a
+ * 14px person in the middle of a 32px canvas draws the feet eight rows above
+ * the point the game uses for collision and for y-sorting. On the walk that is
+ * twelve display pixels, and it is why the house read as something the player
+ * could stand on top of: they stop correctly at the bottom of the wall and are
+ * drawn a brick course inside it.
+ *
+ * Measured, not guessed — `npx tsx scripts/footpad.ts` decodes each sheet, takes
+ * the lowest opaque row across every frame the animation shows, and fails if
+ * these numbers have drifted from the art. The value is the ground line rather
+ * than any one frame's, so a raised knee does not make the character bob.
+ *
+ * Only sheets with a number here have one; anything absent is drawn on its own
+ * feet already, which is what the platformer characters do.
+ */
+export const FOOT_PAD: Partial<Record<SheetId, number>> = {
+  worker: 8,
+  worker2: 8,
+  personA: 8,
+  personB: 8,
+  personC: 8,
+};
+
+/** the same gap in display pixels, which is what the renderer wants */
+export function footPadPx(sheet: SheetId, scale: number): number {
+  return (FOOT_PAD[sheet] ?? 0) * scale;
+}
+
 export interface SpriteSpec {
   sheet: SheetId;
   /** tile column and row in the sheet */

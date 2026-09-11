@@ -228,6 +228,17 @@ export interface RenderSpec {
   glow?: { radius: number; offsetX: number; offsetY: number };
   /** lifts the sprite off the ground without moving its shadow */
   liftY?: number;
+  /**
+   * Drops the art onto the position it is actually standing at, in display
+   * pixels. Character sheets pad under the feet — see FOOT_PAD in ./sheets —
+   * so without this the drawn feet float above the point that collides and
+   * sorts, and walking up to a wall looks like standing on it.
+   *
+   * Deliberately not `liftY` with a negative number: liftY is the floating
+   * mutator's own field and is reported to the player as "lifted", so a
+   * standing offset stored there would make every character read as a defect.
+   */
+  footPad?: number;
   /** extra CSS class for scene-specific looks */
   className?: string;
   /** i18n key for a button caption; falls back to the object name */

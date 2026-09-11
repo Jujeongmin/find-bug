@@ -1,5 +1,6 @@
 import type { ActorSpec, SceneSpec } from "../engine/types";
 import { front, glassDoor } from "../street/build";
+import { PLAYER_FOOT_PAD } from "../street/scene";
 import { DEV_MUTTERS } from "./devlines";
 
 /** the three machines today's builds are queued on */
@@ -99,7 +100,7 @@ export const officeScene: SceneSpec = {
       x: 200,
       y: 556,
       z: 3,
-      render: { actor: actor("worker") },
+      render: { actor: actor("worker"), footPad: PLAYER_FOOT_PAD },
       behaviors: [
         { t: "playerTopDown", speed: 150, minY: WALL_H + 26, maxY: 618 },
       ],
