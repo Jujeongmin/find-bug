@@ -46,6 +46,9 @@ import "./engine.css";
  */
 let carried: number | null = null;
 
+/** how much bigger the world gets while the magnifier is held */
+const ZOOM = 2;
+
 type Phase = "intro" | "play" | "picking" | "category" | "result" | "dead";
 
 interface Props {
@@ -242,6 +245,14 @@ export function EngineStage({
   const [showControls, setShowControls] = useState(true);
   /** held while the magnifier button is pressed */
   const [zoomed, setZoomed] = useState(false);
+  /**
+   * How far the magnifier has been dragged away from the player, in field
+   * units. Null until the pointer moves, which is what keeps a press from
+   * throwing the view into the corner the button happens to sit in.
+   */
+  const [zoomPan, setZoomPan] = useState<{ x: number; y: number } | null>(null);
+  /** where the press landed, so the drag can be measured from it */
+  const zoomFrom = useRef<{ x: number; y: number } | null>(null);
   useEffect(() => setShowControls(true), [scene]);
   useEffect(() => {
     // count from the moment play starts, not from mount: the briefing sits in
@@ -646,16 +657,19 @@ export function EngineStage({
   // The magnifier scales the world layer and keeps the point of interest
   // centred, clamped so the view never runs past the room. At zoom 1 this is
   // the plain camera the larger scenes already used.
-  const zoomLevel = zoomed ? 2 : 1;
+  const zoomLevel = zoomed ? ZOOM : 1;
   const cam = (() => {
     const p = live.objects.find((o) => o.kind === "player");
     if (!p || (!live.world && !zoomed)) return { x: 0, y: 0 };
     const ps = p ? st.objects[p.id] : { x: world.w / 2, y: world.h / 2 };
+    // the glass starts over the player and is dragged from there
+    const fx = ps.x + (zoomed && zoomPan ? zoomPan.x : 0);
+    const fy = ps.y + (zoomed && zoomPan ? zoomPan.y : 0);
     const viewW = FIELD_W / zoomLevel;
     const viewH = FIELD_H / zoomLevel;
     return {
-      x: Math.max(0, Math.min(world.w - viewW, ps.x - viewW / 2)),
-      y: Math.max(0, Math.min(world.h - viewH, ps.y - viewH / 2)),
+      x: Math.max(0, Math.min(world.w - viewW, fx - viewW / 2)),
+      y: Math.max(0, Math.min(world.h - viewH, fy - viewH / 2)),
     };
   })();
 
@@ -1120,13 +1134,54 @@ export function EngineStage({
           {canZoom && !picking && (
             <button
               className={`eng-zoom-btn ${zoomed ? "on" : ""}`}
+              /*
+               * A magnifier you hold still is a magnifier of one thing: your
+               * own feet. Held, it drags — the view follows the pointer away
+               * from the player, which is the whole point of being handed one
+               * in a game about looking at things.
+               *
+               * Two things had to go for that to work. The button took no
+               * pointer capture, so on a mouse the first pixel of movement
+               * left the 46px circle; and onPointerLeave dropped the zoom, so
+               * that movement ended the hold rather than panning with it.
+               * Pressing and moving — exactly what a magnifier is for — was
+               * the one gesture guaranteed to switch it off.
+               */
               onPointerDown={(e) => {
                 e.preventDefault();
+                try {
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                } catch {
+                  // a pointer that is no longer down cannot be captured; the
+                  // hold still works, it just ends when the button is left
+                }
+                zoomFrom.current = { x: e.clientX, y: e.clientY };
+                setZoomPan(null);
                 setZoomed(true);
               }}
-              onPointerUp={() => setZoomed(false)}
-              onPointerLeave={() => setZoomed(false)}
-              onPointerCancel={() => setZoomed(false)}
+              onPointerMove={(e) => {
+                const from = zoomFrom.current;
+                const el = fieldRef.current;
+                if (!from || !el) return;
+                // screen pixels to field units, through the zoom: the world
+                // moves under the glass at the speed the hand does
+                const k =
+                  (el.getBoundingClientRect().width / FIELD_W) * ZOOM;
+                setZoomPan({
+                  x: (e.clientX - from.x) / k,
+                  y: (e.clientY - from.y) / k,
+                });
+              }}
+              onPointerUp={() => {
+                zoomFrom.current = null;
+                setZoomPan(null);
+                setZoomed(false);
+              }}
+              onPointerCancel={() => {
+                zoomFrom.current = null;
+                setZoomPan(null);
+                setZoomed(false);
+              }}
               title={t("item.magnifier")}
             >
               <MagnifierIcon size={16} />
