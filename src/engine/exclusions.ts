@@ -96,6 +96,31 @@ export const EXCLUDED_BUGS: string[] = [
   "stage05:noRespawn:herb3",
   "stage05:noRespawn:herb4",
   "stage05:noRespawn:herb5",
+  /*
+   * Wrapping round, on the shooting range's targets.
+   *
+   * teleportOnEnd makes a patrolling thing reach the end of its run and come
+   * back on from the other side instead of turning. Everywhere else it is
+   * planted that is plainly wrong, because the thing it is planted on is
+   * alive or is under the player's feet: a slime does not teleport across an
+   * arena, a wasp does not cross a field in one frame, and a platform that
+   * vanishes from under you is the clearest fault in the game.
+   *
+   * A target on a rail is none of those. A shooting gallery where the row
+   * slides one way and comes round again is a shooting gallery; so is one
+   * that slides back and forth. There is no intuition saying which of the two
+   * a target owes you, so the defect asks the player to notice a difference
+   * and then guess which side of it is the bug — and the peers do not settle
+   * it either, because either pattern reads as a different rail rather than
+   * as a broken one.
+   *
+   * Reported as not reading as a fault at all. The same reasoning as the
+   * floating trees above: the tell has to be something the player already
+   * expects of the object, and here they expect nothing.
+   */
+  "stage06:teleportOnEnd:targetA:teleport",
+  "stage06:teleportOnEnd:targetB:teleport",
+  "stage06:teleportOnEnd:targetC:teleport",
   "stage06:flipSprite:leverA",
   "stage06:flipSprite:leverC",
   "stage06:noAction:leverB",
