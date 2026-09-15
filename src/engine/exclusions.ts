@@ -124,6 +124,17 @@ export const EXCLUDED_BUGS: string[] = [
   "stage06:flipSprite:leverA",
   "stage06:flipSprite:leverC",
   "stage06:noAction:leverB",
+  /*
+   * Wrapping round, on the mine's ore barrels.
+   *
+   * The same reasoning that took it off the shooting range's targets: a
+   * thing riding a rail has no end behaviour the player already expects of
+   * it. A barrel that reaches the end of the track and comes back on from
+   * the other side reads as a loop line, not a broken one. The barrels keep
+   * the recoil fault, which is wrong whichever way a rail runs.
+   */
+  "stage08:teleportOnEnd:barrel1:teleport",
+  "stage08:teleportOnEnd:barrel2:teleport",
 ];
 
 const excluded = new Set(EXCLUDED_BUGS);

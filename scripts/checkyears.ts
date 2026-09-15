@@ -161,7 +161,9 @@ const account = () => {
 
 console.log("\nthe book only counts what this year can meet");
 {
-  const all = codexRows({}, 1);
+  // an explicit empty table, not the registry: this section tests the gating
+  // rule, and the registry changes every time a build is given a year
+  const all = codexRows({}, 1, {});
   const lockStage07 = { stage07: 2 };
   const y1 = codexRows({}, 1, lockStage07);
   const y2 = codexRows({}, 2, lockStage07);
@@ -170,7 +172,20 @@ console.log("\nthe book only counts what this year can meet");
   is(y1.length === all.length - in07, "a build from a later year is not in year one's book");
   is(y1.every((r) => r.sceneId !== "stage07"), "not even one of its rows");
   is(y2.length === all.length, "and it is there from its own year");
-  is(codexRows({}, 1).length === all.length, "with nothing locked, year one's book is the whole book");
+  is(codexRows({}, 1, {}).length === all.length, "with nothing locked, year one's book is the whole book");
+
+  const realY1 = codexRows({}, 1);
+  const realY2 = codexRows({}, 2);
+  is(realY1.every((r) => r.sceneId !== "stage08") && realY2.some((r) => r.sceneId === "stage08"),
+     "and in the real registry, the mine's faults join the book in year two");
+}
+
+console.log("\nthe registry puts each new build in its own year");
+{
+  is(Object.keys(SCENE_YEAR).every((id) => /^stage\d{2}$/.test(id)),
+     "every later build id passes the server's book pattern");
+  is(!buildIdsFor(1).includes("stage08") && buildIdsFor(2).includes("stage08"),
+     "the mine arrives in year two, and not before");
 }
 
 await (async () => {

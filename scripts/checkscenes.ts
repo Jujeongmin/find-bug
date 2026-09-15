@@ -3,6 +3,7 @@ import { SceneRuntime } from "../src/engine/runtime";
 import { ENGINE_SCENES } from "../src/stages/registry";
 import { stage03Scene } from "../src/stages/stage03/scene";
 import { stage06Scene } from "../src/stages/stage06/scene";
+import { stage08Scene } from "../src/stages/stage08/scene";
 
 let fails = 0;
 const ok = (label: string, cond: boolean) => {
@@ -114,6 +115,58 @@ for (const scene of ENGINE_SCENES) {
   );
 }
 
+/* stage 8: the mine — each lever lifts the gate above it, and only that one */
+{
+  const r = new SceneRuntime(stage08Scene);
+  r.click("leverA");
+  ok("stage08: lever A lifts gate A and only gate A",
+     r.isTriggered("gateA") && !r.isTriggered("gateB") && !r.isTriggered("gateC"));
+  tick(r, 3);
+  ok("stage08: the gate comes back down", !r.isTriggered("gateA"));
+
+  const crossed = new SceneRuntime(applyMutation(stage08Scene, mut(stage08Scene, "wiringSwap:leverA:leverB")));
+  crossed.click("leverA");
+  ok("stage08: with the wires crossed, lever A lifts gate B",
+     !crossed.isTriggered("gateA") && crossed.isTriggered("gateB"));
+
+  const dead = new SceneRuntime(applyMutation(stage08Scene, mut(stage08Scene, "noAction:leverB")));
+  dead.click("leverB");
+  ok("stage08: a dead lever lifts nothing", !dead.isTriggered("gateB"));
+
+  const rc = new SceneRuntime(stage08Scene);
+  const chest = stage08Scene.objects.find((o) => o.id === "chest2")!;
+  rc.state.objects.player.x = chest.x;
+  rc.state.objects.player.y = chest.y;
+  tick(rc, 0.1);
+  ok("stage08: walking onto a chest takes it for 10 gold",
+     rc.state.counters.gold === 10 && !rc.state.objects.chest2.alive);
+  rc.state.objects.player.x = 180;
+  rc.state.objects.player.y = 400;
+  tick(rc, 6.2);
+  ok("stage08: the chest is back six seconds later", rc.state.objects.chest2.alive);
+
+  const rh = new SceneRuntime(stage08Scene);
+  const spider = stage08Scene.objects.find((o) => o.id === "spider1")!;
+  rh.state.objects.player.x = spider.x;
+  rh.state.objects.player.y = spider.y + 10;
+  tick(rh, 0.1);
+  ok("stage08: a spider hurts", rh.state.counters.hp === 2);
+
+  const rb = new SceneRuntime(stage08Scene);
+  let lo = 999, hi = -999;
+  for (let i = 0; i < 60 * 12; i++) {
+    rb.tick(1 / 60);
+    lo = Math.min(lo, rb.state.objects.barrel1.x);
+    hi = Math.max(hi, rb.state.objects.barrel1.x);
+  }
+  ok(`stage08: an ore barrel rides the whole rail and stays on it (${lo.toFixed(0)}..${hi.toFixed(0)})`,
+     lo >= 50 && hi <= 310 && hi - lo > 200);
+
+  const pair = stage08Scene.objects.filter((o) => o.peerGroup === "barrel");
+  const runs = pair.map((o) => JSON.stringify(o.behaviors));
+  ok("stage08: the two barrels share one run and one speed", runs.length === 2 && runs[0] === runs[1]);
+}
+
 console.log(fails === 0 ? "\nALL PASS" : `\n${fails} FAILURES`);
 
 /* death: running out of health ends the run instead of respawning */
@@ -139,3 +192,4 @@ console.log(fails === 0 ? "\nALL PASS" : `\n${fails} FAILURES`);
      Math.abs(fresh.state.objects.player.x - spikes.x) > 30);
   ok("stage03: a fresh run starts alive", fresh.state.dead === false);
 }
+process.exitCode = fails ? 1 : 0;

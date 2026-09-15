@@ -74,7 +74,7 @@
       "stages": [
         6,
         12,
-        18
+        19
       ]
     },
     {
@@ -91,7 +91,7 @@
       "stages": [
         6,
         12,
-        18
+        19
       ]
     },
     {
@@ -108,7 +108,7 @@
       "stages": [
         6,
         12,
-        18
+        19
       ]
     },
     {
@@ -123,9 +123,8 @@
       "score": 2.43,
       "band": 3,
       "stages": [
-        18,
-        24,
-        29
+        19,
+        26
       ]
     },
     {
@@ -140,9 +139,8 @@
       "score": 2.44,
       "band": 3,
       "stages": [
-        18,
-        24,
-        29
+        19,
+        26
       ]
     },
     {
@@ -157,9 +155,8 @@
       "score": 2.53,
       "band": 3,
       "stages": [
-        18,
-        24,
-        29
+        19,
+        26
       ]
     },
     {
@@ -174,9 +171,8 @@
       "score": 2.74,
       "band": 3,
       "stages": [
-        18,
-        24,
-        29
+        19,
+        26
       ]
     },
     {
@@ -191,9 +187,8 @@
       "score": 2.78,
       "band": 3,
       "stages": [
-        18,
-        24,
-        29
+        19,
+        26
       ]
     },
     {
@@ -208,9 +203,8 @@
       "score": 2.84,
       "band": 3,
       "stages": [
-        18,
-        24,
-        29
+        19,
+        26
       ]
     },
     {
@@ -225,9 +219,8 @@
       "score": 2.87,
       "band": 3,
       "stages": [
-        18,
-        24,
-        29
+        19,
+        26
       ]
     },
     {
@@ -305,7 +298,7 @@
         2,
         7,
         13,
-        19
+        21
       ]
     },
     {
@@ -323,7 +316,7 @@
         2,
         7,
         13,
-        19
+        21
       ]
     },
     {
@@ -341,7 +334,7 @@
         2,
         7,
         13,
-        19
+        21
       ]
     },
     {
@@ -359,7 +352,7 @@
         2,
         7,
         13,
-        19
+        21
       ]
     },
     {
@@ -374,9 +367,8 @@
       "score": 2.31,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        21,
+        27
       ]
     },
     {
@@ -391,9 +383,8 @@
       "score": 2.31,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        21,
+        27
       ]
     },
     {
@@ -408,9 +399,8 @@
       "score": 2.41,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        21,
+        27
       ]
     },
     {
@@ -425,9 +415,8 @@
       "score": 2.41,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        21,
+        27
       ]
     },
     {
@@ -442,9 +431,8 @@
       "score": 2.41,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        21,
+        27
       ]
     },
     {
@@ -459,9 +447,8 @@
       "score": 2.41,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        21,
+        27
       ]
     },
     {
@@ -476,9 +463,8 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        21,
+        27
       ]
     },
     {
@@ -493,9 +479,8 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        21,
+        27
       ]
     },
     {
@@ -510,9 +495,8 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        21,
+        27
       ]
     },
     {
@@ -527,9 +511,8 @@
       "score": 2.52,
       "band": 3,
       "stages": [
-        19,
-        25,
-        30
+        21,
+        27
       ]
     },
     {
@@ -543,9 +526,7 @@
       "desc": "촛불 (오른쪽): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
       "score": 3.2,
       "band": 4,
-      "stages": [
-        30
-      ]
+      "stages": []
     },
     {
       "fullId": "stage02:offsetGlow:candle1",
@@ -558,9 +539,7 @@
       "desc": "촛불 (왼쪽): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
       "score": 3.21,
       "band": 4,
-      "stages": [
-        30
-      ]
+      "stages": []
     },
     {
       "fullId": "stage02:speedScale:clockHand",
@@ -573,9 +552,7 @@
       "desc": "초침: 정상 속도의 절반으로 느리게 움직였다.",
       "score": 3.7,
       "band": 4,
-      "stages": [
-        30
-      ]
+      "stages": []
     },
     {
       "fullId": "stage03:noPlatform:platformC",
@@ -652,7 +629,7 @@
         3,
         9,
         14,
-        21
+        22
       ]
     },
     {
@@ -670,7 +647,7 @@
         3,
         9,
         14,
-        21
+        22
       ]
     },
     {
@@ -688,7 +665,7 @@
         3,
         9,
         14,
-        21
+        22
       ]
     },
     {
@@ -706,7 +683,7 @@
         3,
         9,
         14,
-        21
+        22
       ]
     },
     {
@@ -724,7 +701,7 @@
         3,
         9,
         14,
-        21
+        22
       ]
     },
     {
@@ -742,7 +719,7 @@
         3,
         9,
         14,
-        21
+        22
       ]
     },
     {
@@ -760,7 +737,7 @@
         3,
         9,
         14,
-        21
+        22
       ]
     },
     {
@@ -778,7 +755,7 @@
         3,
         9,
         14,
-        21
+        22
       ]
     },
     {
@@ -796,7 +773,7 @@
         3,
         9,
         14,
-        21
+        22
       ]
     },
     {
@@ -811,8 +788,8 @@
       "score": 2.34,
       "band": 3,
       "stages": [
-        21,
-        26
+        22,
+        28
       ]
     },
     {
@@ -827,8 +804,8 @@
       "score": 2.37,
       "band": 3,
       "stages": [
-        21,
-        26
+        22,
+        28
       ]
     },
     {
@@ -843,8 +820,8 @@
       "score": 2.37,
       "band": 3,
       "stages": [
-        21,
-        26
+        22,
+        28
       ]
     },
     {
@@ -859,8 +836,8 @@
       "score": 2.62,
       "band": 3,
       "stages": [
-        21,
-        26
+        22,
+        28
       ]
     },
     {
@@ -875,8 +852,8 @@
       "score": 2.76,
       "band": 3,
       "stages": [
-        21,
-        26
+        22,
+        28
       ]
     },
     {
@@ -891,8 +868,8 @@
       "score": 2.87,
       "band": 3,
       "stages": [
-        21,
-        26
+        22,
+        28
       ]
     },
     {
@@ -907,8 +884,8 @@
       "score": 2.91,
       "band": 3,
       "stages": [
-        21,
-        26
+        22,
+        28
       ]
     },
     {
@@ -923,8 +900,8 @@
       "score": 2.97,
       "band": 3,
       "stages": [
-        21,
-        26
+        22,
+        28
       ]
     },
     {
@@ -939,8 +916,8 @@
       "score": 3,
       "band": 3,
       "stages": [
-        21,
-        26
+        22,
+        28
       ]
     },
     {
@@ -954,7 +931,9 @@
       "desc": "벽난로 (왼쪽): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
       "score": 3.34,
       "band": 4,
-      "stages": []
+      "stages": [
+        28
+      ]
     },
     {
       "fullId": "stage03:offsetGlow:torch2",
@@ -967,7 +946,9 @@
       "desc": "벽난로 (오른쪽): 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
       "score": 3.34,
       "band": 4,
-      "stages": []
+      "stages": [
+        28
+      ]
     },
     {
       "fullId": "stage05:noCollision:tree3",
@@ -1073,8 +1054,7 @@
       "stages": [
         4,
         10,
-        15,
-        22
+        15
       ]
     },
     {
@@ -1091,8 +1071,7 @@
       "stages": [
         4,
         10,
-        15,
-        22
+        15
       ]
     },
     {
@@ -1109,8 +1088,7 @@
       "stages": [
         4,
         10,
-        15,
-        22
+        15
       ]
     },
     {
@@ -1126,8 +1104,8 @@
       "band": 3,
       "stages": [
         15,
-        22,
-        27
+        23,
+        29
       ]
     },
     {
@@ -1143,8 +1121,8 @@
       "band": 3,
       "stages": [
         15,
-        22,
-        27
+        23,
+        29
       ]
     },
     {
@@ -1160,8 +1138,8 @@
       "band": 3,
       "stages": [
         15,
-        22,
-        27
+        23,
+        29
       ]
     },
     {
@@ -1177,8 +1155,8 @@
       "band": 3,
       "stages": [
         15,
-        22,
-        27
+        23,
+        29
       ]
     },
     {
@@ -1194,8 +1172,8 @@
       "band": 3,
       "stages": [
         15,
-        22,
-        27
+        23,
+        29
       ]
     },
     {
@@ -1211,8 +1189,8 @@
       "band": 3,
       "stages": [
         15,
-        22,
-        27
+        23,
+        29
       ]
     },
     {
@@ -1228,8 +1206,8 @@
       "band": 3,
       "stages": [
         15,
-        22,
-        27
+        23,
+        29
       ]
     },
     {
@@ -1245,8 +1223,8 @@
       "band": 3,
       "stages": [
         15,
-        22,
-        27
+        23,
+        29
       ]
     },
     {
@@ -1432,8 +1410,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1449,8 +1427,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1466,8 +1444,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1483,8 +1461,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1500,8 +1478,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1517,8 +1495,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1534,8 +1512,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1551,8 +1529,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1568,8 +1546,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1585,8 +1563,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1602,8 +1580,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1619,8 +1597,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1636,8 +1614,8 @@
       "band": 3,
       "stages": [
         16,
-        23,
-        28
+        24,
+        30
       ]
     },
     {
@@ -1734,6 +1712,287 @@
       "answers": "콜라 버튼 / 사이다 버튼",
       "desc": "콜라 버튼: 연결이 서로 뒤바뀌어 엉뚱한 대상을 작동시켰다.",
       "score": 3.37,
+      "band": 4,
+      "stages": []
+    },
+    {
+      "fullId": "stage08:noAction:leverB",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "noAction",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "가운데 레버 / 가운데 철창",
+      "desc": "가운데 레버: 눌러도 아무 반응이 없었다.",
+      "score": 1.24,
+      "band": 1,
+      "stages": []
+    },
+    {
+      "fullId": "stage08:noAction:leverA",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "noAction",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "왼쪽 레버 / 왼쪽 철창",
+      "desc": "왼쪽 레버: 눌러도 아무 반응이 없었다.",
+      "score": 1.4,
+      "band": 1,
+      "stages": []
+    },
+    {
+      "fullId": "stage08:noAction:leverC",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "noAction",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "오른쪽 레버 / 오른쪽 철창",
+      "desc": "오른쪽 레버: 눌러도 아무 반응이 없었다.",
+      "score": 1.4,
+      "band": 1,
+      "stages": []
+    },
+    {
+      "fullId": "stage08:noPickup:chest2",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "noPickup",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "가운데 상자",
+      "desc": "가운데 상자: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
+      "score": 1.47,
+      "band": 1,
+      "stages": []
+    },
+    {
+      "fullId": "stage08:noPickup:chest1",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "noPickup",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "왼쪽 상자",
+      "desc": "왼쪽 상자: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
+      "score": 1.57,
+      "band": 2,
+      "stages": [
+        18
+      ]
+    },
+    {
+      "fullId": "stage08:noPickup:chest3",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "noPickup",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "오른쪽 상자",
+      "desc": "오른쪽 상자: 밟고 지나가도 주워지지 않았다. 같은 종류의 다른 것은 주워졌는데.",
+      "score": 1.57,
+      "band": 2,
+      "stages": [
+        18
+      ]
+    },
+    {
+      "fullId": "stage08:counterSkew:chest2:gold",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "금화 수 / 가운데 상자",
+      "desc": "금화 수: 표시된 값과 실제로 오르내린 양이 달랐다. (가운데 상자)",
+      "score": 2.47,
+      "band": 3,
+      "stages": [
+        18,
+        25
+      ]
+    },
+    {
+      "fullId": "stage08:bounceOnEnd:barrel1:bounce",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "bounceOnEnd",
+      "category": "weird-movement",
+      "categoryLabel": "이상한 움직임",
+      "answers": "위쪽 광석 통",
+      "desc": "위쪽 광석 통: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
+      "score": 2.57,
+      "band": 3,
+      "stages": [
+        18,
+        25
+      ]
+    },
+    {
+      "fullId": "stage08:counterSkew:chest1:gold",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "금화 수 / 왼쪽 상자",
+      "desc": "금화 수: 표시된 값과 실제로 오르내린 양이 달랐다. (왼쪽 상자)",
+      "score": 2.57,
+      "band": 3,
+      "stages": [
+        18,
+        25
+      ]
+    },
+    {
+      "fullId": "stage08:counterSkew:chest3:gold",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "counterSkew",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "금화 수 / 오른쪽 상자",
+      "desc": "금화 수: 표시된 값과 실제로 오르내린 양이 달랐다. (오른쪽 상자)",
+      "score": 2.57,
+      "band": 3,
+      "stages": [
+        18,
+        25
+      ]
+    },
+    {
+      "fullId": "stage08:bounceOnEnd:barrel2:bounce",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "bounceOnEnd",
+      "category": "weird-movement",
+      "categoryLabel": "이상한 움직임",
+      "answers": "아래쪽 광석 통",
+      "desc": "아래쪽 광석 통: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
+      "score": 2.61,
+      "band": 3,
+      "stages": [
+        18,
+        25
+      ]
+    },
+    {
+      "fullId": "stage08:offsetGlow:lamp1",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "offsetGlow",
+      "category": "graphic",
+      "categoryLabel": "그래픽 오류",
+      "answers": "왼쪽 등불",
+      "desc": "왼쪽 등불: 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
+      "score": 2.7,
+      "band": 3,
+      "stages": [
+        18,
+        25
+      ]
+    },
+    {
+      "fullId": "stage08:offsetGlow:lamp2",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "offsetGlow",
+      "category": "graphic",
+      "categoryLabel": "그래픽 오류",
+      "answers": "오른쪽 등불",
+      "desc": "오른쪽 등불: 불빛이 본체에서 떨어진 엉뚱한 위치에 떠 있었다.",
+      "score": 2.7,
+      "band": 3,
+      "stages": [
+        18,
+        25
+      ]
+    },
+    {
+      "fullId": "stage08:noRespawn:chest2",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "noRespawn",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "가운데 상자",
+      "desc": "가운데 상자: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
+      "score": 2.75,
+      "band": 3,
+      "stages": [
+        18,
+        25
+      ]
+    },
+    {
+      "fullId": "stage08:noRespawn:chest1",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "noRespawn",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "왼쪽 상자",
+      "desc": "왼쪽 상자: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
+      "score": 2.85,
+      "band": 3,
+      "stages": [
+        18,
+        25
+      ]
+    },
+    {
+      "fullId": "stage08:noRespawn:chest3",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "noRespawn",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "오른쪽 상자",
+      "desc": "오른쪽 상자: 한 번 주운 뒤로 다시 자라지 않았다. 같은 종류의 다른 것은 다시 자랐는데.",
+      "score": 2.85,
+      "band": 3,
+      "stages": [
+        18,
+        25
+      ]
+    },
+    {
+      "fullId": "stage08:noDamage:spider1",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "noDamage",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "왼쪽 거미",
+      "desc": "왼쪽 거미: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
+      "score": 3.14,
+      "band": 4,
+      "stages": []
+    },
+    {
+      "fullId": "stage08:noDamage:spider2",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "noDamage",
+      "category": "no-action",
+      "categoryLabel": "동작 안 함",
+      "answers": "오른쪽 거미",
+      "desc": "오른쪽 거미: 몸이 닿아도 아무렇지 않았다. 같은 종류의 다른 것은 아팠는데.",
+      "score": 3.14,
+      "band": 4,
+      "stages": []
+    },
+    {
+      "fullId": "stage08:wiringSwap:leverA:leverB",
+      "scene": "stage08",
+      "sceneName": "광산 보물굴",
+      "mutator": "wiringSwap",
+      "category": "logic",
+      "categoryLabel": "논리 오류",
+      "answers": "왼쪽 레버 / 가운데 레버",
+      "desc": "왼쪽 레버: 연결이 서로 뒤바뀌어 엉뚱한 대상을 작동시켰다.",
+      "score": 3.4,
       "band": 4,
       "stages": []
     },
@@ -1992,8 +2251,8 @@
     {
       "n": 18,
       "nameKey": "stage.build.18",
-      "id": "s18-stage01",
-      "sceneId": "stage01",
+      "id": "s18-stage08",
+      "sceneId": "stage08",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -2001,8 +2260,8 @@
     {
       "n": 19,
       "nameKey": "stage.build.19",
-      "id": "s19-stage02",
-      "sceneId": "stage02",
+      "id": "s19-stage01",
+      "sceneId": "stage01",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -2020,8 +2279,8 @@
     {
       "n": 21,
       "nameKey": "stage.build.21",
-      "id": "s21-stage03",
-      "sceneId": "stage03",
+      "id": "s21-stage02",
+      "sceneId": "stage02",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -2029,8 +2288,8 @@
     {
       "n": 22,
       "nameKey": "stage.build.22",
-      "id": "s22-stage05",
-      "sceneId": "stage05",
+      "id": "s22-stage03",
+      "sceneId": "stage03",
       "minBand": 2,
       "maxBand": 3,
       "stars": 2
@@ -2038,8 +2297,8 @@
     {
       "n": 23,
       "nameKey": "stage.build.23",
-      "id": "s23-stage06",
-      "sceneId": "stage06",
+      "id": "s23-stage05",
+      "sceneId": "stage05",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -2047,8 +2306,8 @@
     {
       "n": 24,
       "nameKey": "stage.build.24",
-      "id": "s24-stage01",
-      "sceneId": "stage01",
+      "id": "s24-stage06",
+      "sceneId": "stage06",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -2056,8 +2315,8 @@
     {
       "n": 25,
       "nameKey": "stage.build.25",
-      "id": "s25-stage02",
-      "sceneId": "stage02",
+      "id": "s25-stage08",
+      "sceneId": "stage08",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -2065,8 +2324,8 @@
     {
       "n": 26,
       "nameKey": "stage.build.26",
-      "id": "s26-stage03",
-      "sceneId": "stage03",
+      "id": "s26-stage01",
+      "sceneId": "stage01",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -2074,8 +2333,8 @@
     {
       "n": 27,
       "nameKey": "stage.build.27",
-      "id": "s27-stage05",
-      "sceneId": "stage05",
+      "id": "s27-stage02",
+      "sceneId": "stage02",
       "minBand": 3,
       "maxBand": 3,
       "stars": 2
@@ -2083,8 +2342,8 @@
     {
       "n": 28,
       "nameKey": "stage.build.28",
-      "id": "s28-stage06",
-      "sceneId": "stage06",
+      "id": "s28-stage03",
+      "sceneId": "stage03",
       "minBand": 3,
       "maxBand": 4,
       "stars": 3
@@ -2092,8 +2351,8 @@
     {
       "n": 29,
       "nameKey": "stage.build.29",
-      "id": "s29-stage01",
-      "sceneId": "stage01",
+      "id": "s29-stage05",
+      "sceneId": "stage05",
       "minBand": 3,
       "maxBand": 4,
       "stars": 3
@@ -2101,8 +2360,8 @@
     {
       "n": 30,
       "nameKey": "stage.build.30",
-      "id": "s30-stage02",
-      "sceneId": "stage02",
+      "id": "s30-stage06",
+      "sceneId": "stage06",
       "minBand": 3,
       "maxBand": 4,
       "stars": 3

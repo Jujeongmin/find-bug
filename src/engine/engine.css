@@ -224,3 +224,28 @@
   from { opacity: 0; transform: translate(-50%, calc(-100% + 3px)); }
   to { opacity: 1; transform: translate(-50%, -100%); }
 }
+
+/* ---- the mine ---- */
+.s8-mine {
+  background:
+    /* stone courses in the back wall the gates are set into */
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0 2px, transparent 2px 40px) 0 60px / 100% 170px no-repeat,
+    repeating-linear-gradient(rgba(0, 0, 0, 0.2) 0 2px, transparent 2px 28px) 0 60px / 100% 170px no-repeat,
+    linear-gradient(#3b3346 0 60px, #4a4152 60px 230px, #2a2320 230px 238px, #5b4636 238px);
+}
+/*
+ * A gate lifts while its lever's wire is live.
+ *
+ * `translate`, not `transform`: every entity already stands where it stands
+ * by `transform: translate(-50%, -100%)`, and replacing that would lift the
+ * gate off its own foot as well as up the wall.
+ */
+.entity.s8-gate {
+  transition: translate 0.3s ease-out;
+}
+.entity.s8-gate.triggered {
+  translate: 0 -42px;
+}
+.entity.s8-lever {
+  cursor: pointer;
+}
