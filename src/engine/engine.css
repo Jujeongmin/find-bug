@@ -299,9 +299,20 @@
 .s9-knob.on {
   rotate: 90deg;
 }
-/* a dial: the shared needle turns from left (cold) through up to right (hot) */
+/*
+ * A dial: the shared needle turns from left (cold) through up to right (hot).
+ *
+ * The two ends are coloured, because the fault this scene exists for is a
+ * thermometer reading backwards, and a dial that does not say which side is
+ * hot cannot be read as backwards: an unlit burner whose needle rests on the
+ * red is wrong before anything is switched on. conic-gradient starts at the
+ * top and turns clockwise, so from -90deg the first quarter is the cold side
+ * and the second is the hot one.
+ */
 .s9-gauge {
-  background: radial-gradient(circle, #fffdf5 0 60%, #d9d2c0 61%);
+  background:
+    radial-gradient(circle, #fffdf5 0 52%, transparent 53%),
+    conic-gradient(from -90deg, #6aa7d8 0 90deg, #e0655a 90deg 180deg, #d9d2c0 180deg);
   border: 3px solid #3a3f49;
   border-radius: 50%;
 }
