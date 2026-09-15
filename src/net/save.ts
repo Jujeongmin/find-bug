@@ -165,3 +165,23 @@ export async function resetSave(
        which is now something that actually happens */
   }
 }
+
+/**
+ * Carry out a wipe this device still owes, and say whether it is now safe to
+ * pull anything down from the account.
+ *
+ * The wipe button empties the device, sends the wipe and reloads in the same
+ * moment, so the account has usually not heard it when the page comes back.
+ * syncBook and syncYears already refused to pull while a wipe was owed. The
+ * boot did not ask: it fetched the account's run, took back the run that had
+ * just been thrown away, and the next autosave put it on the account again
+ * after the owed wipe had emptied it.
+ *
+ * False means the wipe is still owed and the account's copy must not be
+ * trusted - it is the one being thrown away.
+ */
+export async function settleOwedReset(server: Remote): Promise<boolean> {
+  if (!resetOwed()) return true;
+  await resetSave(server);
+  return !resetOwed();
+}

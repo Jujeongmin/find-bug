@@ -23,6 +23,7 @@ import {
   type RunFields,
   type Remote,
 } from "../src/office/run";
+import { settleOwedReset } from "../src/net/save";
 
 /** a localStorage that exists, because node has none */
 const store = new Map<string, string>();
@@ -371,6 +372,58 @@ console.log("\nwiping the account takes the run and leaves the purchase");
   const reset = body.slice(0, body.indexOf("\n  }"));
   is(/run:\s*null/.test(reset), "resetSave clears the run");
   is(!/adsRemoved/.test(reset), "and does not touch adsRemoved");
+}
+
+console.log("\na wipe still owed is carried out before any run is pulled");
+{
+  /*
+   * The wipe button empties this device, sends the wipe, and reloads in the
+   * same moment - so the account usually has not heard it yet. The debt is
+   * written down first for exactly that case. The boot used to fetch the
+   * account's run without looking at it, took back the run that had just
+   * been thrown away, and the next autosave put it on the account again
+   * after the owed wipe had emptied it.
+   */
+  const calls: string[] = [];
+  const good = {
+    remoteFunction: async (name: string) => {
+      calls.push(name);
+      if (name === "getRun") return { v: RUN_VERSION, updatedAt: 1, ...FULL };
+      return true;
+    },
+  } as unknown as Remote;
+
+  store.set("fb_reset_owed", "1");
+  const settled = await settleOwedReset(good);
+  is(settled === true, "an owed wipe that reaches the account settles");
+  is(calls[0] === "resetSave" && !calls.includes("getRun"),
+     `the wipe is sent, and nothing is pulled to send it (${calls.join(",") || "no calls"})`);
+  is(store.get("fb_reset_owed") === undefined, "and the debt is cleared");
+
+  calls.length = 0;
+  const nothingOwed = await settleOwedReset(good);
+  is(nothingOwed === true && calls.length === 0, "with nothing owed, the account is asked nothing");
+
+  const deaf = {
+    remoteFunction: async () => {
+      throw new Error("no answer");
+    },
+  } as unknown as Remote;
+  store.set("fb_reset_owed", "1");
+  const unheard = await settleOwedReset(deaf);
+  is(unheard === false, "a wipe the account did not hear is not settled");
+  is(store.get("fb_reset_owed") === "1", "and it stays owed for the next connection");
+  store.delete("fb_reset_owed");
+}
+
+console.log("\nthe boot does not take the account's run while a wipe is owed");
+{
+  const src = readFileSync("src/office/Office.tsx", "utf8");
+  const boot = src.slice(src.indexOf("export function Office("), src.indexOf("function OfficeRun("));
+  const settleAt = boot.indexOf("settleOwedReset(server)");
+  const fetchAt = boot.indexOf("fetchRun(server)");
+  is(settleAt >= 0 && fetchAt > settleAt,
+     "Office settles an owed wipe before it fetches the account's run");
 }
 
 console.log("\nevery field that is saved is also read back");

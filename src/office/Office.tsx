@@ -1,6 +1,6 @@
 import { devParam, devFlag } from "../dev";
 import { recordBug, codexRows, codexTally, loadCodex } from "./codex";
-import { syncBook, syncYears, queueSync, reportRun } from "../net/save";
+import { syncBook, syncYears, queueSync, reportRun, settleOwedReset } from "../net/save";
 import { loadEntitlements, useAdsRemoved } from "../net/shop";
 import { useGameServer } from "@agent8/gameserver";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -454,10 +454,22 @@ export function Office({ onExit }: { onExit: () => void }) {
     };
     const timer = window.setTimeout(() => done(local), BOOT_WAIT_MS);
     if (connected) {
-      void fetchRun(server).then((remote) => {
+      void (async () => {
+        /*
+         * A wipe asked for just before a reload is still owed here, and the
+         * account still holds the run it threw away. Carry the wipe out
+         * before asking the account for anything; if it cannot be carried
+         * out, go with this device, which the wipe has already emptied.
+         */
+        if (!(await settleOwedReset(server))) {
+          clearTimeout(timer);
+          done(local);
+          return;
+        }
+        const remote = await fetchRun(server);
         clearTimeout(timer);
         done(newer(local, remote));
-      });
+      })();
     }
     return () => clearTimeout(timer);
   }, [boot, connected, server]);
