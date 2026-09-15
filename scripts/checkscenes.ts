@@ -75,6 +75,35 @@ for (const scene of ENGINE_SCENES) {
   ok("stage03: noPlatform drops the player through", r4.state.objects.player.y > 500);
 }
 
+/*
+ * The two bats are peers, so they fly the same orbit at the same pace and
+ * differ only in height. They used to differ in speed and in width as well,
+ * and a player who reported "one bat is faster" was marked wrong, because
+ * no fault makes a bat faster: the difference was the level, not a defect.
+ */
+{
+  const bats = stage03Scene.objects.filter((o) => o.peerGroup === "bat");
+  const orbit = (o: (typeof bats)[number]) => {
+    const f = o.behaviors.find((b) => b.t === "sineFly");
+    return f && f.t === "sineFly" ? { cx: f.cx, ampX: f.ampX, ampY: f.ampY, speed: f.speed } : null;
+  };
+  const orbits = bats.map((b) => JSON.stringify(orbit(b)));
+  ok(`stage03: the two bats fly the same orbit (${orbits.join(" / ")})`,
+     bats.length === 2 && orbits[0] !== "null" && orbits[0] === orbits[1]);
+
+  // and no fault is allowed to change how a bat flies: a bat's speed is not
+  // something a player can be asked to judge
+  const reshaped = generateMutations(stage03Scene)
+    .filter((m) => bats.some((b) => b.id === m.target.objectId))
+    .filter((m) => {
+      const after = applyMutation(stage03Scene, m).objects.find((o) => o.id === m.target.objectId)!;
+      return JSON.stringify(orbit(after)) !== JSON.stringify(orbit(stage03Scene.objects.find((o) => o.id === m.target.objectId)!));
+    })
+    .map((m) => m.bug.id);
+  ok(`stage03: no fault changes a bat's speed or path${reshaped.length ? " — " + reshaped.join(", ") : ""}`,
+     reshaped.length === 0);
+}
+
 /* stage 6: the shooting gallery — tap a target, it drops and scores */
 {
   const r = new SceneRuntime(stage06Scene);

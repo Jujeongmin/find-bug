@@ -109,6 +109,11 @@ export const stage03Scene: SceneSpec = {
       behaviors: [{ t: "damage", counter: "hp", amount: 1, radius: 30 }],
     },
     {
+      /*
+       * The two bats fly one orbit at one pace, at two heights. They used to
+       * differ in speed and width, and no fault makes a bat faster, so a player
+       * who reported the faster one was marked wrong for noticing the level.
+       */
       id: "batA",
       nameKey: "object.batA",
       kind: "sprite",
@@ -117,7 +122,7 @@ export const stage03Scene: SceneSpec = {
       peerGroup: "bat",
       render: { sprite: { sheet: "platchars" as const, col: 7, row: 2, scale: 1.5 }, orientable: true },
       behaviors: [
-        { t: "sineFly", cx: 180, cy: 230, ampX: 140, ampY: 26, speed: 0.7 },
+        { t: "sineFly", cx: 180, cy: 230, ampX: 135, ampY: 25, speed: 0.6 },
         { t: "animate", name: "flap", period: 0.3 },
         { t: "damage", counter: "hp", amount: 1, radius: 30 },
       ],
@@ -131,7 +136,7 @@ export const stage03Scene: SceneSpec = {
       peerGroup: "bat",
       render: { sprite: { sheet: "platchars" as const, col: 7, row: 2, scale: 1.5 }, orientable: true },
       behaviors: [
-        { t: "sineFly", cx: 180, cy: 470, ampX: 130, ampY: 24, speed: 0.55 },
+        { t: "sineFly", cx: 180, cy: 470, ampX: 135, ampY: 25, speed: 0.6 },
         { t: "animate", name: "flap", period: 0.3 },
         { t: "damage", counter: "hp", amount: 1, radius: 30 },
       ],
