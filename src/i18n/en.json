@@ -594,5 +594,7 @@
   "mutter.dev2": "If this goes out as it is, we are finished.",
   "mutter.dev3": "What do I even write in the commit.",
   "loading.title": "Getting ready",
-  "loading.sub": "Fetching the builds and the art"
+  "loading.sub": "Fetching the builds and the art",
+  "gift.title": "Year {n}, first day — take one thing with you",
+  "gift.take": "Take"
 }

@@ -594,5 +594,7 @@
   "mutter.dev2": "이거 그대로 나가면 큰일인데.",
   "mutter.dev3": "커밋 메시지 뭐라고 쓰지.",
   "loading.title": "출근 준비",
-  "loading.sub": "빌드와 리소스를 내려받는 중"
+  "loading.sub": "빌드와 리소스를 내려받는 중",
+  "gift.title": "{n}년차 첫 출근 — 하나 챙겨가자",
+  "gift.take": "챙기기"
 }

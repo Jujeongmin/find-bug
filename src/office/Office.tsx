@@ -36,6 +36,7 @@ import {
   type RunSnapshot,
   type RunFields,
   type GiftId,
+  GIFTS,
 } from "./run";
 import { Loading } from "../components/Loading";
 import { Settings } from "../components/Settings";
@@ -484,8 +485,10 @@ function OfficeRun({
     () => boot?.yearAtStart ?? (boot ? 1 : yearOf(loadYears()))
   );
   /** the first morning's gift, once picked */
-  const [gift] = useState<GiftId | null>(boot?.gift ?? null);
+  const [gift, setGift] = useState<GiftId | null>(boot?.gift ?? null);
   const builds = useMemo(() => buildIdsFor(yearAtStart), [yearAtStart]);
+  /** a run from year two on hands over one thing before its first morning */
+  const giftOwed = yearAtStart >= 2 && gift === null;
   const [assignments, setAssignments] = useState<Assignment[]>(
     () =>
       boot?.assignments ??
@@ -907,8 +910,10 @@ function OfficeRun({
               { n: String(d) }
             );
   const morningLine = () => morningFor(day);
-  // said once on the first morning too, not only on the ones you wake up to
+  // said once on the first morning too, not only on the ones you wake up to —
+  // after the gift, when there is one, so the two never open over each other
   useEffect(() => {
+    if (giftOwed) return;
     setNote(morningLine());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -1299,6 +1304,15 @@ function OfficeRun({
     setPay((p) => p - cost);
     setOwned((o) => [...o, item]);
     sfx.play("success");
+  };
+
+  /** the year's gift: bought for nothing, once, and then the morning */
+  const takeGift = (item: GiftId) => {
+    if (gift !== null) return;
+    setGift(item);
+    setOwned((o) => (o.includes(item) ? o : [...o, item]));
+    sfx.play("success");
+    setNote(morningLine());
   };
 
   /**
@@ -2166,6 +2180,29 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
               >
                 {t("wb.close")}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/*
+        The year's gift. The shop's own markup, so it reads as the same
+        catalogue, with no close button and a backdrop that does nothing: the
+        only way out is to take something, because closing it by accident would
+        throw the gift away.
+      */}
+      {giftOwed && (
+        <div className="modal-backdrop">
+          <div className="modal shop" onClick={(e) => e.stopPropagation()}>
+            <h2>{tp("gift.title", { n: String(yearAtStart) })}</h2>
+            <div className="shop-list">
+              {GIFTS.map((id) => (
+                <button key={id} className="shop-item" onClick={() => takeGift(id)}>
+                  <span className="shop-name">{t(`item.${id}`)}</span>
+                  <span className="shop-desc">{t(`item.${id}.desc`)}</span>
+                  <em>{t("gift.take")}</em>
+                </button>
+              ))}
             </div>
           </div>
         </div>

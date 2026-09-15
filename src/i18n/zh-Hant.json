@@ -594,5 +594,7 @@
   "rp.noisyBody": "裡面有不需要的。開發者挖錯了地方。",
   "rp.keepTesting": "繼續測試",
   "loading.title": "準備上班",
-  "loading.sub": "正在下載版本和素材"
+  "loading.sub": "正在下載版本和素材",
+  "gift.title": "第{n}年第一天上班 — 帶一樣東西去",
+  "gift.take": "帶上"
 }
