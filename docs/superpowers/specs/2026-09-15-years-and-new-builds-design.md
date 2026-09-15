@@ -153,43 +153,36 @@ export const SCENE_YEAR: Record<string, number> = { stage08: 2, stage09: 3 };
 
 ### 2년차 · 광산 보물굴 (`stage08`) — 새 아트 없음
 
-`dungeon.png`는 저장소에 있지만 어느 씬도 쓰지 않는다. 레버만 이 시트에 없어서
-`platformer.png`에서 가져온다. 외곽선 굵기와 갈색 계열이 같다.
+`dungeon.png`는 저장소에 있지만 어느 씬도 쓰지 않던 시트다. 레버와 광차는 이 시트에
+없다. 레버는 `platformer.png`에서 가져오고, 광차는 기존 `barrel` 소품으로 대신한다.
+처음 적었던 dungeon (6,4)(7,4)는 격자로 확대해 보니 광차가 아니라 제어 콘솔이었다.
 
-| 오브젝트 | 그림 (col,row) | 행동 | 노리는 결함 |
+| 오브젝트 | 그림 (col,row) | 행동 | 나오는 결함 |
 |---|---|---|---|
-| 플레이어 | platchars (0,1) — 기존 스테이지와 같음 | `playerTopDown` | 없음. 상자 줍기와 해골 접촉에 필요하다 |
-| 금화 HUD | — | `counter` 표시 오브젝트 | 없음. `counterSkew`는 **보이는** 카운터가 있어야 후보가 된다 |
-| 레버 3 ↔ 철창 3 | platformer (4,3)(5,3)(6,3) / dungeon (4..6,6) | `clickable`의 `trigger`, `links`, `.s8-gate.triggered`가 위로 올라감 | `wiringSwap` — 1번 레버에 2번 철창이 열린다 |
-| 광차 2 (한 쌍) | dungeon (6,4)(7,4), 레일 (7..8,5..6) | `patrol` | `teleportOnEnd`, `bounceOnEnd` |
-| 보물상자 3 + 금화 카운터 | dungeon (5,7)(6,7) | `pickup`, 재생성 있음 | `noPickup`, `noRespawn`, `counterSkew` |
-| 횃불 2 | dungeon (5,2) | `glow`, 필수가 아닌 `animate` | `offsetGlow` |
-| 해골·박쥐 (한 쌍) | dungeon (0..2,10) | `damage` | `noDamage` |
+| 레버 3 ↔ 철창 3 | platformer (4,3) / dungeon (7,5) | `clickable`의 `trigger`, `links`, `.s8-gate.triggered`가 42px 올라감 | `wiringSwap`, `noAction` ×3 |
+| 광석 통 2 (한 쌍, 같은 속도·범위) | 소품 `barrel`, 레일 dungeon (7,6) | `patrol` | `bounceOnEnd` ×2 (`teleportOnEnd`는 과녁 전례로 제외) |
+| 보물상자 3 + 골드 HUD | dungeon (5,7) | `pickup`, 재생성 6초 | `noPickup`·`noRespawn`·`counterSkew` 각 ×3 |
+| 등불 2 | roguelike (54,7) | `glow`, 필수 아닌 `animate` | `offsetGlow` ×2 |
+| 거미 2 (같은 그림) | dungeon (2,10) | `damage` | `noDamage` ×2 |
+| 곡괭이 | dungeon (11,10) | 없음 | 없음 |
 
-직관: 레버는 자기 앞의 철창을 연다. 광차는 레일 끝에서 멈추거나 돌아온다.
-
-횃불 불꽃 멈춤은 처음부터 노리지 않는다. 촛불 두 개를 비교하게 했던 전례가 "인내심
-테스트"로 제외됐다.
-
-광차 순간이동은 사격장 과녁을 뺀 논리와 부딪칠 수 있다. 광차는 레일 끝에 멈춤목이
-보여서 과녁보다 기대가 분명하다고 판단해 넣는다. 만든 뒤 검토에서 안 읽히면 뺀다.
+결함 19개(제외 후). 금화가 아니라 **골드**라고 부른다 — 화면의 카운터 이름이 기존 `counter.gold`다.
 
 ### 3년차 · 주방 (`stage09`) — CSS 조금
 
-| 오브젝트 | 그림 | 행동 | 노리는 결함 |
+화덕 그림은 확인되지 않았다(처음 적은 roguelike (54,8)(55,8)은 화덕이 아니다). 불꽃은
+stage03 촛불이 이미 쓰는 roguelike (54,7)을, 음식은 stage02가 이미 쓰는 고기·빵을 쓴다.
+화구·냄비·손잡이·온도계·배식대는 자판기처럼 CSS로 그린다.
+
+| 오브젝트 | 그림 | 행동 | 나오는 결함 |
 |---|---|---|---|
-| 플레이어 | platchars (0,1) | `playerTopDown` | 없음. 음식 줍기에 필요하다 |
-| 주문 HUD | — | `counter` 표시 오브젝트 | 없음. `counterSkew` 후보 조건 |
-| 화구 손잡이 2 → 온도계 2 | CSS 손잡이, `.eng-needle` 바늘 | `clickable`로 `toggle`, `pressure`가 온도 카운터를 올리고, `meter`가 읽음 | `invertMeter` — 불을 켰는데 바늘이 내려간다. 이 결함의 첫 등장 |
-| 화덕 2 | roguelike (54,8)(55,8) | `glow`, `flagged`로 불 켜짐 표시 | `offsetGlow` |
-| 냄비 2 | CSS | `flagged`, 불이 켜지면 끓음 | 없음 — 온도계 역전을 읽히게 하는 비교 단서 |
-| 손님 줄 (한 쌍) | platchars | `patrol` | `bounceOnEnd` |
-| 음식 3 + 주문 카운터 | roguelike (56,12)(55,13)(56,13) | `pickup`, 재생성 있음 | `noPickup`, `noRespawn`, `counterSkew` |
+| 손잡이 2 → 온도계 2 | CSS, 공용 `.eng-needle` | `clickable`로 `toggle`, `pressure`(초당 +30, 꺼지면 −15), `meter` | `invertMeter` ×2 (첫 등장), `noAction` ×2 |
+| 불꽃 2 | roguelike (54,7) | `flagged`로 켜졌을 때만 보임, `glow` | `offsetGlow` ×2 |
+| 냄비 2 | CSS | `flagged`, 불이 켜지면 끓음 | 없음 — 비교 단서 |
+| 요리 3 + 주문 HUD | roguelike 고기 (54,15), 빵 (55,13) | `pickup`, 재생성 6초 | `noPickup`·`noRespawn`·`counterSkew` 각 ×3 |
+| 손님 2 (같은 속도·범위) | actor `personA`·`personB` | `patrol` | `teleportOnEnd` ×2, `bounceOnEnd` ×2 |
 
-직관: 불을 켜면 뜨거워진다. 누구나 안다.
-
-손잡이·온도계·냄비를 **두 벌** 두는 게 핵심이다. 한쪽 온도계만 거꾸로면 바로 옆에
-정상인 짝이 있다. 거꾸로 된 쪽 냄비도 끓고 있으니 "바늘이 틀렸다"가 한눈에 보인다.
+결함 19개.
 
 ### 두 씬 공통
 
