@@ -249,3 +249,63 @@
 .entity.s8-lever {
   cursor: pointer;
 }
+
+/* ---- the kitchen ---- */
+.s9-kitchen {
+  background:
+    /* tiles behind the range */
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.35) 0 2px, transparent 2px 30px) 0 60px / 100% 280px no-repeat,
+    repeating-linear-gradient(rgba(255, 255, 255, 0.35) 0 2px, transparent 2px 30px) 0 60px / 100% 280px no-repeat,
+    linear-gradient(#c9d6d8 0 340px, #8a6a4f 340px);
+}
+/* the shared prop rule paints a wooden gradient over every bar; each of these
+   is its own material, so the whole background is replaced */
+.s9-stove {
+  background: linear-gradient(#5b6270 0 14px, #3a3f49 14px);
+  border: 3px solid #23262d;
+  border-radius: 6px;
+}
+.s9-pot {
+  background: linear-gradient(#aab3bf, #6d7684);
+  border: 2px solid #2b2f36;
+  border-radius: 4px 4px 14px 14px;
+}
+.s9-pot.boiling {
+  animation: s9-boil 0.5s steps(2) infinite;
+}
+@keyframes s9-boil {
+  50% { translate: 0 -2px; }
+}
+/*
+ * A burner that is off draws neither its flame nor its light.
+ *
+ * `visibility`, not `opacity`: the flicker animation drives opacity, and an
+ * animation wins over a rule. The light is a sibling of the flame rather
+ * than inside it, so it is reached through :has.
+ */
+.sprite-emoji.s9-flame:not(.lit) {
+  visibility: hidden;
+}
+.entity.s9-flame:has(> .sprite-emoji:not(.lit)) > .eng-glow {
+  visibility: hidden;
+}
+.s9-knob {
+  background: radial-gradient(circle, #e9e2d0 0 45%, #7a6a55 46%);
+  border: 2px solid #2b2f36;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: rotate 0.2s;
+}
+.s9-knob.on {
+  rotate: 90deg;
+}
+/* a dial: the shared needle turns from left (cold) through up to right (hot) */
+.s9-gauge {
+  background: radial-gradient(circle, #fffdf5 0 60%, #d9d2c0 61%);
+  border: 3px solid #3a3f49;
+  border-radius: 50%;
+}
+.s9-pass {
+  background: linear-gradient(#b08a60, #7a5a3a);
+  border-top: 2px solid #d4b184;
+}

@@ -6,6 +6,7 @@ import { stage05Scene } from "./stage05/scene";
 import { stage06Scene } from "./stage06/scene";
 import { stage07Scene } from "./stage07/scene";
 import { stage08Scene } from "./stage08/scene";
+import { stage09Scene } from "./stage09/scene";
 
 /**
  * Scenes the engine drives. Stage 4 (card matching) stays a bespoke component —
@@ -19,6 +20,7 @@ export const ENGINE_SCENES: SceneSpec[] = [
   stage06Scene,
   stage07Scene,
   stage08Scene,
+  stage09Scene,
 ];
 
 export const SCENE_BY_ID: Record<string, SceneSpec> = Object.fromEntries(
@@ -35,4 +37,4 @@ export const SCENE_BY_ID: Record<string, SceneSpec> = Object.fromEntries(
  *
  * Ids must pass the server's book pattern, `stage` and two digits.
  */
-export const SCENE_YEAR: Readonly<Record<string, number>> = { stage08: 2 };
+export const SCENE_YEAR: Readonly<Record<string, number>> = { stage08: 2, stage09: 3 };

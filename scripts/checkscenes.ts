@@ -4,6 +4,7 @@ import { ENGINE_SCENES } from "../src/stages/registry";
 import { stage03Scene } from "../src/stages/stage03/scene";
 import { stage06Scene } from "../src/stages/stage06/scene";
 import { stage08Scene } from "../src/stages/stage08/scene";
+import { stage09Scene } from "../src/stages/stage09/scene";
 
 let fails = 0;
 const ok = (label: string, cond: boolean) => {
@@ -165,6 +166,51 @@ for (const scene of ENGINE_SCENES) {
   const pair = stage08Scene.objects.filter((o) => o.peerGroup === "barrel");
   const runs = pair.map((o) => JSON.stringify(o.behaviors));
   ok("stage08: the two barrels share one run and one speed", runs.length === 2 && runs[0] === runs[1]);
+}
+
+/* stage 9: the kitchen — a knob lights its own burner, and its thermometer climbs */
+{
+  const r = new SceneRuntime(stage09Scene);
+  r.click("knobL");
+  ok("stage09: the left knob lights the left burner only",
+     r.state.flags.fireL === true && !r.state.flags.fireR);
+  tick(r, 2);
+  const h = r.state.counters.heatL;
+  ok(`stage09: the left heat rises, the right does not (${h.toFixed(1)})`,
+     h > 55 && h < 65 && r.state.counters.heatR === 0);
+  r.click("knobL");
+  tick(r, 2);
+  ok("stage09: the heat falls again when the burner is off", r.state.counters.heatL < h);
+
+  const inverted = applyMutation(stage09Scene, mut(stage09Scene, "invertMeter:gaugeL"));
+  const meter = inverted.objects.find((o) => o.id === "gaugeL")!.behaviors.find((b) => b.t === "meter");
+  ok("stage09: invertMeter turns the left thermometer backwards",
+     !!meter && meter.t === "meter" && meter.invert === true);
+
+  const dead = new SceneRuntime(applyMutation(stage09Scene, mut(stage09Scene, "noAction:knobR")));
+  dead.click("knobR");
+  tick(dead, 1);
+  ok("stage09: a dead knob lights nothing", !dead.state.flags.fireR && dead.state.counters.heatR === 0);
+
+  const rp = new SceneRuntime(stage09Scene);
+  const dish = stage09Scene.objects.find((o) => o.id === "dish1")!;
+  rp.state.objects.player.x = dish.x;
+  rp.state.objects.player.y = dish.y;
+  tick(rp, 0.1);
+  ok("stage09: taking a dish serves an order", rp.state.counters.served === 1);
+
+  const rw = new SceneRuntime(stage09Scene);
+  const x0 = rw.state.objects.customer1.x;
+  tick(rw, 3);
+  ok("stage09: the customers walk", rw.state.objects.customer1.x !== x0);
+
+  const pairs = ["gauge", "knob", "customer"].map((g) => {
+    const runs = stage09Scene.objects
+      .filter((o) => o.peerGroup === g)
+      .map((o) => JSON.stringify(o.behaviors).replace(/"(fire|heat)[LR]"/g, '"$1"'));
+    return runs.length === 2 && runs[0] === runs[1];
+  });
+  ok("stage09: each left-and-right pair behaves identically", pairs.every(Boolean));
 }
 
 console.log(fails === 0 ? "\nALL PASS" : `\n${fails} FAILURES`);

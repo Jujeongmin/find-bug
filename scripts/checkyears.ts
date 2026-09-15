@@ -186,6 +186,8 @@ console.log("\nthe registry puts each new build in its own year");
      "every later build id passes the server's book pattern");
   is(!buildIdsFor(1).includes("stage08") && buildIdsFor(2).includes("stage08"),
      "the mine arrives in year two, and not before");
+  is(!buildIdsFor(2).includes("stage09") && buildIdsFor(3).includes("stage09"),
+     "the kitchen arrives in year three, and not before");
 }
 
 await (async () => {
