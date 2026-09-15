@@ -549,7 +549,7 @@ function OfficeRun({
   /** so a re-render of the terminal screen does not count the run twice */
   const runReported = useRef(false);
   const [codexAtStart] = useState(
-    () => boot?.codexAtStart ?? codexTally(codexRows()).caught
+    () => boot?.codexAtStart ?? codexTally(codexRows(undefined, yearAtStart)).caught
   );
   const [shipped, setShipped] = useState(false);
   const [caught, setCaught] = useState(boot?.caught ?? 0);
@@ -1663,7 +1663,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
         */}
         <p className="wb-dev-word">{t(devShipLine(rating, devLevel))}</p>
         {(() => {
-          const book = codexTally(codexRows());
+          const book = codexTally(codexRows(undefined, yearAtStart));
           return (
             <p className="wb-tally wb-book">
               {tp("codex.shipLine", {
@@ -2091,7 +2091,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
               })}
             </p>
             {(() => {
-              const rows = codexRows();
+              const rows = codexRows(undefined, yearAtStart);
               const tally = codexTally(rows);
               const byScene = new Map<string, typeof rows>();
               for (const r of rows) {

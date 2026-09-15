@@ -1,4 +1,4 @@
-import { ENGINE_SCENES } from "../stages/registry";
+import { ENGINE_SCENES, SCENE_YEAR } from "../stages/registry";
 import { stage04 } from "../stages/stage04/bugs";
 import { generateMutations } from "../engine/generate";
 import type { BugCategory } from "../core/types";
@@ -111,10 +111,20 @@ export interface CodexRow {
   state: Seen | "unseen";
 }
 
-/** Every fault the game can plant, with what the player has done about it. */
-export function codexRows(book: Book = loadCodex()): CodexRow[] {
+/**
+ * Every fault the game can plant this year, with what the player has done
+ * about it. A build that arrives in a later year is left out of the rows and
+ * the total alike: the book's "of N" is what the player can meet. The card
+ * game is a year-one build, so its loop below is not gated.
+ */
+export function codexRows(
+  book: Book = loadCodex(),
+  year: number = Number.MAX_SAFE_INTEGER,
+  sceneYear: Readonly<Record<string, number>> = SCENE_YEAR
+): CodexRow[] {
   const rows: CodexRow[] = [];
   for (const scene of ENGINE_SCENES) {
+    if ((sceneYear[scene.id] ?? 1) > year) continue;
     for (const m of generateMutations(scene)) {
       rows.push({
         sceneId: scene.id,

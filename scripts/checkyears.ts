@@ -14,6 +14,7 @@ import {
   type LaterBuild,
 } from "../src/office/schedule";
 import { ENGINE_SCENES, SCENE_YEAR } from "../src/stages/registry";
+import { codexRows } from "../src/office/codex";
 import {
   MAX_YEARS,
   addYear,
@@ -157,6 +158,20 @@ const account = () => {
     get: () => state,
   };
 };
+
+console.log("\nthe book only counts what this year can meet");
+{
+  const all = codexRows({}, 1);
+  const lockStage07 = { stage07: 2 };
+  const y1 = codexRows({}, 1, lockStage07);
+  const y2 = codexRows({}, 2, lockStage07);
+  const in07 = all.filter((r) => r.sceneId === "stage07").length;
+  is(in07 > 0, `stage07 has faults to lock (${in07})`);
+  is(y1.length === all.length - in07, "a build from a later year is not in year one's book");
+  is(y1.every((r) => r.sceneId !== "stage07"), "not even one of its rows");
+  is(y2.length === all.length, "and it is there from its own year");
+  is(codexRows({}, 1).length === all.length, "with nothing locked, year one's book is the whole book");
+}
 
 await (async () => {
   console.log("\nthe account keeps the same set, and counts the runs from before ids");
