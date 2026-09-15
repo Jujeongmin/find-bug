@@ -3,6 +3,7 @@ import { useGameServer } from "@agent8/gameserver";
 import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
 import { clearCodex } from "../office/codex";
+import { clearYears } from "../office/years";
 import { resetSave } from "../net/save";
 import { clearRun, useSaveStatus } from "../office/run";
 import { useI18n, LANGS, type Lang } from "../i18n";
@@ -220,6 +221,7 @@ export function Settings() {
                 return;
               }
               clearCodex();
+              clearYears();
               clearRun(connected ? server : null);
               void resetSave(connected ? server : null);
               sfx.play("fail");

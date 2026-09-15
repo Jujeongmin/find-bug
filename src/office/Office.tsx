@@ -1,6 +1,6 @@
 import { devParam, devFlag } from "../dev";
 import { recordBug, codexRows, codexTally, loadCodex } from "./codex";
-import { syncBook, queueSync, reportRun } from "../net/save";
+import { syncBook, syncYears, queueSync, reportRun } from "../net/save";
 import { loadEntitlements, useAdsRemoved } from "../net/shop";
 import { useGameServer } from "@agent8/gameserver";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -18,7 +18,7 @@ import { devLine, devShipLine } from "./devlines";
 import { DINNER_SPIRIT, HOTFIX_CONDITION, isDinner, isHotfix } from "./events";
 import { ENGINE_SCENES } from "../stages/registry";
 import { assignDay, buildIdsFor, isFreeze } from "./schedule";
-import { loadYears, newRunId, yearOf } from "./years";
+import { addYear, loadYears, newRunId, yearOf } from "./years";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
@@ -532,7 +532,9 @@ function OfficeRun({
    */
   const { server, connected } = useGameServer();
   useEffect(() => {
-    if (connected) void syncBook(server);
+    if (!connected) return;
+    void syncBook(server);
+    void syncYears(server);
   }, [connected, server]);
 
   /*
@@ -1608,7 +1610,18 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
        * out of the render, and two copies of that can disagree.
        */
       sfx.play(rating >= 3 ? "success" : "fail");
-      void reportRun(connected ? server : null, rating);
+      /*
+       * The run is a year now. Written to the device first, so a tab closed on
+       * this screen still counts it. The account hears after the rating has
+       * landed: syncYears turns an old runs count into legacy ids once, and it
+       * has to see this run already counted there to subtract it.
+       */
+      addYear(runId);
+      void (async () => {
+        const srv = connected ? server : null;
+        await reportRun(srv, rating);
+        if (srv) await syncYears(srv);
+      })();
       void syncBook(server);
     }
     return (
