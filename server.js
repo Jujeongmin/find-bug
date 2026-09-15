@@ -50,6 +50,12 @@ const REMOVE_ADS = "remove-ads";
 const ENTRY_ID = /^stage\d{2}\/[A-Za-z0-9_-]+(:[A-Za-z0-9_-]+)*$/;
 const MAX_ID_LEN = 64;
 
+/*
+ * A finished run's id: "r" and twelve characters, or "legacy-N" for a run the
+ * account counted before ids existed. The same pattern as src/office/years.ts.
+ */
+const RUN_ID = /^(r[0-9a-z]{12}|legacy-\d{1,2})$/;
+
 /**
  * What a stored run is allowed to look like.
  *
@@ -106,6 +112,9 @@ const RUN_FIELDS = {
   pochaNights: ["n", 0, 99],
   dinnerAsked: ["b"],
   codexAtStart: ["n", 0, 999],
+  runId: ["runid"],
+  yearAtStart: ["n", 1, 99],
+  gift: ["s", [null, "magnifier", "chair", "alarm", "shoes", "thermos"]],
 };
 
 const SEVERITIES = ["low", "normal", "critical"];
@@ -305,6 +314,8 @@ function runField(rule, v) {
       return runList(v, runAssignment);
     case "severities":
       return runList(v, (x) => (SEVERITIES.includes(x) ? x : undefined));
+    case "runid":
+      return typeof v === "string" && RUN_ID.test(v) ? v : undefined;
     case "items":
       return runList(v, (x) => (ITEMS.includes(x) ? x : undefined));
     case "spot":

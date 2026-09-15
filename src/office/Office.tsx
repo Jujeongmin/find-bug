@@ -18,6 +18,7 @@ import { devLine, devShipLine } from "./devlines";
 import { DINNER_SPIRIT, HOTFIX_CONDITION, isDinner, isHotfix } from "./events";
 import { ENGINE_SCENES } from "../stages/registry";
 import { assignDay, buildIdsFor, isFreeze } from "./schedule";
+import { loadYears, newRunId, yearOf } from "./years";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
@@ -34,6 +35,7 @@ import {
   type Arrival,
   type RunSnapshot,
   type RunFields,
+  type GiftId,
 } from "./run";
 import { Loading } from "../components/Loading";
 import { Settings } from "../components/Settings";
@@ -472,7 +474,18 @@ function OfficeRun({
 }) {
   const { t, tp } = useI18n();
   const [day, setDay] = useState(boot?.day ?? START_DAY);
-  const builds = useMemo(() => buildIdsFor(1), []);
+  /** this run's id, fixed for its lifetime */
+  const [runId] = useState(() => boot?.runId ?? newRunId());
+  /**
+   * The year this run belongs to. A saved run from before years existed has
+   * none and is year one; a fresh run is whatever this device has finished.
+   */
+  const [yearAtStart] = useState(
+    () => boot?.yearAtStart ?? (boot ? 1 : yearOf(loadYears()))
+  );
+  /** the first morning's gift, once picked */
+  const [gift] = useState<GiftId | null>(boot?.gift ?? null);
+  const builds = useMemo(() => buildIdsFor(yearAtStart), [yearAtStart]);
   const [assignments, setAssignments] = useState<Assignment[]>(
     () =>
       boot?.assignments ??
@@ -748,6 +761,9 @@ function OfficeRun({
     pochaNights,
     dinnerAsked,
     codexAtStart,
+    runId,
+    yearAtStart,
+    gift,
   } satisfies RunFields);
 
   useEffect(() => {

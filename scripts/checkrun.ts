@@ -86,6 +86,9 @@ const FULL: RunFields = {
   pochaNights: 2,
   dinnerAsked: true,
   codexAtStart: 37,
+  runId: "r0a1b2c3d4e5f",
+  yearAtStart: 3,
+  gift: "alarm",
 };
 
 console.log("\na run survives being written down and read back");

@@ -2,6 +2,7 @@ import { useSyncExternalStore } from "react";
 import type { GameServer } from "@agent8/gameserver";
 import type { Severity } from "./rating";
 import type { MachineId } from "./scene";
+import { isRunId } from "./years";
 
 /**
  * A twelve-day run, written down.
@@ -38,6 +39,20 @@ export type ItemId =
   | "shoes"
   | "thermos"
   | "retest";
+
+/**
+ * What a new year can hand over on its first morning. Everything on sale
+ * except the retest form: the others change how fast you work or how well you
+ * see, and the form undoes a report the briefing says will stand.
+ */
+export type GiftId = Exclude<ItemId, "retest">;
+export const GIFTS: readonly GiftId[] = [
+  "magnifier",
+  "chair",
+  "alarm",
+  "shoes",
+  "thermos",
+];
 
 export interface Assignment {
   machine: MachineId;
@@ -115,6 +130,15 @@ export interface RunFields {
    * found at all.
    */
   codexAtStart: number;
+  /** this run's id, added to the finished set when it ships */
+  runId: string;
+  /**
+   * The year this run began in. Fixed at the start: another device finishing a
+   * run halfway through this one does not change what this one holds.
+   */
+  yearAtStart: number;
+  /** what the first morning handed over, or null until it is picked */
+  gift: GiftId | null;
 }
 
 /**
@@ -320,6 +344,9 @@ export function parseRun(raw: unknown): RunSnapshot | null {
   put(out, "pochaNights", int(r.pochaNights, 0, 99));
   put(out, "dinnerAsked", bool(r.dinnerAsked));
   put(out, "codexAtStart", int(r.codexAtStart, 0, 999));
+  put(out, "runId", isRunId(r.runId) ? r.runId : undefined);
+  put(out, "yearAtStart", int(r.yearAtStart, 1, 99));
+  put(out, "gift", r.gift === null ? null : oneOf(r.gift, GIFTS));
   return out;
 }
 
