@@ -6,6 +6,7 @@
  *
  * Run: npx tsx scripts/checkyears.ts
  */
+import { readFileSync } from "node:fs";
 import {
   assignDay,
   buildIdsFor,
@@ -132,6 +133,79 @@ console.log("\nthe device keeps a set of finished runs, and the year is its size
   clearYears();
   is(loadYears().length === 0 && yearOf(loadYears()) === 1, "clearing goes back to year one");
 }
+
+/** server.js, loaded the way the platform loads it, against a fake account */
+const account = () => {
+  let state: Record<string, unknown> = {};
+  const $global = {
+    getMyState: async () => JSON.parse(JSON.stringify(state)),
+    updateMyState: async (patch: Record<string, unknown>) => {
+      state = { ...state, ...patch };
+    },
+  };
+  const src = readFileSync("server.js", "utf8");
+  const load = new Function("$global", `${src}\nreturn new Server();`) as (
+    g: typeof $global
+  ) => {
+    syncYears: (ids: unknown) => Promise<string[]>;
+    reportRun: (rating: number) => Promise<unknown>;
+    resetSave: () => Promise<unknown>;
+  };
+  return {
+    server: load($global),
+    set: (next: Record<string, unknown>) => void (state = next),
+    get: () => state,
+  };
+};
+
+await (async () => {
+  console.log("\nthe account keeps the same set, and counts the runs from before ids");
+
+  {
+    const { server, set, get } = account();
+    set({ runs: 3 });
+    const first = await server.syncYears([]);
+    is(first.length === 3 && first[0] === "legacy-1", `three runs from before become three legacy ids (${first.join(",")})`);
+    set({ ...get(), runs: 4 });
+    const again = await server.syncYears([]);
+    is(again.length === 3, "and the migration happens once — a later runs count adds nothing");
+  }
+
+  {
+    const { server, set } = account();
+    set({ runs: 4 });
+    const got = await server.syncYears(["r0a1b2c3d4e5f"]);
+    is(got.length === 4, `a run reported before the first sync is not counted twice (${got.join(",")})`);
+    is(yearOf(got) === 5, "which makes it year five");
+  }
+
+  {
+    const { server } = account();
+    await server.syncYears(["r000000000001"]);
+    const both = await server.syncYears(["r000000000002"]);
+    is(both.length === 2, "two devices' runs are a union");
+    const dup = await server.syncYears(["r000000000001"]);
+    is(dup.length === 2, "and the same run twice is still one");
+    const junk = await server.syncYears(["stage01/x", 7, "r12", null]);
+    is(junk.length === 2, "ids that are not run ids are refused");
+  }
+
+  {
+    const { server } = account();
+    const many = Array.from({ length: 120 }, (_, i) => `r${String(i).padStart(12, "0")}`);
+    const got = await server.syncYears(many);
+    is(got.length === 99, "the account stops at 99 runs too");
+  }
+
+  {
+    const { server, set, get } = account();
+    set({ runs: 5, finished: ["r000000000001"] });
+    await server.resetSave();
+    is(Array.isArray(get().finished) && (get().finished as unknown[]).length === 0, "a wipe empties the finished set");
+    const after = await server.syncYears([]);
+    is(after.length === 0, "and does not migrate the old count back in");
+  }
+})();
 
 console.log(bad ? `\n${bad} FAIL` : "\nthe years hold");
 process.exitCode = bad ? 1 : 0;

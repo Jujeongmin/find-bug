@@ -55,6 +55,7 @@ const MAX_ID_LEN = 64;
  * account counted before ids existed. The same pattern as src/office/years.ts.
  */
 const RUN_ID = /^(r[0-9a-z]{12}|legacy-\d{1,2})$/;
+const MAX_YEARS = 99;
 
 /**
  * What a stored run is allowed to look like.
@@ -165,6 +166,45 @@ class Server {
   }
 
   /**
+   * Fold a device's finished runs into the account's and hand back the union.
+   *
+   * A set, not a count: two devices that each finished a run offline have
+   * finished two, and a run reported twice is one.
+   *
+   * The account counted runs as a number before this existed. The first time
+   * a `finished` set is written, that number becomes that many legacy ids —
+   * less whatever ids arrived in the same call, because the ship screen reports
+   * the rating before it syncs, so a run that just shipped is already in `runs`
+   * and is also arriving here. After that the number is never read again, so a
+   * report that lands between two syncs cannot be counted twice.
+   */
+  async syncYears(incoming) {
+    const state = (await $global.getMyState()) || {};
+    const add = sanitiseYears(incoming);
+    const had = Array.isArray(state.finished);
+    let finished;
+    if (had) {
+      finished = sanitiseYears(state.finished);
+    } else {
+      const runs =
+        Number.isInteger(state.runs) && state.runs > 0
+          ? Math.min(state.runs, MAX_YEARS)
+          : 0;
+      const legacy = Math.max(0, runs - add.length);
+      finished = Array.from({ length: legacy }, (_, i) => `legacy-${i + 1}`);
+    }
+    const before = finished.length;
+    for (const id of add) {
+      if (finished.length >= MAX_YEARS) break;
+      if (!finished.includes(id)) finished.push(id);
+    }
+    if (!had || finished.length !== before) {
+      await $global.updateMyState({ finished, updatedAt: Date.now() });
+    }
+    return finished;
+  }
+
+  /**
    * Lets a player wipe their own save.
    *
    * The run goes with the book. Wiping is the player throwing away what they
@@ -178,6 +218,7 @@ class Server {
       best: 0,
       runs: 0,
       run: null,
+      finished: [],
       updatedAt: Date.now(),
     });
     return true;
@@ -376,6 +417,18 @@ function sanitiseRun(raw) {
   for (const [key, rule] of Object.entries(RUN_FIELDS)) {
     const value = runField(rule, raw[key]);
     if (value !== undefined) out[key] = value;
+  }
+  return out;
+}
+
+/** a list of run ids as sent by a client: well formed, distinct, capped */
+function sanitiseYears(raw) {
+  const out = [];
+  if (!Array.isArray(raw)) return out;
+  for (const id of raw) {
+    if (out.length >= MAX_YEARS) break;
+    if (typeof id !== "string" || !RUN_ID.test(id)) continue;
+    if (!out.includes(id)) out.push(id);
   }
   return out;
 }

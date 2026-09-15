@@ -1,5 +1,6 @@
 import type { GameServer } from "@agent8/gameserver";
 import { loadCodex, mergeCodex, type Seen } from "../office/codex";
+import { loadYears, mergeYears } from "../office/years";
 
 /**
  * The account copy of the defect book.
@@ -80,6 +81,29 @@ export async function syncBook(server: Remote): Promise<void> {
     if (merged && sent === epoch) mergeCodex(merged);
   } catch {
     /* no server, or it said no. The local book is still the book. */
+  }
+}
+
+/**
+ * Fold this device's finished runs into the account's, both ways.
+ *
+ * The same posture as the book: a union, allowed to fail quietly, and a wipe
+ * still owed is carried out before anything is pulled down — otherwise the
+ * account's set would come straight back over an emptied device.
+ */
+export async function syncYears(server: Remote): Promise<void> {
+  if (resetOwed()) {
+    await resetSave(server);
+    if (resetOwed()) return;
+  }
+  const sent = epoch;
+  try {
+    const merged = (await server.remoteFunction("syncYears", [
+      loadYears(),
+    ])) as unknown;
+    if (Array.isArray(merged) && sent === epoch) mergeYears(merged);
+  } catch {
+    /* no server, or it said no. The local set is still the set. */
   }
 }
 
