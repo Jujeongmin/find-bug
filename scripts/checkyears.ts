@@ -13,6 +13,24 @@ import {
   type LaterBuild,
 } from "../src/office/schedule";
 import { ENGINE_SCENES, SCENE_YEAR } from "../src/stages/registry";
+import {
+  MAX_YEARS,
+  addYear,
+  clearYears,
+  isRunId,
+  loadYears,
+  mergeYears,
+  newRunId,
+  yearOf,
+} from "../src/office/years";
+
+/** a localStorage that exists, because node has none */
+const store = new Map<string, string>();
+(globalThis as { localStorage?: unknown }).localStorage = {
+  getItem: (k: string) => store.get(k) ?? null,
+  setItem: (k: string, v: string) => void store.set(k, v),
+  removeItem: (k: string) => void store.delete(k),
+};
 
 let bad = 0;
 const is = (cond: boolean, msg: string) => {
@@ -80,6 +98,39 @@ console.log("\na later year adds its builds and every one of them reaches a mach
     is(missing.length === 0, `year ${year}: all ${builds.length} builds are queued on a working day${missing.length ? ` — never ${missing.join(", ")}` : ""}`);
     is(!doubled, `year ${year}: no day puts one build on two machines`);
   }
+}
+
+console.log("\nthe device keeps a set of finished runs, and the year is its size");
+{
+  store.clear();
+  is(yearOf(loadYears()) === 1, "nothing finished is year one");
+
+  const a = newRunId();
+  const b = newRunId();
+  is(isRunId(a) && isRunId(b) && a !== b, `run ids are well formed and distinct (${a}, ${b})`);
+
+  addYear(a);
+  is(yearOf(loadYears()) === 2, "one finished run is year two");
+  addYear(a);
+  is(loadYears().length === 1, "reporting the same run twice counts it once");
+
+  mergeYears([b, "legacy-1", a]);
+  is(yearOf(loadYears()) === 4, "a second device's runs are added, not maxed");
+
+  mergeYears(["", "r123", "stage01/x", 42, null, "legacy-100"]);
+  is(loadYears().length === 3, "ids that are not run ids are ignored");
+
+  store.set("fb_years_v1", "not json");
+  is(loadYears().length === 0, "an unreadable record is an empty one, not an exception");
+
+  store.clear();
+  const many = Array.from({ length: 120 }, () => newRunId());
+  mergeYears(many);
+  is(loadYears().length === MAX_YEARS, `the record stops at ${MAX_YEARS} runs`);
+  is(yearOf(loadYears()) === 99, "and the year stops at 99");
+
+  clearYears();
+  is(loadYears().length === 0 && yearOf(loadYears()) === 1, "clearing goes back to year one");
 }
 
 console.log(bad ? `\n${bad} FAIL` : "\nthe years hold");
