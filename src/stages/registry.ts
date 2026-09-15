@@ -22,3 +22,15 @@ export const ENGINE_SCENES: SceneSpec[] = [
 export const SCENE_BY_ID: Record<string, SceneSpec> = Object.fromEntries(
   ENGINE_SCENES.map((s) => [s.id, s])
 );
+
+/**
+ * The year a build first reaches the machines.
+ *
+ * A finished run is a year, and a new year is a reason to start the next run:
+ * builds listed here join the rotation from their year on. Anything not listed
+ * arrives in year one — which is every build the game shipped with, so year
+ * one is exactly the game it was.
+ *
+ * Ids must pass the server's book pattern, `stage` and two digits.
+ */
+export const SCENE_YEAR: Readonly<Record<string, number>> = {};

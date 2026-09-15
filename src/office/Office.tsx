@@ -8,7 +8,7 @@ import type { CSSProperties } from "react";
 import { useI18n } from "../i18n";
 import { EngineStage } from "../engine/EngineStage";
 import type { SceneSpec } from "../engine/types";
-import { officeScene, MACHINES, type MachineId } from "./scene";
+import { officeScene, MACHINES } from "./scene";
 import { homeScene } from "../home/scene";
 import { streetScene } from "../street/scene";
 import { laneScene } from "../street/lane";
@@ -17,6 +17,7 @@ import { pochaLine } from "../street/pocha";
 import { devLine, devShipLine } from "./devlines";
 import { DINNER_SPIRIT, HOTFIX_CONDITION, isDinner, isHotfix } from "./events";
 import { ENGINE_SCENES } from "../stages/registry";
+import { assignDay, buildIdsFor, isFreeze } from "./schedule";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
@@ -404,58 +405,6 @@ const ALARM_MINUTES = 30;
 
 
 /**
- * Three builds a day, one per machine. Each day holds exactly one of each
- * severity, and which machine carries the critical one rotates — so there is
- * always a build worth reaching first, and it is never the same walk twice.
- */
-/*
- * One per machine, rotated by the day so no machine is always the bad one.
- *
- * Four entries because there are four machines: with three the fourth build
- * doubled a severity that moved from day to day, and the total riding on a
- * day changed with it — which is not something a rating can be a share of.
- */
-const SEVERITIES: Severity[] = ["normal", "low", "critical", "normal"];
-
-/**
- * Code freeze: the last two working days, when everything on the machines is
- * critical.
- *
- * Eleven of the twelve days were the same day. The ship date was a number in
- * the corner that counted down past a calendar nothing happened on, and the
- * last morning of the run played exactly like the first.
- *
- * Nothing new is written this close to a release, so what is left on the
- * machines is the work nobody dared touch until now. A day of it weighs
- * sixteen against an ordinary nine, dropping a build costs four times what
- * it costs in week one, and the coffee stops being optional.
- */
-const FREEZE_FROM = 11;
-const isFreeze = (day: number) => day >= FREEZE_FROM;
-
-/**
- * Every build the game can queue. The card game is not a scene the engine
- * drives — it is its own component — but it is a build like any other from
- * the floor, so it belongs in the rotation rather than behind a URL flag.
- */
-const BUILD_IDS = [...ENGINE_SCENES.map((s) => s.id), "stage04"];
-
-function assignDay(day: number, machines: readonly MachineId[] = MACHINES): Assignment[] {
-  return machines.map((machine, i) => ({
-    machine,
-    // a stride that is coprime with the list, so the day's four slide along
-    // it instead of alternating between the same two sets
-    sceneId: BUILD_IDS[(day * 5 + i) % BUILD_IDS.length],
-    severity:
-      isFreeze(day) || (isHotfix(day) && i === 0)
-        ? "critical"
-        : SEVERITIES[(i + day) % SEVERITIES.length],
-    result: null,
-    bugId: null,
-  }));
-}
-
-/**
  * The QA floor, replacing the stage-select grid.
  *
  * The verification itself is unchanged — the same scene, the same planted
@@ -523,12 +472,13 @@ function OfficeRun({
 }) {
   const { t, tp } = useI18n();
   const [day, setDay] = useState(boot?.day ?? START_DAY);
+  const builds = useMemo(() => buildIdsFor(1), []);
   const [assignments, setAssignments] = useState<Assignment[]>(
     () =>
       boot?.assignments ??
       (isWeekend(boot?.day ?? START_DAY)
         ? []
-        : assignDay(boot?.day ?? START_DAY))
+        : assignDay(boot?.day ?? START_DAY, builds, MACHINES))
   );
   const [running, setRunning] = useState<Assignment | null>(null);
   const [note, setNote] = useState<string | null>(null);
@@ -1132,7 +1082,7 @@ function OfficeRun({
   const wake = () => {
     const next = day + 1;
     setDay(next);
-    setAssignments(isWeekend(next) ? [] : assignDay(next));
+    setAssignments(isWeekend(next) ? [] : assignDay(next, builds, MACHINES));
     setWorkedWeekend(false);
     setHobbyDone(false);
     /*
@@ -1505,7 +1455,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
         // Catching up this week is what breaks the next one.
         setWorkedWeekend(true);
         setAssignments(
-          assignDay(day, [MACHINES[0]]).map((a) => ({ ...a, hotfix: true }))
+          assignDay(day, builds, [MACHINES[0]]).map((a) => ({ ...a, hotfix: true }))
         );
         setBorrowed((b) => b + borrowCost());
     // the night is not the only thing it comes out of
@@ -1617,7 +1567,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
      * interchangeable, and a share of the wrong total is the wrong rating.
      */
     const stake = WORK_DAYS.reduce(
-      (sum, d) => sum + totalStake(1, assignDay(d).map((a) => a.severity)),
+      (sum, d) => sum + totalStake(1, assignDay(d, builds, MACHINES).map((a) => a.severity)),
       0
     );
     const rating = shipRating(shipped_, late, stake);
