@@ -596,5 +596,10 @@
   "loading.title": "准备上班",
   "loading.sub": "正在下载版本和素材",
   "gift.title": "第{n}年第一天上班 — 带一样东西去",
-  "gift.take": "带上"
+  "gift.take": "带上",
+  "home.morningYear": "第{n}年。又是十二天。",
+  "home.newBuild": "新版本「{name}」来了。",
+  "ship.nextYear": "下一年：第{n}年",
+  "ship.nextYearBuild": "下一年：第{n}年 — 新版本「{name}」将加入",
+  "ship.giftAhead": "第一天上班可以带一件装备"
 }

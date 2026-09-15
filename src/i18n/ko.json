@@ -596,5 +596,10 @@
   "loading.title": "출근 준비",
   "loading.sub": "빌드와 리소스를 내려받는 중",
   "gift.title": "{n}년차 첫 출근 — 하나 챙겨가자",
-  "gift.take": "챙기기"
+  "gift.take": "챙기기",
+  "home.morningYear": "{n}년차. 다시 12일이다.",
+  "home.newBuild": "새 빌드 ‘{name}’이 들어왔다.",
+  "ship.nextYear": "다음은 {n}년차",
+  "ship.nextYearBuild": "다음은 {n}년차 — 새 빌드 ‘{name}’이 들어온다",
+  "ship.giftAhead": "첫 출근에 장비 하나를 챙겨간다"
 }

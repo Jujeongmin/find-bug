@@ -596,5 +596,10 @@
   "loading.title": "Getting ready",
   "loading.sub": "Fetching the builds and the art",
   "gift.title": "Year {n}, first day — take one thing with you",
-  "gift.take": "Take"
+  "gift.take": "Take",
+  "home.morningYear": "Year {n}. Twelve days again.",
+  "home.newBuild": "A new build is in: {name}.",
+  "ship.nextYear": "Next: year {n}",
+  "ship.nextYearBuild": "Next: year {n} — a new build arrives: {name}",
+  "ship.giftAhead": "You take one piece of equipment in on the first day"
 }

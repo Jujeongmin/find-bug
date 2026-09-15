@@ -596,5 +596,10 @@
   "loading.title": "出勤の準備",
   "loading.sub": "ビルドと素材を読み込み中",
   "gift.title": "{n}年目の初出勤 — ひとつ持っていこう",
-  "gift.take": "持っていく"
+  "gift.take": "持っていく",
+  "home.morningYear": "{n}年目。また12日だ。",
+  "home.newBuild": "新しいビルド「{name}」が入った。",
+  "ship.nextYear": "次は{n}年目",
+  "ship.nextYearBuild": "次は{n}年目 — 新しいビルド「{name}」が入る",
+  "ship.giftAhead": "初出勤に装備をひとつ持っていける"
 }

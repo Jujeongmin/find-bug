@@ -16,8 +16,8 @@ import { PASSERS, passerLine } from "../street/passers";
 import { pochaLine } from "../street/pocha";
 import { devLine, devShipLine } from "./devlines";
 import { DINNER_SPIRIT, HOTFIX_CONDITION, isDinner, isHotfix } from "./events";
-import { ENGINE_SCENES } from "../stages/registry";
-import { assignDay, buildIdsFor, isFreeze } from "./schedule";
+import { ENGINE_SCENES, SCENE_BY_ID } from "../stages/registry";
+import { assignDay, buildIdsFor, isFreeze, LATER_BUILDS } from "./schedule";
 import { addYear, loadYears, newRunId, yearOf } from "./years";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
@@ -891,6 +891,14 @@ function OfficeRun({
    */
   const [firstEverRun] = useState(() => Object.keys(loadCodex()).length === 0);
 
+  /** the first morning of a later year, and the build it brought if any */
+  const yearMorning = () => {
+    const fresh = LATER_BUILDS.find((b) => b.year === yearAtStart);
+    const scene = fresh ? SCENE_BY_ID[fresh.id] : undefined;
+    const lines = [tp("home.morningYear", { n: String(yearAtStart) })];
+    if (scene) lines.push(tp("home.newBuild", { name: t(scene.nameKey) }));
+    return lines.join("\n");
+  };
   const morningFor = (d: number) =>
     isWeekend(d)
       ? t("home.morningWeekend")
@@ -899,7 +907,9 @@ function OfficeRun({
         : isHotfix(d)
           ? t("event.hotfix.morning")
           : d === 1
-          ? t(firstEverRun ? "home.morningFirst" : "home.morningFirstAgain")
+          ? yearAtStart >= 2
+            ? yearMorning()
+            : t(firstEverRun ? "home.morningFirst" : "home.morningFirstAgain")
           : tp(
               // the same day, in the voice of whoever is having it
               spirit >= MAX_SPIRIT - 1
@@ -1685,6 +1695,38 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
                 total: String(book.total),
                 fresh: String(Math.max(0, book.caught - codexAtStart)),
               })}
+            </p>
+          );
+        })()}
+        {(() => {
+          /*
+           * What the next run will be. Read from the device's set, which this
+           * run was added to above — and which another device may have pushed
+           * further on, in which case this says so.
+           */
+          const nextYear = yearOf(loadYears());
+          const arriving = LATER_BUILDS.filter(
+            (b) => b.year > yearAtStart && b.year <= nextYear
+          )
+            .map((b) => SCENE_BY_ID[b.id])
+            // a type guard, not filter(Boolean): TypeScript does not narrow
+            // through Boolean, and arriving[0].nameKey would not compile
+            .filter((sc): sc is SceneSpec => sc !== undefined);
+          const line = arriving.length
+            ? tp("ship.nextYearBuild", {
+                n: String(nextYear),
+                name: t(arriving[0].nameKey),
+              })
+            : tp("ship.nextYear", { n: String(nextYear) });
+          return (
+            <p className="wb-tally wb-year">
+              {line}
+              {yearAtStart < 2 && nextYear >= 2 && (
+                <>
+                  <br />
+                  {t("ship.giftAhead")}
+                </>
+              )}
             </p>
           );
         })()}
