@@ -184,6 +184,31 @@ console.log("\nthe book only counts what this year can meet");
      "and in the real registry, the mine's faults join the book in year two");
 }
 
+console.log("\nevery build a year holds is dealt within the fortnight");
+{
+  /*
+   * The day picks its builds with a fixed stride through the list. A stride
+   * that shares a factor with the list length only ever reaches some of it:
+   * 5 through 10 builds dealt two sets of four and never the other two, and
+   * year four, the first with ten, never saw the car park it opened.
+   */
+  const dealt = (builds: readonly string[]) => {
+    const seen = new Set<string>();
+    for (let d = 1; d <= 12; d++) {
+      for (const a of assignDay(d, builds, MACHINES)) seen.add(a.sceneId);
+    }
+    return builds.filter((b) => !seen.has(b));
+  };
+  for (let n = 7; n <= 12; n++) {
+    const missing = dealt(Array.from({ length: n }, (_, i) => `b${i}`));
+    is(missing.length === 0, `${n} builds: all dealt${missing.length ? " — never " + missing.join(",") : ""}`);
+  }
+  for (const year of [1, 2, 3, 4, 5]) {
+    const missing = dealt(buildIdsFor(year));
+    is(missing.length === 0, `year ${year}: every build reaches a machine${missing.length ? " — never " + missing.join(",") : ""}`);
+  }
+}
+
 console.log("\nthe registry puts each new build in its own year");
 {
   is(Object.keys(SCENE_YEAR).every((id) => /^stage\d{2}$/.test(id)),

@@ -77,6 +77,21 @@ export function buildIdsFor(
   ];
 }
 
+const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+
+/**
+ * How far along the list each day moves. It has to share no factor with the
+ * list's length, so the day's four slide along it instead of alternating
+ * between the same sets: 5 did that for 7, 8 and 9 builds, and with 10 it
+ * dealt two sets of four and never the other two builds. 5 is kept wherever
+ * it works, so the years that already had it deal exactly as they did.
+ */
+function strideFor(length: number): number {
+  let stride = 5;
+  while (gcd(stride, length) !== 1) stride++;
+  return stride;
+}
+
 /**
  * Four builds a day, one per machine. Each day holds one of each severity and
  * a second normal, and which machine carries the critical one rotates — so
@@ -88,12 +103,10 @@ export function assignDay(
   builds: readonly string[],
   machines: readonly MachineId[]
 ): Assignment[] {
+  const stride = strideFor(builds.length);
   return machines.map((machine, i) => ({
     machine,
-    // a stride that is coprime with the list, so the day's four slide along
-    // it instead of alternating between the same two sets — 5 is coprime with
-    // 7, 8 and 9, which is every length the years produce
-    sceneId: builds[(day * 5 + i) % builds.length],
+    sceneId: builds[(day * stride + i) % builds.length],
     severity:
       isFreeze(day) || (isHotfix(day) && i === 0)
         ? "critical"
