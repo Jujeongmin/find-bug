@@ -86,6 +86,8 @@ interface Props {
    * random and reported back through onBugPicked.
    */
   bugId?: string | null;
+  /** fault ids to deal first, when any of them are in the pool */
+  prefer?: readonly string[];
   onBugPicked?: (bugId: string) => void;
   /**
    * What a wrong report means. The stage grid lets the player try again with a
@@ -139,6 +141,7 @@ export function EngineStage({
   onObserve,
   onAction,
   bugId,
+  prefer,
   onBugPicked,
   onFail,
   onPlayerRest,
@@ -173,7 +176,7 @@ export function EngineStage({
   }, [judging, scene, minBand, maxBand]);
   const [mutation, setMutation] = useState<Mutation | null>(() => {
     if (!mutations.length) return null;
-    return mutations.find((m) => m.bug.id === bugId) ?? pickMutation(mutations);
+    return mutations.find((m) => m.bug.id === bugId) ?? pickMutation(mutations, undefined, prefer);
   });
   // tell the caller which one it got, so the same build is waiting on the same
   // machine when the player comes back to it
@@ -488,7 +491,7 @@ export function EngineStage({
    */
   const nextRound = () => {
     if (!mutation) return;
-    const next = pickMutation(mutations, mutation.bug.id);
+    const next = pickMutation(mutations, mutation.bug.id, prefer);
     setMutation(next);
     runtimeRef.current.reset(applyMutation(scene, next));
     setPickedObject(null);

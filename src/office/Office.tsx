@@ -19,6 +19,7 @@ import { DINNER_SPIRIT, HOTFIX_CONDITION, isDinner, isHotfix } from "./events";
 import { ENGINE_SCENES, SCENE_BY_ID } from "../stages/registry";
 import { assignDay, buildIdsFor, isFreeze, LATER_BUILDS } from "./schedule";
 import { addYear, loadYears, newRunId, recordBest, yearOf } from "./years";
+import { masteredBuilds, preferFor } from "./mastery";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
@@ -568,6 +569,20 @@ function OfficeRun({
   const [codexAtStart] = useState(
     () => boot?.codexAtStart ?? codexTally(codexRows(undefined, yearAtStart)).caught
   );
+  /*
+   * The book as rows, worked out once rather than on every tick of the clock:
+   * a hundred and fifty faults are generated to build it. It moves when a
+   * build closes (running), when a day turns, and when the account's copy may
+   * have come down (connected).
+   */
+  const bookRows = useMemo(
+    () => codexRows(undefined, yearAtStart),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [yearAtStart, running, day, connected]
+  );
+  const mastered = useMemo(() => masteredBuilds(bookRows), [bookRows]);
+  /** the build on screen was mastered when it was opened, so it costs nothing */
+  const [runningFree, setRunningFree] = useState(false);
   const [shipped, setShipped] = useState(false);
   const [caught, setCaught] = useState(boot?.caught ?? 0);
   const [missed, setMissed] = useState(boot?.missed ?? 0);
@@ -988,7 +1003,7 @@ function OfficeRun({
     }
     // charged here rather than on opening the machine, so backing out of a
     // build still costs nothing
-    setCondition((c) => Math.max(0, c - INSPECT_COST));
+    if (!runningFree) setCondition((c) => Math.max(0, c - INSPECT_COST));
     /*
      * A wrong report stands — the briefing says so two screens before the
      * player makes one, and it is the whole weight of the decision. The form
@@ -1611,7 +1626,9 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
     }
     // nothing left to look with. The coffee is the way back in, and after
     // that the door is.
-    if (condition < INSPECT_COST) return setNote(t("office.tooTired"));
+    const free = mastered.includes(a.sceneId);
+    if (!free && condition < INSPECT_COST) return setNote(t("office.tooTired"));
+    setRunningFree(free);
     setRunning(a);
   };
 
@@ -1779,6 +1796,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
      * "step away" rather than "sign this off" — the clock running while you
      * walk is the only price of a second look.
      */
+    const prefer = preferFor(bookRows, running.sceneId);
     const build = {
       key: `${day}-${running.machine}`,
       title: `${tp("office.buildTitle", { machine: t(`object.${running.machine}`) })} · ${clock(minutes)}`,
@@ -1807,6 +1825,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
           playtest={PLAYTEST}
           tutorial={day === 1}
           bugId={build.bugId}
+          prefer={prefer}
           onBugPicked={build.onBugPicked}
           onClear={build.onClear}
           onFail={build.onFail}
@@ -1825,6 +1844,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
         playtest={PLAYTEST}
         tutorial={day === 1}
         bugId={build.bugId}
+        prefer={prefer}
         onBugPicked={build.onBugPicked}
         onClear={build.onClear}
         onFail={build.onFail}

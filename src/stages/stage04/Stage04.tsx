@@ -83,6 +83,8 @@ interface Props {
   title?: string;
   /** the defect this build already has, if it has been opened before */
   bugId?: string | null;
+  /** fault ids to deal first, when any of them are in the pool */
+  prefer?: readonly string[];
   onBugPicked?: (bugId: string) => void;
   /** what a wrong report means; without it the player gets another go */
   onFail?: () => void;
@@ -104,6 +106,7 @@ export function Stage04({
   stageNo,
   title,
   bugId,
+  prefer,
   onBugPicked,
   onFail,
   tutorial = false,
@@ -117,7 +120,7 @@ export function Stage04({
     () => tutorial && !localStorage.getItem("fb_seen_tutorial")
   );
   const [bug, setBug] = useState<BugDef>(
-    () => stage04.bugPool.find((b) => b.id === bugId) ?? pickBug(stage04.bugPool)
+    () => stage04.bugPool.find((b) => b.id === bugId) ?? pickBug(stage04.bugPool, undefined, prefer)
   );
   // tell the caller which defect it got, so the same one is waiting on the
   // machine when the player comes back to it
@@ -241,7 +244,7 @@ export function Stage04({
   };
 
   const onRetry = () => {
-    setBug(pickBug(stage04.bugPool, bug.id));
+    setBug(pickBug(stage04.bugPool, bug.id, prefer));
     setDeal(makeDeal());
     setFirstPick(null);
     setLock(false);
@@ -307,7 +310,7 @@ export function Stage04({
             desc: t(bug.descKey),
           }}
           onReroll={() => {
-            setBug(pickBug(stage04.bugPool, bug.id));
+            setBug(pickBug(stage04.bugPool, bug.id, prefer));
             setDeal(makeDeal());
             setFirstPick(null);
             setLock(false);

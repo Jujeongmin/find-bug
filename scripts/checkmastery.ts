@@ -4,6 +4,7 @@
  *
  * Run: npx tsx scripts/checkmastery.ts
  */
+import { readFileSync } from "node:fs";
 import { codexRows, type Book } from "../src/office/codex";
 import { buildProgress, masteredBuilds, preferFor } from "../src/office/mastery";
 import { pickMutation, generateMutations } from "../src/engine/generate";
@@ -99,6 +100,19 @@ console.log("\nevery fault in the book can be dealt, so every build can be maste
   const cards = stage04.bugPool.map((b) => b.id).sort();
   const cardBook = all.filter((r) => r.sceneId === "stage04").map((r) => r.bugId).sort();
   is(JSON.stringify(cards) === JSON.stringify(cardBook), "stage04: the card pool is the book's");
+}
+
+console.log("\nthe office wires it through");
+{
+  const office = readFileSync("src/office/Office.tsx", "utf8");
+  is(/if \(!free && condition < INSPECT_COST\)/.test(office), "a mastered build opens with no condition left");
+  is(/if \(!runningFree\) setCondition\(\(c\) => Math\.max\(0, c - INSPECT_COST\)\)/.test(office),
+     "and costs none to inspect");
+  is((office.match(/prefer=\{prefer\}/g) ?? []).length === 2, "both build components are handed the preference");
+  const engine = readFileSync("src/engine/EngineStage.tsx", "utf8");
+  is((engine.match(/pickMutation\([^)]*prefer\)/g) ?? []).length === 2, "EngineStage picks with it, first and on a re-roll");
+  const cards = readFileSync("src/stages/stage04/Stage04.tsx", "utf8");
+  is((cards.match(/pickBug\([^)]*prefer\)/g) ?? []).length === 3, "Stage04 picks with it everywhere it picks");
 }
 
 console.log(bad ? `\n${bad} FAIL` : "\nmastery holds");
