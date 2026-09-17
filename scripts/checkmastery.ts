@@ -42,7 +42,7 @@ console.log("\na build is mastered when every one of its faults is caught");
   is(p.total === p.caught + 1, `progress counts it (${p.caught}/${p.total})`);
   const y1 = buildProgress(codexRows({}, 1));
   is(!y1.has("stage08") && !y1.has("stage09"), "year one's progress has no mine or kitchen");
-  is(buildProgress(codexRows({}, 99)).size === 9, "every build has progress by year 99");
+  is(buildProgress(codexRows({}, 99)).size === 10, "every build has progress by year 99");
 }
 
 console.log("\nthe faults preferred are the ones not caught");

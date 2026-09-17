@@ -5,6 +5,7 @@ import { stage03Scene } from "../src/stages/stage03/scene";
 import { stage06Scene } from "../src/stages/stage06/scene";
 import { stage08Scene } from "../src/stages/stage08/scene";
 import { stage09Scene } from "../src/stages/stage09/scene";
+import { stage10Scene } from "../src/stages/stage10/scene";
 
 let fails = 0;
 const ok = (label: string, cond: boolean) => {
@@ -275,4 +276,65 @@ console.log(fails === 0 ? "\nALL PASS" : `\n${fails} FAILURES`);
      Math.abs(fresh.state.objects.player.x - spikes.x) > 30);
   ok("stage03: a fresh run starts alive", fresh.state.dead === false);
 }
+/* stage 10: the car park — a pay station lifts its own barrier, cars hurt, coins are picked up */
+{
+  const r = new SceneRuntime(stage10Scene);
+  r.click("payA");
+  ok("stage10: pay station A lifts barrier A only", r.isTriggered("barrierA") && !r.isTriggered("barrierB"));
+  tick(r, 3);
+  ok("stage10: the barrier comes back down", !r.isTriggered("barrierA"));
+
+  const crossed = new SceneRuntime(applyMutation(stage10Scene, mut(stage10Scene, "wiringSwap:payA:payB")));
+  crossed.click("payA");
+  ok("stage10: with the wires crossed, A lifts B", !crossed.isTriggered("barrierA") && crossed.isTriggered("barrierB"));
+  const dead = new SceneRuntime(applyMutation(stage10Scene, mut(stage10Scene, "noAction:payB")));
+  dead.click("payB");
+  ok("stage10: a dead pay station lifts nothing", !dead.isTriggered("barrierB"));
+
+  const rc = new SceneRuntime(stage10Scene);
+  const coin = stage10Scene.objects.find((o) => o.id === "coin1")!;
+  rc.state.objects.player.x = coin.x;
+  rc.state.objects.player.y = coin.y;
+  tick(rc, 0.1);
+  ok("stage10: walking onto a coin takes it", rc.state.counters.coins === 1 && !rc.state.objects.coin1.alive);
+  rc.state.objects.player.x = 180;
+  rc.state.objects.player.y = 280;
+  tick(rc, 6.2);
+  ok("stage10: the coin is back six seconds later", rc.state.objects.coin1.alive);
+
+  const rh = new SceneRuntime(stage10Scene);
+  rh.state.objects.player.x = rh.state.objects.car1.x;
+  rh.state.objects.player.y = rh.state.objects.car1.y;
+  tick(rh, 0.05);
+  ok(`stage10: a car hurts (hp ${rh.state.counters.hp})`, rh.state.counters.hp === 2);
+
+  const rm = new SceneRuntime(stage10Scene);
+  let lo = 999, hi = -999;
+  for (let i = 0; i < 60 * 12; i++) {
+    rm.tick(1 / 60);
+    lo = Math.min(lo, rm.state.objects.car2.y);
+    hi = Math.max(hi, rm.state.objects.car2.y);
+  }
+  ok(`stage10: a car drives its whole lane and stays on it (${lo.toFixed(0)}..${hi.toFixed(0)})`,
+     lo >= 290 && hi <= 590 && hi - lo > 200);
+  const cars = stage10Scene.objects.filter((o) => o.peerGroup === "car").map((o) => JSON.stringify(o.behaviors));
+  ok("stage10: the two cars drive alike", cars.length === 2 && cars[0] === cars[1]);
+  const driven = generateMutations(stage10Scene)
+    .filter((m) => /^car\d$/.test(m.target.objectId) && m.bug.category === "weird-movement")
+    .map((m) => m.bug.id);
+  ok(`stage10: no fault changes how a car drives${driven.length ? " — " + driven.join(", ") : ""}`,
+     driven.length === 0);
+
+  const rp = new SceneRuntime(stage10Scene);
+  const parked = stage10Scene.objects.find((o) => o.id === "parked2")!;
+  rp.state.objects.player.x = parked.x;
+  rp.state.objects.player.y = parked.y - 60;
+  rp.keys.add("arrowdown");
+  tick(rp, 1.5);
+  const gap = Math.hypot(rp.state.objects.player.x - parked.x, rp.state.objects.player.y - parked.y);
+  ok(`stage10: a parked car cannot be walked through (${gap.toFixed(0)}px)`, gap >= 20);
+  ok(`stage10: enough faults to deal (${generateMutations(stage10Scene).length})`,
+     generateMutations(stage10Scene).length >= 3);
+}
+
 process.exitCode = fails ? 1 : 0;

@@ -7,8 +7,20 @@
  * there is nothing to store and a wipe takes the rank with everything else.
  */
 
-/** the mastered count each rank starts at: newcomer, junior, senior, lead, head */
-export const RANK_STEPS = [0, 1, 3, 6, 9] as const;
+import { buildIdsFor } from "./schedule";
+
+/**
+ * The mastered count each rank starts at: newcomer, junior, senior, lead,
+ * and head of QA, which is every build there is — so a build added in a
+ * later year moves the last step with it.
+ */
+export const RANK_STEPS: readonly number[] = [
+  0,
+  1,
+  3,
+  6,
+  buildIdsFor(Number.MAX_SAFE_INTEGER).length,
+];
 
 export function rankOf(mastered: number): number {
   let rank = 0;

@@ -32,7 +32,7 @@ console.log("\nevery build has a trophy and a place on the wall");
   is(all.every((id) => TROPHY_ART[id] && (TROPHY_ART[id].sprite || TROPHY_ART[id].prop)),
      "each one has art");
   const slots = trophySlots();
-  is(slots.length === 9, `nine slots (${slots.length})`);
+  is(slots.length === 10, `ten slots (${slots.length})`);
   const spans = slots.map((s) => ({ ...s, from: s.x - TROPHY_W / 2, to: s.x + TROPHY_W / 2 }));
   is(spans.every((s) => s.from >= 0 && s.to <= 360), "all on the wall");
   is(spans.every((s) => s.to <= WINDOW.from || s.from >= WINDOW.to), "none in front of the window");
@@ -68,7 +68,8 @@ console.log("\nmastered builds stand out");
   is(JSON.stringify(lit) === JSON.stringify(["trophy_stage01", "trophy_stage08"]),
      `only the mastered two are lit (${lit.join(",")})`);
   is(t.length === 8, "and year two has eight on the wall");
-  is(trophies(added([], 3)).length === 9, "year three has all nine");
+  is(trophies(added([], 3)).length === 9, "year three has nine");
+  is(trophies(added([], 4)).length === 10, "year four has all ten");
 }
 
 console.log("\nthis run's new trophies shine");

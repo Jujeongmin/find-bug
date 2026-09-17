@@ -192,6 +192,8 @@ console.log("\nthe registry puts each new build in its own year");
      "the mine arrives in year two, and not before");
   is(!buildIdsFor(2).includes("stage09") && buildIdsFor(3).includes("stage09"),
      "the kitchen arrives in year three, and not before");
+  is(!buildIdsFor(3).includes("stage10") && buildIdsFor(4).includes("stage10"),
+     "the car park arrives in year four, and not before");
 }
 
 console.log("\nthe device keeps the best rating it has seen");

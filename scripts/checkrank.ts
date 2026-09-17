@@ -5,6 +5,7 @@
  */
 import { readFileSync } from "node:fs";
 import { RANK_STEPS, rankKey, rankOf } from "../src/office/rank";
+import { buildIdsFor } from "../src/office/schedule";
 import ko from "../src/i18n/ko.json";
 import en from "../src/i18n/en.json";
 import ja from "../src/i18n/ja.json";
@@ -19,9 +20,10 @@ const is = (cond: boolean, msg: string) => {
 
 console.log("\nthe rank follows the count");
 {
-  const want: [number, number][] = [[0, 0], [1, 1], [2, 1], [3, 2], [5, 2], [6, 3], [8, 3], [9, 4], [12, 4]];
+  const want: [number, number][] = [[0, 0], [1, 1], [2, 1], [3, 2], [5, 2], [6, 3], [9, 3], [10, 4], [12, 4]];
   for (const [n, r] of want) is(rankOf(n) === r, `${n} mastered is rank ${r} (${rankOf(n)})`);
-  is(RANK_STEPS.length === 5 && rankOf(RANK_STEPS[RANK_STEPS.length - 1]) === 4, "five ranks, the last at nine");
+  is(RANK_STEPS.length === 5 && RANK_STEPS[4] === buildIdsFor(Number.MAX_SAFE_INTEGER).length,
+     `five ranks, the last at every build (${RANK_STEPS[4]})`);
 }
 
 console.log("\nevery rank has a name in every language");

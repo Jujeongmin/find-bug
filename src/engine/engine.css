@@ -250,6 +250,25 @@
   cursor: pointer;
 }
 
+/* ---- the car park ---- */
+.s10-lot {
+  background:
+    /* the white lines of the three middle bays */
+    linear-gradient(90deg, transparent 80px, #e8e8e8 80px 83px, transparent 83px 147px, #e8e8e8 147px 150px, transparent 150px 212px, #e8e8e8 212px 215px, transparent 215px 277px, #e8e8e8 277px 280px, transparent 280px) 0 428px / 100% 88px no-repeat,
+    /* the lane edges either side */
+    linear-gradient(90deg, transparent 72px, #d9b43a 72px 75px, transparent 75px 285px, #d9b43a 285px 288px, transparent 288px) 0 250px / 100% 400px no-repeat,
+    linear-gradient(#56606b 0 150px, #3c4148 150px 158px, #2f3338 158px);
+}
+.entity.s10-barrier {
+  transition: translate 0.3s ease-out;
+}
+.entity.s10-barrier.triggered {
+  translate: 0 -34px;
+}
+.entity.s10-pay {
+  cursor: pointer;
+}
+
 /* ---- the kitchen ---- */
 .s9-kitchen {
   background:

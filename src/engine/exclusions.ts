@@ -149,6 +149,15 @@ export const EXCLUDED_BUGS: string[] = [
    */
   "stage09:invertMeter:gaugeL",
   "stage09:invertMeter:gaugeR",
+  /*
+   * The car park's two moving cars, for the reason the ore barrels lost
+   * theirs: a car that comes back on at the other end of its lane, or turns
+   * back sharply, is how a looping lane is drawn, not a fault anyone can call.
+   */
+  "stage10:teleportOnEnd:car1:teleport",
+  "stage10:teleportOnEnd:car2:teleport",
+  "stage10:bounceOnEnd:car1:bounce",
+  "stage10:bounceOnEnd:car2:bounce",
 ];
 
 const excluded = new Set(EXCLUDED_BUGS);

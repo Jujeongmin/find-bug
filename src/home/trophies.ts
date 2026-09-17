@@ -30,13 +30,14 @@ export const TROPHY_ART: Record<string, RenderSpec> = {
   stage04: { prop: { id: "card", scale: 0.75 } },
   stage08: { sprite: { sheet: "dungeon", col: 11, row: 10, scale: 1.5 } },
   stage09: { sprite: { sheet: "roguelike", col: 55, row: 13, scale: 1.5 } },
+  stage10: { sprite: { sheet: "city", col: 33, row: 22, spanX: 2, spanY: 2, scale: 0.75 } },
 };
 
 /** where the trophies stand: on the plank, either side of the window */
 const SHELF_Y = 70;
 const PLANKS = [
   { id: SHELF_ID, x: 16, width: 124, slots: 5 },
-  { id: "trophyShelfRight", x: 216, width: 100, slots: 4 },
+  { id: "trophyShelfRight", x: 216, width: 124, slots: 5 },
 ];
 const SLOT_W = 24;
 
