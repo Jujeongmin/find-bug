@@ -21,7 +21,7 @@
 - **혜택:** 숙련 빌드는 검사해도 기운(`INSPECT_COST`)이 줄지 않는다.
   - 기운이 `INSPECT_COST`보다 적어도 숙련 빌드는 열 수 있다. 하루에 검사할 수 있는 양은 시간이 정한다.
   - 숙련 여부는 **검사 화면을 여는 순간** 정해서 그 검사에 붙여 둔다. 마지막 결함을 잡은 그 검사는 기운이 그대로 줄고, 다음 검사부터 공짜다.
-  - 이 값은 세이브에 넣지 않는다. 검사 화면은 세이브되지 않는 화면 상태이기 때문이다(`RunFields` 주석 참고).
+  - 이 값은 Office의 화면 상태 `runningFree`에 둔다. `running`은 세이브되는 `Assignment`라서 필드를 붙이지 않는다. 검사 화면은 세이브되지 않는다(`RunFields` 주석 참고).
 - 초기화하면 수첩이 비고, 숙련도 함께 사라진다. 따로 지울 저장소가 없다.
 
 ## 3. 못 잡은 결함부터 배정
@@ -43,7 +43,7 @@
 - **출시 화면:**
   - 이번 회차에 새로 숙련된 빌드가 있으면 "새로 숙련: 박쥐 동굴, 광산 보물굴" 한 줄을 띄운다.
   - 열린 빌드를 모두 숙련했고 모든 빌드가 열려 있다면(9/9) 완주 문구를 한 줄 띄운다.
-  - "새로 숙련"을 계산하려면 회차 시작 때 숙련 목록이 필요하다. 회차 세이브에 `masteredAtStart: string[]`을 넣는다. `codexAtStart`처럼 회차 시작 때 한 번 정하는 값이다. 없으면(예전 세이브) 빈 목록으로 본다.
+  - "새로 숙련"을 계산하려면 회차 시작 때 숙련 목록이 필요하다. 회차 세이브에 `masteredAtStart: string[]`을 넣는다. `codexAtStart`처럼 회차 시작 때 한 번 정하는 값이다. 없으면(예전 세이브) `codexAtStart`와 같이 불러오는 시점에 계산한다.
 - 문구는 i18n 5개 언어 모두에 넣는다.
 
 ## 5. 구조
@@ -57,12 +57,13 @@
 - `src/core/judge.ts`: `pickBug(pool, excludeId?, prefer?)`
 - `src/engine/EngineStage.tsx`, `src/stages/stage04/Stage04.tsx`: `prefer` prop을 받아 위 두 함수에 넘긴다.
 - `src/office/Office.tsx`
-  - 검사 화면을 열 때(`setRunning`) 그 빌드가 숙련인지를 `running.free`에 기록한다.
-  - `tooTired` 검사와 기운 차감은 `free`면 건너뛴다.
+  - 검사 화면을 열 때(`setRunning`) 그 빌드가 숙련인지를 `runningFree`에 기록한다.
+  - `tooTired` 검사와 기운 차감은 `runningFree`면 건너뛴다.
+  - 수첩 행은 `useMemo`로 한 번 계산해서 칩, 배정, 숙련 판정에 같이 쓴다. 시계가 돌 때마다 150개 결함을 다시 만들지 않기 위해서다.
   - 빌드 컴포넌트에 `prefer`를 넘긴다.
   - HUD 칩, 수첩, 아침 문구, 출시 화면을 고친다.
 - `src/office/run.ts`: `masteredAtStart` 필드와 검증을 추가한다.
-- `server.js`: `RUN_FIELDS`에 `masteredAtStart: ["scenes"]`를 넣는다. 새 규칙 `scenes`는 빌드 id 목록이다(`stage` 뒤 숫자 두 자리, 중복 없음, 최대 16개).
+- `server.js`: `RUN_FIELDS`에 `masteredAtStart: ["scenes"]`를 넣는다. 새 규칙 `scenes`는 빌드 id 목록이다(`stage` 뒤 숫자 두 자리, 길이는 다른 목록과 같은 `RUN_LIST` 제한).
 
 ## 6. 검사
 
@@ -72,7 +73,7 @@
 - `preferFor`는 `caught`를 빼고 돌려주고, 숙련 빌드에 대해서는 빈 목록을 돌려준다.
 - `pickMutation`과 `pickBug`는 `prefer`가 있으면 그 안에서만 고른다(여러 번 뽑아서 확인). `prefer`가 비었거나 겹치는 게 없으면 전체에서 고른다. `excludeId`와 함께 줘도 직전 결함은 나오지 않는다.
 - 모든 빌드에서 `codexRows`의 결함 id와 오피스가 실제로 배정할 수 있는 결함 id가 **같다**. 달라지면 영영 숙련할 수 없는 빌드가 생긴다.
-- 소스 검사: Office가 `free`일 때 기운 차감과 `tooTired`를 건너뛰고, 빌드 컴포넌트 두 곳 모두에 `prefer`를 넘긴다.
+- 소스 검사: Office가 `runningFree`일 때 기운 차감과 `tooTired`를 건너뛰고, 빌드 컴포넌트 두 곳 모두에 `prefer`를 넘긴다.
 - `checkrun`의 `FULL`에 `masteredAtStart`를 추가한다.
 
 ## 7. 범위 밖
