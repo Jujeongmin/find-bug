@@ -115,5 +115,15 @@ console.log("\nthe office wires it through");
   is((cards.match(/pickBug\([^)]*prefer\)/g) ?? []).length === 3, "Stage04 picks with it everywhere it picks");
 }
 
+console.log("\nwhat the day suggests knows a mastered build still opens");
+{
+  const office = readFileSync("src/office/Office.tsx", "utf8");
+  is(/if \(assignments\.some\(canOpen\)\) \{/.test(office), "the next-step line asks canOpen");
+  is(/if \(assignments\.some\(canOpen\) && !tookOvertime\)/.test(office), "and so does the overtime offer");
+  is(!/if \(left && condition >= INSPECT_COST\)/.test(office), "the next-step line no longer asks condition alone");
+  is(!/if \(left > 0 && condition >= INSPECT_COST && !tookOvertime\)/.test(office), "nor does the overtime offer");
+  is(/!hadCoffee && condition < costly/.test(office), "the coffee hint counts only the builds that cost");
+}
+
 console.log(bad ? `\n${bad} FAIL` : "\nmastery holds");
 process.exitCode = bad ? 1 : 0;

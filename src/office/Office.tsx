@@ -583,6 +583,9 @@ function OfficeRun({
   const mastered = useMemo(() => masteredBuilds(bookRows), [bookRows]);
   /** the build on screen was mastered when it was opened, so it costs nothing */
   const [runningFree, setRunningFree] = useState(false);
+  /** a build can be opened now: it is mastered, or there is condition to spend */
+  const canOpen = (a: Assignment) =>
+    a.result === null && (mastered.includes(a.sceneId) || condition >= INSPECT_COST);
   // what was mastered when the run began, so the ship screen can say what is new
   const [masteredAtStart] = useState<string[]>(
     () => boot?.masteredAtStart ?? masteredBuilds(codexRows(undefined, yearAtStart))
@@ -1224,8 +1227,6 @@ function OfficeRun({
    * having nothing left to look at, knocks off as before.
    */
   const endOfDay = () => {
-    const left = assignments.filter((a) => a.result === null).length;
-
     /*
      * Six o'clock, and the choice is the player's either way.
      *
@@ -1236,10 +1237,11 @@ function OfficeRun({
      * should not be gated on an ad network being reachable. What the advert
      * buys is the half hour for nothing, which is what a reward is.
      *
-     * It is still worth nothing without the condition left to open a machine
-     * with, so that one state does not raise it.
+     * It is still worth nothing without a machine that can be opened — one with
+     * condition left for it, or a mastered one that needs none — so that one
+     * state does not raise it.
      */
-    if (left > 0 && condition >= INSPECT_COST && !tookOvertime) {
+    if (assignments.some(canOpen) && !tookOvertime) {
       setOffer("overtime");
       return;
     }
@@ -1930,15 +1932,18 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
        * first morning is not the same as being told about it on the morning it
        * is needed.
        */
-      if (!hadCoffee && condition < left) {
+      const costly = assignments.filter(
+        (a) => a.result === null && !mastered.includes(a.sceneId)
+      ).length;
+      if (!hadCoffee && condition < costly) {
         return { key: "quest.coffee", at: "coffee" };
       }
       return { key: "quest.goOffice", at: "officeDoor" };
     }
-    if (left && condition >= INSPECT_COST) {
+    if (assignments.some(canOpen)) {
       // the worst one first, which is the advice the pips are already giving
       const worst = assignments
-        .filter((a) => a.result === null)
+        .filter((a) => canOpen(a))
         .reduce((best, a) =>
           SEVERITY_PIPS[a.severity] > SEVERITY_PIPS[best.severity] ? a : best
         );
