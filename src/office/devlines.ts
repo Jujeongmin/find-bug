@@ -35,13 +35,21 @@ export interface DevTalk {
   talks: number;
   /** the relationship, 0 to 3, earned by handing defects over */
   level: number;
+  /** the player's rank, 0 to 4, from the builds they have mastered */
+  rank: number;
 }
 
 /** how many things they say when there is nothing more pressing */
 export const IDLE_LINES = 5;
 
 export function devLine(s: DevTalk): string {
-  if (s.firstTalk) return "office.dev.intro";
+  // the first hello of a run knows who has walked in
+  if (s.firstTalk) {
+    if (s.rank >= 4) return "office.dev.introRank3";
+    if (s.rank >= 2) return "office.dev.introRank2";
+    if (s.rank >= 1) return "office.dev.introRank1";
+    return "office.dev.intro";
+  }
   if (s.pending) return "office.dev.waiting";
   if (s.lastResult === "caught") return "office.dev.caught";
   if (s.lastResult === "missed") return "office.dev.missed";
@@ -105,6 +113,9 @@ export const DEV_MUTTERS = [
 export function devKeys(): string[] {
   return [
     "office.dev.intro",
+    "office.dev.introRank1",
+    "office.dev.introRank2",
+    "office.dev.introRank3",
     "office.dev.waiting",
     "office.dev.caught",
     "office.dev.missed",

@@ -21,6 +21,7 @@ import { ENGINE_SCENES, SCENE_BY_ID } from "../stages/registry";
 import { assignDay, buildIdsFor, isFreeze, LATER_BUILDS } from "./schedule";
 import { addYear, loadYears, newRunId, recordBest, yearOf } from "./years";
 import { buildProgress, masteredBuilds, preferFor } from "./mastery";
+import { rankKey, rankOf } from "./rank";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
@@ -587,6 +588,7 @@ function OfficeRun({
     [yearAtStart, running, day, connected]
   );
   const mastered = useMemo(() => masteredBuilds(bookRows), [bookRows]);
+  const rank = rankOf(mastered.length);
   /** the build on screen was mastered when it was opened, so it costs nothing */
   const [runningFree, setRunningFree] = useState(false);
   /** a build can be opened now: it is mastered, or there is condition to spend */
@@ -940,6 +942,7 @@ function OfficeRun({
     const scene = fresh ? SCENE_BY_ID[fresh.id] : undefined;
     const lines = [tp("home.morningYear", { n: String(yearAtStart) })];
     if (scene) lines.push(tp("home.newBuild", { name: t(scene.nameKey) }));
+    lines.push(tp("rank.morning", { rank: t(rankKey(rank)) }));
     // nothing new arrives from the fourth year; what is left is the book
     if (yearAtStart >= 4) {
       lines.push(
@@ -1358,6 +1361,7 @@ function OfficeRun({
       spirit,
       talks,
       level: devLevel,
+      rank,
     });
 
   const buy = (item: ItemId, cost: number) => {
@@ -1792,6 +1796,17 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
                 })}
               {fresh.length > 0 && every && <br />}
               {every && t("mastery.all")}
+            </p>
+          );
+        })()}
+        {(() => {
+          // a new title, if the builds this run mastered carried the player past one
+          const from = rankOf(masteredAtStart.length);
+          const to = rankOf(masteredBuilds(codexRows(undefined, yearAtStart)).length);
+          if (to <= from) return null;
+          return (
+            <p className="wb-tally wb-mastery">
+              {tp("rank.promoted", { from: t(rankKey(from)), to: t(rankKey(to)) })}
             </p>
           );
         })()}
@@ -2268,6 +2283,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
                     })}
                   </p>
                   <p className="codex-tally">
+                    {t(rankKey(rankOf(done.length)))} ·{" "}
                     {tp("mastery.tally", { k: String(done.length), m: String(buildCount) })}
                   </p>
                   <div className="codex-list">

@@ -9,7 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "report": "tsx scripts/report.ts && tsx scripts/report-html.ts",
-    "verify": "tsc -b && tsx scripts/checkcurriculum.ts && tsx scripts/checkscenes.ts && tsx scripts/checkruntime.ts && tsx scripts/checki18n.ts && tsx scripts/checkquest.ts && tsx scripts/checkcategories.ts && tsx scripts/checkrun.ts && tsx scripts/checkads.ts && tsx scripts/footpad.ts && tsx scripts/checkzoom.ts && tsx scripts/checkyears.ts && tsx scripts/checkmastery.ts && tsx scripts/checkwipes.ts && tsx scripts/checktrophies.ts",
+    "verify": "tsc -b && tsx scripts/checkcurriculum.ts && tsx scripts/checkscenes.ts && tsx scripts/checkruntime.ts && tsx scripts/checki18n.ts && tsx scripts/checkquest.ts && tsx scripts/checkcategories.ts && tsx scripts/checkrun.ts && tsx scripts/checkads.ts && tsx scripts/footpad.ts && tsx scripts/checkzoom.ts && tsx scripts/checkyears.ts && tsx scripts/checkmastery.ts && tsx scripts/checkwipes.ts && tsx scripts/checktrophies.ts && tsx scripts/checkrank.ts",
     "deploy": "npx -y @agent8/deploy",
     "typecheck": "tsc -b",
     "sprites": "tsx scripts/spritesheet.ts && tsx scripts/spritelist.ts",

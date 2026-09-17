@@ -161,6 +161,7 @@ for (const [name, dict] of dicts) {
       spirit: 3,
       talks: 0,
       level: 0,
+      rank: 0,
       ...over,
     });
   const cases: [string, string, string][] = [
@@ -182,6 +183,12 @@ for (const [name, dict] of dicts) {
     ["and the state you are in, before small talk", talk({ spirit: 1 }), "office.dev.worried"],
     ["otherwise the relationship talks", talk({ level: 2, talks: 3 }), "office.dev.warm2_1"],
     ["or nothing much does", talk({ talks: 7 }), "office.dev.idle2"],
+    ["a newcomer is greeted as before", talk({ firstTalk: true }), "office.dev.intro"],
+    ["a junior is recognised", talk({ firstTalk: true, rank: 1 }), "office.dev.introRank1"],
+    ["a senior is trusted", talk({ firstTalk: true, rank: 2 }), "office.dev.introRank2"],
+    ["and so is a lead", talk({ firstTalk: true, rank: 3 }), "office.dev.introRank2"],
+    ["the head of QA is a title", talk({ firstTalk: true, rank: 4 }), "office.dev.introRank3"],
+    ["after hello, rank changes nothing", talk({ talks: 7, rank: 4 }), "office.dev.idle2"],
     ["the ship is spoken to as well", devShipLine(4.5, 0), "office.dev.shipGood"],
     ["and a friend says something else about it", devShipLine(1, 3), "office.dev.shipWarm"],
   ];
