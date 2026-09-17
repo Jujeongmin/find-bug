@@ -3,7 +3,7 @@ import { recordBug, codexRows, codexTally, loadCodex } from "./codex";
 import { syncBook, syncYears, queueSync, reportRun, settleAccount } from "../net/save";
 import { loadEntitlements, useAdsRemoved } from "../net/shop";
 import { useGameServer } from "@agent8/gameserver";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { useI18n } from "../i18n";
 import { EngineStage } from "../engine/EngineStage";
@@ -591,6 +591,12 @@ function OfficeRun({
   const rank = rankOf(mastered.length);
   /** the build on screen was mastered when it was opened, so it costs nothing */
   const [runningFree, setRunningFree] = useState(false);
+  /*
+   * The day's one line, kept under the bar. It was pinned 40px down, which is
+   * one row of the bar; on a phone the bar wraps and the machine chips on its
+   * second row were underneath the line.
+   */
+  const questRef = useRef<HTMLDivElement>(null);
   /** a build can be opened now: it is mastered, or there is condition to spend */
   const canOpen = (a: Assignment) =>
     a.result === null && (mastered.includes(a.sceneId) || condition >= INSPECT_COST);
@@ -623,6 +629,20 @@ function OfficeRun({
    * rather than something that has already happened when they arrive.
    */
   const [place, setPlace] = useState<Place>(boot?.place ?? START_PLACE);
+  useLayoutEffect(() => {
+    const quest = questRef.current;
+    const frame = quest?.offsetParent;
+    const bar = frame?.querySelector(".wb-header");
+    if (!quest || !frame || !bar) return;
+    const settle = () => {
+      const below = bar.getBoundingClientRect().bottom - frame.getBoundingClientRect().top;
+      quest.style.top = `${Math.round(below + 6)}px`;
+    };
+    settle();
+    const watch = new ResizeObserver(settle);
+    watch.observe(bar);
+    return () => watch.disconnect();
+  }, [running, shipped, place]);
 
   /*
    * Music belongs to the parts of the day that are not work.
@@ -2201,7 +2221,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
         */}
       {/* what the day is waiting on, over the top of the room it is in */}
       {!running && !shipped && (
-        <div className="quest">
+        <div className="quest" ref={questRef}>
           {here.params ? tp(here.key, here.params) : t(here.key)}
         </div>
       )}
