@@ -21,7 +21,7 @@ const store = new Map<string, string>();
 const { syncBook, syncYears, resetSave, settleAccount, onAccountWiped } =
   await import("../src/net/save");
 const { seenWipes } = await import("../src/net/wipes");
-const { RUN_VERSION } = await import("../src/office/run");
+const { RUN_VERSION, RUN_PUSH_MS, saveRun } = await import("../src/office/run");
 
 let bad = 0;
 const is = (cond: boolean, msg: string) => {
@@ -162,12 +162,49 @@ console.log("\nan account that cannot be asked wipes nothing");
   is(got === "ok" && store.has("fb_codex_v1") && wipedCalls === 0, "the device keeps what it has");
 }
 
+console.log("\nonce a wipe from elsewhere is found, the run in memory cannot be written back");
+{
+  /*
+   * The page is reopening, but the office on it is still mounted and its
+   * clock still ticks: every tick asks to write the run down, and the count
+   * it would be sent under is already the new one, so the server would take
+   * it. Last in this script, because the stop lasts until the page goes.
+   */
+  deviceB();
+  const acc = account(old);
+  await settleAccount(acc.remote);
+  await acc.server.resetSave();
+  const calls: string[] = [];
+  const spy = {
+    remoteFunction: async (name: string, args: unknown[] = []) => {
+      calls.push(name);
+      return acc.remote.remoteFunction(name, args);
+    },
+  };
+  const got = await settleAccount(spy);
+  is(got === "wiped", "the wipe is found");
+  saveRun({ day: 9 } as never, spy);
+  is(!store.has("fb_run"), "the next tick does not put the run back on the device");
+  await new Promise((r) => setTimeout(r, RUN_PUSH_MS + 300));
+  is(!calls.includes("saveRun"), `nor on the account (${calls.join(",")})`);
+  is(acc.get().run === null, "the account's run stays gone");
+}
+
 console.log("\nthe callers use it");
 {
   const office = readFileSync("src/office/Office.tsx", "utf8");
   const boot = office.slice(office.indexOf("export function Office("), office.indexOf("function OfficeRun("));
   is(boot.includes("settleAccount(server)") && boot.indexOf("settleAccount(server)") < boot.indexOf("fetchRun(server)"),
      "the boot settles the account before fetching the run");
+  const wiped = boot.slice(boot.indexOf('if (account === "wiped")'), boot.indexOf('if (account === "owed")'));
+  is(/clearTimeout\(timer\)/.test(wiped) && /settled\.current = true/.test(wiped),
+     "a wipe found at boot stops the fallback from mounting the old run");
+  const books = boot.indexOf("syncBook(server)");
+  const years = boot.indexOf("syncYears(server)");
+  const fetch = boot.indexOf("fetchRun(server)");
+  is(books > 0 && years > 0 && books < fetch && years < fetch,
+     "and the account's book and years are in before a run starts from them");
+  is(/haltRunWrites\(\)/.test(readFileSync("src/net/save.ts", "utf8")),"a wipe from elsewhere stops the run being written");
   const runTs = readFileSync("src/office/run.ts", "utf8");
   is(/remoteFunction\("saveRun", \[lastSnap, seenWipes\(\)\]\)/.test(runTs), "the run push says which wipe it has seen");
   const save = readFileSync("src/net/save.ts", "utf8");

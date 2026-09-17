@@ -2,7 +2,7 @@ import type { GameServer } from "@agent8/gameserver";
 import { loadCodex, mergeCodex, type Seen } from "../office/codex";
 import { clearYears, loadYears, mergeBest, mergeYears } from "../office/years";
 import { clearCodex } from "../office/codex";
-import { clearRun } from "../office/run";
+import { clearRun, haltRunWrites } from "../office/run";
 import { seenWipes, setSeenWipes } from "./wipes";
 
 /**
@@ -242,6 +242,7 @@ export async function settleAccount(
     return "ok";
   }
   // wiped elsewhere: nothing here is the player's any more
+  haltRunWrites();
   epoch++;
   if (pending !== null) {
     clearTimeout(pending);

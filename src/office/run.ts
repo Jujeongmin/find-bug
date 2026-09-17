@@ -624,10 +624,27 @@ const unqueue = () => {
  * whole run again, so a dropped push loses nothing but the seconds until the
  * next one.
  */
+/**
+ * Stop writing the run down, for the rest of this page.
+ *
+ * For a wipe found from another device: the page is reopening, but the
+ * office on it is still mounted and its clock asks for a write four times a
+ * second. Those writes would put the thrown-away run back on the device, and
+ * on the account under the wipe count the device has just taken on, which
+ * the server has no reason to refuse. The reload clears this.
+ */
+let halted = false;
+
+export function haltRunWrites(): void {
+  halted = true;
+  unqueue();
+}
+
 export function saveRun(
   fields: RunFields,
   server: Remote | null | undefined
 ): void {
+  if (halted) return;
   latest = fields;
   latestServer = server ?? null;
   scheduleLocal();

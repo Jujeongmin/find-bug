@@ -468,12 +468,26 @@ export function Office({ onExit }: { onExit: () => void }) {
          * been emptied by then and the page is being reopened.
          */
         const account = await settleAccount(server);
-        if (account === "wiped") return;
+        if (account === "wiped") {
+          // nothing to mount: the page is reopening, and the fallback must
+          // not start the run that was just thrown away
+          clearTimeout(timer);
+          settled.current = true;
+          return;
+        }
         if (account === "owed") {
           clearTimeout(timer);
           done(local);
           return;
         }
+        /*
+         * The account's book and years before a run is started from them. A
+         * new run reads the year it is in and the builds already mastered
+         * the moment it mounts; on a device that has not synced yet both
+         * were this device's alone, so a third-year player began year one
+         * and three builds mastered elsewhere were announced as new.
+         */
+        await Promise.all([syncBook(server), syncYears(server)]);
         const remote = await fetchRun(server);
         clearTimeout(timer);
         done(newer(local, remote));
