@@ -624,6 +624,7 @@
   "mastery.tally": "Mastered builds {k}/{m}",
   "mastery.morning": "Mastered builds: {k}/{m}.",
   "mastery.fresh": "Newly mastered: {names}",
+  "mastery.gained": "★ {name} mastered! Inspecting this build costs no condition from now on, and its trophy is up on the shelf at home.",
   "mastery.all": "Every build mastered. There is no fault here you have not caught.",
   "stage.stage08.name": "The mine",
   "intro.stage08.line": "Mine build. Pull the levers, take the chests, mind the spiders. One thing is wrong.",

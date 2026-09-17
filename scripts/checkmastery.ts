@@ -6,7 +6,7 @@
  */
 import { readFileSync } from "node:fs";
 import { codexRows, type Book } from "../src/office/codex";
-import { buildProgress, masteredBuilds, preferFor } from "../src/office/mastery";
+import { buildProgress, completes, masteredBuilds, preferFor } from "../src/office/mastery";
 import { pickMutation, generateMutations } from "../src/engine/generate";
 import { poolFor } from "../src/engine/curriculum";
 import { pickBug } from "../src/core/judge";
@@ -113,6 +113,26 @@ console.log("\nthe office wires it through");
   is((engine.match(/pickMutation\([^)]*prefer\)/g) ?? []).length === 2, "EngineStage picks with it, first and on a re-roll");
   const cards = readFileSync("src/stages/stage04/Stage04.tsx", "utf8");
   is((cards.match(/pickBug\([^)]*prefer\)/g) ?? []).length === 3, "Stage04 picks with it everywhere it picks");
+}
+
+console.log("\nthe catch that finishes a build is the one that says so");
+{
+  const rows1 = all.filter((r) => r.sceneId === "stage01");
+  const last = rows1[rows1.length - 1].bugId;
+  const allButLast = codexRows(bookWith("stage01", "caught", last), 99);
+  is(completes(allButLast, "stage01", last), "catching the one fault left completes the build");
+  is(!completes(allButLast, "stage01", rows1[0].bugId), "catching one already caught does not");
+  const twoLeft = codexRows(
+    { ...bookWith("stage01", "caught", last), [`stage01/${rows1[0].bugId}`]: "missed" },
+    99
+  );
+  is(!completes(twoLeft, "stage01", last), "nor does one of two still open");
+  is(!completes(codexRows(bookWith("stage01", "caught"), 99), "stage01", last),
+     "nor anything in a build already mastered");
+  is(!completes(allButLast, "stage02", last), "and a fault is only asked about in its own build");
+  const office = readFileSync("src/office/Office.tsx", "utf8");
+  is(/completes\(bookRows, running\.sceneId, running\.bugId\)/.test(office), "the office asks it when a build closes");
+  is(office.includes('"mastery.gained"') && /sfx\.play\("success"\)/.test(office), "and says so, with a sound");
 }
 
 console.log("\nwhat the day suggests knows a mastered build still opens");

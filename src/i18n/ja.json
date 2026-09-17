@@ -624,6 +624,7 @@
   "mastery.tally": "熟練ビルド {k}/{m}",
   "mastery.morning": "熟練ビルド {k}/{m}。",
   "mastery.fresh": "新たに熟練：{names}",
+  "mastery.gained": "★ {name}を熟練！このビルドは検査しても体力を使わない。家の棚にトロフィーが並んだ。",
   "mastery.all": "全ビルド熟練。この会社に知らない不具合はない。",
   "stage.stage08.name": "鉱山の宝物庫",
   "intro.stage08.line": "鉱山ビルド。レバーを引き、宝箱を拾い、クモに気をつけろ。どこか一つおかしい。",

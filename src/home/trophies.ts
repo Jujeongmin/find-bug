@@ -54,7 +54,9 @@ export function trophySlots(): { sceneId: string; x: number }[] {
 export function withTrophies(
   scene: SceneSpec,
   mastered: readonly string[],
-  open: readonly string[]
+  open: readonly string[],
+  /** mastered this run, so they catch the eye the first time they are home */
+  fresh: readonly string[] = []
 ): SceneSpec {
   const planks: ObjectSpec[] = PLANKS.map((p) => ({
     id: p.id,
@@ -81,7 +83,14 @@ export function withTrophies(
         x: s.x,
         y: SHELF_Y,
         z: 1,
-        render: { ...art, className: lit ? "trophy" : "trophy trophy-locked" },
+        render: {
+          ...art,
+          className: !lit
+            ? "trophy trophy-locked"
+            : fresh.includes(s.sceneId)
+              ? "trophy trophy-new"
+              : "trophy",
+        },
         behaviors: [],
       };
     });

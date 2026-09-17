@@ -32,6 +32,22 @@ export function masteredBuilds(rows: readonly CodexRow[]): string[] {
 }
 
 /**
+ * Whether catching this one fault is what masters its build: every other
+ * fault in the build is already caught, and this one is not. Asked before the
+ * catch is written down, so the moment can be announced once and only once.
+ */
+export function completes(
+  rows: readonly CodexRow[],
+  sceneId: string,
+  bugId: string
+): boolean {
+  const mine = rows.filter((r) => r.sceneId === sceneId);
+  const target = mine.find((r) => r.bugId === bugId);
+  if (!target || target.state === "caught") return false;
+  return mine.every((r) => r === target || r.state === "caught");
+}
+
+/**
  * The faults of one build that the book does not have as caught. Dealt first,
  * so each run moves the book on instead of dealing the ones it already has;
  * a mastered build has none, and is dealt from everything again.

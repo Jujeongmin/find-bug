@@ -1119,6 +1119,15 @@
 /* the shelf at home: a plank either side of the window, a trophy per mastered build */
 .trophy-shelf { background: #7a4f2c; box-shadow: 0 2px 0 #4a2f19; border-radius: 1px; }
 .trophy-locked { filter: grayscale(1) brightness(0.35); opacity: 0.55; }
+/* put up this run: a gold glow that breathes, until the run is over */
+.trophy-new { animation: trophy-shine 1.6s ease-in-out infinite; }
+@keyframes trophy-shine {
+  0%, 100% { filter: drop-shadow(0 0 1px #f2c14e); }
+  50% { filter: drop-shadow(0 0 5px #ffe08a) brightness(1.25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .trophy-new { animation: none; filter: drop-shadow(0 0 3px #f2c14e); }
+}
 .codex-list {
   display: flex;
   flex-direction: column;

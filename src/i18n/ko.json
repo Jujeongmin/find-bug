@@ -624,6 +624,7 @@
   "mastery.tally": "숙련 빌드 {k}/{m}",
   "mastery.morning": "숙련 빌드 {k}/{m}.",
   "mastery.fresh": "새로 숙련: {names}",
+  "mastery.gained": "★ {name} 숙련! 이제 이 빌드는 검사해도 기운이 들지 않는다. 집 선반에 트로피가 올라갔다.",
   "mastery.all": "모든 빌드를 숙련했다. 이 회사에서 모르는 결함은 없다.",
   "stage.stage08.name": "광산 보물굴",
   "intro.stage08.line": "광산 빌드. 레버를 당기고, 상자를 줍고, 거미를 조심하라. 하나가 잘못됐다.",

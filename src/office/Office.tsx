@@ -20,7 +20,7 @@ import { DINNER_SPIRIT, HOTFIX_CONDITION, isDinner, isHotfix } from "./events";
 import { ENGINE_SCENES, SCENE_BY_ID } from "../stages/registry";
 import { assignDay, buildIdsFor, isFreeze, LATER_BUILDS } from "./schedule";
 import { addYear, loadYears, newRunId, recordBest, yearOf } from "./years";
-import { buildProgress, masteredBuilds, preferFor } from "./mastery";
+import { buildProgress, completes, masteredBuilds, preferFor } from "./mastery";
 import { rankKey, rankOf } from "./rank";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
@@ -598,6 +598,8 @@ function OfficeRun({
   const [masteredAtStart] = useState<string[]>(
     () => boot?.masteredAtStart ?? masteredBuilds(codexRows(undefined, yearAtStart))
   );
+  // the trophies this run put up, which shine on the shelf until it ends
+  const freshTrophies = mastered.filter((id) => !masteredAtStart.includes(id));
   const [shipped, setShipped] = useState(false);
   const [caught, setCaught] = useState(boot?.caught ?? 0);
   const [missed, setMissed] = useState(boot?.missed ?? 0);
@@ -872,7 +874,7 @@ function OfficeRun({
     // in from the block, or out of bed
     const inside = from === "lane";
     const at = withPlayerAt(homeScene, inside ? 272 : 132, inside ? 545 : 258);
-    if (!isWeekend(day)) return withSpeed(withTrophies(at, mastered, builds), pace);
+    if (!isWeekend(day)) return withSpeed(withTrophies(at, mastered, builds, freshTrophies), pace);
     // the same desk, doing the other thing it would obviously be doing
     return withSpeed(withTrophies({
       ...at,
@@ -891,7 +893,8 @@ function OfficeRun({
             }
           : o
       ),
-    }, mastered, builds), pace);
+    }, mastered, builds, freshTrophies), pace);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [from, day, pace, mastered, builds]);
   /**
    * The block, entered from your own doorstep or from the corner of the main
@@ -1007,6 +1010,11 @@ function OfficeRun({
      * hours for it was never seen, and a book that counted it would be
      * recording the calendar rather than the player.
      */
+    // asked before the catch is written down: is this the one that masters the build
+    const mastering =
+      result === "caught" &&
+      !!running.bugId &&
+      completes(bookRows, running.sceneId, running.bugId);
     if (running.bugId) {
       recordBug(running.sceneId, running.bugId, result);
       queueSync(connected ? server : null);
@@ -1066,6 +1074,22 @@ function OfficeRun({
      */
     if (day === 1 && caught + missed === 0) {
       setNote(t("office.firstBuildDone"));
+    }
+    /*
+     * The build that has just been finished off, said last so it is not
+     * covered by anything else this report set off; anything that was set
+     * goes above it in the same note.
+     */
+    if (mastering) {
+      const lines = [
+        tp("mastery.gained", { name: t(`stage.${running.sceneId}.name`) }),
+      ];
+      const next = rankOf(mastered.length + 1);
+      if (next > rank) {
+        lines.push(tp("rank.promoted", { from: t(rankKey(rank)), to: t(rankKey(next)) }));
+      }
+      sfx.play("success");
+      setNote((prev) => (prev ? `${prev}\n\n` : "") + lines.join("\n"));
     }
     setAssignments((as) =>
       as.map((a) =>

@@ -71,6 +71,18 @@ console.log("\nmastered builds stand out");
   is(trophies(added([], 3)).length === 9, "year three has all nine");
 }
 
+console.log("\nthis run's new trophies shine");
+{
+  const scene = withTrophies(homeScene, ["stage01", "stage02"], buildIdsFor(1), ["stage02"]);
+  const shine = scene.objects.filter((o) => o.render.className?.includes("trophy-new")).map((o) => o.id);
+  is(JSON.stringify(shine) === JSON.stringify(["trophy_stage02"]), `only the one mastered this run (${shine.join(",")})`);
+  const none = withTrophies(homeScene, ["stage01"], buildIdsFor(1));
+  is(!none.objects.some((o) => o.render.className?.includes("trophy-new")), "and none without being told");
+  const office = readFileSync("src/office/Office.tsx", "utf8");
+  is(/const freshTrophies = mastered\.filter\(\(id\) => !masteredAtStart\.includes\(id\)\)/.test(office),
+     "the office picks this run's out");
+}
+
 console.log("\nthe shelf says what is on it");
 {
   const t = (k: string) => `<${k}>`;

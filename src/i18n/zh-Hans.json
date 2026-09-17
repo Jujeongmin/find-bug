@@ -624,6 +624,7 @@
   "mastery.tally": "熟练版本 {k}/{m}",
   "mastery.morning": "熟练版本 {k}/{m}。",
   "mastery.fresh": "新熟练：{names}",
+  "mastery.gained": "★ {name} 已熟练！以后检查这个版本不再消耗体力。家里的架子上多了一座奖杯。",
   "mastery.all": "所有版本均已熟练。这里没有你没抓过的缺陷。",
   "stage.stage08.name": "矿洞宝库",
   "intro.stage08.line": "矿洞版本。拉动拉杆、捡起宝箱、小心蜘蛛。有一处不对。",
