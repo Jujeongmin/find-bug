@@ -70,11 +70,17 @@ export function applyMutation(scene: SceneSpec, mutation: Mutation): SceneSpec {
 /** Picks a random mutation, avoiding the one used last round. */
 export function pickMutation(
   mutations: Mutation[],
-  excludeId?: string
+  excludeId?: string,
+  prefer?: readonly string[]
 ): Mutation {
-  const pool =
+  const fresh =
     mutations.length > 1 && excludeId
       ? mutations.filter((m) => m.bug.id !== excludeId)
       : mutations;
+  // the ones asked for, if any of them are here; everything otherwise
+  const wanted = prefer?.length
+    ? fresh.filter((m) => prefer.includes(m.bug.id))
+    : [];
+  const pool = wanted.length ? wanted : fresh;
   return pool[Math.floor(Math.random() * pool.length)];
 }
