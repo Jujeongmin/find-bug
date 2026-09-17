@@ -1116,6 +1116,9 @@
   color: #14141f; background: #f2c14e; border-radius: 4px; padding: 0 5px;
 }
 .wb-mastery { color: #f2c14e; }
+/* the shelf at home: a plank either side of the window, a trophy per mastered build */
+.trophy-shelf { background: #7a4f2c; box-shadow: 0 2px 0 #4a2f19; border-radius: 1px; }
+.trophy-locked { filter: grayscale(1) brightness(0.35); opacity: 0.55; }
 .codex-list {
   display: flex;
   flex-direction: column;

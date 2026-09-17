@@ -10,6 +10,7 @@ import { EngineStage } from "../engine/EngineStage";
 import type { SceneSpec } from "../engine/types";
 import { officeScene, MACHINES } from "./scene";
 import { homeScene } from "../home/scene";
+import { SHELF_ID, trophyLine, withTrophies } from "../home/trophies";
 import { streetScene } from "../street/scene";
 import { laneScene } from "../street/lane";
 import { PASSERS, passerLine } from "../street/passers";
@@ -869,9 +870,9 @@ function OfficeRun({
     // in from the block, or out of bed
     const inside = from === "lane";
     const at = withPlayerAt(homeScene, inside ? 272 : 132, inside ? 545 : 258);
-    if (!isWeekend(day)) return withSpeed(at, pace);
+    if (!isWeekend(day)) return withSpeed(withTrophies(at, mastered, builds), pace);
     // the same desk, doing the other thing it would obviously be doing
-    return withSpeed({
+    return withSpeed(withTrophies({
       ...at,
       objects: at.objects.map((o) =>
         o.id === "homeScreen"
@@ -888,8 +889,8 @@ function OfficeRun({
             }
           : o
       ),
-    }, pace);
-  }, [from, day, pace]);
+    }, mastered, builds), pace);
+  }, [from, day, pace, mastered, builds]);
   /**
    * The block, entered from your own doorstep or from the corner of the main
    * road, and the office street, entered from that same corner or out of the
@@ -1527,6 +1528,10 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
       setEarlyTomorrow(true);
       sfx.play("pick");
       return setNote(tp("home.hobbyDid", { n: String(HOBBY_PAY) }));
+    }
+    if (id === SHELF_ID) {
+      sfx.play("click");
+      return setNote(trophyLine(mastered, builds, t, tp));
     }
     if (id === "journal") {
       sfx.play("click");

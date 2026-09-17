@@ -27,6 +27,8 @@ export const PROPS = {
   crate: { w: 16, h: 23 },
   barrel: { w: 17, h: 22 },
   rug: { w: 72, h: 50 },
+  // a playing card, for the card room's trophy on the shelf at home
+  card: { w: 32, h: 32 },
 } as const satisfies Record<string, PropSpec>;
 
 export type PropId = keyof typeof PROPS;

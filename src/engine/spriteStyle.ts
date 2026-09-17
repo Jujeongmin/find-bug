@@ -17,6 +17,7 @@ import doorSrc from "../assets/props/door.png";
 import crateSrc from "../assets/props/crate.png";
 import barrelSrc from "../assets/props/barrel.png";
 import rugSrc from "../assets/props/rug.png";
+import cardSrc from "../assets/cards/card_hearts_A.png";
 import { PROPS, type PropId, type PropRef } from "./props";
 
 /**
@@ -64,6 +65,7 @@ const PROP_SRC: Record<PropId, string> = {
   crate: crateSrc,
   barrel: barrelSrc,
   rug: rugSrc,
+  card: cardSrc,
 };
 
 /**
