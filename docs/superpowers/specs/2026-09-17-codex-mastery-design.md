@@ -10,7 +10,7 @@
 원칙:
 - 보상은 모두 **확정**이다. 뽑기, 강화, 합성 같은 확률형 요소는 넣지 않는다.
 - 새 아트가 필요 없다.
-- 서버를 바꾸지 않는다. 수첩 동기화(`syncBook`)가 이미 있다.
+- 서버는 회차 세이브 필드 하나(`masteredAtStart`)만 늘린다. 수첩 동기화(`syncBook`)가 이미 있어서 숙련 상태는 따로 올리지 않는다.
 
 ## 2. 숙련 빌드
 
@@ -62,7 +62,7 @@
   - 빌드 컴포넌트에 `prefer`를 넘긴다.
   - HUD 칩, 수첩, 아침 문구, 출시 화면을 고친다.
 - `src/office/run.ts`: `masteredAtStart` 필드와 검증을 추가한다.
-- `server.js`: `RUN_FIELDS`에 `masteredAtStart`를 넣는다. 형식은 `codexAtStart`와 같은 방식으로, 빌드 id 목록(최대 16개, `stage\d{2}` 패턴)이다.
+- `server.js`: `RUN_FIELDS`에 `masteredAtStart: ["scenes"]`를 넣는다. 새 규칙 `scenes`는 빌드 id 목록이다(`stage` 뒤 숫자 두 자리, 중복 없음, 최대 16개).
 
 ## 6. 검사
 
