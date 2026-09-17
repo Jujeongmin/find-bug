@@ -139,6 +139,8 @@ export interface RunFields {
   yearAtStart: number;
   /** what the first morning handed over, or null until it is picked */
   gift: GiftId | null;
+  /** the builds already mastered when this run began, for "newly mastered" */
+  masteredAtStart: string[];
 }
 
 /**
@@ -225,6 +227,10 @@ const listOf = <T>(v: unknown, each: (x: unknown) => T | undefined) => {
   }
   return out;
 };
+
+const SCENE_ID = /^stage\d{2}$/;
+const sceneId = (x: unknown): string | undefined =>
+  typeof x === "string" && SCENE_ID.test(x) ? x : undefined;
 
 const assignment = (v: unknown): Assignment | undefined => {
   if (!v || typeof v !== "object") return undefined;
@@ -347,6 +353,7 @@ export function parseRun(raw: unknown): RunSnapshot | null {
   put(out, "runId", isRunId(r.runId) ? r.runId : undefined);
   put(out, "yearAtStart", int(r.yearAtStart, 1, 99));
   put(out, "gift", r.gift === null ? null : oneOf(r.gift, GIFTS));
+  put(out, "masteredAtStart", listOf(r.masteredAtStart, sceneId));
   return out;
 }
 

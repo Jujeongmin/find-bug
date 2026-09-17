@@ -116,6 +116,7 @@ const RUN_FIELDS = {
   runId: ["runid"],
   yearAtStart: ["n", 1, 99],
   gift: ["s", [null, "magnifier", "chair", "alarm", "shoes", "thermos"]],
+  masteredAtStart: ["scenes"],
 };
 
 const SEVERITIES = ["low", "normal", "critical"];
@@ -362,6 +363,10 @@ function runField(rule, v) {
       return runList(v, runAssignment);
     case "severities":
       return runList(v, (x) => (SEVERITIES.includes(x) ? x : undefined));
+    case "scenes":
+      return runList(v, (x) =>
+        typeof x === "string" && /^stage\d{2}$/.test(x) ? x : undefined
+      );
     case "runid":
       return typeof v === "string" && RUN_ID.test(v) ? v : undefined;
     case "items":

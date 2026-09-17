@@ -19,7 +19,7 @@ import { DINNER_SPIRIT, HOTFIX_CONDITION, isDinner, isHotfix } from "./events";
 import { ENGINE_SCENES, SCENE_BY_ID } from "../stages/registry";
 import { assignDay, buildIdsFor, isFreeze, LATER_BUILDS } from "./schedule";
 import { addYear, loadYears, newRunId, recordBest, yearOf } from "./years";
-import { masteredBuilds, preferFor } from "./mastery";
+import { buildProgress, masteredBuilds, preferFor } from "./mastery";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
@@ -583,6 +583,10 @@ function OfficeRun({
   const mastered = useMemo(() => masteredBuilds(bookRows), [bookRows]);
   /** the build on screen was mastered when it was opened, so it costs nothing */
   const [runningFree, setRunningFree] = useState(false);
+  // what was mastered when the run began, so the ship screen can say what is new
+  const [masteredAtStart] = useState<string[]>(
+    () => boot?.masteredAtStart ?? masteredBuilds(codexRows(undefined, yearAtStart))
+  );
   const [shipped, setShipped] = useState(false);
   const [caught, setCaught] = useState(boot?.caught ?? 0);
   const [missed, setMissed] = useState(boot?.missed ?? 0);
@@ -798,6 +802,7 @@ function OfficeRun({
     runId,
     yearAtStart,
     gift,
+    masteredAtStart,
   } satisfies RunFields);
 
   useEffect(() => {
@@ -926,6 +931,15 @@ function OfficeRun({
     const scene = fresh ? SCENE_BY_ID[fresh.id] : undefined;
     const lines = [tp("home.morningYear", { n: String(yearAtStart) })];
     if (scene) lines.push(tp("home.newBuild", { name: t(scene.nameKey) }));
+    // nothing new arrives from the fourth year; what is left is the book
+    if (yearAtStart >= 4) {
+      lines.push(
+        tp("mastery.morning", {
+          k: String(mastered.length),
+          m: String(buildIdsFor(yearAtStart).length),
+        })
+      );
+    }
     return lines.join("\n");
   };
   const morningFor = (d: number) =>
@@ -1751,6 +1765,26 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
         })()}
         {(() => {
           /*
+           * What this run added to the builds that cost nothing. Read from the
+           * book as it stands against the list taken when the run began.
+           */
+          const now = masteredBuilds(codexRows(undefined, yearAtStart));
+          const fresh = now.filter((id) => !masteredAtStart.includes(id));
+          const every = now.length === buildIdsFor(Number.MAX_SAFE_INTEGER).length;
+          if (!fresh.length && !every) return null;
+          return (
+            <p className="wb-tally wb-mastery">
+              {fresh.length > 0 &&
+                tp("mastery.fresh", {
+                  names: fresh.map((id) => t(`stage.${id}.name`)).join(", "),
+                })}
+              {fresh.length > 0 && every && <br />}
+              {every && t("mastery.all")}
+            </p>
+          );
+        })()}
+        {(() => {
+          /*
            * What the next run will be. Read from the device's set, which this
            * run was added to above — and which another device may have pushed
            * further on, in which case this says so.
@@ -2075,14 +2109,14 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
               {assignments.map((a) => (
                 <b
                   key={a.machine}
-                  className={`q-${a.severity} ${a.result ? "done" : ""} hud-ask`}
+                  className={`q-${a.severity} ${a.result ? "done" : ""} ${mastered.includes(a.sceneId) ? "mastered" : ""} hud-ask`}
                   title={`${t(`object.${a.machine}`)} · ${t(`office.sev.${a.severity}`)}`}
                   onClick={() =>
                     setNote(
                       tp(a.result ? "office.whatChipDone" : "office.whatChip", {
                         machine: t(`object.${a.machine}`),
                         sev: t(`office.sev.${a.severity}`),
-                      })
+                      }) + (mastered.includes(a.sceneId) ? `\n${t("mastery.chip")}` : "")
                     )
                   }
                 >
@@ -2203,6 +2237,8 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
             {(() => {
               const rows = codexRows(undefined, yearAtStart);
               const tally = codexTally(rows);
+              const done = masteredBuilds(rows);
+              const buildCount = buildProgress(rows).size;
               const byScene = new Map<string, typeof rows>();
               for (const r of rows) {
                 byScene.set(r.sceneId, [...(byScene.get(r.sceneId) ?? []), r]);
@@ -2216,6 +2252,9 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
                       missed: String(tally.missed),
                     })}
                   </p>
+                  <p className="codex-tally">
+                    {tp("mastery.tally", { k: String(done.length), m: String(buildCount) })}
+                  </p>
                   <div className="codex-list">
                     {[...byScene].map(([sceneId, list]) => (
                       <section key={sceneId}>
@@ -2225,6 +2264,9 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
                             {list.filter((r) => r.state === "caught").length}/
                             {list.length}
                           </b>
+                          {done.includes(sceneId) && (
+                            <em className="codex-mastered">{t("mastery.stamp")}</em>
+                          )}
                         </h3>
                         {/*
                           Only what has been met gets a line. A hundred and

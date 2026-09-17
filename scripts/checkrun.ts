@@ -90,6 +90,7 @@ const FULL: RunFields = {
   runId: "r0a1b2c3d4e5f",
   yearAtStart: 3,
   gift: "alarm",
+  masteredAtStart: ["stage03", "stage04"],
 };
 
 console.log("\na run survives being written down and read back");

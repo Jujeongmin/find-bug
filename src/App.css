@@ -618,6 +618,12 @@
   opacity: 0.85;
 }
 .office-queue b.done { opacity: 0.28; }
+/* a mastered build: a gold ring and a star, and the note says it is free */
+.office-queue b.mastered { box-shadow: 0 0 0 2px #f2c14e; position: relative; }
+.office-queue b.mastered::after {
+  content: "★"; position: absolute; top: -7px; right: -5px;
+  font-size: 9px; color: #f2c14e; text-shadow: 0 0 2px #000;
+}
 .q-pending {
   font-style: normal; font-size: 10px; font-weight: 700;
   color: #ffd98a; border: 1px solid #6b5426; border-radius: 4px; padding: 1px 5px;
@@ -1105,6 +1111,11 @@
  */
 .modal.codex { max-width: 330px; width: 92%; }
 .codex-tally { margin: 0; font-size: 12px; color: #9aa6bb; }
+.codex-mastered {
+  font-style: normal; font-size: 10px; font-weight: 700; margin-left: 6px;
+  color: #14141f; background: #f2c14e; border-radius: 4px; padding: 0 5px;
+}
+.wb-mastery { color: #f2c14e; }
 .codex-list {
   display: flex;
   flex-direction: column;
