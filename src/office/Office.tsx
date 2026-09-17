@@ -1,6 +1,6 @@
 import { devParam, devFlag } from "../dev";
 import { recordBug, codexRows, codexTally, loadCodex } from "./codex";
-import { syncBook, syncYears, queueSync, reportRun, settleOwedReset } from "../net/save";
+import { syncBook, syncYears, queueSync, reportRun, settleAccount } from "../net/save";
 import { loadEntitlements, useAdsRemoved } from "../net/shop";
 import { useGameServer } from "@agent8/gameserver";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -461,8 +461,13 @@ export function Office({ onExit }: { onExit: () => void }) {
          * account still holds the run it threw away. Carry the wipe out
          * before asking the account for anything; if it cannot be carried
          * out, go with this device, which the wipe has already emptied.
+         *
+         * A wipe made on another device is found here too. The device has
+         * been emptied by then and the page is being reopened.
          */
-        if (!(await settleOwedReset(server))) {
+        const account = await settleAccount(server);
+        if (account === "wiped") return;
+        if (account === "owed") {
           clearTimeout(timer);
           done(local);
           return;

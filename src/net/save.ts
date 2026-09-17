@@ -1,6 +1,9 @@
 import type { GameServer } from "@agent8/gameserver";
 import { loadCodex, mergeCodex, type Seen } from "../office/codex";
-import { loadYears, mergeBest, mergeYears } from "../office/years";
+import { clearYears, loadYears, mergeBest, mergeYears } from "../office/years";
+import { clearCodex } from "../office/codex";
+import { clearRun } from "../office/run";
+import { seenWipes, setSeenWipes } from "./wipes";
 
 /**
  * The account copy of the defect book.
@@ -68,15 +71,14 @@ let epoch = 0;
 
 /** pull the account's copy down and fold both ways */
 export async function syncBook(server: Remote): Promise<void> {
-  // a wipe still owed is carried out first, and nothing is pulled until it is
-  if (resetOwed()) {
-    await resetSave(server);
-    if (resetOwed()) return;
-  }
+  // a wipe still owed is carried out first, and nothing is pulled until it is;
+  // a wipe made elsewhere empties this device before it sends anything
+  if ((await settleAccount(server)) !== "ok") return;
   const sent = epoch;
   try {
     const merged = (await server.remoteFunction("syncBook", [
       loadCodex(),
+      seenWipes(),
     ])) as Book | null;
     if (merged && sent === epoch) mergeCodex(merged);
   } catch {
@@ -92,14 +94,12 @@ export async function syncBook(server: Remote): Promise<void> {
  * account's set would come straight back over an emptied device.
  */
 export async function syncYears(server: Remote): Promise<void> {
-  if (resetOwed()) {
-    await resetSave(server);
-    if (resetOwed()) return;
-  }
+  if ((await settleAccount(server)) !== "ok") return;
   const sent = epoch;
   try {
     const merged = (await server.remoteFunction("syncYears", [
       loadYears(),
+      seenWipes(),
     ])) as unknown;
     if (Array.isArray(merged) && sent === epoch) mergeYears(merged);
     // the best rides along: the account has kept it since before the device did
@@ -134,7 +134,7 @@ export async function reportRun(
   if (!server) return;
   try {
     const sent = epoch;
-    const res = (await server.remoteFunction("reportRun", [rating])) as {
+    const res = (await server.remoteFunction("reportRun", [rating, seenWipes()])) as {
       best?: unknown;
     } | null;
     if (sent === epoch) mergeBest(res?.best);
@@ -165,8 +165,13 @@ export async function resetSave(
   }
   if (!server) return;
   try {
-    await server.remoteFunction("resetSave", []);
+    const res = (await server.remoteFunction("resetSave", [])) as {
+      wipes?: unknown;
+    } | null;
     setResetOwed(false);
+    // this wipe is one the device has seen, or its next sync takes it for
+    // somebody else's
+    if (Number.isInteger(res?.wipes)) setSeenWipes(res!.wipes as number);
   } catch {
     /* the local book is already gone; this one goes on the next connection,
        which is now something that actually happens */
@@ -191,4 +196,61 @@ export async function settleOwedReset(server: Remote): Promise<boolean> {
   if (!resetOwed()) return true;
   await resetSave(server);
   return !resetOwed();
+}
+
+/**
+ * What to do once this device has been emptied by a wipe made elsewhere.
+ *
+ * Reopen the page, for the reason the wipe button does: the run in memory is
+ * the one that was thrown away, and it writes itself back down a second
+ * later if the screen is left standing. The checks swap this out.
+ */
+let wipedHere: () => void = () => {
+  if (typeof location !== "undefined") location.reload();
+};
+
+export function onAccountWiped(fn: () => void): void {
+  wipedHere = fn;
+}
+
+/**
+ * Make sure this device is not holding what the player threw away.
+ *
+ * "owed": this device's own wipe has not reached the account, so nothing
+ * may be pulled. "wiped": the account was wiped on another device since
+ * this one last looked; everything here has been dropped and the page is
+ * being reopened. "ok": carry on.
+ *
+ * An account that cannot be asked is taken as unchanged. Its writes will not
+ * get through either, and the server refuses a stale one when they do.
+ */
+export async function settleAccount(
+  server: Remote
+): Promise<"ok" | "owed" | "wiped"> {
+  if (!(await settleOwedReset(server))) return "owed";
+  let count: unknown;
+  try {
+    count = await server.remoteFunction("getWipes", []);
+  } catch {
+    return "ok";
+  }
+  if (!Number.isInteger(count) || (count as number) < 0) return "ok";
+  const n = count as number;
+  const seen = seenWipes();
+  if (seen === undefined || n <= seen) {
+    if (seen !== n) setSeenWipes(n);
+    return "ok";
+  }
+  // wiped elsewhere: nothing here is the player's any more
+  epoch++;
+  if (pending !== null) {
+    clearTimeout(pending);
+    pending = null;
+  }
+  clearCodex();
+  clearYears();
+  clearRun(null);
+  setSeenWipes(n);
+  wipedHere();
+  return "wiped";
 }

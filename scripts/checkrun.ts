@@ -421,7 +421,8 @@ console.log("\nthe boot does not take the account's run while a wipe is owed");
 {
   const src = readFileSync("src/office/Office.tsx", "utf8");
   const boot = src.slice(src.indexOf("export function Office("), src.indexOf("function OfficeRun("));
-  const settleAt = boot.indexOf("settleOwedReset(server)");
+  // settleAccount carries out an owed wipe first (see settleOwedReset above)
+  const settleAt = boot.indexOf("settleAccount(server)");
   const fetchAt = boot.indexOf("fetchRun(server)");
   is(settleAt >= 0 && fetchAt > settleAt,
      "Office settles an owed wipe before it fetches the account's run");

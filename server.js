@@ -137,8 +137,9 @@ class Server {
    * matter which side is newer — there is no last-write-wins question to get
    * wrong, because the states are ordered.
    */
-  async syncBook(incoming) {
+  async syncBook(incoming, seen) {
     const state = (await $global.getMyState()) || {};
+    if (staleWipe(seen, state)) return null;
     const book = sanitise(state.book);
     const add = sanitise(incoming);
     let changed = false;
@@ -156,10 +157,11 @@ class Server {
   }
 
   /** the end of a run: the rating it shipped with, best kept */
-  async reportRun(rating) {
+  async reportRun(rating, seen) {
     const r = Number(rating);
     if (!Number.isFinite(r) || r < 0 || r > 5) return null;
     const state = (await $global.getMyState()) || {};
+    if (staleWipe(seen, state)) return null;
     const best = Math.max(Number(state.best) || 0, r);
     const runs = (Number(state.runs) || 0) + 1;
     await $global.updateMyState({ best, runs, updatedAt: Date.now() });
@@ -186,8 +188,9 @@ class Server {
    * and is also arriving here. After that the number is never read again, so a
    * report that lands between two syncs cannot be counted twice.
    */
-  async syncYears(incoming) {
+  async syncYears(incoming, seen) {
     const state = (await $global.getMyState()) || {};
+    if (staleWipe(seen, state)) return null;
     const add = sanitiseYears(incoming);
     const had = Array.isArray(state.finished);
     let finished;
@@ -221,15 +224,25 @@ class Server {
    * theirs to lose by pressing this.
    */
   async resetSave() {
+    const state = (await $global.getMyState()) || {};
+    // counted, so a device still holding what this threw away can tell
+    const wipes = wipeCount(state) + 1;
     await $global.updateMyState({
       book: {},
       best: 0,
       runs: 0,
       run: null,
       finished: [],
+      wipes,
       updatedAt: Date.now(),
     });
-    return true;
+    return { wipes };
+  }
+
+  /** how many times this account has been wiped */
+  async getWipes() {
+    const state = (await $global.getMyState()) || {};
+    return wipeCount(state);
   }
 
   /**
@@ -240,7 +253,9 @@ class Server {
    * last-one-wins record. Sharing a call would mean a failed book sync could
    * cost a day of work, and a rejected run could cost the book.
    */
-  async saveRun(snapshot) {
+  async saveRun(snapshot, seen) {
+    const state = (await $global.getMyState()) || {};
+    if (staleWipe(seen, state)) return { ok: false, stale: true };
     const run = sanitiseRun(snapshot);
     if (!run) return { ok: false };
     await $global.updateMyState({ run, updatedAt: Date.now() });
@@ -431,6 +446,22 @@ function sanitiseRun(raw) {
     if (value !== undefined) out[key] = value;
   }
   return out;
+}
+
+function wipeCount(state) {
+  return Number.isInteger(state.wipes) && state.wipes > 0 ? state.wipes : 0;
+}
+
+/**
+ * A write made before a wipe the sender has not heard about.
+ *
+ * The sender says how many wipes it has seen. Fewer than the account has
+ * means what it carries is what the player threw away on another device.
+ * A sender that says nothing is a build from before this was counted, and
+ * is heard as it always was.
+ */
+function staleWipe(seen, state) {
+  return Number.isInteger(seen) && seen < wipeCount(state);
 }
 
 /** a list of run ids as sent by a client: well formed, distinct, capped */

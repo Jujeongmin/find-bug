@@ -3,6 +3,7 @@ import type { GameServer } from "@agent8/gameserver";
 import type { Severity } from "./rating";
 import type { MachineId } from "./scene";
 import { isRunId } from "./years";
+import { seenWipes } from "../net/wipes";
 
 /**
  * A twelve-day run, written down.
@@ -575,7 +576,7 @@ const push = () => {
   const server = latestServer;
   void (async () => {
     try {
-      const res = (await server.remoteFunction("saveRun", [lastSnap])) as {
+      const res = (await server.remoteFunction("saveRun", [lastSnap, seenWipes()])) as {
         ok?: boolean;
       } | null;
       setStatus({ account: res?.ok === true ? "ok" : "refused" });
