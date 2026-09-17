@@ -195,6 +195,12 @@ for (const scene of ENGINE_SCENES) {
   const pair = stage08Scene.objects.filter((o) => o.peerGroup === "barrel");
   const runs = pair.map((o) => JSON.stringify(o.behaviors));
   ok("stage08: the two barrels share one run and one speed", runs.length === 2 && runs[0] === runs[1]);
+  // and how a barrel rides its rail is not something a player is asked to judge
+  const moved = generateMutations(stage08Scene)
+    .filter((m) => /^barrel\d$/.test(m.target.objectId) && m.bug.category === "weird-movement")
+    .map((m) => m.bug.id);
+  ok(`stage08: no fault changes how an ore barrel moves${moved.length ? " — " + moved.join(", ") : ""}`,
+     moved.length === 0);
 }
 
 /* stage 9: the kitchen — a knob lights its own burner, and its thermometer climbs */
@@ -211,10 +217,12 @@ for (const scene of ENGINE_SCENES) {
   tick(r, 2);
   ok("stage09: the heat falls again when the burner is off", r.state.counters.heatL < h);
 
-  const inverted = applyMutation(stage09Scene, mut(stage09Scene, "invertMeter:gaugeL"));
-  const meter = inverted.objects.find((o) => o.id === "gaugeL")!.behaviors.find((b) => b.t === "meter");
-  ok("stage09: invertMeter turns the left thermometer backwards",
-     !!meter && meter.t === "meter" && meter.invert === true);
+  // the thermometers are read, not judged: no fault is planted on them
+  const onGauges = generateMutations(stage09Scene)
+    .filter((m) => /^gauge[LR]$/.test(m.target.objectId))
+    .map((m) => m.bug.id);
+  ok(`stage09: no fault is planted on a thermometer${onGauges.length ? " — " + onGauges.join(", ") : ""}`,
+     onGauges.length === 0);
 
   const dead = new SceneRuntime(applyMutation(stage09Scene, mut(stage09Scene, "noAction:knobR")));
   dead.click("knobR");

@@ -1790,22 +1790,6 @@
       ]
     },
     {
-      "fullId": "stage08:bounceOnEnd:barrel1:bounce",
-      "scene": "stage08",
-      "sceneName": "광산 보물굴",
-      "mutator": "bounceOnEnd",
-      "category": "weird-movement",
-      "categoryLabel": "이상한 움직임",
-      "answers": "위쪽 광석 통",
-      "desc": "위쪽 광석 통: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
-      "score": 2.57,
-      "band": 3,
-      "stages": [
-        18,
-        26
-      ]
-    },
-    {
       "fullId": "stage08:counterSkew:chest1:gold",
       "scene": "stage08",
       "sceneName": "광산 보물굴",
@@ -1831,22 +1815,6 @@
       "answers": "골드 수 / 오른쪽 상자",
       "desc": "골드 수: 표시된 값과 실제로 오르내린 양이 달랐다. (오른쪽 상자)",
       "score": 2.57,
-      "band": 3,
-      "stages": [
-        18,
-        26
-      ]
-    },
-    {
-      "fullId": "stage08:bounceOnEnd:barrel2:bounce",
-      "scene": "stage08",
-      "sceneName": "광산 보물굴",
-      "mutator": "bounceOnEnd",
-      "category": "weird-movement",
-      "categoryLabel": "이상한 움직임",
-      "answers": "아래쪽 광석 통",
-      "desc": "아래쪽 광석 통: 끝에 닿을 때마다 뒤로 튕겼다가 다시 갔다.",
-      "score": 2.61,
       "band": 3,
       "stages": [
         18,
@@ -2077,38 +2045,6 @@
       "answers": "주문 수 / 가운데 요리",
       "desc": "주문 수: 표시된 값과 실제로 오르내린 양이 달랐다. (가운데 요리)",
       "score": 2.39,
-      "band": 3,
-      "stages": [
-        19,
-        27
-      ]
-    },
-    {
-      "fullId": "stage09:invertMeter:gaugeR",
-      "scene": "stage09",
-      "sceneName": "주방",
-      "mutator": "invertMeter",
-      "category": "logic",
-      "categoryLabel": "논리 오류",
-      "answers": "오른쪽 온도계",
-      "desc": "오른쪽 온도계: 실제 값과 반대로 움직였다.",
-      "score": 2.4,
-      "band": 3,
-      "stages": [
-        19,
-        27
-      ]
-    },
-    {
-      "fullId": "stage09:invertMeter:gaugeL",
-      "scene": "stage09",
-      "sceneName": "주방",
-      "mutator": "invertMeter",
-      "category": "logic",
-      "categoryLabel": "논리 오류",
-      "answers": "왼쪽 온도계",
-      "desc": "왼쪽 온도계: 실제 값과 반대로 움직였다.",
-      "score": 2.48,
       "band": 3,
       "stages": [
         19,

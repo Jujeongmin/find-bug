@@ -130,11 +130,25 @@ export const EXCLUDED_BUGS: string[] = [
    * The same reasoning that took it off the shooting range's targets: a
    * thing riding a rail has no end behaviour the player already expects of
    * it. A barrel that reaches the end of the track and comes back on from
-   * the other side reads as a loop line, not a broken one. The barrels keep
-   * the recoil fault, which is wrong whichever way a rail runs.
+   * the other side reads as a loop line, not a broken one.
    */
   "stage08:teleportOnEnd:barrel1:teleport",
   "stage08:teleportOnEnd:barrel2:teleport",
+  /*
+   * The recoil went the same way, and with it every way a barrel moves. A
+   * barrel bouncing back off the end of its rail reads as a buffer stop doing
+   * its job, and how a barrel rides a rail is not something a player should
+   * be marked wrong about.
+   */
+  "stage08:bounceOnEnd:barrel1:bounce",
+  "stage08:bounceOnEnd:barrel2:bounce",
+  /*
+   * The kitchen's thermometers, turned backwards. A needle is read against
+   * its own colours, and a reversed one was not a fair question. The
+   * thermometers stay as dressing that tells the two burners apart.
+   */
+  "stage09:invertMeter:gaugeL",
+  "stage09:invertMeter:gaugeR",
 ];
 
 const excluded = new Set(EXCLUDED_BUGS);
