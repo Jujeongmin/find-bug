@@ -222,6 +222,27 @@ for (const [name, dict] of dicts) {
   }
 }
 
+/*
+ * A fault description names a counter by its key, like the object it names.
+ * The build screen translated both; the book and the debug list translated
+ * only the object, and the book printed "object.score" to the player.
+ */
+console.log("\nevery screen that describes a fault translates its counter too");
+{
+  const { readFileSync } = await import("node:fs");
+  for (const file of ["src/office/Office.tsx", "src/debug/DebugLab.tsx", "src/engine/EngineStage.tsx"]) {
+    const src = readFileSync(file, "utf8");
+    const objs = (src.match(/obj: t\([^)]*descParams\.obj/g) ?? []).length;
+    const counters = (src.match(/counter: [^,}]*descParams\.counter/g) ?? []).length;
+    if (objs > 0 && objs === counters) {
+      console.log(`PASS  ${file}: ${objs} description(s), counter translated in each`);
+    } else {
+      console.log(`FAIL  ${file}: ${objs} translate obj, ${counters} translate counter`);
+      bad++;
+    }
+  }
+}
+
 if (bad) {
   console.log(`\n${bad} problem(s)`);
   process.exit(1);

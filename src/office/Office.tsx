@@ -2291,6 +2291,9 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
                                 {tp(r.descKey, {
                                   ...r.descParams,
                                   obj: t(r.descParams.obj ?? ""),
+                                  counter: r.descParams.counter
+                                    ? t(r.descParams.counter)
+                                    : "",
                                 })}
                               </span>
                             ))}

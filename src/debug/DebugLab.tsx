@@ -62,6 +62,7 @@ export function DebugLab({ onExit }: { onExit: () => void }) {
       desc: tp(m.bug.descKey, {
         ...m.bug.descParams,
         obj: t(m.bug.descParams.obj ?? ""),
+        counter: m.bug.descParams.counter ? t(m.bug.descParams.counter) : "",
       }),
     }));
   }, [sceneId, scene, t, tp]);
