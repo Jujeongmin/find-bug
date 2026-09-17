@@ -20,9 +20,12 @@ import {
   addYear,
   clearYears,
   isRunId,
+  loadBest,
   loadYears,
+  mergeBest,
   mergeYears,
   newRunId,
+  recordBest,
   yearOf,
 } from "../src/office/years";
 
@@ -150,6 +153,7 @@ const account = () => {
   ) => {
     syncYears: (ids: unknown) => Promise<string[]>;
     reportRun: (rating: number) => Promise<unknown>;
+    getBest: () => Promise<unknown>;
     resetSave: () => Promise<unknown>;
   };
   return {
@@ -190,6 +194,27 @@ console.log("\nthe registry puts each new build in its own year");
      "the kitchen arrives in year three, and not before");
 }
 
+console.log("\nthe device keeps the best rating it has seen");
+{
+  clearYears();
+  is(loadBest() === null, "nothing shipped yet, no best");
+  is(recordBest(2.4) === null, "the first run has nothing to beat");
+  is(loadBest() === 2.4, "and becomes the best");
+  is(recordBest(1.1) === 2.4 && loadBest() === 2.4, "a worse run hands back the best and leaves it");
+  is(recordBest(3.7) === 2.4 && loadBest() === 3.7, "a better run hands back the old best and replaces it");
+  mergeBest(3.2);
+  is(loadBest() === 3.7, "an account best below it changes nothing");
+  mergeBest(4.5);
+  is(loadBest() === 4.5, "an account best above it is taken");
+  for (const junk of [null, "5", -1, 6, NaN, Infinity]) mergeBest(junk);
+  is(loadBest() === 4.5, "and anything that is not a rating is ignored");
+  store.set("fb_best_v1", "banana");
+  is(loadBest() === null, "a corrupt store reads as no best");
+  recordBest(1);
+  clearYears();
+  is(loadBest() === null, "the wipe takes the best with the years");
+}
+
 await (async () => {
   console.log("\nthe account keeps the same set, and counts the runs from before ids");
 
@@ -227,6 +252,17 @@ await (async () => {
     const many = Array.from({ length: 120 }, (_, i) => `r${String(i).padStart(12, "0")}`);
     const got = await server.syncYears(many);
     is(got.length === 99, "the account stops at 99 runs too");
+  }
+
+  {
+    const { server, set } = account();
+    set({});
+    is((await server.getBest()) === 0, "an account that never shipped has a best of 0");
+    await server.reportRun(3.3);
+    await server.reportRun(2);
+    is((await server.getBest()) === 3.3, "the account hands back the best it kept");
+    await server.resetSave();
+    is((await server.getBest()) === 0, "and a wipe clears it");
   }
 
   {

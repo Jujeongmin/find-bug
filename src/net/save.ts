@@ -1,6 +1,6 @@
 import type { GameServer } from "@agent8/gameserver";
 import { loadCodex, mergeCodex, type Seen } from "../office/codex";
-import { loadYears, mergeYears } from "../office/years";
+import { loadYears, mergeBest, mergeYears } from "../office/years";
 
 /**
  * The account copy of the defect book.
@@ -102,6 +102,9 @@ export async function syncYears(server: Remote): Promise<void> {
       loadYears(),
     ])) as unknown;
     if (Array.isArray(merged) && sent === epoch) mergeYears(merged);
+    // the best rides along: the account has kept it since before the device did
+    const best = (await server.remoteFunction("getBest", [])) as unknown;
+    if (sent === epoch) mergeBest(best);
   } catch {
     /* no server, or it said no. The local set is still the set. */
   }
@@ -130,7 +133,11 @@ export async function reportRun(
 ): Promise<void> {
   if (!server) return;
   try {
-    await server.remoteFunction("reportRun", [rating]);
+    const sent = epoch;
+    const res = (await server.remoteFunction("reportRun", [rating])) as {
+      best?: unknown;
+    } | null;
+    if (sent === epoch) mergeBest(res?.best);
   } catch {
     /* the rating is on screen either way */
   }

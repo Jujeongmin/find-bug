@@ -18,7 +18,7 @@ import { devLine, devShipLine } from "./devlines";
 import { DINNER_SPIRIT, HOTFIX_CONDITION, isDinner, isHotfix } from "./events";
 import { ENGINE_SCENES, SCENE_BY_ID } from "../stages/registry";
 import { assignDay, buildIdsFor, isFreeze, LATER_BUILDS } from "./schedule";
-import { addYear, loadYears, newRunId, yearOf } from "./years";
+import { addYear, loadYears, newRunId, recordBest, yearOf } from "./years";
 import { Stage04 } from "../stages/stage04/Stage04";
 import { sfx } from "../audio/sfx";
 import { music } from "../audio/music";
@@ -563,6 +563,8 @@ function OfficeRun({
 
   /** so a re-render of the terminal screen does not count the run twice */
   const runReported = useRef(false);
+  // the best rating from before this run shipped, read once when it does
+  const bestBefore = useRef<number | null>(null);
   const [codexAtStart] = useState(
     () => boot?.codexAtStart ?? codexTally(codexRows(undefined, yearAtStart)).caught
   );
@@ -1653,6 +1655,7 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
        * has to see this run already counted there to subtract it.
        */
       addYear(runId);
+      bestBefore.current = recordBest(rating);
       void (async () => {
         const srv = connected ? server : null;
         await reportRun(srv, rating);
@@ -1672,6 +1675,25 @@ ${tp("street.pochaAte", { n: String(POCHA_PAY) })}`
           </span>
           <b>{rating.toFixed(1)}</b>
         </div>
+        {(() => {
+          /*
+           * Against the runs before it. Compared at the tenth the screen
+           * shows, so a record is never announced over two equal numbers.
+           * A first run has nothing to beat and says nothing.
+           */
+          const prev = bestBefore.current;
+          if (prev === null) return null;
+          const tenth = (v: number) => Math.round(v * 10);
+          return tenth(rating) > tenth(prev) ? (
+            <p className="wb-best wb-best-new">
+              {tp("ship.bestNew", { prev: prev.toFixed(1) })}
+            </p>
+          ) : (
+            <p className="wb-best">
+              {tp("ship.best", { best: Math.max(prev, rating).toFixed(1) })}
+            </p>
+          );
+        })()}
         <p className="wb-tally">
           {tp("office.tally", { caught: String(caught), total: String(total) })}
           <br />

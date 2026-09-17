@@ -89,9 +89,56 @@ export function addYear(id: string): string[] {
 export function clearYears(): void {
   try {
     localStorage.removeItem(KEY);
+    localStorage.removeItem(BEST_KEY);
   } catch {
     /* nothing was stored, so nothing needs removing */
   }
+}
+
+/**
+ * The best rating a run has shipped with, on this device.
+ *
+ * The account has kept it since the first report and nothing ever showed it.
+ * The device keeps its own copy so the ship screen can say whether this run
+ * beat it without waiting on the network, and folds the account's in, the
+ * larger winning, whenever it hears from it.
+ */
+const BEST_KEY = "fb_best_v1";
+
+const isRating = (v: unknown): v is number =>
+  typeof v === "number" && Number.isFinite(v) && v >= 0 && v <= 5;
+
+export function loadBest(): number | null {
+  try {
+    const raw = localStorage.getItem(BEST_KEY);
+    if (raw === null) return null;
+    const v = Number(raw);
+    return isRating(v) ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+function storeBest(v: number): void {
+  try {
+    localStorage.setItem(BEST_KEY, String(v));
+  } catch {
+    /* the screen still shows this run's stars */
+  }
+}
+
+/** a run has shipped with this rating; hands back the best from before it */
+export function recordBest(rating: number): number | null {
+  const before = loadBest();
+  if (isRating(rating) && (before === null || rating > before)) storeBest(rating);
+  return before;
+}
+
+/** the account's best, folded in; anything that is not a rating is ignored */
+export function mergeBest(v: unknown): void {
+  if (!isRating(v)) return;
+  const before = loadBest();
+  if (before === null || v > before) storeBest(v);
 }
 
 /** the year a run started now would be */

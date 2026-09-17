@@ -602,6 +602,8 @@
   "ship.nextYear": "下一年：第{n}年",
   "ship.nextYearBuild": "下一年：第{n}年 — 新版本「{name}」將加入",
   "ship.giftAhead": "第一天上班可以帶一件裝備",
+  "ship.best": "最佳紀錄 ★{best}",
+  "ship.bestNew": "刷新最佳紀錄！（之前 ★{prev}）",
   "stage.stage08.name": "礦洞寶庫",
   "intro.stage08.line": "礦洞版本。拉動拉桿、撿起寶箱、小心蜘蛛。有一處不對。",
   "goal.stage08": "拉下拉桿，上方的鐵柵就會升起。寶箱給金幣，蜘蛛會傷人",

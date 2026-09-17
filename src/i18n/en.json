@@ -602,6 +602,8 @@
   "ship.nextYear": "Next: year {n}",
   "ship.nextYearBuild": "Next: year {n} — a new build arrives: {name}",
   "ship.giftAhead": "You take one piece of equipment in on the first day",
+  "ship.best": "Best: ★{best}",
+  "ship.bestNew": "New best! (was ★{prev})",
   "stage.stage08.name": "The mine",
   "intro.stage08.line": "Mine build. Pull the levers, take the chests, mind the spiders. One thing is wrong.",
   "goal.stage08": "Pull a lever: the gate above it lifts. Chests give gold. Spiders hurt",

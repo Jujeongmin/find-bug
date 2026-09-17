@@ -447,6 +447,9 @@
 .wb-rating { display: flex; align-items: baseline; gap: 10px; }
 .wb-stars { color: #f2c14e; font-size: 26px; letter-spacing: 2px; }
 .wb-rating b { font-size: 22px; }
+/* the best is the rating's footnote, gold only when this run set it */
+.wb-best { color: #9aa6bb; font-size: 13px; margin: -8px 0 0; }
+.wb-best-new { color: #f2c14e; font-weight: 700; }
 .wb-tally { color: #9aa6bb; font-size: 13px; margin: 0; }
 .wb-reviews { width: 100%; overflow-y: auto; min-height: 0; flex: 1; text-align: left; }
 .wb-review {

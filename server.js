@@ -165,6 +165,13 @@ class Server {
     return { best, runs };
   }
 
+  /** the best rating the account has kept, 0 when it has none */
+  async getBest() {
+    const state = (await $global.getMyState()) || {};
+    const best = Number(state.best);
+    return Number.isFinite(best) && best >= 0 && best <= 5 ? best : 0;
+  }
+
   /**
    * Fold a device's finished runs into the account's and hand back the union.
    *

@@ -602,6 +602,8 @@
   "ship.nextYear": "次は{n}年目",
   "ship.nextYearBuild": "次は{n}年目 — 新しいビルド「{name}」が入る",
   "ship.giftAhead": "初出勤に装備をひとつ持っていける",
+  "ship.best": "最高記録 ★{best}",
+  "ship.bestNew": "最高記録更新！（前回 ★{prev}）",
   "stage.stage08.name": "鉱山の宝物庫",
   "intro.stage08.line": "鉱山ビルド。レバーを引き、宝箱を拾い、クモに気をつけろ。どこか一つおかしい。",
   "goal.stage08": "レバーを引くと、その上の鉄格子が上がる。宝箱はゴールド、クモは痛い",
