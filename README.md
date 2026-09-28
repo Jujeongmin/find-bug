@@ -1,32 +1,65 @@
-# React + TypeScript + Vite
+# Find the Bug
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+QA 테스터가 되어 12일간의 스프린트를 버티는 게임. 매일 아침 책상에 빌드 큐가 쌓이고, 각 빌드는 결함 하나가 심어진 작은 플레이 가능한 씬이다. 플레이어는 결함을 찾아내고, 어떤 종류인지 분류하고, 빌드를 승인해야 한다.
 
-Currently, two official plugins are available:
+**▶ [플레이하기](https://verse8.io/B9h4t9L)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 게임 설계
 
-## React Compiler
+- **시간과 컨디션, 두 개의 자원.** 09:00–18:00이 실제 1초당 게임 내 2.3분으로 흐른다. 들여다보는 것 자체가 시간을 쓰고, 컨디션은 하루에 열 수 있는 빌드 수를 제한한다. 돈은 있지만 의도적으로 빈약하다 — 한 런의 수입이 상점 물건값보다 적어서 장비는 체크리스트가 아니라 선택이 된다.
+- **스테이지 그리드가 아니다.** 출근길, 사무실, 거리, 집이 있고 빌드는 그 하루 안의 책상에서 열린다. 하루가 빌드를 제약한다.
+- **런은 남지 않는다.** 남는 건 결함 수첩 하나. 7개 빌드에 걸친 115개 결함 중 한 런에서 만나는 건 40개쯤. 다시 하는 이유는 아직 못 만난 것들이다.
+- **판정은 물체 + 분류 둘 다.** 어느 쪽이 틀렸는지는 알려주지 않는다.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 기술적으로 흥미로운 부분
 
-## Expanding the Oxlint configuration
+**결함은 손으로 쓰지 않고 생성된다.** 19개의 mutator가 씬의 오브젝트와 교차해서 결함 풀을 만들고, 스코어러가 각 결과를 난이도 1–4 밴드로 등급화하고, 커리큘럼이 그 밴드에서 30개 스테이지 슬롯을 배분한다. 결함 목록을 관리하는 파일은 없다 — 씬을 작성하면 풀이 거기서 떨어져 나온다. 손으로 개입하는 곳은 제외 목록 하나뿐이다.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```
+engine/generate.ts     mutator × 오브젝트 = 결함 풀
+engine/score.ts        각 결함을 밴드 1–4로 등급화
+engine/curriculum.ts   밴드에서 30개 스테이지 슬롯 배분
+engine/exclusions.ts   손으로 빼는 유일한 자리
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+이 구조 때문에 검증 스크립트가 16개 붙어 있다. 씬을 고치면 풀이 조용히 무너질 수 있어서, `npm run verify`가 커리큘럼·씬·런타임·i18n·퀘스트·카테고리·레이아웃·마스터리까지 회귀로 확인한다. 스테이지 풀이 최소치(3) 밑으로 떨어지면 빌드가 실패한다.
+
+## 기술 스택
+
+- React 18 + TypeScript + Vite
+- 손으로 쓴 CSS (Tailwind 없음)
+- `@agent8/gameserver` — 계정, 저장, 멀티플레이. 서버가 죽어도 게임은 돈다
+- 5개 언어 i18n (전부 채워야 verify 통과)
+- CC0 스프라이트 시트, 빌드 스크립트로 패킹
+- oxlint
+
+## 실행
+
+```bash
+npm install
+npm run dev
+```
+
+```bash
+npm run verify         # 회귀 검증 전체
+npm run lint           # oxlint
+npm run typecheck      # tsc -b
+npm run report         # 결함 검수 목록 재생성
+npm run build:release  # 배포 빌드
+```
+
+## 저장소 구조
+
+```
+src/engine/      결함 생성 · 스코어링 · 커리큘럼
+src/core/        판정, 런 상태
+src/stages/      씬 데이터와 레지스트리
+src/office/      사무실 · 책상 · 하루
+src/street/      거리, 상점
+src/home/        집, 트로피
+src/net/         계정 · 저장 (실패해도 되는 호출들)
+src/i18n/        5개 언어 사전
+scripts/         검증 · 리포트 · 아트 파이프라인
+PROJECT/         설계 컨텍스트, 요구사항, 불변식
+docs/            결함 검수 목록, 배포, 에셋, 수익화
+```
